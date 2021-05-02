@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import styled from 'styled-components';
 
 export default function Home() {
   return (
@@ -8,9 +9,15 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>hello Entitree</main>
+      <main>
+        hello <Title>Entitree</Title>
+      </main>
 
       <footer>footer</footer>
     </div>
   );
 }
+
+const Title = styled.h1`
+  color: red;
+`;
