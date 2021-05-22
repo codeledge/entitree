@@ -1,7 +1,8 @@
 {
   "env": {
     "browser": true,
-    "es6": true
+    "es6": true,
+    "jest": true
   },
   "parserOptions": {
     "ecmaFeatures": {
@@ -17,9 +18,15 @@
   "plugins": ["import", "jsx-a11y", "react", "react-hooks", "prettier"],
   "extends": ["airbnb", "prettier"],
   "rules": {
-    "prettier/prettier": "error",
+    "prettier/prettier": "off",
+    "arrow-body-style": "off",
     "camelcase": "off",
+    "dot-notation": "off",
+    "prefer-template": "off",
+    "spaced-comment": "off",
+    "no-param-reassign": "off",
     "import/prefer-default-export": "off",
+    "import/order": "off",
     "react/prop-types": "off",
     "react/jsx-filename-extension": "off",
     "react/jsx-props-no-spreading": "off",
@@ -59,6 +66,7 @@
         "@typescript-eslint/no-use-before-define": [0],
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-var-requires": "off",
+        "@typescript-eslint/no-non-null-assertion": "off",
         "@typescript-eslint/quotes": "off"
       }
     }
