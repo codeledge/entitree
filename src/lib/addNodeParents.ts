@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CHILD_ID } from "../constants/properties";
 import { EntityNode } from "types/EntityNode";
+import { LangCode } from "types/Lang";
 import filterSpouses from "./filterSpouses";
 import getEntities from "./getEntities";
 import getNodeUniqueId from "./getNodeUniqueId";
@@ -8,11 +9,15 @@ import { hierarchy } from "d3-hierarchy";
 import { sortByGender } from "./sortEntities";
 import store from "store";
 
-export default async function addNodeParents(node: EntityNode) {
+export default async function addNodeParents(
+  node: EntityNode,
+  languageCode: LangCode,
+  currentPropId: string,
+) {
   if (!node.data.upIds) return;
-  const { currentUpMap, currentPropId } = store.getState().navigation;
+  const { currentUpMap } = store.getState().navigation;
 
-  const entities = await getEntities(node.data.upIds, {
+  const entities = await getEntities(node.data.upIds, languageCode, {
     upMap: currentUpMap,
     addLeftIds: currentPropId === CHILD_ID,
     addRightIds: currentPropId === CHILD_ID,

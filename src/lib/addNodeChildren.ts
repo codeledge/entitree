@@ -1,16 +1,19 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CHILD_ID } from "../constants/properties";
 import { EntityNode } from "types/EntityNode";
+import { LangCode } from "types/Lang";
 import getEntities from "./getEntities";
 import getNodeUniqueId from "./getNodeUniqueId";
 import { hierarchy } from "d3-hierarchy";
 import { sortByBirthDate } from "./sortEntities";
-import store from "store";
 
-export default async function addNodeChildren(node: EntityNode) {
+export default async function addNodeChildren(
+  node: EntityNode,
+  languageCode: LangCode,
+  currentPropId: string,
+) {
   if (!node.data.downIds) return;
-  const { currentPropId } = store.getState().navigation;
-  const entities = await getEntities(node.data.downIds, {
+  const entities = await getEntities(node.data.downIds, languageCode, {
     addDownIds: true,
     addRightIds: currentPropId === CHILD_ID,
   });

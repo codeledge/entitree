@@ -136,7 +136,7 @@ export default function SearchBar() {
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu alignRight>
-                    {currentEntityProps.map((prop) => (
+                    {currentEntityProps?.map((prop) => (
                       <Link
                         key={prop.id}
                         href={`/${currentLang.code}/${prop.slug}/${currentEntity.wikipediaSlug}`}

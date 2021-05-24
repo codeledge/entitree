@@ -5,7 +5,9 @@ export default function addWikipediaUrl(
   entity: BigEntity,
   languageCode: LangCode,
 ) {
-  entity.sitelink = entity.sitelinks?.[languageCode + "wiki"];
-  entity.wikipediaUrl = entity.sitelink?.url;
-  entity.wikipediaSlug = entity.wikipediaUrl?.split("/wiki/")[1];
+  const sitelink = entity.sitelinks?.[languageCode + "wiki"];
+  if (sitelink?.url) {
+    entity.wikipediaUrl = sitelink.url;
+    entity.wikipediaSlug = sitelink.url?.split("/wiki/")[1];
+  }
 }

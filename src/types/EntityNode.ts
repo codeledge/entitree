@@ -6,6 +6,7 @@ export interface EntityNode extends HierarchyNode<BigEntity> {
   x: number;
   y: number;
   virtualParent?: EntityNode;
+  depth: number; //override this field
   isParent?: boolean;
   isSibling?: boolean;
   isSpouse?: boolean;

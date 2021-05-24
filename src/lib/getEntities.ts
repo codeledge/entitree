@@ -7,7 +7,7 @@ import formatEntity from "./formatEntity";
 import getWikidataEntities from "wikidata/getWikidataEntities";
 
 type Options = ConnectorOptions & {
-  secondLanguageCode: LangCode;
+  secondLanguageCode?: LangCode;
 };
 
 export default async function getEntities(
