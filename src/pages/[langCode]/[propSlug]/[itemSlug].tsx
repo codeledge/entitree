@@ -26,16 +26,18 @@ import { LangCode } from "types/Lang";
 import { PropsList } from "react-zoom-pan-pinch/dist/store/interfaces/propsInterface";
 import { SITE_NAME } from "constants/meta";
 import SearchBar from "layout/SearchBar";
+import getConfig from "next/config";
 import getEntities from "lib/getEntities";
 import getItemProps from "wikidata/getItemProps";
 import getNodeUniqueId from "lib/getNodeUniqueId";
 import getUpMap from "wikidata/getUpMap";
 import getWikipediaArticle from "wikipedia/getWikipediaArticle";
 import { hierarchy } from "d3-hierarchy";
+import path from "path";
 import { showError } from "store/alertSlice";
 import { useDispatch } from "react-redux";
 
-const TreePage = ({ errorCode }) => {
+const TreePage = ({ errorCode, ogTitle, ogImage }) => {
   const { currentEntity, currentProp } = useAppSelector(
     ({ navigation }) => navigation,
   );
@@ -98,6 +100,9 @@ const TreePage = ({ errorCode }) => {
             : ""}{" "}
           - {SITE_NAME}
         </title>
+        <meta property="og:title" content={ogTitle} />
+        <meta property="og:image" content={ogImage} />
+
         {currentEntity?.description && (
           <meta name="description" content={currentEntity?.description} />
         )}
@@ -179,6 +184,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
         } = await getWikipediaArticle(itemSlug, langCode);
         if (wikibase_item) itemId = wikibase_item;
       } catch (error) {
+        console.error(error);
+
         return { props: { errorCode: error.response.status } };
       }
     }
@@ -193,7 +200,31 @@ export const getServerSideProps = wrapper.getServerSideProps(
       store.dispatch(setCurrentEntityProps(itemProps));
       const currentProp = itemProps.find(({ slug }) => slug === propSlug);
       if (currentProp) store.dispatch(setCurrentProp(currentProp));
+
+      const featuredImageFile = path.join(
+        "screenshot",
+        propSlug,
+        itemSlug + ".png",
+      );
+
+      const ogTitle = currentEntity.label;
+      let ogImage;
+      let twitterCard;
+      console.log(getConfig().serverRuntimeConfig.PROJECT_ROOT);
+
+      //     if (fs.existsSync(
+      //   path.join(getConfig().serverRuntimeConfig.PROJECT_ROOT, staticFilePath),
+      // );) {
+      //       ogImage = featuredImageFile;
+      //     } else {
+      //       ogImage = "icons/entitree_square.png";
+      //       twitterCard = "summary";
+      //     }
+
+      return { props: { ogTitle } };
     } catch (error) {
+      console.error(error);
+
       return { props: { errorCode: error.response.status } };
     }
   },

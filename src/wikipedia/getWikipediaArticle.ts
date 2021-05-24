@@ -2,8 +2,8 @@ import axios from "axios";
 
 type Response = {
   type: string;
-  title: string;
-  displaytitle: string;
+  title: string; //"Shit"
+  displaytitle: string; //"<i>Shit</i>"
   namespace: { id: number; text: string };
   wikibase_item: string;
   titles: {
