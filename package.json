@@ -10,14 +10,7 @@
     "test": "jest",
     "type-check": "tsc",
     "lint": "eslint --ignore-path .gitignore \"src/**/*.+(ts|tsx)\"",
-    "format": "prettier --ignore-path .gitignore \"src/**/*.+(ts|tsx)\" --write",
-    "postinstall": "husky install"
-  },
-  "lint-staged": {
-    "./src/**/*.{ts,tsx}": [
-      "yarn lint --fix",
-      "yarn format"
-    ]
+    "format": "prettier --ignore-path .gitignore \"src/**/*.+(ts|tsx)\" --write"
   },
   "dependencies": {
     "@reduxjs/toolkit": "1.5.1",
@@ -50,8 +43,6 @@
     "wikidata-sdk": "7.12.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "12.1.1",
-    "@commitlint/config-conventional": "12.1.1",
     "@testing-library/jest-dom": "5.12.0",
     "@testing-library/react": "11.2.7",
     "@types/node": "14.14.43",
@@ -71,9 +62,7 @@
     "eslint-plugin-prettier": "3.4.0",
     "eslint-plugin-react": "7.23.2",
     "eslint-plugin-react-hooks": "4.2.0",
-    "husky": "6.0.0",
     "jest": "26.6.3",
-    "lint-staged": "10.5.4",
     "prettier": "2.2.1",
     "typescript": "4.2.4"
   }
