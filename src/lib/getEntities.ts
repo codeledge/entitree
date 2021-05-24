@@ -2,22 +2,28 @@ import addEntityConnectors, { ConnectorOptions } from "./addEntityConnectors";
 
 import { BigEntity } from "types/Entity";
 import { DEFAULT_LANGS_CODES } from "../constants/langs";
-import { Entity } from "wikibase-types/dist";
+import { LangCode } from "types/Lang";
 import formatEntity from "./formatEntity";
 import getWikidataEntities from "wikidata/getWikidataEntities";
-import store from "store";
+
+type Options = ConnectorOptions & {
+  secondLanguageCode: LangCode;
+};
 
 export default async function getEntities(
-  ids: Entity["id"][],
-  connectorOptions?: ConnectorOptions,
+  ids: string[],
+  languageCode: LangCode,
+  options?: Options,
 ) {
   const languages = DEFAULT_LANGS_CODES;
 
-  const { languageCode, secondLanguageCode } = store.getState().settings;
   if (!languages.includes(languageCode)) languages.push(languageCode);
 
-  if (secondLanguageCode && !languages.includes(secondLanguageCode))
-    languages.push(secondLanguageCode);
+  if (
+    options?.secondLanguageCode &&
+    !languages.includes(options.secondLanguageCode)
+  )
+    languages.push(options.secondLanguageCode);
 
   const wikiEntitiesMap = await getWikidataEntities({
     ids,
@@ -26,13 +32,13 @@ export default async function getEntities(
 
   const entities: BigEntity[] = ids.reduce((acc: BigEntity[], id) => {
     if (!wikiEntitiesMap[id] || wikiEntitiesMap[id]["missing"] !== undefined)
-      return entities;
+      return acc;
 
     const entity = formatEntity(wikiEntitiesMap[id]);
 
-    // siblings and spouses don't need connectors, so no connectorOptions is passed
-    if (connectorOptions) {
-      addEntityConnectors(entity, connectorOptions);
+    // siblings and spouses don't need connectors, so no currentPropId is passed
+    if (options?.currentPropId) {
+      addEntityConnectors(entity, options);
     }
 
     return acc.concat(entity);

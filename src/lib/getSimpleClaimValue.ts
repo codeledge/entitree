@@ -1,3 +1,5 @@
+/* eslint-disable no-empty */
+/* eslint-disable consistent-return */
 import { SimpleClaims } from "types/Entity";
 
 export default function getSimpleClaimValue(
@@ -5,9 +7,6 @@ export default function getSimpleClaimValue(
   propId: string,
 ) {
   try {
-    if (simpleClaims) return simpleClaims[propId][0].value;
-  } catch (error) {
-    return undefined;
-  }
-  return undefined;
+    return simpleClaims?.[propId][0].value;
+  } catch (error) {}
 }

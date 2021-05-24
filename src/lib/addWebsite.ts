@@ -1,6 +1,8 @@
 import { BigEntity } from "types/Entity";
 import { WEBSITE_ID } from "constants/properties";
+import getSimpleClaimValue from "./getSimpleClaimValue";
 
 export default function addWebsite(entity: BigEntity) {
-  entity.website = entity.simpleClaims?.[WEBSITE_ID][0].value;
+  const website = getSimpleClaimValue(entity.simpleClaims, WEBSITE_ID);
+  if (website) entity.website = website;
 }

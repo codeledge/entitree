@@ -13,18 +13,23 @@ import {
   SearchResult,
   searchTerm as wikidataSearchTerm,
 } from "services/wikidata";
-import { setCurrentEntityId, setCurrentPropId } from "store/navigationSlice";
+import { loadEntity, setCurrentProp } from "store/navigationSlice";
 import { useAppDispatch, useAppSelector } from "store";
 
+import { DEFAULT_PROPERTY_ALL } from "constants/properties";
 import { FaSearch } from "react-icons/fa";
+import Link from "next/link";
 import styled from "styled-components";
 import useDebounce from "../hooks/useDebounce";
 import useOnClickOutside from "hooks/useOnClickOutside";
 
 export default function SearchBar() {
-  const { currentEntity, currentProp, loadingEntity } = useAppSelector(
-    ({ navigation }) => navigation,
-  );
+  const {
+    currentEntity,
+    currentProp,
+    loadingEntity,
+    currentEntityProps,
+  } = useAppSelector(({ navigation }) => navigation);
 
   const { currentLang } = useAppSelector(({ settings }) => settings);
 
@@ -72,7 +77,7 @@ export default function SearchBar() {
   useEffect(() => {
     if (currentEntity) {
       setFromKeyboard(false);
-      setSearchTerm(currentEntity.label);
+      setSearchTerm(currentEntity.label || "");
     }
   }, [currentEntity]);
 
@@ -131,14 +136,19 @@ export default function SearchBar() {
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu alignRight>
-                    {currentEntity.availableProps.map((prop) => (
-                      <Dropdown.Item
+                    {currentEntityProps.map((prop) => (
+                      <Link
                         key={prop.id}
-                        className={prop.isFav ? "fav" : ""}
-                        onClick={() => dispatch(setCurrentPropId(prop.id))}
+                        href={`/${currentLang.code}/${prop.slug}/${currentEntity.wikipediaSlug}`}
+                        passHref
                       >
-                        {prop.overrideLabel || prop.label}
-                      </Dropdown.Item>
+                        <Dropdown.Item
+                          className={prop.isFav ? "fav" : ""}
+                          // onClick={() => dispatch(setCurrentProp(prop))}
+                        >
+                          {prop.overrideLabel || prop.label}
+                        </Dropdown.Item>
+                      </Link>
                     ))}
                   </Dropdown.Menu>
                 </Dropdown>
@@ -265,6 +275,10 @@ function Suggestions({
 
   useOnClickOutside(wrapperRef, () => setShowSuggestions(false));
 
+  const { currentProp } = useAppSelector(({ navigation }) => navigation);
+
+  const { currentLang } = useAppSelector(({ settings }) => settings);
+
   return (
     <div ref={wrapperRef} className="Suggestions dropdown-menu show d-relative">
       {loadingSuggestions && (
@@ -276,18 +290,28 @@ function Suggestions({
         <div className="searchingMessage">Sorry, no results found</div>
       )}
       {searchResults.map((result) => (
-        <Button
+        <Link
           key={result.id}
-          className="searchResultBtn"
-          variant="light"
-          onClick={() => {
-            dispatch(setCurrentEntityId(result.id));
-            setShowSuggestions(false);
-          }}
+          href={`/${currentLang.code}/${
+            currentProp?.slug || DEFAULT_PROPERTY_ALL
+          }/${result.id}`}
+          // onClick={() => {
+          //   setShowSuggestions(false);
+          // }}
         >
-          <b>{result.label}</b>
-          {result.description && <i>{result.description}</i>}
-        </Button>
+          <Button
+            //key={result.id}
+            className="searchResultBtn"
+            variant="light"
+            // onClick={() => {
+            //   dispatch(setCurrentEntityId(result.id));
+            //   setShowSuggestions(false);
+            // }}
+          >
+            <b>{result.label}</b>
+            {result.description && <i>{result.description}</i>}
+          </Button>
+        </Link>
       ))}
     </div>
   );

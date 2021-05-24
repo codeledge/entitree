@@ -1,12 +1,8 @@
-import "./Node.scss";
+/* eslint-disable jsx-a11y/no-noninteractive-element-to-interactive-role */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable prefer-arrow-callback */
 
-import {
-  CHILD_ID,
-  EYE_COLOR_ID,
-  GENI_ID,
-  INSTAGRAM_ID,
-  WIKITREE_ID,
-} from "../../constants/properties";
+import { CHILD_ID, EYE_COLOR_ID, GENI_ID } from "../../constants/properties";
 import {
   DOWN_SYMBOL,
   LEFT_SYMBOL,
@@ -20,184 +16,42 @@ import {
   FiChevronRight,
   FiChevronUp,
 } from "react-icons/fi";
-import { IMAGE_SERVER_BASE_URL, imageServer } from "../../services/imageServer";
-import React, { memo, useContext, useEffect, useMemo, useState } from "react";
+import { GiBigDiamondRing, GiPerson } from "react-icons/gi";
+import React, { memo, useEffect, useMemo, useState } from "react";
 import { RiGroupLine, RiParentLine } from "react-icons/ri";
 import styled, { useTheme } from "styled-components";
-
-import { AppContext } from "../../App";
-import { BsImage } from "react-icons/bs";
-import { Button } from "react-bootstrap";
-import DetailsModal from "../../modals/DetailsModal/DetailsModal";
-import { GiBigDiamondRing } from "react-icons/gi";
-import { GiPerson } from "react-icons/gi";
-import { MdChildCare } from "react-icons/md";
-import clsx from "clsx";
-import colorByProperty from "../../wikidata/colorByProperty";
-import getData from "../../axios/getData";
-import getGeniImageUrl from "../../geni/getGeniImageUrl";
-import getSimpleClaimValue from "../../lib/getSimpleClaimValue";
-import getWikitreeImageUrl from "../../wikitree/getWikitreeImageUrl";
-import queryString from "query-string";
-import { useLocation } from "react-router-dom";
-
-export default memo(function Node({
-  node,
-  currentProp,
-  toggleParents,
+import {
   toggleChildren,
+  toggleParents,
   toggleSiblings,
   toggleSpouses,
-  setFocusedNode,
-  focusedNode,
-  debug,
-}) {
-  if (debug) console.log(node);
+} from "store/treeSlice";
 
+import { BsImage } from "react-icons/bs";
+import { Button } from "react-bootstrap";
+import { EntityNode } from "types/EntityNode";
+import { Image } from "types/Entity";
+import { MdChildCare } from "react-icons/md";
+import { Theme } from "constants/themes";
+import clsx from "clsx";
+import { useAppSelector } from "store";
+
+export default memo(function Node({ node }: { node: EntityNode }) {
   const [showModal, setShowModal] = useState(false);
-  const [thumbnails, setThumbnails] = useState(node.data.thumbnails);
-  const [images, setImages] = useState(node.data.images);
-  const [faceImage, setFaceImage] = useState();
+  const [thumbnails, setThumbnails] = useState<Image[]>(
+    node.data.thumbnails || [],
+  );
+  const [images, setImages] = useState<Image[]>(node.data.images || []);
+  const [faceImage, setFaceImage] = useState<Image>();
   const [thumbnailIndex, setThumbnailIndex] = useState(0);
-  const theme = useTheme();
-  const location = useLocation();
-  const { settings, secondLabel } = useContext(AppContext);
+  const theme = useTheme() as Theme;
+
+  const settings = useAppSelector(({ settings: s }) => s);
+  const navigation = useAppSelector(({ navigation: n }) => n);
 
   const hideModal = () => {
     setShowModal(false);
   };
-
-  //helper function needed to improve the line-clamp by moving the class to the smaller div to prevent "..." at the last line
-  const hasLabelOnly = theme.descriptionDisplay === "none" && !secondLabel;
-
-  const eyeColor = useMemo(
-    () => colorByProperty(node.data.simpleClaims[EYE_COLOR_ID]),
-    [node.data.simpleClaims]
-  );
-
-  // const hairColor = useMemo(
-  //   () => colorByProperty(node.data.simpleClaims[HAIR_COLOR_ID]),
-  //   [node.data.simpleClaims]
-  // );
-
-  useEffect(() => {
-    // check if node QID is in url params and toggle accrodingly
-    const urlIds = queryString.parse(location.search);
-    if (urlIds[node.data.id]) {
-      if (urlIds[node.data.id].indexOf(UP_SYMBOL) > -1 && node.isParent)
-        toggleParents(node, { noRecenter: true });
-      if (urlIds[node.data.id].indexOf(DOWN_SYMBOL) > -1 && node.isChild)
-        toggleChildren(node, { noRecenter: true });
-      if (urlIds[node.data.id].indexOf(LEFT_SYMBOL) > -1 && node.isParent)
-        toggleSiblings(node, { noRecenter: true });
-      if (urlIds[node.data.id].indexOf(RIGHT_SYMBOL) > -1 && node.isChild)
-        toggleSpouses(node, { noRecenter: true });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    //should this also go under the showExternalImages settings?!
-    var numericId = node.data.id.substr(1);
-    imageServer
-      .get(`/api/v1/image/info/wikidata/${numericId}`)
-      .then(({ images }) => {
-        images.forEach((dpImg) => {
-          // const dpImg = data.images[0];
-          let descr = `${dpImg.uploadSite}\nImage Database`;
-          if (dpImg.comment) {
-            descr += `\n${dpImg.comment}`;
-          }
-          if (dpImg.recordedDate) {
-            descr += `\nPhoto taken in ${dpImg.recordedDate.substr(0, 4)}`;
-          }
-          if (dpImg.sourceUrl) {
-            descr += `\n\n${dpImg.sourceUrl}`;
-          }
-          //this will set always last image?!
-          setFaceImage({
-            url: `${IMAGE_SERVER_BASE_URL}/api/v1/image/facecrop/id/${dpImg.id}`,
-            alt: descr,
-          });
-          setThumbnails((thumbnails) => [
-            {
-              url: `${IMAGE_SERVER_BASE_URL}/api/v1/image/thumbnail/id/${dpImg.id}`,
-              alt: descr,
-            },
-            ...thumbnails, //as the imageServer assets might be more accurate, use them first
-          ]);
-          setImages((images) => [
-            {
-              url: `${IMAGE_SERVER_BASE_URL}/api/v1/image/thumbnail/id/${dpImg.id}`,
-              alt: descr,
-            },
-            ...images, //as the imageServer assets might be more accurate, use them first
-          ]);
-        });
-      })
-      .catch();
-
-    if (settings.showExternalImages) {
-      /* DISABLE WIKITREE, SINCE CORS DOESN'T WORK
-      const wikitreeId = getSimpleClaimValue(
-        node.data.simpleClaims,
-        WIKITREE_ID
-      );
-      if (wikitreeId) {
-        getWikitreeImageUrl(wikitreeId)
-          .then((wikitreeImageUrl) => {
-            if (wikitreeImageUrl) {
-              const img = {
-                url: wikitreeImageUrl,
-                alt: `Wikitree.com image`,
-              };
-              setThumbnails(thumbnails.concat(img));
-              setImages(images.concat(img));
-            }
-          })
-          .catch();
-      }
-      */
-
-      const geniId = getSimpleClaimValue(node.data.simpleClaims, GENI_ID);
-      if (geniId) {
-        getGeniImageUrl(geniId)
-          .then((geniImageUrl) => {
-            if (geniImageUrl) {
-              const geniImg = {
-                url: geniImageUrl,
-                alt: `Geni.com image`,
-              };
-              setThumbnails((thumbnails) => thumbnails.concat(geniImg));
-              setImages((images) => images.concat(geniImg));
-            }
-          })
-          .catch();
-      }
-
-      /* ERROR REDIRECT
-      const instagramUsername = getSimpleClaimValue(
-        node.data.simpleClaims,
-        INSTAGRAM_ID
-      );
-      if (instagramUsername) {
-        getData(`https://www.instagram.com/${instagramUsername}/?__a=1`)
-          .then((data) => {
-            if (data.graphql && data.graphql.user.profile_pic_url) {
-              const instagramImage = {
-                url: data.graphql.user.profile_pic_url,
-                alt: `Instagram profile pic of ${instagramUsername}`,
-              };
-              setThumbnails(thumbnails.concat(instagramImage));
-              setImages(images.concat(instagramImage));
-            }
-          })
-          .catch();
-      }
-      */
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const {
     data: { gender, isHuman },
@@ -208,38 +62,24 @@ export default memo(function Node({
   const onThumbClick =
     thumbnails.length > 1
       ? () => setThumbnailIndex((thumbnailIndex + 1) % thumbnails.length)
-      : null;
+      : undefined;
 
-  const hasSecondLabel =
-    secondLabel &&
-    node.data.secondLabel &&
-    node.data.label !== node.data.secondLabel;
+  const hasLabelOnly =
+    theme.descriptionDisplay === "none" && !settings.secondLanguageCode;
+
+  const hasSecondLabel = Boolean(
+    settings.secondLanguageCode &&
+      node.data.secondLabel &&
+      node.data.label !== node.data.secondLabel,
+  );
+
   return (
     <ThemedNodeOuter
       style={{
         left: node.x,
         top: node.y,
       }}
-      className={clsx("Node", {
-        focused: focusedNode && focusedNode.treeId === node.treeId,
-        [gender]: gender,
-      })}
-      onClick={() => setFocusedNode(node)}
-      //data-id={node.data.id}
-      //data-tree-id={node.treeId}
     >
-      {/*  { node.childNumber && (
-    <span
-      className="childNumber"
-      style={{
-        position: "absolute",
-        top: "-20px",
-      }}
-    >
-      { node.childNumber }
-    </span>
-      ) }
-      */}
       <ThemedNodeInner>
         {theme.thumbDisplay && (
           <ThemedThumbnail
@@ -265,7 +105,7 @@ export default memo(function Node({
               <>
                 {settings.showFace && faceImage ? (
                   <img
-                    alt={faceImage.alt}
+                    alt={faceImage?.alt}
                     src={
                       faceImage.url +
                       (settings.imageType === "head" ? "?factor=1.5" : "")
@@ -289,32 +129,6 @@ export default memo(function Node({
           </ThemedThumbnail>
         )}
         <ThemedContent className="content" hasSecondLabel={hasSecondLabel}>
-          {settings.showEyeHairColors && (
-            <div className="colorIcons">
-              {eyeColor && (
-                <span
-                  className="eyeColor"
-                  title={eyeColor.itemLabel + " eyes"}
-                  style={{
-                    color: "#" + eyeColor.hex,
-                  }}
-                >
-                  <FaEye size={25} />
-                </span>
-              )}
-              {/*{hairColor && (
-              <span
-                className="hairColor"
-                title={hairColor.itemLabel}
-                style={{
-                  color: "#" + hairColor.hex,
-                }}
-              >
-                <GiBeard />
-              </span>
-            )}*/}
-            </div>
-          )}
           <div
             className={clsx({
               "four-line-clamp": !hasLabelOnly,
@@ -326,10 +140,13 @@ export default memo(function Node({
                   "four-line-clamp": hasLabelOnly,
                 })}
                 role="button"
-                tabIndex="0"
+                tabIndex={0}
+                onKeyPress={() => setShowModal(true)}
                 onClick={() => setShowModal(true)}
                 title={
-                  node.data.label ? `Show ${node.data.label} details` : null
+                  node.data.label
+                    ? `Show ${node.data.label} details`
+                    : undefined
                 }
               >
                 {node.data.birthName && settings.showBirthName ? (
@@ -346,10 +163,13 @@ export default memo(function Node({
                   "four-line-clamp": hasLabelOnly,
                 })}
                 role="button"
-                tabIndex="0"
+                tabIndex={0}
+                onKeyPress={() => setShowModal(true)}
                 onClick={() => setShowModal(true)}
                 title={
-                  node.data.label ? `Show ${node.data.label} details` : null
+                  node.data.label
+                    ? `Show ${node.data.label} details`
+                    : undefined
                 }
               >
                 {node.data.birthName && settings.showBirthName ? (
@@ -391,23 +211,11 @@ export default memo(function Node({
           </div>
         </ThemedContent>
       </ThemedNodeInner>
-      {/* {node._parentsExpanded && currentProp && (
-        <div className="upPropLabel" style={{ top: -CARD_VERTICAL_GAP / 2 }}>
-          <span>{currentProp.label}</span>
-        </div>
-      )}
-      {node._childrenExpanded && currentProp && (
-        <div
-          className="downPropLabel"
-          style={{ bottom: -CARD_VERTICAL_GAP / 2 }}
-        >
-          <span>{currentProp.label}</span>
-        </div>
-      )} */}
+
       {node.data.leftIds && !!node.data.leftIds.length && (
         <Button
-          className={`siblingToggle relativeToggle`}
-          variant={"link"}
+          className="siblingToggle relativeToggle"
+          variant="link"
           disabled={node.loadingSiblings}
           onClick={() => toggleSiblings(node)}
           title={(node._siblingsExpanded ? "Collapse" : "Expand") + " siblings"}
@@ -423,8 +231,8 @@ export default memo(function Node({
       )}
       {node.data.rightIds && !!node.data.rightIds.length && (
         <Button
-          className={`spouseToggle relativeToggle`}
-          variant={"link"}
+          className="spouseToggle relativeToggle"
+          variant="link"
           disabled={node.loadingSpouses}
           onClick={() => toggleSpouses(node)}
           title={(node._spousesExpanded ? "Collapse" : "Expand") + " spouses"}
@@ -440,8 +248,8 @@ export default memo(function Node({
       )}
       {node.data.upIds && !!node.data.upIds.length && (
         <Button
-          className={`parentToggle relativeToggle`}
-          variant={"link"}
+          className="parentToggle relativeToggle"
+          variant="link"
           disabled={node.loadingParents}
           onClick={() => toggleParents(node)}
         >
@@ -449,7 +257,7 @@ export default memo(function Node({
           <span className="chevron ml-1 mr-1">
             {node._parentsExpanded ? <FiChevronDown /> : <FiChevronUp />}
           </span>
-          {currentProp && currentProp.id === CHILD_ID && (
+          {navigation.currentPropId === CHILD_ID && (
             <span className="icon">
               <RiParentLine />
             </span>
@@ -458,8 +266,8 @@ export default memo(function Node({
       )}
       {node.data.downIds && !!node.data.downIds.length && (
         <Button
-          className={`childrenToggle relativeToggle`}
-          variant={"link"}
+          className="childrenToggle relativeToggle"
+          variant="link"
           disabled={node.loadingChildren}
           onClick={() => toggleChildren(node)}
         >
@@ -467,7 +275,7 @@ export default memo(function Node({
           <span className="chevron ml-1 mr-1">
             {node._childrenExpanded ? <FiChevronUp /> : <FiChevronDown />}
           </span>
-          {currentProp && currentProp.id === CHILD_ID && (
+          {navigation.currentPropId === CHILD_ID && (
             <span className="icon">
               <MdChildCare />
             </span>
@@ -478,12 +286,11 @@ export default memo(function Node({
         !node.data.downIds.length &&
         !!node.data.childrenCount &&
         node.data.childrenCount > 0 &&
-        currentProp &&
-        currentProp.id === CHILD_ID && (
+        navigation.currentPropId === CHILD_ID && (
           <Button
-            className={`childrenToggle relativeToggle`}
-            variant={"link"}
-            title={"Children not available, please add them on wikidata.org"}
+            className="childrenToggle relativeToggle"
+            variant="link"
+            title="Children not available, please add them on wikidata.org"
           >
             <span className="value">{node.data.childrenCount}</span>
             <span className="icon">
@@ -491,9 +298,6 @@ export default memo(function Node({
             </span>
           </Button>
         )}
-      {showModal && (
-        <DetailsModal hideModal={hideModal} node={node} nodeImages={images} />
-      )}
     </ThemedNodeOuter>
   );
 });
@@ -541,7 +345,7 @@ const ThemedThumbnail = styled.div`
   }
 `;
 
-const ThemedContent = styled.div`
+const ThemedContent = styled.div<{ hasSecondLabel?: boolean }>`
   //use margin to get width 100% calculations eg dates
   margin-left: ${({ theme }) => theme.contentPaddingLeft}px;
   margin-top: ${({ theme }) => theme.contentPaddingTop}px;

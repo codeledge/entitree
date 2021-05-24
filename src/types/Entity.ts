@@ -1,10 +1,10 @@
-import { Entity, Sitelink } from "wikibase-types/dist";
+import { Entity } from "wikibase-types";
+import { LangCode } from "types/Lang";
 
 export type WikiEntity = Entity;
-
 export interface BigEntity extends WikiEntity {
-  description?: string;
   label?: string;
+  description?: string;
   secondLabel?: string;
   birthName?: string;
   birthDate?: string;
@@ -22,7 +22,6 @@ export interface BigEntity extends WikiEntity {
   abolishedDate?: string;
   inceptionAblishedSpan?: string;
   wikidataUrl?: string;
-  sitelink?: Sitelink;
   wikipediaUrl?: string;
   wikipediaSlug?: string;
   externalLinks?: ExternalLink[];
@@ -44,6 +43,15 @@ export interface BigEntity extends WikiEntity {
 export type Image = {
   url: string;
   alt: string;
+};
+
+export type EntityProp = {
+  id: string;
+  slug: string;
+  label: string;
+  overrideLabel?: string;
+  overrideLabels?: Record<LangCode, string>; // actually only CHILD_ID has
+  isFav?: boolean;
 };
 
 export type SimpleClaims = Record<string, SimpleClaim[]>;

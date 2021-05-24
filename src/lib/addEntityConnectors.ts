@@ -12,6 +12,7 @@ import getSimpleClaimValue from "./getSimpleClaimValue";
 import store from "store";
 
 export type ConnectorOptions = {
+  currentPropId?: string;
   upMap?: Record<string, string[]>;
   addDownIds?: boolean;
   addRightIds?: boolean;
@@ -28,16 +29,15 @@ export default function addEntityConnectors(
     delete entity.upIds;
   }
 
-  const { currentPropId } = store.getState().navigation;
-  if (options.addDownIds && currentPropId) {
-    entity.downIds = getClaimIds(entity, currentPropId);
+  if (options.addDownIds && options.currentPropId) {
+    entity.downIds = getClaimIds(entity, options.currentPropId);
     entity.downIdsAlreadySorted = checkIfClaimsHasSeriesOrdinal(
       entity,
-      currentPropId,
+      options.currentPropId,
     );
 
     //use number of children property, use count of children if not available
-    if (currentPropId === CHILD_ID) {
+    if (options.currentPropId === CHILD_ID) {
       //only for family trees
       entity.childrenCount =
         Number(

@@ -1,10 +1,17 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { AppState, AppThunk } from "store";
+import { BigEntity, EntityProp } from "types/Entity";
+import { PayloadAction, createAction, createSlice } from "@reduxjs/toolkit";
+
+import { CHILD_ID } from "constants/properties";
+import { HYDRATE } from "next-redux-wrapper";
+import getEntities from "lib/getEntities";
+import getItemProps from "wikidata/getItemProps";
+import getUpMap from "wikidata/getUpMap";
 
 type NavigationState = {
-  currentEntity?: WikidataEntity;
-  currentEntityId?: WikidataEntity["id"];
-  currentProp?: WikidataProp;
-  currentPropId?: WikidataProp["id"];
+  currentEntity?: BigEntity;
+  currentEntityProps?: EntityProp[];
+  currentProp?: EntityProp;
   currentUpMap?: UpMap;
   loadingEntity: boolean;
 };
@@ -15,57 +22,66 @@ const initialState: NavigationState = {
   loadingEntity: false,
 };
 
-type WikidataEntity = {
-  id: string;
-  label: string;
-  description: string;
-  availableProps: WikidataProp[];
-};
+const hydrate = createAction<AppState>(HYDRATE);
 
-type WikidataProp = {
-  id: string;
-  label: string;
-  overrideLabel: string;
-  isFav: boolean;
-};
-
-export const settingsSlice = createSlice({
+export const navigationSlice = createSlice({
   name: "navigation",
   initialState,
   reducers: {
-    setCurrentEntity: (state, action: PayloadAction<WikidataEntity>) => {
+    setCurrentEntity: (state, action) => {
       state.currentEntity = action.payload;
     },
     setLoadingEntity: (state, action: PayloadAction<boolean>) => {
       state.currentEntity = undefined;
       state.loadingEntity = action.payload;
     },
-    setCurrentEntityId: (
-      state,
-      action: PayloadAction<WikidataEntity["id"]>,
-    ) => {
-      state.currentEntityId = action.payload;
-    },
-    setCurrentProp: (state, action: PayloadAction<WikidataProp>) => {
+    setCurrentProp: (state, action: PayloadAction<EntityProp>) => {
       state.currentProp = action.payload;
     },
-    setCurrentPropId: (state, action: PayloadAction<WikidataProp["id"]>) => {
-      state.currentPropId = action.payload;
+    setCurrentEntityProps: (state, action: PayloadAction<EntityProp[]>) => {
+      state.currentEntityProps = action.payload;
     },
+  },
+  extraReducers(builder) {
+    builder.addCase(hydrate, (state, action) => {
+      //console.log("HYDRATE in " + navigationSlice.name, action.payload);
+      return {
+        ...state,
+        ...action.payload[navigationSlice.name],
+      };
+    });
   },
 });
 
-export const loadEntity = () => (dispatch) => {
+export const loadEntity = (itemId): AppThunk => async (dispatch, getState) => {
   dispatch(setLoadingEntity(true));
-  //let [_currentEntity, itemProps] = await getItemMemo;
+
+  const { currentLang, secondLanguageCode } = getState().settings;
+  const { currentProp } = getState().navigation;
+
+  const [[entity], itemProps, upMap] = await Promise.all([
+    getEntities([itemId], currentLang.code, {
+      secondLanguageCode,
+    }),
+    getItemProps(itemId, currentLang.code),
+    ...(currentProp ? [getUpMap(itemId, currentProp.id)] : []),
+  ]);
+
+  dispatch(setCurrentEntityProps(itemProps));
+
+  if (!currentProp) {
+    itemProps.forEach((prop) => {
+      if (prop.id === CHILD_ID) dispatch(setCurrentProp(prop));
+    });
+  }
+  dispatch(setCurrentEntity(entity));
 };
 
 export const {
   setCurrentEntity,
-  setCurrentEntityId,
+  setCurrentEntityProps,
   setLoadingEntity,
   setCurrentProp,
-  setCurrentPropId,
-} = settingsSlice.actions;
+} = navigationSlice.actions;
 
-export default settingsSlice.reducer;
+export default navigationSlice.reducer;
