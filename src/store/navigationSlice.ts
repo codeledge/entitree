@@ -1,5 +1,5 @@
 import { AppState, AppThunk } from "store";
-import { BigEntity, EntityProp } from "types/Entity";
+import { Entity, EntityProp } from "types/Entity";
 import { PayloadAction, createAction, createSlice } from "@reduxjs/toolkit";
 
 import { CHILD_ID } from "constants/properties";
@@ -9,7 +9,7 @@ import getItemProps from "wikidata/getItemProps";
 import getUpMap from "wikidata/getUpMap";
 
 type NavigationState = {
-  currentEntity?: BigEntity;
+  currentEntity?: Entity;
   currentEntityProps?: EntityProp[];
   currentProp?: EntityProp;
   currentUpMap?: UpMap;

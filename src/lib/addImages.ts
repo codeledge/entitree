@@ -1,9 +1,9 @@
 import { IMAGE_ID, LOGO_ID } from "../constants/properties";
 
-import { BigEntity } from "types/Entity";
+import { Entity } from "types/Entity";
 import { Theme } from "constants/themes";
 
-export default function addImages(entity: BigEntity, theme: Theme) {
+export default function addImages(entity: Entity, theme: Theme) {
   entity.thumbnails = [];
   entity.images = [];
 

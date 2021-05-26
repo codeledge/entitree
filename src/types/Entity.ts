@@ -1,8 +1,39 @@
-import { Entity } from "wikibase-types";
+import { Claim } from "./Claim";
 import { LangCode } from "types/Lang";
 
-export type WikiEntity = Entity;
-export interface BigEntity extends WikiEntity {
+export interface Sitelink {
+  readonly site: string;
+  readonly title: string;
+  readonly badges: readonly string[];
+  readonly url?: string;
+}
+
+export interface LanguageEntry {
+  readonly language: string;
+  readonly value: string;
+}
+
+export interface WikiEntity {
+  type: string;
+  datatype?: string;
+  id: string;
+  pageid?: number;
+  ns?: number;
+  title?: string;
+  lastrevid?: number;
+  modified?: string;
+  redirects?: {
+    from: string;
+    to: string;
+  };
+  aliases?: Record<string, LanguageEntry[]>;
+  claims?: Record<string, Claim[]>;
+  descriptions?: Record<string, LanguageEntry>;
+  labels?: Record<string, LanguageEntry>;
+  sitelinks?: Record<string, Sitelink>;
+}
+
+export interface Entity extends WikiEntity {
   label?: string;
   description?: string;
   secondLabel?: string;

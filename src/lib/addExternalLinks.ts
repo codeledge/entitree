@@ -1,6 +1,6 @@
 /* eslint-disable guard-for-in */
 /* eslint-disable no-restricted-syntax */
-import { BigEntity, ExternalLink } from "types/Entity";
+import { Entity, ExternalLink } from "types/Entity";
 
 import { SOCIAL_PROPS_IDS } from "../constants/properties";
 import getSimpleClaimValue from "./getSimpleClaimValue";
@@ -9,7 +9,7 @@ import getSimpleClaimValue from "./getSimpleClaimValue";
  * Gets a list of social media icons
  * @param claims accepts wbk.simplify.claims
  */
-export default function addExternalLinks(entity: BigEntity) {
+export default function addExternalLinks(entity: Entity) {
   const socialProps: ExternalLink[] = [];
   const { simpleClaims } = entity;
   for (const socialPropId in SOCIAL_PROPS_IDS) {

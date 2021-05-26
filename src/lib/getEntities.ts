@@ -1,7 +1,7 @@
 import addEntityConnectors, { ConnectorOptions } from "./addEntityConnectors";
 
-import { BigEntity } from "types/Entity";
 import { DEFAULT_LANGS_CODES } from "../constants/langs";
+import { Entity } from "types/Entity";
 import { LangCode } from "types/Lang";
 import formatEntity from "./formatEntity";
 import getWikidataEntities from "wikidata/getWikidataEntities";
@@ -30,7 +30,7 @@ export default async function getEntities(
     languages,
   });
 
-  const entities: BigEntity[] = ids.reduce((acc: BigEntity[], id) => {
+  const entities: Entity[] = ids.reduce((acc: Entity[], id) => {
     if (!wikiEntitiesMap[id] || wikiEntitiesMap[id]["missing"] !== undefined)
       return acc;
 

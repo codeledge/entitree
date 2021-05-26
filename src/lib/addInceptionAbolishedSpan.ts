@@ -1,6 +1,6 @@
-import { BigEntity } from "types/Entity";
+import { Entity } from "types/Entity";
 
-export default function addInceptionAbolishedSpan(entity: BigEntity) {
+export default function addInceptionAbolishedSpan(entity: Entity) {
   let inceptionAblishedSpan = "";
   if (entity.inceptionDate) inceptionAblishedSpan += entity.inceptionDate;
   if (entity.inceptionDate && entity.abolishedDate)

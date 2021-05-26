@@ -190,7 +190,7 @@ const ThemedSearchBar = styled(Form)`
       .input-group-prepend {
         position: absolute;
         z-index: 5;
-        top: 11px;
+        top: 6px;
         left: 9px;
         color: var(--gray);
       }

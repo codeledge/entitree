@@ -5,11 +5,11 @@ import {
   HUMAN_MALE_ID,
 } from "constants/entities";
 
-import { BigEntity } from "types/Entity";
+import { Entity } from "types/Entity";
 import { GENDER_ID } from "constants/properties";
 import getSimpleClaimValue from "./getSimpleClaimValue";
 
-export default function addGender(entity: BigEntity) {
+export default function addGender(entity: Entity) {
   const genderId = getSimpleClaimValue(entity.simpleClaims, GENDER_ID);
   if (genderId) {
     if (genderId === HUMAN_MALE_ID || genderId === ANIMAL_MALE_ID) {

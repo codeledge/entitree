@@ -1,6 +1,6 @@
-import { BigEntity } from "types/Entity";
+import { Entity } from "types/Entity";
 
-export default function addStartEndSpan(entity: BigEntity) {
+export default function addStartEndSpan(entity: Entity) {
   let startEndSpan = "";
   if (entity.startDate) startEndSpan += entity.startDate;
   if (entity.startDate && entity.endDate) startEndSpan += " - ";

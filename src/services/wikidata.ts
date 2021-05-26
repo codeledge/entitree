@@ -8,9 +8,9 @@ const wikidataService = axios.create({
 wikidataService.interceptors.response.use(serviceSuccessInterceptor);
 
 export type SearchResult = {
-  aliases: string[]; // ["Queen Elizabeth II"]
+  aliases?: string[]; // ["Queen Elizabeth II"]
   id: string; // Q623
-  description: string; // "chemical element with symbol C and atomic number 6; common element of all known life"
+  description?: string; // "chemical element with symbol C and atomic number 6; common element of all known life"
   concepturi: string; // "http://www.wikidata.org/entity/Q623"
   label: string; // carbon
   match: {

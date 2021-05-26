@@ -1,9 +1,6 @@
-import { BigEntity } from "types/Entity";
+import { Entity } from "types/Entity";
 
-export default function addDescription(
-  entity: BigEntity,
-  languageCode: string,
-) {
+export default function addDescription(entity: Entity, languageCode: string) {
   const { descriptions } = entity;
   if (!descriptions) return;
   const descriptionObject = descriptions[languageCode];

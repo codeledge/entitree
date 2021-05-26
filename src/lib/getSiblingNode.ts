@@ -1,10 +1,10 @@
-import { BigEntity } from "types/Entity";
+import { Entity } from "types/Entity";
 import { EntityNode } from "types/EntityNode";
 import getNodeUniqueId from "./getNodeUniqueId";
 import { hierarchy } from "d3-hierarchy";
 
 export default function getSiblingNode(
-  entity: BigEntity,
+  entity: Entity,
   index: number,
 ): EntityNode {
   const siblingNode = hierarchy(entity) as EntityNode;

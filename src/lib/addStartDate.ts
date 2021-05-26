@@ -1,10 +1,10 @@
-import { BigEntity } from "types/Entity";
+import { Entity } from "types/Entity";
 import { Lang } from "../types/Lang";
 import { START_DATE_ID } from "../constants/properties";
 import formatDateClaim from "./formatDateClaim";
 
 export default function addStartDate(
-  entity: BigEntity,
+  entity: Entity,
   languageCode: Lang["code"],
 ) {
   const claim = entity.claims?.[START_DATE_ID];

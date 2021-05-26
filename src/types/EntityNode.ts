@@ -1,7 +1,7 @@
-import { BigEntity } from "./Entity";
+import { Entity } from "./Entity";
 import { HierarchyNode } from "d3-hierarchy";
 
-export interface EntityNode extends HierarchyNode<BigEntity> {
+export interface EntityNode extends HierarchyNode<Entity> {
   treeId?: string; // gets added afterward
   x: number;
   y: number;

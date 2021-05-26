@@ -4,12 +4,12 @@ import {
   NICKNAME_ID,
 } from "../constants/properties";
 
-import { BigEntity } from "types/Entity";
+import { Entity } from "types/Entity";
 import { LangCode } from "types/Lang";
 import getSimpleClaimValue from "./getSimpleClaimValue";
 
 export default function addSecondLabel(
-  entity: BigEntity,
+  entity: Entity,
   propCode: string | LangCode,
 ) {
   if (!propCode) return;

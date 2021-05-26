@@ -297,13 +297,13 @@ export default memo(({ node }: { node: EntityNode }) => {
 });
 
 const ThemedNodeOuter = styled.div`
+  position: absolute;
+  transform: translate(-50%, -50%);
+  transition: all ease-in-out 0.2s;
   box-sizing: content-box;
   border-radius: ${({ theme }) => theme.nodeBorderRadius}px;
   border: ${({ theme }) => theme.nodeBorder};
   box-shadow: ${({ theme }) => theme.nodeBoxShadow};
-  &.focused {
-    box-shadow: ${({ theme }) => theme.nodeFocusedBoxShadow};
-  }
   height: ${({ theme }) => theme.nodeHeight}px;
   width: ${({ theme }) => theme.nodeWidth}px;
   background-color: ${({ theme }) => theme.nodeBackgroundColor};
@@ -312,6 +312,100 @@ const ThemedNodeOuter = styled.div`
   ${({ theme }) =>
     theme.nodeFlexDirection === "column" && `justify-content: center`};
   ${({ theme }) => theme.nodeCss};
+
+  .downPropLabel,
+  .upPropLabel {
+    position: absolute;
+    left: 50%;
+    span {
+      position: absolute;
+      padding-bottom: 3px;
+      font-size: 14px;
+      color: gray;
+      white-space: nowrap;
+      transform: translate(-50%, -50%);
+    }
+  }
+  .relativeToggle {
+    position: absolute;
+    padding: 3px;
+    font-size: 12px;
+    font-weight: bold;
+    //background-color: red;
+    line-height: 1;
+    transition: all;
+    @media print {
+      color: gray;
+    }
+    &:hover {
+      text-decoration: none;
+    }
+    &:focus {
+      text-decoration: underline;
+      box-shadow: none;
+    }
+    .chevron {
+      stroke-width: 2;
+      font-size: 16px;
+      @media print {
+        display: none;
+      }
+    }
+  }
+  .siblingToggle {
+    right: 100%;
+  }
+  .spouseToggle {
+    left: 100%;
+  }
+  .siblingToggle,
+  .spouseToggle {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .parentToggle,
+  .childrenToggle {
+    left: 50%;
+    white-space: nowrap;
+    transform: translateX(-50%);
+    .value {
+      display: inline-block;
+      min-width: 1em; //default to optional icon width for central alignment
+    }
+  }
+  .parentToggle {
+    bottom: 100%;
+  }
+  .childrenToggle {
+    top: 100%;
+  }
+
+  //SETTINGS
+  &.female {
+    .showGenderColor & {
+      background-color: #ffcccc;
+    }
+  }
+  &.male {
+    .showGenderColor & {
+      background-color: #ccd9ff;
+    }
+  }
+  &.thirdgender {
+    .showGenderColor & {
+      //background-color: rgba(238, 130, 238, 0.11);
+    }
+  }
+  .relativeToggle {
+    .hideToggleButton & {
+      display: none;
+    }
+  }
+  .colorIcons {
+    position: absolute;
+    bottom: 0;
+    right: 2px;
+  }
 `;
 
 const ThemedNodeInner = styled.div`
@@ -325,6 +419,9 @@ const ThemedNodeInner = styled.div`
 `;
 
 const ThemedThumbnail = styled.div`
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
   width: ${({ theme }) => theme.thumbWidth}px;
   height: ${({ theme }) => theme.thumbHeight}px;
   border-radius: ${({ theme }) => theme.thumbBorderRadius}px;
@@ -334,19 +431,71 @@ const ThemedThumbnail = styled.div`
   ${({ theme }) =>
     theme.nodeFlexDirection === "column" &&
     `margin-top: ${(theme.nodeWidth - theme.thumbWidth) / 2}px`};
+  &.hasThumbnails {
+    cursor: pointer;
+  }
+  .defaultImgMessage {
+    color: gray;
+    font-size: 50px;
+    font-style: italic;
+    opacity: 0.3;
+    display: block;
+    text-align: center;
+    top: -4px;
+    white-space: nowrap;
+  }
+  img {
+    object-fit: cover;
+    object-position: top;
+    width: 100%;
+    font-size: 12px; //for alt text
+  }
   .thumbnailCounter {
+    position: absolute;
+    right: 2px;
+    bottom: 2px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border-radius: 15px;
+    font-size: 10px;
+    line-height: 1;
+    padding: 2px 4px 3px;
+    cursor: pointer;
+    z-index: 1;
     display: ${({ theme }) => theme.thumbCounterDisplay};
   }
 `;
 
 const ThemedContent = styled.div<{ hasSecondLabel?: boolean }>`
+  position: relative;
+  flex-grow: 1;
   //use margin to get width 100% calculations eg dates
   margin-left: ${({ theme }) => theme.contentPaddingLeft}px;
   margin-top: ${({ theme }) => theme.contentPaddingTop}px;
   .four-line-clamp {
     -webkit-line-clamp: ${({ theme }) => theme.contentLineClamp};
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    //-webkit-line-clamp: => moved to Node.js
+    line-height: 1; // leave 1, the children will be proportional to this
+    overflow: hidden;
   }
   .label {
+    //do not set display, will come from theme
+    vertical-align: text-top; //allow text start from top despite the line height
+    border: 0;
+    padding: 0;
+    font-weight: bold;
+    line-height: 1.2;
+    @media print {
+      color: gray;
+    }
+    &:focus {
+      outline: none;
+      border: 0;
+      box-shadow: none;
+      text-decoration: underline;
+    }
     word-break: break-word;
     text-align: ${({ theme }) => theme.labelTextAlign};
     font-size: ${({ theme }) => theme.labelFontSize}px;
@@ -361,8 +510,18 @@ const ThemedContent = styled.div<{ hasSecondLabel?: boolean }>`
   .description {
     //if "block" the dots will have the same color of the text
     display: ${({ theme }) => theme.descriptionDisplay};
+    line-height: 1.1;
+    font-size: 12px;
+    color: #666;
   }
   .dates {
+    //do not set display nor font size, will come from theme
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: absolute;
+    bottom: 0;
+    width: 100%; //this applies to all themes
     display: ${({ theme }) => theme.datesDisplay};
     text-align: ${({ theme }) => theme.labelTextAlign};
     font-size: ${({ theme }) => theme.datesFontSize}px;

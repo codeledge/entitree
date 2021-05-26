@@ -1,4 +1,4 @@
-import { BigEntity, SimpleClaim } from "types/Entity";
+import { Entity, SimpleClaim } from "types/Entity";
 
 // Claims may have qualifier series ordinal,
 // this should be set when the children birthdate is unknown,
@@ -18,7 +18,7 @@ function getSeriesOrdinal(claim: SimpleClaim) {
   return 0;
 }
 
-export default function getClaimIds(entity: BigEntity, propId: string) {
+export default function getClaimIds(entity: Entity, propId: string) {
   const simpleClaimSet = entity.simpleClaims?.[propId] || [];
   simpleClaimSet.sort((a, b) => {
     return getSeriesOrdinal(a) - getSeriesOrdinal(b);
@@ -27,10 +27,7 @@ export default function getClaimIds(entity: BigEntity, propId: string) {
 }
 
 // checks whether the claim has a qualifier of series ordinal, return true if the first one has it
-export function checkIfClaimsHasSeriesOrdinal(
-  entity: BigEntity,
-  propId: string,
-) {
+export function checkIfClaimsHasSeriesOrdinal(entity: Entity, propId: string) {
   const simpleClaimSet = entity.simpleClaims?.[propId] || [];
   if (simpleClaimSet.length) {
     if (getSeriesOrdinal(simpleClaimSet[0])) {

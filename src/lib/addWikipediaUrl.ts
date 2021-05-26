@@ -1,8 +1,8 @@
-import { BigEntity } from "types/Entity";
+import { Entity } from "types/Entity";
 import { LangCode } from "types/Lang";
 
 export default function addWikipediaUrl(
-  entity: BigEntity,
+  entity: Entity,
   languageCode: LangCode,
 ) {
   const sitelink = entity.sitelinks?.[languageCode + "wiki"];

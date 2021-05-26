@@ -6,8 +6,8 @@ import {
 } from "../constants/properties";
 import getClaimIds, { checkIfClaimsHasSeriesOrdinal } from "./getClaimIds";
 
-import { BigEntity } from "types/Entity";
 import { Claim } from "wikibase-types/dist/claim";
+import { Entity } from "types/Entity";
 import getSimpleClaimValue from "./getSimpleClaimValue";
 import store from "store";
 
@@ -20,7 +20,7 @@ export type ConnectorOptions = {
 };
 
 export default function addEntityConnectors(
-  entity: BigEntity,
+  entity: Entity,
   options: ConnectorOptions,
 ) {
   if (options.upMap) {
@@ -58,7 +58,7 @@ export default function addEntityConnectors(
   else delete entity.leftIds;
 }
 
-function addRightIds(entity: BigEntity) {
+function addRightIds(entity: Entity) {
   let claim: Claim[] = [];
   const { rightEntityOption } = store.getState().settings;
   if (rightEntityOption?.propIds) {

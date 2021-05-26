@@ -10,7 +10,7 @@ import React, { useState } from "react";
 
 import { EXAMPLES } from "../constants/examples";
 import { FiSliders } from "react-icons/fi";
-import Logo from "../components/Logo/Logo";
+import Logo from "./Logo";
 import ReactGA from "react-ga";
 import { SITE_NAME } from "../constants/meta";
 import styled from "styled-components";
@@ -60,7 +60,7 @@ export default function Header({ simple }: { simple?: boolean }) {
               onClick={openSettingsModal}
             >
               settings
-              <FiSliders className="ml-2" />
+              <FiSliders className="ms-2" />
             </Button>
             {/* <SettingsModal
               show={showSettingsModal}
@@ -79,12 +79,18 @@ const ThemedHeader = styled(Navbar)`
   padding-bottom: 0;
   height: 50px; //just a default fallback for other pages
   .navbar-brand {
+    margin-right: 0;
     svg {
       top: -2px;
       position: relative;
     }
   }
   .examplesButton {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 99; // stay over tree
+
     .dropdown-menu {
       top: 105%;
     }

@@ -1,8 +1,8 @@
-/* eslint-disable no-restricted-syntax */
-import { BigEntity } from "types/Entity";
 import { DEFAULT_LANGS_CODES } from "../constants/langs";
+/* eslint-disable no-restricted-syntax */
+import { Entity } from "types/Entity";
 
-export default function addLabel(entity: BigEntity, languageCode) {
+export default function addLabel(entity: Entity, languageCode) {
   const { labels } = entity;
   if (!labels) return;
 
