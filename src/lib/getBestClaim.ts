@@ -1,7 +1,7 @@
 import { Claim } from "wikibase-types/dist/claim";
 
 export default function getBestClaim(
-  claim: readonly Claim[],
+  claim: Claim[],
   prop = "id",
 ): string | undefined {
   if (!claim) return;

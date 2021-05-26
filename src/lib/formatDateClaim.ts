@@ -8,7 +8,7 @@ import ordinalize from "ordinalize";
 import wbk from "wikidata-sdk";
 
 export default function formatDateClaim(
-  claims: readonly Claim[],
+  claims: Claim[],
   languageCode = DEFAULT_LANG_CODE,
   yearOnly = false,
 ): string {

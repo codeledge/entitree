@@ -2,15 +2,15 @@ import { Claim } from "./Claim";
 import { LangCode } from "types/Lang";
 
 export interface Sitelink {
-  readonly site: string;
-  readonly title: string;
-  readonly badges: readonly string[];
-  readonly url?: string;
+  site: string;
+  title: string;
+  badges: string[];
+  url?: string;
 }
 
 export interface LanguageEntry {
-  readonly language: string;
-  readonly value: string;
+  language: string;
+  value: string;
 }
 
 export interface WikiEntity {
