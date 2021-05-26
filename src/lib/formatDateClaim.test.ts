@@ -1,4 +1,4 @@
-import { Claim } from "wikibase-types/dist";
+import { Claim } from "types/Claim";
 import formatDateClaim from "./formatDateClaim";
 
 test("JESUS birth date", () => {

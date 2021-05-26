@@ -6,7 +6,7 @@ import {
 } from "../constants/properties";
 import getClaimIds, { checkIfClaimsHasSeriesOrdinal } from "./getClaimIds";
 
-import { Claim } from "wikibase-types/dist/claim";
+import { Claim } from "types/Claim";
 import { Entity } from "types/Entity";
 import getSimpleClaimValue from "./getSimpleClaimValue";
 import store from "store";

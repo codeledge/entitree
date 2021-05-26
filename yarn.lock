@@ -4537,11 +4537,6 @@ next-redux-wrapper@6.0.2:
   resolved "https://registry.yarnpkg.com/next-redux-wrapper/-/next-redux-wrapper-6.0.2.tgz#b8dcd214e7b5cedd7a2a611ddb60422384d24374"
   integrity sha512-I9CnIYhQwI/qEoNdc9VAPjIyuq4rFFhCTa4rKhoDHWEVHGB1DXZy8TAyGpwvWizESd8IoTI/OKlP6bFpCbXsOw==
 
-next-seo@4.24.0:
-  version "4.24.0"
-  resolved "https://registry.yarnpkg.com/next-seo/-/next-seo-4.24.0.tgz#7c0447da00b8574dcda5c6979771a7f6efd24f55"
-  integrity sha512-9VQXfXAelhE+hAWzJ4azigQaW3FPX0kU0eYKFQXKsQjgY7AWtukjRGXls0oSIk8khhDJwmCt46EwsO9n5DDW6Q==
-
 next@10.1.3:
   version "10.1.3"
   resolved "https://registry.npmjs.org/next/-/next-10.1.3.tgz"
@@ -6738,11 +6733,6 @@ wikibase-sdk@^7.12.0:
   version "7.12.0"
   resolved "https://registry.yarnpkg.com/wikibase-sdk/-/wikibase-sdk-7.12.0.tgz#cf606f1deda874ca0a717cf49bc1dd00d7e80893"
   integrity sha512-7X6iQZGmKnPJ6DgieYsJfzc5Rz6Bsj1IDZE449uGXISkBH0/MZkP6kJGcMrSl3ywiZOLMW+8n4yMEAkts7sn2g==
-
-wikibase-types@0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/wikibase-types/-/wikibase-types-0.2.1.tgz#6f2a78af706f548a45172521ca56fa422fbb12e2"
-  integrity sha512-r7kw3L3AYwZ27Pebkbk23eaDq9iWNtkWoaUgIgFfSl9YxsGhGw2R9/0BaWLGwauQBom9BNhFNzhNa2f4tXUUgw==
 
 wikidata-sdk@*, wikidata-sdk@7.12.0:
   version "7.12.0"

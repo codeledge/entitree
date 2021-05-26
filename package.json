@@ -40,7 +40,6 @@
     "redux-persist": "6.0.0",
     "styled-components": "5.2.3",
     "url-join": "4.0.1",
-    "wikibase-types": "0.2.1",
     "wikidata-sdk": "7.12.0"
   },
   "devDependencies": {

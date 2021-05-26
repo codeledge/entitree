@@ -1,4 +1,4 @@
-import { Entity } from "wikibase-types/dist";
+import { WikiEntity } from "types/Entity";
 import axios from "axios";
 import wdk from "wikidata-sdk";
 
@@ -8,12 +8,13 @@ type getWikidataEntitiesProps = {
   props?: string[]; // ['info', 'claims']
 };
 
-type EntityResponse = Record<Entity["id"], Entity>;
+type Response = Record<WikiEntity["id"], WikiEntity>;
+
 export default async function getWikidataEntities({
   ids,
   languages = ["en"],
   props = ["labels", "descriptions", "claims", "sitelinks/urls"],
-}: getWikidataEntitiesProps): Promise<EntityResponse> {
+}: getWikidataEntitiesProps): Promise<Response> {
   if (ids.length === 0) {
     return {};
   }
@@ -37,13 +38,11 @@ export default async function getWikidataEntities({
 
   // responses will be based on the number of urls generated
   const responses = await axios.all(
-    urls.map((url) =>
-      axios.get<any, { data: { entities: EntityResponse } }>(url),
-    ),
+    urls.map((url) => axios.get<any, { data: { entities: Response } }>(url)),
   );
 
   // merge all responses in one object
-  let allentities: EntityResponse = {};
+  let allentities: Response = {};
   responses.forEach(({ data: { entities } }) => {
     allentities = {
       ...allentities,

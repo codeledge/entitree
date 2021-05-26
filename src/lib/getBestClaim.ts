@@ -1,4 +1,4 @@
-import { Claim } from "wikibase-types/dist/claim";
+import { Claim } from "types/Claim";
 
 export default function getBestClaim(
   claim: Claim[],

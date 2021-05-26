@@ -1,5 +1,5 @@
 import { CIRCA_ID, PRESUMABLY_ID } from "../constants/entities";
-import { Claim, ClaimSnakTimeValue } from "wikibase-types/dist";
+import { Claim, ClaimSnakTimeValue } from "types/Claim";
 
 import { DEFAULT_LANG_CODE } from "../constants/langs";
 import { DateTime } from "luxon";
