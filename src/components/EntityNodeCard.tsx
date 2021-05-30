@@ -258,7 +258,7 @@ export default memo(({ node }: { node: EntityNode }) => {
           )}
         </Button>
       )}
-      {node.data.downIds && !!node.data.downIds.length && (
+      {!!node.data.downIds?.length && (
         <Button
           className="childrenToggle relativeToggle"
           variant="link"

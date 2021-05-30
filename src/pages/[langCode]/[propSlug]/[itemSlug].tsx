@@ -2,13 +2,18 @@ import {
   setCurrentEntity,
   setCurrentEntityProps,
   setCurrentProp,
+  setCurrentUpMap,
+  setPreloadedChildren,
+  setPreloadedParents,
 } from "store/navigationSlice";
+import { sortByBirthDate, sortByGender } from "lib/sortEntities";
 import { useAppSelector, wrapper } from "store";
 
+import { CHILD_ID } from "constants/properties";
 import Div100vh from "react-div-100vh";
+import DrawingArea from "components/DrawingArea";
 import Error from "next/error";
 import Footer from "layout/Footer";
-import Graph from "components/Graph";
 import Head from "next/head";
 import Header from "layout/Header";
 import { LangCode } from "types/Lang";
@@ -19,6 +24,7 @@ import fs from "fs";
 import getConfig from "next/config";
 import getEntities from "lib/getEntities";
 import getItemProps from "wikidata/getItemProps";
+import getUpMap from "wikidata/getUpMap";
 import getWikipediaArticle from "wikipedia/getWikipediaArticle";
 import path from "path";
 import styled from "styled-components";
@@ -73,7 +79,7 @@ const TreePage = ({
       <Page>
         <Header />
         <SearchBar />
-        <Graph />
+        <DrawingArea />
       </Page>
       <Footer />
     </>
@@ -94,52 +100,88 @@ export const getServerSideProps = wrapper.getServerSideProps(
     };
 
     let itemId;
+    let itemThumbnail;
     if (itemSlug.match(/^Q\d+$/)) {
       itemId = itemSlug;
     } else {
       try {
         const {
-          data: { wikibase_item },
+          data: {
+            wikibase_item,
+            thumbnail: { source },
+          },
         } = await getWikipediaArticle(itemSlug, langCode);
         if (wikibase_item) itemId = wikibase_item;
+        if (source) itemThumbnail = source;
       } catch (error) {
-        console.error(error);
-
         return { props: { errorCode: error.response.status } };
       }
     }
 
     try {
-      const [[currentEntity], itemProps] = await Promise.all([
-        getEntities([itemId], langCode),
-        getItemProps(itemId, langCode),
+      const itemProps = await getItemProps(itemId, langCode);
+      const currentProp = itemProps.find(({ slug }) => slug === propSlug);
+      const [[currentEntity], upMap] = await Promise.all([
+        getEntities([itemId], langCode, {
+          currentPropId: currentProp?.id,
+          addDownIds: true,
+          addLeftIds: true,
+          addRightIds: true,
+        }),
+        ...(currentProp ? [getUpMap(itemId, currentProp.id)] : []),
       ]);
+
+      const [preloadedChildren, preloadedParents] = await Promise.all([
+        getEntities(currentEntity.downIds!, langCode, {
+          currentPropId: currentProp?.id,
+          addDownIds: true,
+          addRightIds: currentProp?.id === CHILD_ID,
+        }),
+        getEntities(upMap[currentEntity.id], langCode, {
+          currentPropId: currentProp?.id,
+          upMap,
+          addLeftIds: currentProp?.id === CHILD_ID,
+          addRightIds: currentProp?.id === CHILD_ID,
+        }),
+      ]);
+      if (currentProp?.id === CHILD_ID && !currentEntity.downIdsAlreadySorted) {
+        sortByBirthDate(preloadedChildren);
+      }
+      if (currentProp?.id === CHILD_ID) {
+        sortByGender(preloadedParents);
+      }
 
       store.dispatch(setCurrentEntity(currentEntity));
       store.dispatch(setCurrentEntityProps(itemProps));
-      const currentProp = itemProps.find(({ slug }) => slug === propSlug);
+      if (preloadedChildren)
+        store.dispatch(setPreloadedChildren(preloadedChildren));
+      if (preloadedParents)
+        store.dispatch(setPreloadedParents(preloadedParents));
+      if (upMap) store.dispatch(setCurrentUpMap(upMap));
       if (currentProp) store.dispatch(setCurrentProp(currentProp));
 
       const featuredImageFile = path.join(
-        "screenshot",
+        "/screenshot",
         propSlug,
         itemSlug + ".png",
       );
 
       const ogTitle = currentEntity.label;
-      let ogImage;
-      let twitterCard;
+      let ogImage = "";
+      let twitterCard = "";
 
       if (
         fs.existsSync(
           path.join(
             getConfig().serverRuntimeConfig.PROJECT_ROOT,
-            "public",
+            `public`,
             featuredImageFile,
           ),
         )
       ) {
         ogImage = featuredImageFile;
+      } else if (itemThumbnail) {
+        ogImage = itemThumbnail;
       } else {
         ogImage = "icons/entitree_square.png";
         twitterCard = "summary";
@@ -149,7 +191,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     } catch (error) {
       console.error(error);
 
-      return { props: { errorCode: error.response.status } };
+      return { props: { errorCode: error.response?.status || 500 } };
     }
   },
 );

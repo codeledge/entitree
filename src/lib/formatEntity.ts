@@ -14,6 +14,7 @@ import addImages from "./addImages";
 import addInceptionAbolishedSpan from "./addInceptionAbolishedSpan";
 import addInceptionDate from "./addInceptionDate";
 import addIsHuman from "./addIsHuman";
+import addIsInfantDeath from "./addIsInfantDeath";
 import addLabel from "./addLabel";
 import addLifeSpan from "./addLifeSpan";
 import addSecondLabel from "./addSecondLabel";
@@ -31,8 +32,6 @@ export default function formatEntity(wikidataEntity: WikiEntity) {
     theme,
   } = store.getState();
 
-  console.log({ languageCode, secondLanguageCode });
-
   const simpleClaims = wbk.simplify.claims(wikidataEntity.claims, {
     keepQualifiers: true,
   });
@@ -48,7 +47,7 @@ export default function formatEntity(wikidataEntity: WikiEntity) {
 
   addBirthDate(entity, languageCode);
   addDeathDate(entity, languageCode);
-  // addIsInfantDeath(entity);
+  addIsInfantDeath(entity);
   addLifeSpan(entity);
 
   addBirthPlaceId(entity);
@@ -77,10 +76,6 @@ export default function formatEntity(wikidataEntity: WikiEntity) {
   addIsHuman(entity);
 
   addImages(entity, theme);
-
-  //delete as non-serializeable
-  delete entity.claims;
-  delete entity.simpleClaims;
 
   return entity;
 }

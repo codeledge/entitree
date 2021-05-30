@@ -14,6 +14,10 @@ type NavigationState = {
   currentProp?: EntityProp;
   currentUpMap?: UpMap;
   loadingEntity: boolean;
+  preloadedChildren?: Entity[];
+  preloadedParents?: Entity[];
+  preloadedSiblings?: Entity[];
+  preloadedSpouses?: Entity[];
 };
 
 type UpMap = Record<string, any>;
@@ -40,6 +44,21 @@ export const navigationSlice = createSlice({
     },
     setCurrentEntityProps: (state, action: PayloadAction<EntityProp[]>) => {
       state.currentEntityProps = action.payload;
+    },
+    setCurrentUpMap: (state, action: PayloadAction<UpMap>) => {
+      state.currentUpMap = action.payload;
+    },
+    setPreloadedChildren: (state, action: PayloadAction<Entity[]>) => {
+      state.preloadedChildren = action.payload;
+    },
+    setPreloadedParents: (state, action: PayloadAction<Entity[]>) => {
+      state.preloadedParents = action.payload;
+    },
+    setPreloadedSiblings: (state, action: PayloadAction<Entity[]>) => {
+      state.preloadedSiblings = action.payload;
+    },
+    setPreloadedSpouses: (state, action: PayloadAction<Entity[]>) => {
+      state.preloadedSpouses = action.payload;
     },
   },
   extraReducers(builder) {
@@ -82,6 +101,11 @@ export const {
   setCurrentEntityProps,
   setLoadingEntity,
   setCurrentProp,
+  setCurrentUpMap,
+  setPreloadedChildren,
+  setPreloadedSiblings,
+  setPreloadedParents,
+  setPreloadedSpouses,
 } = navigationSlice.actions;
 
 export default navigationSlice.reducer;

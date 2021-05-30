@@ -36,10 +36,17 @@ export default async function getEntities(
 
     const entity = formatEntity(wikiEntitiesMap[id]);
 
+    //filter out by default
+    if (entity.isHuman && entity.isInfantDeath) return acc;
+
     // siblings and spouses don't need connectors, so no currentPropId is passed
     if (options?.currentPropId) {
       addEntityConnectors(entity, options);
     }
+
+    //delete as non-serializeable
+    delete entity.claims;
+    delete entity.simpleClaims;
 
     return acc.concat(entity);
   }, []);

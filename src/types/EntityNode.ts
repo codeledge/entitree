@@ -6,6 +6,8 @@ export interface EntityNode extends HierarchyNode<Entity> {
   x: number;
   y: number;
   virtualParent?: EntityNode;
+  siblings?: EntityNode[];
+  spouses?: EntityNode[];
   depth: number; //override this field
   isParent?: boolean;
   isSibling?: boolean;
@@ -20,5 +22,6 @@ export interface EntityNode extends HierarchyNode<Entity> {
   loadingSiblings?: boolean;
   _siblingsExpanded?: boolean;
   loadingChildren?: boolean;
+  _children?: EntityNode[];
   _childrenExpanded?: boolean;
 }

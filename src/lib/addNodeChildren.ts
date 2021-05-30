@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CHILD_ID } from "../constants/properties";
+import { Entity } from "types/Entity";
 import { EntityNode } from "types/EntityNode";
 import { LangCode } from "types/Lang";
 import getEntities from "./getEntities";
@@ -20,10 +21,13 @@ export default async function addNodeChildren(
   if (currentPropId === CHILD_ID && !node.data.downIdsAlreadySorted) {
     sortByBirthDate(entities);
   }
-  entities.forEach((entity, index) => {
-    if (entity.isHuman && entity.isInfantDeath) return;
+  addChildEntities(node, entities);
+}
+
+export const addChildEntities = (node: EntityNode, childEntities: Entity[]) => {
+  childEntities?.forEach((entity, index) => {
     const childNode = hierarchy(entity) as EntityNode;
-    childNode.depth = node.depth! + 1;
+    childNode.depth = node.depth + 1;
     childNode.parent = node;
     childNode.childNumber = index + 1;
     childNode.treeId = getNodeUniqueId(childNode, index);
@@ -33,4 +37,4 @@ export default async function addNodeChildren(
     }
     node.children.push(childNode);
   });
-}
+};

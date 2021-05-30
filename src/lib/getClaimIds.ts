@@ -4,7 +4,7 @@ import { Entity, SimpleClaim } from "types/Entity";
 // this should be set when the children birthdate is unknown,
 // but they should still be sorted by age.
 function getSeriesOrdinal(claim: SimpleClaim) {
-  if (claim.qualifiers.P1545[0]) {
+  if (claim?.qualifiers?.P1545?.[0]) {
     return parseInt(claim.qualifiers.P1545[0], 10);
   }
   // const {

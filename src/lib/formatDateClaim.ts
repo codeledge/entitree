@@ -25,7 +25,9 @@ export default function formatDateClaim(
   if (!firstDate) return "";
   const { value } = firstDate.mainsnak.datavalue as ClaimSnakTimeValue;
   const sourcingCircumstances =
-    firstDate.qualifiers?.[SOURCING_CIRCUMSTANCES_ID][0].datavalue?.value["id"];
+    firstDate.qualifiers?.[SOURCING_CIRCUMSTANCES_ID]?.[0]?.datavalue?.value[
+      "id"
+    ];
 
   return parseDate(value, languageCode, yearOnly, sourcingCircumstances);
 }

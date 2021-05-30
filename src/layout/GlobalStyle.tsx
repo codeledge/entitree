@@ -33,6 +33,10 @@ export const GlobalStyle = createGlobalStyle`
     vertical-align: middle;
   }    
 
+  .btn-link {
+    text-decoration: none;
+  }
+
   &.dark {
 
     background-color: ${DARK_COLOR};

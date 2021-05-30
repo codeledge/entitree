@@ -1,10 +1,11 @@
 import { Container } from "react-bootstrap";
 import { FaGithub } from "react-icons/fa";
-import Footer from "../../layout/Footer";
+import Footer from "../layout/Footer";
 import Head from "next/head";
-import Header from "../../layout/Header";
+import Header from "../layout/Header";
 import React from "react";
-import { SITE_NAME } from "../../constants/meta";
+import { SITE_NAME } from "../constants/meta";
+import { Title } from "layout/Title";
 import styled from "styled-components";
 
 export default function AboutPage() {
@@ -17,7 +18,7 @@ export default function AboutPage() {
       </Head>
       <Header simple />
       <Container className="pb-5">
-        <h1>About the project</h1>
+        <Title>About the project</Title>
         <p>
           This effort started in mid-2020 and is a merger of other{" "}
           <a href="https://www.wikidata.org/wiki/Wikidata:Tools/Visualize_data">
@@ -178,11 +179,6 @@ export default function AboutPage() {
 }
 
 const Page = styled.div`
-  h1 {
-    font-weight: 200;
-    margin-bottom: 20px;
-    margin-top: 15px;
-  }
   .donateButtons {
     display: flex;
     justify-content: space-around;
