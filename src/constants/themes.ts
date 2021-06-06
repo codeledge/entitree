@@ -1,47 +1,47 @@
-import isInIframe from "../lib/isInIframe";
+import { DefaultTheme } from "styled-components";
 
-export interface Theme {
-  contentLineClamp: number;
-  contentPaddingLeft: number;
-  contentPaddingTop: number;
-  datesDisplay: "block" | "none";
-  datesFontColor: string;
-  datesFontSize: number;
-  datesYearOnly: boolean;
-  descriptionDisplay: "inline" | "none";
-  disabled?: boolean;
-  graphBackgroundColor?: string;
-  headerHeight: number;
-  isCustom?: boolean;
-  isInIframe: boolean;
-  labelFontColor: string;
-  labelFontSize: number;
-  labelTextAlign: string;
-  name: string;
-  nodeBackgroundColor?: string;
-  nodeBorder: string;
-  nodeBorderRadius: number;
-  nodeBoxShadow: string;
-  nodeCss: string;
-  nodeFlexDirection: "row" | "column";
-  nodeFocusedBoxShadow: string;
-  nodeHeight: number;
-  nodeVerticalSpacing: number;
-  nodeWidth: number;
-  relStroke: string;
-  relStrokeWidth: number;
-  searchBarHeight: number;
-  separationCousins: number;
-  separationSameGroup: number;
-  separationSiblingSpouse: number;
-  thumbBorderRadius: number;
-  thumbCounterDisplay: "block" | "none";
-  thumbHeight: number;
-  thumbWidth: number;
-  thumbDisplay: boolean;
+declare module "styled-components" {
+  export interface DefaultTheme {
+    contentLineClamp: number;
+    contentPaddingLeft: number;
+    contentPaddingTop: number;
+    datesDisplay: "block" | "none";
+    datesFontColor: string;
+    datesFontSize: number;
+    datesYearOnly: boolean;
+    descriptionDisplay: "inline" | "none";
+    disabled?: boolean;
+    graphBackgroundColor?: string;
+    headerHeight: number;
+    labelFontColor: string;
+    labelFontSize: number;
+    labelTextAlign: string;
+    name: string;
+    nodeBackgroundColor?: string;
+    nodeBorder: string;
+    nodeBorderRadius: number;
+    nodeBoxShadow: string;
+    nodeCss: string;
+    nodeFlexDirection: "row" | "column";
+    nodeFocusedBoxShadow: string;
+    nodeHeight: number;
+    nodeVerticalSpacing: number;
+    nodeWidth: number;
+    relStroke: string;
+    relStrokeWidth: number;
+    searchBarHeight: number;
+    separationCousins: number;
+    separationSameGroup: number;
+    separationSiblingSpouse: number;
+    thumbBorderRadius: number;
+    thumbCounterDisplay: "block" | "none";
+    thumbHeight: number;
+    thumbWidth: number;
+    thumbDisplay: boolean;
+  }
 }
 
-export const defaultTheme: Theme = {
+export const defaultTheme: DefaultTheme = {
   contentPaddingLeft: 3,
   contentPaddingTop: 0,
   datesDisplay: "block",
@@ -50,7 +50,6 @@ export const defaultTheme: Theme = {
   datesYearOnly: false,
   descriptionDisplay: "inline",
   headerHeight: 48,
-  isInIframe: isInIframe(),
   labelFontColor: "",
   labelFontSize: 13,
   labelTextAlign: "left",
@@ -79,14 +78,14 @@ export const defaultTheme: Theme = {
   thumbDisplay: true,
 };
 
-const bigTheme: Theme = {
+const bigTheme: DefaultTheme = {
   ...defaultTheme,
   name: "Big",
   datesFontSize: 9,
   labelFontSize: 16,
 };
 
-const lightTheme: Theme = {
+const lightTheme: DefaultTheme = {
   ...defaultTheme,
   name: "Light",
   labelFontSize: 16,
@@ -96,13 +95,13 @@ const lightTheme: Theme = {
   thumbWidth: 60,
 };
 
-const darkTheme: Theme = {
+const darkTheme: DefaultTheme = {
   ...defaultTheme,
   name: "Dark",
   disabled: true,
 };
 
-const onlyLabelTheme: Theme = {
+const onlyLabelTheme: DefaultTheme = {
   ...defaultTheme,
   datesDisplay: "none",
   datesFontSize: 14,
@@ -118,7 +117,7 @@ const onlyLabelTheme: Theme = {
   thumbWidth: 86,
 };
 
-const verticalTheme: Theme = {
+const verticalTheme: DefaultTheme = {
   ...defaultTheme,
   datesDisplay: "none",
   datesFontSize: 14,
@@ -138,7 +137,7 @@ const verticalTheme: Theme = {
   thumbWidth: 84,
 };
 
-const mattsTheme: Theme = {
+const mattsTheme: DefaultTheme = {
   ...defaultTheme,
   datesDisplay: "block",
   datesFontColor: "black",
@@ -166,13 +165,13 @@ const mattsTheme: Theme = {
   thumbBorderRadius: 10,
 };
 
-const onlyText: Theme = {
+const onlyText: DefaultTheme = {
   ...defaultTheme,
   name: "Only Text",
   thumbDisplay: false,
 };
 
-const rawTheme: Theme = {
+const rawTheme: DefaultTheme = {
   ...defaultTheme,
   name: "Borderless",
   contentPaddingLeft: 0,

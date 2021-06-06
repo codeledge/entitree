@@ -10,7 +10,7 @@ import {
   FiChevronUp,
 } from "react-icons/fi";
 import { GiBigDiamondRing, GiPerson } from "react-icons/gi";
-import React, { memo, useEffect, useMemo, useState } from "react";
+import React, { memo, useState } from "react";
 import { RiGroupLine, RiParentLine } from "react-icons/ri";
 import styled, { useTheme } from "styled-components";
 import {
@@ -18,7 +18,7 @@ import {
   toggleParents,
   toggleSiblings,
   toggleSpouses,
-} from "store/treeSlice";
+} from "actions/treeActions";
 
 import { BsImage } from "react-icons/bs";
 import { Button } from "react-bootstrap";
@@ -26,11 +26,12 @@ import { CHILD_ID } from "constants/properties";
 import { EntityNode } from "types/EntityNode";
 import { Image } from "types/Entity";
 import { MdChildCare } from "react-icons/md";
-import { Theme } from "constants/themes";
 import clsx from "clsx";
 import { useAppSelector } from "store";
+import { useDispatch } from "react-redux";
 
 export default memo(({ node }: { node: EntityNode }) => {
+  const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const [thumbnails, setThumbnails] = useState<Image[]>(
     node.data.thumbnails || [],
@@ -38,10 +39,10 @@ export default memo(({ node }: { node: EntityNode }) => {
   const [images, setImages] = useState<Image[]>(node.data.images || []);
   const [faceImage, setFaceImage] = useState<Image>();
   const [thumbnailIndex, setThumbnailIndex] = useState(0);
-  const theme = useTheme() as Theme;
+  const theme = useTheme();
 
   const settings = useAppSelector(({ settings: s }) => s);
-  const { currentProp } = useAppSelector(({ navigation }) => navigation);
+  const { currentProp } = useAppSelector(({ tree }) => tree);
 
   const hideModal = () => {
     setShowModal(false);
@@ -128,7 +129,7 @@ export default memo(({ node }: { node: EntityNode }) => {
               "four-line-clamp": !hasLabelOnly,
             })}
           >
-            {node.isRoot ? (
+            {node.data.isRoot ? (
               <h1
                 className={clsx(`label btn btn-link mb-0`, {
                   "four-line-clamp": hasLabelOnly,
@@ -210,13 +211,13 @@ export default memo(({ node }: { node: EntityNode }) => {
         <Button
           className="siblingToggle relativeToggle"
           variant="link"
-          disabled={node.loadingSiblings}
-          onClick={() => toggleSiblings(node)}
-          title={(node._siblingsExpanded ? "Collapse" : "Expand") + " siblings"}
+          disabled={node.data.loadingSiblings}
+          onClick={() => dispatch(toggleSiblings(node))}
+          title={(node.data.siblings ? "Collapse" : "Expand") + " siblings"}
         >
           <div className="value">{node.data.leftIds.length}</div>
           <div className="chevron mt-1 mb-1">
-            {node._siblingsExpanded ? <FiChevronRight /> : <FiChevronLeft />}
+            {node.data.siblings ? <FiChevronRight /> : <FiChevronLeft />}
           </div>
           <div className="icon">
             <RiGroupLine />
@@ -227,29 +228,29 @@ export default memo(({ node }: { node: EntityNode }) => {
         <Button
           className="spouseToggle relativeToggle"
           variant="link"
-          disabled={node.loadingSpouses}
-          onClick={() => toggleSpouses(node)}
-          title={(node._spousesExpanded ? "Collapse" : "Expand") + " spouses"}
+          disabled={node.data.loadingSpouses}
+          onClick={() => dispatch(toggleSpouses(node))}
+          title={(node.data.spouses ? "Collapse" : "Expand") + " spouses"}
         >
           <div className="value">{node.data.rightIds.length}</div>
           <div className="chevron mt-1 mb-1">
-            {node._spousesExpanded ? <FiChevronLeft /> : <FiChevronRight />}
+            {node.data.spouses ? <FiChevronLeft /> : <FiChevronRight />}
           </div>
           <div className="icon">
             <GiBigDiamondRing />
           </div>
         </Button>
       )}
-      {node.data.upIds && !!node.data.upIds.length && (
+      {!!node.data.upIds?.length && (
         <Button
           className="parentToggle relativeToggle"
           variant="link"
-          disabled={node.loadingParents}
-          onClick={() => toggleParents(node)}
+          disabled={node.data.loadingParents}
+          onClick={() => dispatch(toggleParents(node))}
         >
           <span className="value">{node.data.upIds.length}</span>
           <span className="chevron ml-1 mr-1">
-            {node._parentsExpanded ? <FiChevronDown /> : <FiChevronUp />}
+            {node.data.parents ? <FiChevronDown /> : <FiChevronUp />}
           </span>
           {currentProp?.id === CHILD_ID && (
             <span className="icon">
@@ -262,12 +263,12 @@ export default memo(({ node }: { node: EntityNode }) => {
         <Button
           className="childrenToggle relativeToggle"
           variant="link"
-          disabled={node.loadingChildren}
-          onClick={() => toggleChildren(node)}
+          disabled={node.data.loadingChildren}
+          onClick={() => dispatch(toggleChildren(node))}
         >
           <span className="value">{node.data.childrenCount}</span>
           <span className="chevron ml-1 mr-1">
-            {node._childrenExpanded ? <FiChevronUp /> : <FiChevronDown />}
+            {node.data.children ? <FiChevronUp /> : <FiChevronDown />}
           </span>
           {currentProp?.id === CHILD_ID && (
             <span className="icon">
@@ -520,7 +521,7 @@ const ThemedContent = styled.div<{ hasSecondLabel?: boolean }>`
     overflow: hidden;
     text-overflow: ellipsis;
     position: absolute;
-    bottom: 0;
+    bottom: -1px;
     width: 100%; //this applies to all themes
     display: ${({ theme }) => theme.datesDisplay};
     text-align: ${({ theme }) => theme.labelTextAlign};

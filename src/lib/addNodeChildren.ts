@@ -24,6 +24,22 @@ export default async function addNodeChildren(
   addChildEntities(node, entities);
 }
 
+export async function getNodeChildren(
+  node: EntityNode,
+  languageCode: LangCode,
+  currentPropId: string,
+) {
+  if (!node.data.downIds) return [];
+  const entities = await getEntities(node.data.downIds, languageCode, {
+    addDownIds: true,
+    addRightIds: currentPropId === CHILD_ID,
+  });
+  if (currentPropId === CHILD_ID && !node.data.downIdsAlreadySorted) {
+    sortByBirthDate(entities);
+  }
+  return entities;
+}
+
 export const addChildEntities = (node: EntityNode, childEntities: Entity[]) => {
   childEntities?.forEach((entity, index) => {
     const childNode = hierarchy(entity) as EntityNode;

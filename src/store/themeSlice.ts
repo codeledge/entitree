@@ -1,9 +1,9 @@
-import { Theme, defaultTheme } from "constants/themes";
-
+import { DefaultTheme } from "styled-components";
 import { createSlice } from "@reduxjs/toolkit";
+import { defaultTheme } from "constants/themes";
 import { setTreeLayout } from "lib/getTreeLayout";
 
-const initialState: Theme = defaultTheme;
+const initialState: DefaultTheme = defaultTheme;
 
 export const themeSlice = createSlice({
   name: "theme",

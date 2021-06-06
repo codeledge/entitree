@@ -13,13 +13,12 @@ import {
   SearchResult,
   searchTerm as wikidataSearchTerm,
 } from "services/wikidata";
-import { loadEntity, setCurrentProp } from "store/navigationSlice";
-import { useAppDispatch, useAppSelector } from "store";
 
 import { DEFAULT_PROPERTY_ALL } from "constants/properties";
 import { FaSearch } from "react-icons/fa";
 import Link from "next/link";
 import styled from "styled-components";
+import { useAppSelector } from "store";
 import useDebounce from "../hooks/useDebounce";
 import useOnClickOutside from "hooks/useOnClickOutside";
 
@@ -29,11 +28,9 @@ export default function SearchBar() {
     currentProp,
     loadingEntity,
     currentEntityProps,
-  } = useAppSelector(({ navigation }) => navigation);
+  } = useAppSelector(({ tree }) => tree);
 
   const { currentLang } = useAppSelector(({ settings }) => settings);
-
-  const dispatch = useAppDispatch();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [loadingSuggestions, setLoadingSuggestions] = useState(false);
@@ -269,13 +266,11 @@ function Suggestions({
   searchResults: SearchResult[];
   setShowSuggestions: (a) => void;
 }) {
-  const dispatch = useAppDispatch();
-
   const wrapperRef = useRef(null);
 
   useOnClickOutside(wrapperRef, () => setShowSuggestions(false));
 
-  const { currentProp } = useAppSelector(({ navigation }) => navigation);
+  const { currentProp } = useAppSelector(({ tree }) => tree);
 
   const { currentLang } = useAppSelector(({ settings }) => settings);
 

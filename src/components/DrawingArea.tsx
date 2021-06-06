@@ -1,3 +1,5 @@
+import { MAX_SCALE, MIN_SCALE } from "constants/tree";
+
 import Graph from "./Graph";
 import React from "react";
 import { TransformWrapper } from "react-zoom-pan-pinch";
@@ -10,8 +12,13 @@ export default function DrawingArea() {
         zoomIn={{ step: 20 }}
         zoomOut={{ step: 20 }}
         wheel={{ step: 25 }}
+        doubleClick={{
+          disabled: true,
+        }}
         options={{
           limitToBounds: false,
+          minScale: MIN_SCALE,
+          maxScale: MAX_SCALE,
         }}
       >
         {(props) => <Graph {...props} />}

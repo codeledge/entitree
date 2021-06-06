@@ -1,6 +1,7 @@
 import axios from "axios";
 import wdk from "wikidata-sdk";
 
+//TODO: release cache after a while
 const cache = {};
 
 export default async function getUpMap(itemId: string, propId: string) {

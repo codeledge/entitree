@@ -1,10 +1,7 @@
 import { Claim } from "types/Claim";
 
-export default function getBestClaim(
-  claim: Claim[],
-  prop = "id",
-): string | undefined {
-  if (!claim) return;
+export default function getBestClaim(claim: Claim[], prop = "id"): string {
+  if (!claim) return "";
 
   const cleanClaims: Claim[] = [];
   claim.forEach((c) => {
@@ -18,6 +15,5 @@ export default function getBestClaim(
 
   const bestClaim = cleanClaims[0];
 
-  // eslint-disable-next-line consistent-return
-  return bestClaim?.mainsnak.datavalue?.value?.[prop];
+  return bestClaim?.mainsnak.datavalue?.value?.[prop] || "";
 }

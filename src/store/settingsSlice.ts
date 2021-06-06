@@ -1,9 +1,10 @@
 import { DEFAULT_LANG, DEFAULT_LANG_CODE } from "constants/langs";
 import { Lang, LangCode } from "types/Lang";
 
+import { DefaultTheme } from "styled-components";
 import { RIGHT_ENTITY_OPTIONS } from "constants/properties";
-import { Theme } from "constants/themes";
 import { createSlice } from "@reduxjs/toolkit";
+import { defaultTheme } from "constants/themes";
 
 type SettingsState = {
   themeCode: string;
@@ -18,11 +19,11 @@ type SettingsState = {
   showFace: boolean;
   rightEntityOption: typeof RIGHT_ENTITY_OPTIONS[0];
   imageType: "face" | "head";
-  customThemes: Record<Theme["name"], Theme>;
+  customThemes: Record<DefaultTheme["name"], DefaultTheme>;
 };
 
 const initialState: SettingsState = {
-  themeCode: "default",
+  themeCode: defaultTheme.name,
   currentLang: DEFAULT_LANG,
   languageCode: DEFAULT_LANG_CODE,
   showGenderColor: false,

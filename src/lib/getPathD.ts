@@ -1,10 +1,11 @@
 /* eslint-disable no-nested-ternary */
-import { Theme } from "constants/themes";
+
+import { DefaultTheme } from "styled-components";
 
 export default function getPathD(
   { x: startX, y: startY },
   { x: endX, y: endY },
-  theme: Theme,
+  theme: DefaultTheme,
 ) {
   if (startX === endX) return `M${startX},${startY} V${endY}`;
   if (startY === endY) return `M${startX},${startY} H${endX}`;

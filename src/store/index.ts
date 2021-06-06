@@ -17,7 +17,6 @@ import {
 } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
-import navigationReducer from "./navigationSlice";
 import settingsReducer from "./settingsSlice";
 import storage from "redux-persist/lib/storage";
 import themeReducer from "./themeSlice";
@@ -25,7 +24,6 @@ import treeReducer from "./treeSlice";
 
 const rootReducer = combineReducers({
   settings: settingsReducer,
-  navigation: navigationReducer,
   theme: themeReducer,
   tree: treeReducer,
 });
@@ -43,7 +41,9 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = configureStore({
   reducer: persistedReducer,
   middleware: getDefaultMiddleware({
-    serializableCheck: false, // be carefult not to have weird stuff in persisted settings
+    serializableCheck: {
+      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+    },
   }),
 });
 

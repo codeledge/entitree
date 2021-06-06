@@ -1,9 +1,9 @@
 import { IMAGE_ID, LOGO_ID } from "../constants/properties";
 
+import { DefaultTheme } from "styled-components";
 import { Entity } from "types/Entity";
-import { Theme } from "constants/themes";
 
-export default function addImages(entity: Entity, theme: Theme) {
+export default function addImages(entity: Entity, theme: DefaultTheme) {
   entity.thumbnails = [];
   entity.images = [];
 

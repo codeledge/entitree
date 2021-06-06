@@ -23,7 +23,7 @@ export default function addEntityConnectors(
   entity: Entity,
   options: ConnectorOptions,
 ) {
-  if (options.upMap) {
+  if (options.upMap && options.upMap[entity.id]) {
     entity.upIds = options.upMap[entity.id];
   } else {
     delete entity.upIds;

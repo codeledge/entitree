@@ -69,6 +69,23 @@ export interface Entity extends WikiEntity {
   leftIds?: string[];
   downIdsAlreadySorted?: boolean;
   childrenCount?: number;
+  parents?: Entity[];
+  children?: Entity[];
+  siblings?: Entity[];
+  spouses?: Entity[];
+  _children?: Entity[];
+  _spouses?: Entity[];
+  _siblings?: Entity[];
+  _parents?: Entity[];
+  isParent?: boolean;
+  isSibling?: boolean;
+  isSpouse?: boolean;
+  isChild?: boolean;
+  isRoot?: boolean;
+  loadingSpouses?: boolean;
+  loadingParents?: boolean;
+  loadingSiblings?: boolean;
+  loadingChildren?: boolean;
 }
 
 export type Image = {

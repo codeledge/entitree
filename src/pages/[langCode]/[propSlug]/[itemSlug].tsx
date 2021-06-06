@@ -1,12 +1,16 @@
 import {
+  getChildEntities,
+  getParentEntities,
+  getRootEntity,
+} from "lib/getEntities";
+import {
+  setChildTree,
   setCurrentEntity,
   setCurrentEntityProps,
   setCurrentProp,
   setCurrentUpMap,
-  setPreloadedChildren,
-  setPreloadedParents,
-} from "store/navigationSlice";
-import { sortByBirthDate, sortByGender } from "lib/sortEntities";
+  setParentTree,
+} from "store/treeSlice";
 import { useAppSelector, wrapper } from "store";
 
 import { CHILD_ID } from "constants/properties";
@@ -22,7 +26,6 @@ import { SITE_NAME } from "constants/meta";
 import SearchBar from "layout/SearchBar";
 import fs from "fs";
 import getConfig from "next/config";
-import getEntities from "lib/getEntities";
 import getItemProps from "wikidata/getItemProps";
 import getUpMap from "wikidata/getUpMap";
 import getWikipediaArticle from "wikipedia/getWikipediaArticle";
@@ -39,9 +42,7 @@ const TreePage = ({
   twitterImage,
   twitterTitle,
 }) => {
-  const { currentEntity, currentProp } = useAppSelector(
-    ({ navigation }) => navigation,
-  );
+  const { currentEntity, currentProp } = useAppSelector(({ tree }) => tree);
 
   if (errorCode) {
     return <Error statusCode={errorCode} />;
@@ -105,6 +106,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
       itemId = itemSlug;
     } else {
       try {
+        //TODO: cache this
         const {
           data: {
             wikibase_item,
@@ -121,42 +123,46 @@ export const getServerSideProps = wrapper.getServerSideProps(
     try {
       const itemProps = await getItemProps(itemId, langCode);
       const currentProp = itemProps.find(({ slug }) => slug === propSlug);
-      const [[currentEntity], upMap] = await Promise.all([
-        getEntities([itemId], langCode, {
-          currentPropId: currentProp?.id,
-          addDownIds: true,
-          addLeftIds: true,
-          addRightIds: true,
-        }),
-        ...(currentProp ? [getUpMap(itemId, currentProp.id)] : []),
-      ]);
+      const upMap = currentProp && (await getUpMap(itemId, currentProp.id));
+      const currentEntity = await getRootEntity(itemId, langCode, {
+        currentPropId: currentProp?.id,
+        upMap,
+        addDownIds: true,
+        addLeftIds: true,
+        addRightIds: true,
+      });
 
       const [preloadedChildren, preloadedParents] = await Promise.all([
-        getEntities(currentEntity.downIds!, langCode, {
+        getChildEntities(currentEntity.downIds!, langCode, {
           currentPropId: currentProp?.id,
           addDownIds: true,
           addRightIds: currentProp?.id === CHILD_ID,
+          downIdsAlreadySorted: currentEntity.downIdsAlreadySorted,
         }),
-        getEntities(upMap[currentEntity.id], langCode, {
+        getParentEntities(upMap[currentEntity.id], langCode, {
           currentPropId: currentProp?.id,
           upMap,
           addLeftIds: currentProp?.id === CHILD_ID,
-          addRightIds: currentProp?.id === CHILD_ID,
         }),
       ]);
-      if (currentProp?.id === CHILD_ID && !currentEntity.downIdsAlreadySorted) {
-        sortByBirthDate(preloadedChildren);
-      }
-      if (currentProp?.id === CHILD_ID) {
-        sortByGender(preloadedParents);
-      }
 
       store.dispatch(setCurrentEntity(currentEntity));
       store.dispatch(setCurrentEntityProps(itemProps));
       if (preloadedChildren)
-        store.dispatch(setPreloadedChildren(preloadedChildren));
+        store.dispatch(
+          setChildTree({
+            ...currentEntity,
+            children: preloadedChildren,
+          }),
+        );
       if (preloadedParents)
-        store.dispatch(setPreloadedParents(preloadedParents));
+        store.dispatch(
+          setParentTree({
+            ...currentEntity,
+            parents: preloadedParents,
+          }),
+        );
+
       if (upMap) store.dispatch(setCurrentUpMap(upMap));
       if (currentProp) store.dispatch(setCurrentProp(currentProp));
 
