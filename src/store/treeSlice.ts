@@ -5,6 +5,7 @@ import { AppState } from "store";
 import { HYDRATE } from "next-redux-wrapper";
 import { UpMap } from "types/EntityNode";
 import { findEntity } from "treeHelpers/findEntity";
+import { loadEntity } from "store/navigationSlice";
 
 export type TreeState = {
   currentEntity?: Entity;
@@ -33,12 +34,13 @@ export const treeSlice = createSlice({
   name: "tree",
   initialState,
   reducers: {
+    reset: (state) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      state.loadingEntity = true;
+    },
     setCurrentEntity: (state, action) => {
       state.currentEntity = action.payload;
-    },
-    setLoadingEntity: (state, action: PayloadAction<boolean>) => {
-      state.currentEntity = undefined;
-      state.loadingEntity = action.payload;
+      state.loadingEntity = false;
     },
     setCurrentProp: (state, action: PayloadAction<EntityProp>) => {
       state.currentProp = action.payload;
@@ -304,6 +306,7 @@ export const {
   expandParents,
   expandSiblings,
   expandSpouses,
+  reset,
   setChildTree,
   setCurrentEntity,
   setCurrentEntityProps,

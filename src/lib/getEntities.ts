@@ -92,6 +92,8 @@ export const getParentEntities = async (
   languageCode: LangCode,
   options?: Options,
 ): Promise<Entity[]> => {
+  if (!ids) return [];
+
   const parents = await getEntities(ids, languageCode, options);
 
   parents.forEach((parent) => {
@@ -129,6 +131,8 @@ export const getSiblingEntities = async (
   siblings.forEach((sibling) => {
     sibling.isSibling = true;
   });
+
+  sortByBirthDate(siblings);
 
   return siblings;
 };

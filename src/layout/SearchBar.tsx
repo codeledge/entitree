@@ -1,11 +1,9 @@
 import {
-  Button,
   Container,
   Dropdown,
   Form,
   InputGroup,
   Overlay,
-  Spinner,
   Tooltip,
 } from "react-bootstrap";
 import React, { useEffect, useRef, useState } from "react";
@@ -14,13 +12,12 @@ import {
   searchTerm as wikidataSearchTerm,
 } from "services/wikidata";
 
-import { DEFAULT_PROPERTY_ALL } from "constants/properties";
 import { FaSearch } from "react-icons/fa";
 import Link from "next/link";
+import Suggestions from "./Suggestions";
 import styled from "styled-components";
 import { useAppSelector } from "store";
 import useDebounce from "../hooks/useDebounce";
-import useOnClickOutside from "hooks/useOnClickOutside";
 
 export default function SearchBar() {
   const {
@@ -221,93 +218,4 @@ const ThemedSearchBar = styled(Form)`
     margin-bottom: 1rem;
     width: 100%;
   }
-  .Suggestions {
-    position: absolute;
-    top: 50px;
-    width: 100%;
-    background-color: #f8f9fa;
-    .searchingMessage {
-      padding: 0.375rem 0.75rem;
-      color: grey;
-      .spinner-border {
-        width: 1.2em;
-        height: 1.2em;
-        margin-right: 10px;
-      }
-    }
-    .searchResultBtn {
-      width: 100%;
-      text-align: left;
-      line-height: 1.2;
-      b {
-        display: block;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-      i {
-        display: block;
-        color: gray;
-        text-decoration: gray;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-    }
-  }
 `;
-
-function Suggestions({
-  loadingSuggestions,
-  searchResults,
-  setShowSuggestions,
-}: {
-  loadingSuggestions: boolean;
-  searchResults: SearchResult[];
-  setShowSuggestions: (a) => void;
-}) {
-  const wrapperRef = useRef(null);
-
-  useOnClickOutside(wrapperRef, () => setShowSuggestions(false));
-
-  const { currentProp } = useAppSelector(({ tree }) => tree);
-
-  const { currentLang } = useAppSelector(({ settings }) => settings);
-
-  return (
-    <div ref={wrapperRef} className="Suggestions dropdown-menu show d-relative">
-      {loadingSuggestions && (
-        <div className="searchingMessage">
-          <Spinner animation="border" variant="secondary" /> Searching
-        </div>
-      )}
-      {!loadingSuggestions && !searchResults.length && (
-        <div className="searchingMessage">Sorry, no results found</div>
-      )}
-      {searchResults.map((result) => (
-        <Link
-          key={result.id}
-          href={`/${currentLang.code}/${
-            currentProp?.slug || DEFAULT_PROPERTY_ALL
-          }/${result.id}`}
-          // onClick={() => {
-          //   setShowSuggestions(false);
-          // }}
-        >
-          <Button
-            //key={result.id}
-            className="searchResultBtn"
-            variant="light"
-            // onClick={() => {
-            //   dispatch(setCurrentEntityId(result.id));
-            //   setShowSuggestions(false);
-            // }}
-          >
-            <b>{result.label}</b>
-            {result.description && <i>{result.description}</i>}
-          </Button>
-        </Link>
-      ))}
-    </div>
-  );
-}

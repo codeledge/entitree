@@ -24,11 +24,14 @@ import { LangCode } from "types/Lang";
 import React from "react";
 import { SITE_NAME } from "constants/meta";
 import SearchBar from "layout/SearchBar";
+import { Spinner } from "react-bootstrap";
+import TreeLoader from "layout/TreeLoader";
 import fs from "fs";
 import getConfig from "next/config";
 import getItemProps from "wikidata/getItemProps";
 import getUpMap from "wikidata/getUpMap";
 import getWikipediaArticle from "wikipedia/getWikipediaArticle";
+import { loadEntity } from "treeHelpers/loadEntity";
 import path from "path";
 import styled from "styled-components";
 
@@ -42,7 +45,9 @@ const TreePage = ({
   twitterImage,
   twitterTitle,
 }) => {
-  const { currentEntity, currentProp } = useAppSelector(({ tree }) => tree);
+  const { currentEntity, currentProp, loadingEntity } = useAppSelector(
+    ({ tree }) => tree,
+  );
 
   if (errorCode) {
     return <Error statusCode={errorCode} />;
@@ -80,7 +85,7 @@ const TreePage = ({
       <Page>
         <Header />
         <SearchBar />
-        <DrawingArea />
+        {loadingEntity ? <TreeLoader /> : <DrawingArea />}
       </Page>
       <Footer />
     </>
@@ -93,12 +98,14 @@ const Page = styled(Div100vh)`
 `;
 
 export const getServerSideProps = wrapper.getServerSideProps(
-  async ({ store, query }) => {
+  async ({ store: { dispatch }, query }) => {
     const { langCode, propSlug, itemSlug } = query as {
       langCode: LangCode;
       propSlug: string;
       itemSlug: string;
     };
+
+    const decodedPropSlug = decodeURIComponent(propSlug);
 
     let itemId;
     let itemThumbnail;
@@ -108,67 +115,27 @@ export const getServerSideProps = wrapper.getServerSideProps(
       try {
         //TODO: cache this
         const {
-          data: {
-            wikibase_item,
-            thumbnail: { source },
-          },
+          data: { wikibase_item, thumbnail },
         } = await getWikipediaArticle(itemSlug, langCode);
         if (wikibase_item) itemId = wikibase_item;
-        if (source) itemThumbnail = source;
+        if (thumbnail) itemThumbnail = thumbnail.source;
       } catch (error) {
-        return { props: { errorCode: error.response.status } };
+        console.error(error);
+        return { props: { errorCode: error.response?.status || 500 } };
       }
     }
 
     try {
-      const itemProps = await getItemProps(itemId, langCode);
-      const currentProp = itemProps.find(({ slug }) => slug === propSlug);
-      const upMap = currentProp && (await getUpMap(itemId, currentProp.id));
-      const currentEntity = await getRootEntity(itemId, langCode, {
-        currentPropId: currentProp?.id,
-        upMap,
-        addDownIds: true,
-        addLeftIds: true,
-        addRightIds: true,
+      const { currentEntity } = await loadEntity({
+        itemId,
+        langCode,
+        propSlug: decodedPropSlug,
+        dispatch,
       });
-
-      const [preloadedChildren, preloadedParents] = await Promise.all([
-        getChildEntities(currentEntity.downIds!, langCode, {
-          currentPropId: currentProp?.id,
-          addDownIds: true,
-          addRightIds: currentProp?.id === CHILD_ID,
-          downIdsAlreadySorted: currentEntity.downIdsAlreadySorted,
-        }),
-        getParentEntities(upMap[currentEntity.id], langCode, {
-          currentPropId: currentProp?.id,
-          upMap,
-          addLeftIds: currentProp?.id === CHILD_ID,
-        }),
-      ]);
-
-      store.dispatch(setCurrentEntity(currentEntity));
-      store.dispatch(setCurrentEntityProps(itemProps));
-      if (preloadedChildren)
-        store.dispatch(
-          setChildTree({
-            ...currentEntity,
-            children: preloadedChildren,
-          }),
-        );
-      if (preloadedParents)
-        store.dispatch(
-          setParentTree({
-            ...currentEntity,
-            parents: preloadedParents,
-          }),
-        );
-
-      if (upMap) store.dispatch(setCurrentUpMap(upMap));
-      if (currentProp) store.dispatch(setCurrentProp(currentProp));
 
       const featuredImageFile = path.join(
         "/screenshot",
-        propSlug,
+        decodedPropSlug,
         itemSlug + ".png",
       );
 
