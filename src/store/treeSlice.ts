@@ -5,7 +5,6 @@ import { AppState } from "store";
 import { HYDRATE } from "next-redux-wrapper";
 import { UpMap } from "types/EntityNode";
 import { findEntity } from "treeHelpers/findEntity";
-import { loadEntity } from "store/navigationSlice";
 
 export type TreeState = {
   currentEntity?: Entity;
