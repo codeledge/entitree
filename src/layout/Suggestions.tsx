@@ -2,7 +2,7 @@ import { Button, Spinner } from "react-bootstrap";
 import React, { useRef } from "react";
 
 import { DEFAULT_PROPERTY_ALL } from "constants/properties";
-import { SearchResult } from "services/wikidata";
+import { SearchResult } from "services/wikidataService";
 import { loadEntity } from "treeHelpers/loadEntity";
 import styled from "styled-components";
 import { useAppSelector } from "store";

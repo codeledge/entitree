@@ -35,6 +35,7 @@
     "react/jsx-filename-extension": "off",
     "react/jsx-props-no-spreading": "off",
     "react/no-unused-prop-types": "off",
+    "react/no-unescaped-entities": "off",
     "react/react-in-jsx-scope": "off",
     "react/require-default-props": "off",
     "import/extensions": [

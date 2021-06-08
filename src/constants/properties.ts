@@ -208,3 +208,22 @@ export const RIGHT_ENTITY_OPTIONS = [
 ];
 
 export const DEFAULT_PROPERTY_ALL = "all";
+
+export const EXTRA_INFO_OPTIONS = [
+  {
+    code: "eyeColor",
+    title: "Eye Color",
+  },
+  {
+    code: "hairColor",
+    title: "Hair Color",
+  },
+  {
+    code: "countryFlag",
+    title: "Country Flag",
+  },
+  {
+    code: "religion",
+    title: "religion",
+  },
+];

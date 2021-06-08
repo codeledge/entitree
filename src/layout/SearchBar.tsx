@@ -10,7 +10,7 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   SearchResult,
   searchTerm as wikidataSearchTerm,
-} from "services/wikidata";
+} from "services/wikidataService";
 
 import { FaSearch } from "react-icons/fa";
 import Link from "next/link";
@@ -184,8 +184,8 @@ const ThemedSearchBar = styled(Form)`
       .input-group-prepend {
         position: absolute;
         z-index: 5;
-        top: 6px;
-        left: 9px;
+        top: 11px;
+        left: 10px;
         color: var(--gray);
       }
     }

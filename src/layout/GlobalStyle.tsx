@@ -9,9 +9,7 @@ export const GlobalStyle = createGlobalStyle`
     padding: 0;
     box-sizing: border-box;
   }
-  * {
-    font-family: 'Open Sans', sans-serif;
-  }
+
   
   @media (min-width: 576px) {
     .container {
@@ -81,5 +79,21 @@ export const GlobalStyle = createGlobalStyle`
   hr {
     margin-top: 0.8rem;
     margin-bottom: 0.8rem;
+  }
+
+  .SettingsModalDialog {
+    //or it will break on mobile
+    @media screen and (min-width: 850px) {
+      position: absolute;
+      margin: 0;
+      height: 100vh;
+      right: 0;
+    }
+    .modal-content {
+      height: 100%;
+      overflow-y: auto;
+      border-radius: 0;
+      border: none;
+    }
   }
 `;

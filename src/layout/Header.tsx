@@ -13,6 +13,7 @@ import { FiSliders } from "react-icons/fi";
 import Logo from "./Logo";
 import ReactGA from "react-ga";
 import { SITE_NAME } from "../constants/meta";
+import SettingsModal from "modals/SettingsModal";
 import styled from "styled-components";
 
 export default function Header({ simple }: { simple?: boolean }) {
@@ -60,12 +61,12 @@ export default function Header({ simple }: { simple?: boolean }) {
               onClick={openSettingsModal}
             >
               settings
-              <FiSliders className="ms-2" />
+              <FiSliders className="ml-2" />
             </Button>
-            {/* <SettingsModal
+            <SettingsModal
               show={showSettingsModal}
               hideModal={() => setShowSettingsModal(false)}
-            /> */}
+            />
           </Nav>
         )}
       </Container>

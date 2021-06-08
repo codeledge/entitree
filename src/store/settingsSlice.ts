@@ -1,9 +1,9 @@
 import { DEFAULT_LANG, DEFAULT_LANG_CODE } from "constants/langs";
-import { Lang, LangCode } from "types/Lang";
+import { Lang, LangCode, SecondLabel } from "types/Lang";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 import { DefaultTheme } from "styled-components";
 import { RIGHT_ENTITY_OPTIONS } from "constants/properties";
-import { createSlice } from "@reduxjs/toolkit";
 import { defaultTheme } from "constants/themes";
 
 type SettingsState = {
@@ -11,6 +11,7 @@ type SettingsState = {
   currentLang: Lang;
   languageCode: LangCode;
   secondLanguageCode?: LangCode;
+  secondLabel?: Lang | SecondLabel;
   showGenderColor: boolean;
   showEyeHairColors: boolean;
   showBirthName: boolean;
@@ -20,6 +21,8 @@ type SettingsState = {
   rightEntityOption: typeof RIGHT_ENTITY_OPTIONS[0];
   imageType: "face" | "head";
   customThemes: Record<DefaultTheme["name"], DefaultTheme>;
+  showExtraInfo?: boolean;
+  extraInfo?: string;
 };
 
 const initialState: SettingsState = {
@@ -41,15 +44,43 @@ export const settingsSlice = createSlice({
   name: "settings",
   initialState,
   reducers: {
-    setSettings: (state, action) => {
-      state = action.payload;
+    setSetting: (
+      state,
+      { payload: { key, val } }: PayloadAction<{ key: string; val: any }>,
+    ) => {
+      state[key] = val;
     },
     setCustomTheme: (state, { payload }) => {
       state.customThemes[payload.name] = payload;
     },
+    setCurrentLang: (state, { payload }: PayloadAction<Lang>) => {
+      state.currentLang = payload;
+    },
+    setSecondLabel: (
+      state,
+      { payload }: PayloadAction<SettingsState["secondLabel"]>,
+    ) => {
+      state.secondLabel = payload;
+    },
+    setCustomThemeProp: (
+      state,
+      { payload: { key, val } }: PayloadAction<{ key: string; val: any }>,
+    ) => {
+      state.customThemes[state.themeCode][key] = val;
+    },
+    resetCurrentTheme: (state) => {
+      delete state.customThemes[state.themeCode];
+    },
   },
 });
 
-export const { setSettings, setCustomTheme } = settingsSlice.actions;
+export const {
+  resetCurrentTheme,
+  setCurrentLang,
+  setCustomTheme,
+  setCustomThemeProp,
+  setSecondLabel,
+  setSetting,
+} = settingsSlice.actions;
 
 export default settingsSlice.reducer;

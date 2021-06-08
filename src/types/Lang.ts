@@ -6,4 +6,9 @@ export type Lang = {
   disambPageDesc: string;
 };
 
+export type SecondLabel = {
+  code: string;
+  name: string;
+};
+
 export type LangCode = keyof typeof LANG_MAP;

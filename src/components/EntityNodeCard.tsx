@@ -23,6 +23,7 @@ import {
 import { BsImage } from "react-icons/bs";
 import { Button } from "react-bootstrap";
 import { CHILD_ID } from "constants/properties";
+import DetailsModal from "modals/DetailsModal";
 import { EntityNode } from "types/EntityNode";
 import { Image } from "types/Entity";
 import { MdChildCare } from "react-icons/md";
@@ -293,6 +294,10 @@ export default memo(({ node }: { node: EntityNode }) => {
             </span>
           </Button>
         )}
+
+      {showModal && (
+        <DetailsModal hideModal={hideModal} node={node} nodeImages={images} />
+      )}
     </ThemedNodeOuter>
   );
 });
