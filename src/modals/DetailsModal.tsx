@@ -3,15 +3,21 @@ import React, { useEffect, useState } from "react";
 
 import { FiExternalLink } from "react-icons/fi";
 import getEntitiesLabel from "treeHelpers/getEntitiesLabel";
+import { getEntityUrl } from "helpers/getEntityUrl";
 import getWikipediaArticle from "wikipedia/getWikipediaArticle";
+import { loadEntity } from "treeHelpers/loadEntity";
 import { missingImagesLink } from "services/imageService";
 import styled from "styled-components";
 import { useAppSelector } from "store";
+import { useDispatch } from "react-redux";
+import { useRouter } from "next/router";
 
 export default function DetailsModal({ node, hideModal, nodeImages }) {
   const { languageCode } = useAppSelector(({ settings }) => settings);
-  const { currentEntity } = useAppSelector(({ tree }) => tree);
+  const { currentEntity, currentProp } = useAppSelector(({ tree }) => tree);
+  const router = useRouter();
 
+  const dispatch = useDispatch();
   const [images, setImages] = useState(nodeImages);
   const [birthPlace, setBirthPlace] = useState<string>();
   const [deathPlace, setDeathPlace] = useState<string>();
@@ -165,7 +171,24 @@ export default function DetailsModal({ node, hideModal, nodeImages }) {
           <Button
             variant="light"
             className="mr-auto"
-            onClick={() => {
+            onClick={async () => {
+              const {
+                currentEntity: nextCurrentEntity,
+                currentProp: nextCurrentProp,
+              } = await loadEntity({
+                itemId: node.data.id,
+                langCode: languageCode,
+                propSlug: currentProp?.slug,
+                dispatch,
+                redirectToFamilyTreeProp: true,
+              });
+              const url = getEntityUrl(
+                languageCode,
+                nextCurrentProp,
+                nextCurrentEntity,
+              );
+              router.push(url, url, { shallow: true });
+
               hideModal();
             }}
           >

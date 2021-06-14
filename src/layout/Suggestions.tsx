@@ -1,8 +1,8 @@
 import { Button, Spinner } from "react-bootstrap";
 import React, { useRef } from "react";
 
-import { DEFAULT_PROPERTY_ALL } from "constants/properties";
 import { SearchResult } from "services/wikidataService";
+import { getEntityUrl } from "helpers/getEntityUrl";
 import { loadEntity } from "treeHelpers/loadEntity";
 import styled from "styled-components";
 import { useAppSelector } from "store";
@@ -27,7 +27,7 @@ export default function Suggestions({
 
   const { currentProp } = useAppSelector(({ tree }) => tree);
 
-  const { currentLang } = useAppSelector(({ settings }) => settings);
+  const { languageCode } = useAppSelector(({ settings }) => settings);
 
   return (
     <StyledSuggestions
@@ -54,15 +54,16 @@ export default function Suggestions({
               currentProp: nextCurrentProp,
             } = await loadEntity({
               itemId: result.id,
-              langCode: currentLang.code,
+              langCode: languageCode,
               propSlug: currentProp?.slug,
               dispatch,
               redirectToFamilyTreeProp: true,
             });
-            const url = `/${currentLang.code}/${
-              (nextCurrentProp && encodeURIComponent(nextCurrentProp?.slug)) ||
-              DEFAULT_PROPERTY_ALL
-            }/${nextCurrentEntity.wikipediaSlug || nextCurrentEntity.id}`;
+            const url = getEntityUrl(
+              languageCode,
+              nextCurrentProp,
+              nextCurrentEntity,
+            );
             router.push(url, url, { shallow: true });
           }}
         >

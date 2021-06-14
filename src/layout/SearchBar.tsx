@@ -17,6 +17,7 @@ import Link from "next/link";
 import Suggestions from "./Suggestions";
 import styled from "styled-components";
 import { useAppSelector } from "store";
+import { useCurrentLang } from "hooks/useCurrentLang";
 import useDebounce from "../hooks/useDebounce";
 
 export default function SearchBar() {
@@ -27,7 +28,7 @@ export default function SearchBar() {
     currentEntityProps,
   } = useAppSelector(({ tree }) => tree);
 
-  const { currentLang } = useAppSelector(({ settings }) => settings);
+  const currentLang = useCurrentLang();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [loadingSuggestions, setLoadingSuggestions] = useState(false);

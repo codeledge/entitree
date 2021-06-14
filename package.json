@@ -39,6 +39,7 @@
     "react-zoom-pan-pinch": "1.6.1",
     "redux": "4.1.0",
     "redux-persist": "6.0.0",
+    "reselect": "4.0.0",
     "styled-components": "5.2.3",
     "url-join": "4.0.1",
     "wikidata-sdk": "7.12.0"

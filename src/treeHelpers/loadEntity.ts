@@ -53,25 +53,26 @@ export const loadEntity = async ({
     redirectToFamilyTreeProp &&
     itemProps.some((prop) => FAMILY_IDS_MAP[prop.id])
   ) {
+    const familyTreeProp = { ...FAMILY_TREE_PROP };
     //Remove all family-related props in favour of the custom
     itemProps = itemProps.filter((prop) => {
-      if (prop.id === CHILD_ID) FAMILY_TREE_PROP.label = prop.label; //get translated child label
+      if (prop.id === CHILD_ID) familyTreeProp.label = prop.label; //get translated child label
       return !FAMILY_IDS_MAP[prop.id];
     });
 
     //check if there is a translation for it
     const translatedFamilyTree = FAMILY_TREE_TRANSLATIONS[langCode];
     if (translatedFamilyTree) {
-      FAMILY_TREE_PROP.overrideLabel = translatedFamilyTree;
-      FAMILY_TREE_PROP.slug = translatedFamilyTree.replace(/\s/g, "_");
+      familyTreeProp.overrideLabel = translatedFamilyTree;
+      familyTreeProp.slug = translatedFamilyTree.replace(/\s/g, "_");
     }
 
     //Add the Family tree fav currentProp
-    itemProps = [FAMILY_TREE_PROP, ...itemProps];
+    itemProps = [familyTreeProp, ...itemProps];
 
     //Select the family tree if no other currentProp is selected, or if it's a family currentProp
     if (!currentProp || FAMILY_IDS_MAP[currentProp.id]) {
-      currentProp = FAMILY_TREE_PROP;
+      currentProp = familyTreeProp;
     }
   }
 

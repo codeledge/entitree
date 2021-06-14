@@ -19,12 +19,10 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 import settingsReducer from "./settingsSlice";
 import storage from "redux-persist/lib/storage";
-import themeReducer from "./themeSlice";
 import treeReducer from "./treeSlice";
 
 const rootReducer = combineReducers({
   settings: settingsReducer,
-  theme: themeReducer,
   tree: treeReducer,
 });
 

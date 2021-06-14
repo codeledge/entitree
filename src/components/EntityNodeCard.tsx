@@ -2,7 +2,9 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable prefer-arrow-callback */
 
-import { FaEye, FaFemale, FaMale } from "react-icons/fa";
+import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { CHILD_ID, EYE_COLOR_ID, HAIR_COLOR_ID } from "constants/properties";
+import { FaEye, FaFemale, FaMale, FaUser } from "react-icons/fa";
 import {
   FiChevronDown,
   FiChevronLeft,
@@ -10,9 +12,9 @@ import {
   FiChevronUp,
 } from "react-icons/fi";
 import { GiBigDiamondRing, GiPerson } from "react-icons/gi";
-import React, { memo, useState } from "react";
+import React, { memo, useMemo, useState } from "react";
 import { RiGroupLine, RiParentLine } from "react-icons/ri";
-import styled, { useTheme } from "styled-components";
+import styled, { css, useTheme } from "styled-components";
 import {
   toggleChildren,
   toggleParents,
@@ -21,13 +23,15 @@ import {
 } from "actions/treeActions";
 
 import { BsImage } from "react-icons/bs";
-import { Button } from "react-bootstrap";
-import { CHILD_ID } from "constants/properties";
 import DetailsModal from "modals/DetailsModal";
 import { EntityNode } from "types/EntityNode";
 import { Image } from "types/Entity";
 import { MdChildCare } from "react-icons/md";
+import { SettingsState } from "store/settingsSlice";
 import clsx from "clsx";
+import colorByProperty from "helpers/colorByProperty";
+import countryByQid from "helpers/countryByQid";
+import religionByQid from "helpers/religionByQid";
 import { useAppSelector } from "store";
 import { useDispatch } from "react-redux";
 
@@ -42,6 +46,10 @@ export default memo(({ node }: { node: EntityNode }) => {
   const [thumbnailIndex, setThumbnailIndex] = useState(0);
   const theme = useTheme();
 
+  const [birthCountry, setBirthCountry] = useState(
+    node.data.countryOfCitizenship,
+  );
+
   const settings = useAppSelector(({ settings: s }) => s);
   const { currentProp } = useAppSelector(({ tree }) => tree);
 
@@ -50,8 +58,10 @@ export default memo(({ node }: { node: EntityNode }) => {
   };
 
   const {
-    data: { gender, isHuman },
+    data: { gender, isHuman, religion },
   } = node;
+
+  console.log({ religion });
 
   const currentThumbnail = thumbnails[thumbnailIndex];
 
@@ -61,12 +71,22 @@ export default memo(({ node }: { node: EntityNode }) => {
       : undefined;
 
   const hasLabelOnly =
-    theme.descriptionDisplay === "none" && !settings.secondLanguageCode;
+    theme.descriptionDisplay === "none" && !settings.secondLabel;
 
   const hasSecondLabel = Boolean(
-    settings.secondLanguageCode &&
+    settings.secondLabel &&
       node.data.secondLabel &&
       node.data.label !== node.data.secondLabel,
+  );
+
+  const eyeColor = useMemo(
+    () => colorByProperty(node.data.simpleClaims?.[EYE_COLOR_ID]),
+    [node.data.simpleClaims],
+  );
+
+  const hairColor = useMemo(
+    () => colorByProperty(node.data.simpleClaims?.[HAIR_COLOR_ID]),
+    [node.data.simpleClaims],
   );
 
   return (
@@ -75,6 +95,8 @@ export default memo(({ node }: { node: EntityNode }) => {
         left: node.x,
         top: node.y,
       }}
+      {...settings}
+      gender={gender}
     >
       <ThemedNodeInner>
         {theme.thumbDisplay && (
@@ -208,6 +230,54 @@ export default memo(({ node }: { node: EntityNode }) => {
         </ThemedContent>
       </ThemedNodeInner>
 
+      {settings.showExtraInfo && (
+        <Badge>
+          {settings.extraInfo === "countryFlag" && birthCountry && (
+            <div className="flagIcons">
+              <OverlayTrigger
+                placement="bottom"
+                overlay={<Tooltip id="country">{birthCountry.text}</Tooltip>}
+              >
+                <span>
+                  <img
+                    alt=""
+                    src={`https://www.countryflags.io/${birthCountry.code}/flat/32.png`}
+                    title={birthCountry.name}
+                  />
+                </span>
+              </OverlayTrigger>
+            </div>
+          )}
+          {eyeColor && settings.extraInfo === "eyeColor" && (
+            <span
+              className="eyeColor"
+              title={eyeColor.itemLabel + " eyes"}
+              style={{
+                color: "#" + eyeColor.hex,
+              }}
+            >
+              <FaEye size={25} />
+            </span>
+          )}
+          {hairColor && settings.extraInfo === "hairColor" && (
+            <span
+              className="hairColor"
+              title={hairColor.itemLabel}
+              style={{
+                color: "#" + hairColor.hex,
+              }}
+            >
+              <FaUser />
+            </span>
+          )}
+          {religion && settings.extraInfo === "religion" && (
+            <div title={religion.itemLabel + " (wikidata)"}>
+              {religion.emoji}
+            </div>
+          )}
+        </Badge>
+      )}
+
       {node.data.leftIds && !!node.data.leftIds.length && (
         <Button
           className="siblingToggle relativeToggle"
@@ -302,7 +372,7 @@ export default memo(({ node }: { node: EntityNode }) => {
   );
 });
 
-const ThemedNodeOuter = styled.div`
+const ThemedNodeOuter = styled.div<SettingsState & { gender?: string }>`
   position: absolute;
   transform: translate(-50%, -50%);
   transition: all ease-in-out 0.2s;
@@ -386,32 +456,38 @@ const ThemedNodeOuter = styled.div`
     top: 100%;
   }
 
-  //SETTINGS
-  &.female {
-    .showGenderColor & {
-      background-color: #ffcccc;
-    }
+  ${
+    ({ showGenderColor, gender }) =>
+      showGenderColor &&
+      gender &&
+      (gender === "female"
+        ? css`
+            background-color: #ffcccc;
+          `
+        : gender === "male"
+        ? css`
+            background-color: #ccd9ff;
+          `
+        : "")
+    // gender === "thirdgender"
+    // ? css`
+    //     background-color: rgba(238, 130, 238, 0.11);
+    //   `
+    // : ""
   }
-  &.male {
-    .showGenderColor & {
-      background-color: #ccd9ff;
-    }
-  }
-  &.thirdgender {
-    .showGenderColor & {
-      //background-color: rgba(238, 130, 238, 0.11);
-    }
-  }
+
   .relativeToggle {
     .hideToggleButton & {
       display: none;
     }
   }
-  .colorIcons {
-    position: absolute;
-    bottom: 0;
-    right: 2px;
-  }
+`;
+
+const Badge = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -50%);
 `;
 
 const ThemedNodeInner = styled.div`
@@ -482,7 +558,6 @@ const ThemedContent = styled.div<{ hasSecondLabel?: boolean }>`
     -webkit-line-clamp: ${({ theme }) => theme.contentLineClamp};
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    //-webkit-line-clamp: => moved to Node.js
     line-height: 1; // leave 1, the children will be proportional to this
     overflow: hidden;
   }

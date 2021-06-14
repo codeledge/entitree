@@ -1,15 +1,23 @@
+import { DefaultTheme } from "styled-components";
 import { THEMES } from "constants/themes";
-import store from "store";
+import { createSelector } from "reselect";
+import { useAppSelector } from "store";
 
-export default function useCurrentTheme() {
-  const { customThemes, themeCode } = store.getState().settings;
+const customThemesSelector = ({ settings }) => settings.customThemes;
+const themeCodeSelector = ({ settings }) => settings.themeCode;
 
-  const baseTheme = THEMES.find(({ name }) => themeCode === name);
-  //TODO: if theme not found?
-  const currentTheme = {
-    ...baseTheme,
-    ...(customThemes[themeCode] || {}),
-  };
+export const currentThemeSelector = createSelector(
+  [customThemesSelector, themeCodeSelector],
+  (customThemes, themeCode) => {
+    const baseTheme = THEMES.find(({ name }) => themeCode === name);
+    //TODO: if theme not found?
+    const currentTheme = {
+      ...baseTheme,
+      ...(customThemes[themeCode] || {}),
+    } as DefaultTheme;
 
-  return currentTheme;
-}
+    return currentTheme;
+  },
+);
+
+export const useCurrentTheme = () => useAppSelector(currentThemeSelector);

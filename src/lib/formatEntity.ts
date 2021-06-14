@@ -4,6 +4,7 @@ import addAbolishedDate from "./addAbolishedDate";
 import addBirthDate from "./addBirthDate";
 import addBirthName from "./addBirthName";
 import addBirthPlaceId from "./addBirthPlaceId";
+import addCountryOfCitizenship from "./addCountryOfCitizenship";
 import addDeathDate from "./addDeathDate";
 import addDeathPlaceId from "./addDeathPlaceId";
 import addDescription from "./addDescription";
@@ -17,6 +18,7 @@ import addIsHuman from "./addIsHuman";
 import addIsInfantDeath from "./addIsInfantDeath";
 import addLabel from "./addLabel";
 import addLifeSpan from "./addLifeSpan";
+import addReligion from "./addReligion";
 import addSecondLabel from "./addSecondLabel";
 import addStartDate from "./addStartDate";
 import addStartEndSpan from "./addStartEndSpan";
@@ -28,8 +30,7 @@ import wbk from "wikidata-sdk";
 
 export default function formatEntity(wikidataEntity: WikiEntity) {
   const {
-    settings: { languageCode, secondLanguageCode },
-    theme,
+    settings: { languageCode, secondLabel },
   } = store.getState();
 
   const simpleClaims = wbk.simplify.claims(wikidataEntity.claims, {
@@ -42,7 +43,7 @@ export default function formatEntity(wikidataEntity: WikiEntity) {
   };
 
   addLabel(entity, languageCode);
-  if (secondLanguageCode) addSecondLabel(entity, secondLanguageCode);
+  addSecondLabel(entity, secondLabel);
   addDescription(entity, languageCode);
 
   addBirthDate(entity, languageCode);
@@ -75,7 +76,11 @@ export default function formatEntity(wikidataEntity: WikiEntity) {
 
   addIsHuman(entity);
 
-  addImages(entity, theme);
+  addImages(entity);
+
+  addCountryOfCitizenship(entity);
+
+  addReligion(entity);
 
   return entity;
 }

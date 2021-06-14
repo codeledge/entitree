@@ -1,30 +1,27 @@
 import { Col, Form, InputGroup, Row } from "react-bootstrap";
-import React, { useEffect } from "react";
-import { resetCurrentTheme, setCustomThemeProp } from "store/settingsSlice";
+import React, { useEffect, useState } from "react";
+import { resetCurrentTheme, setCustomTheme } from "store/settingsSlice";
 
 import Button from "react-bootstrap/Button";
-import { setTheme } from "store/themeSlice";
-import { useAppSelector } from "store";
 import useDebounce from "hooks/useDebounce";
 import { useDispatch } from "react-redux";
+import { useTheme } from "styled-components";
 
 export default function CustomThemeForm() {
-  const { customThemes } = useAppSelector(({ settings }) => settings);
+  const currentTheme = useTheme();
 
-  const currentTheme = useAppSelector(({ theme }) => theme);
+  const [currentCustomTheme, setCurrentCustomTheme] = useState(currentTheme);
 
-  const currentCustomTheme = customThemes[currentTheme.name];
-
-  const deboucedCustomTheme = useDebounce(currentCustomTheme, 1000);
+  const debouncedCustomTheme = useDebounce(currentCustomTheme, 1000);
   useEffect(() => {
-    setTheme(deboucedCustomTheme);
+    dispatch(setCustomTheme(debouncedCustomTheme));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [deboucedCustomTheme]);
+  }, [debouncedCustomTheme]);
 
   const downloadJsonFile = (e) => {
     e.preventDefault();
     const element = document.createElement("a");
-    const downloadTheme = customThemes[currentTheme.name];
+    const downloadTheme = currentCustomTheme;
     const file = new Blob([JSON.stringify(downloadTheme)], {
       type: "text/json",
     });
@@ -37,7 +34,7 @@ export default function CustomThemeForm() {
 
   const dispatch = useDispatch();
   const setCustomProp = (key, val) => {
-    dispatch(setCustomThemeProp({ key, val }));
+    setCurrentCustomTheme((t) => ({ ...t, [key]: val }));
   };
 
   return (
@@ -619,8 +616,8 @@ export default function CustomThemeForm() {
             title="Save a copy of your customized theme, you may send it to us to include as a main theme. Importing a theme in the browser is not yet supported."
             size="sm"
             className="ml-2"
+            variant="outline-primary"
             onClick={downloadJsonFile}
-            style={{ opacity: "40%" }}
           >
             Download Theme
           </Button>

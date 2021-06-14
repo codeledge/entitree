@@ -1,9 +1,13 @@
 import { IMAGE_ID, LOGO_ID } from "../constants/properties";
 
-import { DefaultTheme } from "styled-components";
 import { Entity } from "types/Entity";
 
-export default function addImages(entity: Entity, theme: DefaultTheme) {
+const THUMB_SIZE = 80;
+
+export default function addImages(
+  entity: Entity,
+  //theme: DefaultTheme = defaultTheme, // is gonna be hard to get theme here, e.g. on the server
+) {
   entity.thumbnails = [];
   entity.images = [];
 
@@ -13,7 +17,7 @@ export default function addImages(entity: Entity, theme: DefaultTheme) {
       //catch undefined value
       if (image.value) {
         entity.thumbnails?.push({
-          url: getCommonsUrlByFile(image.value, theme?.thumbWidth),
+          url: getCommonsUrlByFile(image.value, THUMB_SIZE),
           alt: `${entity.label}'s Image ${
             index + 1
           } from Wikimedia Commons\nPlease refer to https://commons.wikimedia.org/wiki/File:${
@@ -21,7 +25,7 @@ export default function addImages(entity: Entity, theme: DefaultTheme) {
           } for credits`,
         });
         entity.images?.push({
-          url: getCommonsUrlByFile(image.value, theme?.thumbWidth * 2),
+          url: getCommonsUrlByFile(image.value, THUMB_SIZE * 2),
           alt: `${entity.label}'s Image ${
             index + 1
           } from Wikimedia Commons\nPlease refer to https://commons.wikimedia.org/wiki/File:${
@@ -52,11 +56,11 @@ export default function addImages(entity: Entity, theme: DefaultTheme) {
       //catch undefined value
       if (image.value) {
         entity.thumbnails?.push({
-          url: getCommonsUrlByFile(image.value, theme?.thumbWidth),
+          url: getCommonsUrlByFile(image.value, THUMB_SIZE),
           alt: `${entity.label}'s Logo ${index + 1} from Wikimedia Commons`,
         });
         entity.images?.push({
-          url: getCommonsUrlByFile(image.value, theme?.thumbWidth * 2),
+          url: getCommonsUrlByFile(image.value, THUMB_SIZE * 2),
           alt: `${entity.label}'s Logo ${index + 1} from Wikimedia Commons`,
         });
       }

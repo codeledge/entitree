@@ -3,29 +3,34 @@ import {
   NAME_IN_KANA_ID,
   NICKNAME_ID,
 } from "../constants/properties";
+import { Lang, SecondLabel } from "types/Lang";
 
 import { Entity } from "types/Entity";
-import { LangCode } from "types/Lang";
 import getSimpleClaimValue from "./getSimpleClaimValue";
 
 export default function addSecondLabel(
   entity: Entity,
-  propCode: string | LangCode,
+  secondLabel?: SecondLabel | Lang,
 ) {
-  if (!propCode) return;
+  if (!secondLabel) return;
   const { labels, simpleClaims } = entity;
 
   //exeption for the following prop codes
-  if ([BIRTH_NAME_ID, NICKNAME_ID, NAME_IN_KANA_ID].includes(propCode)) {
-    const secondLabel = getSimpleClaimValue(simpleClaims, propCode);
-    if (secondLabel) {
-      entity.secondLabel = secondLabel;
+  if (
+    [BIRTH_NAME_ID, NICKNAME_ID, NAME_IN_KANA_ID].includes(secondLabel.code)
+  ) {
+    const secondLabelValue = getSimpleClaimValue(
+      simpleClaims,
+      secondLabel.code,
+    );
+    if (secondLabelValue) {
+      entity.secondLabel = secondLabelValue;
     }
     return;
   }
 
   //try to add translated label
-  const translatedLabel = labels?.[propCode]?.value;
+  const translatedLabel = labels?.[secondLabel.code]?.value;
   if (!translatedLabel) return;
   entity.secondLabel = translatedLabel;
 }

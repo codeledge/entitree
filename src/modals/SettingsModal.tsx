@@ -2,21 +2,20 @@ import { Button, Collapse, Dropdown, Form, Modal } from "react-bootstrap";
 import { EXTRA_INFO_OPTIONS, RIGHT_ENTITY_OPTIONS } from "constants/properties";
 import { LANGS, SECOND_LABELS } from "constants/langs";
 import React, { useEffect, useState } from "react";
-import {
-  setCurrentLang,
-  setSecondLabel,
-  setSetting,
-} from "store/settingsSlice";
+import { setLangCode, setSecondLabel, setSetting } from "store/settingsSlice";
+import styled, { useTheme } from "styled-components";
 
 import { CustomMenu } from "./CustomMenu";
 import CustomThemeForm from "./CustomThemeForm";
 import { CustomToggle } from "./CustomToggle";
 import ReactGA from "react-ga";
 import { THEMES } from "constants/themes";
-import { setTheme } from "store/themeSlice";
-import styled from "styled-components";
+import { getEntityUrl } from "helpers/getEntityUrl";
+import { loadEntity } from "treeHelpers/loadEntity";
 import { useAppSelector } from "store";
+import { useCurrentLang } from "hooks/useCurrentLang";
 import { useDispatch } from "react-redux";
+import { useRouter } from "next/router";
 
 export default function SettingsModal({ show, hideModal }) {
   useEffect(() => {
@@ -27,10 +26,12 @@ export default function SettingsModal({ show, hideModal }) {
     });
   }, []);
 
-  const currentTheme = useAppSelector(({ theme }) => theme);
+  const currentTheme = useTheme();
+  const currentLang = useCurrentLang();
+  const router = useRouter();
+
   const {
-    customThemes,
-    currentLang,
+    languageCode,
     secondLabel,
     rightEntityOption,
     showGenderColor,
@@ -42,6 +43,7 @@ export default function SettingsModal({ show, hideModal }) {
     showFace,
     imageType,
   } = useAppSelector(({ settings }) => settings);
+  const { currentProp, currentEntity } = useAppSelector(({ tree }) => tree);
 
   const dispatch = useDispatch();
 
@@ -66,14 +68,14 @@ export default function SettingsModal({ show, hideModal }) {
               {currentTheme.name}
             </Dropdown.Toggle>
             <Dropdown.Menu>
-              {Object.values(THEMES).map((theme, index) => (
+              {THEMES.map((theme, index) => (
                 <Dropdown.Item
                   key={theme.name}
                   eventKey={index + 1}
                   active={theme.name === currentTheme.name}
                   disabled={theme.disabled}
                   onClick={() =>
-                    setTheme({ ...theme, ...customThemes[theme.name] })
+                    dispatch(setSetting({ key: "themeCode", val: theme.name }))
                   }
                 >
                   {theme.name}
@@ -102,23 +104,41 @@ export default function SettingsModal({ show, hideModal }) {
         <hr />
         <Dropdown className="langDropdown">
           <Dropdown.Toggle as={CustomToggle}>
-            <span className="label">Translate label to</span> {currentLang.name}
+            <span className="label">Language</span> {currentLang.name}
           </Dropdown.Toggle>
           <Dropdown.Menu alignRight as={CustomMenu}>
             {LANGS.map((lang, index) => (
               <Dropdown.Item
                 key={lang.code}
                 eventKey={index + 1}
-                active={lang.code === currentLang.code}
-                onClick={() => setCurrentLang(lang)}
+                active={lang.code === languageCode}
+                onClick={async () => {
+                  dispatch(setLangCode(lang.code));
+                  const {
+                    currentEntity: nextCurrentEntity,
+                    currentProp: nextCurrentProp,
+                  } = await loadEntity({
+                    itemId: currentEntity!.id,
+                    langCode: lang.code,
+                    propSlug: currentProp?.slug,
+                    dispatch,
+                    redirectToFamilyTreeProp: true,
+                  });
+                  const url = getEntityUrl(
+                    lang.code,
+                    nextCurrentProp,
+                    nextCurrentEntity,
+                  );
+                  router.push(url, url, { shallow: true });
+                }}
               >
                 {lang.name}
               </Dropdown.Item>
             ))}
           </Dropdown.Menu>
           <Form.Text className="text-muted mt-0">
-            If the language is available, the label (e.g. the person's name)
-            will be translated
+            If the language is available, the person's name and description will
+            be translated
           </Form.Text>
         </Dropdown>
         <Dropdown className="langDropdown">
@@ -129,21 +149,23 @@ export default function SettingsModal({ show, hideModal }) {
           <Dropdown.Menu alignRight as={CustomMenu}>
             <Dropdown.Item
               active={!secondLabel}
-              onClick={() => setSecondLabel(undefined)}
+              onClick={() => dispatch(setSecondLabel(undefined))}
             >
               - no second label -
             </Dropdown.Item>
             <Dropdown.Header>Properties</Dropdown.Header>
 
-            {SECOND_LABELS.map((lang, index) => (
+            {SECOND_LABELS.map((secondLabelOption, index) => (
               <Dropdown.Item
-                key={lang.code}
+                key={secondLabelOption.code}
                 eventKey={index + 1}
-                active={secondLabel && lang.code === secondLabel.code}
-                onClick={() => setSecondLabel(lang)}
-                disabled={currentLang && currentLang.code === lang.code}
+                active={
+                  secondLabel && secondLabelOption.code === secondLabel.code
+                }
+                onClick={() => dispatch(setSecondLabel(secondLabelOption))}
+                disabled={languageCode === secondLabelOption.code}
               >
-                {lang.name}
+                {secondLabelOption.name}
               </Dropdown.Item>
             ))}
             <Dropdown.Divider />
@@ -154,8 +176,8 @@ export default function SettingsModal({ show, hideModal }) {
                 key={lang.code}
                 eventKey={index + 1}
                 active={secondLabel && lang.code === secondLabel.code}
-                onClick={() => setSecondLabel(lang)}
-                disabled={currentLang && currentLang.code === lang.code}
+                onClick={() => dispatch(setSecondLabel(lang))}
+                disabled={languageCode === lang.code}
               >
                 {lang.name}
               </Dropdown.Item>
@@ -184,16 +206,23 @@ export default function SettingsModal({ show, hideModal }) {
                   JSON.stringify(rightEntityOption.propIds) ===
                   JSON.stringify(option.propIds)
                 }
-                onClick={() =>
+                onClick={async () => {
                   dispatch(
                     setSetting({
                       key: "rightEntityOption",
                       val: option,
                     }),
-                  )
-                }
+                  );
+                  await loadEntity({
+                    itemId: currentEntity!.id,
+                    langCode: languageCode,
+                    propSlug: currentProp?.slug,
+                    dispatch,
+                    redirectToFamilyTreeProp: true,
+                  });
+                }}
               >
-                {rightEntityOption.title}
+                {option.title}
               </Dropdown.Item>
             ))}
           </Dropdown.Menu>
@@ -237,68 +266,32 @@ export default function SettingsModal({ show, hideModal }) {
               )
             }
             type="checkbox"
-            label="Show extra info"
+            label="Show badge"
           />
-          <Dropdown className="imageDropdown d-inline-block ml-1">
-            <Dropdown.Toggle as={CustomToggle}>
-              <span className="imageDropdownLabel">show</span>{" "}
-              {EXTRA_INFO_OPTIONS.find((c) => c.code === extraInfo)?.title}
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              <Dropdown.Item
-                active={extraInfo === "eyeColor"}
-                onClick={() =>
-                  dispatch(
-                    setSetting({
-                      key: "extraInfo",
-                      val: "eyeColor",
-                    }),
-                  )
-                }
-              >
-                Eye color
-              </Dropdown.Item>
-              <Dropdown.Item
-                active={extraInfo === "hairColor"}
-                onClick={() =>
-                  dispatch(
-                    setSetting({
-                      key: "extraInfo",
-                      val: "hairColor",
-                    }),
-                  )
-                }
-              >
-                Hair color
-              </Dropdown.Item>
-              <Dropdown.Item
-                active={extraInfo === "countryFlag"}
-                onClick={() =>
-                  dispatch(
-                    setSetting({
-                      key: "extraInfo",
-                      val: "countryFlag",
-                    }),
-                  )
-                }
-              >
-                Country flag
-              </Dropdown.Item>
-              <Dropdown.Item
-                active={extraInfo === "religion"}
-                onClick={() =>
-                  dispatch(
-                    setSetting({
-                      key: "extraInfo",
-                      val: "religion",
-                    }),
-                  )
-                }
-              >
-                religion
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
+          {showExtraInfo && (
+            <Dropdown className="imageDropdown d-inline-block ml-1">
+              <Dropdown.Toggle as={CustomToggle}>
+                {EXTRA_INFO_OPTIONS.find((c) => c.code === extraInfo)?.title}
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                {EXTRA_INFO_OPTIONS.map((extraOption) => (
+                  <Dropdown.Item
+                    active={extraInfo === extraOption.code}
+                    onClick={() =>
+                      dispatch(
+                        setSetting({
+                          key: "extraInfo",
+                          val: extraOption.code,
+                        }),
+                      )
+                    }
+                  >
+                    {extraOption.title}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
+          )}
           <Form.Text className="text-muted pl-4">
             An icon with extra infos (beta)
           </Form.Text>

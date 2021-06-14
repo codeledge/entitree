@@ -13,7 +13,6 @@ import {
 } from "store/treeSlice";
 import { useAppSelector, wrapper } from "store";
 
-import { CHILD_ID } from "constants/properties";
 import Div100vh from "react-div-100vh";
 import DrawingArea from "components/DrawingArea";
 import Error from "next/error";
@@ -24,12 +23,9 @@ import { LangCode } from "types/Lang";
 import React from "react";
 import { SITE_NAME } from "constants/meta";
 import SearchBar from "layout/SearchBar";
-import { Spinner } from "react-bootstrap";
 import TreeLoader from "layout/TreeLoader";
 import fs from "fs";
 import getConfig from "next/config";
-import getItemProps from "wikidata/getItemProps";
-import getUpMap from "wikidata/getUpMap";
 import getWikipediaArticle from "wikipedia/getWikipediaArticle";
 import { loadEntity } from "treeHelpers/loadEntity";
 import path from "path";
