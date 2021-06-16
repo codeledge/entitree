@@ -1,27 +1,43 @@
 import { MAX_SCALE, MIN_SCALE } from "constants/tree";
+import React, { useRef } from "react";
 
 import Graph from "./Graph";
-import React from "react";
+import Navigation from "components/Navigation";
 import { TransformWrapper } from "react-zoom-pan-pinch";
 import styled from "styled-components";
+import useElementSize from "hooks/useElementSize";
 
 export default function DrawingArea() {
+  const wrapperRef = useRef(null);
+
+  const { width: drawingWidth, height: drawingHeight } = useElementSize(
+    wrapperRef,
+  );
+
   return (
-    <GraphWrapper>
+    <GraphWrapper ref={wrapperRef}>
       <TransformWrapper
-        zoomIn={{ step: 20 }}
-        zoomOut={{ step: 20 }}
-        wheel={{ step: 25 }}
+        velocityAnimation={{
+          disabled: false,
+        }}
         doubleClick={{
           disabled: true,
         }}
-        options={{
-          limitToBounds: false,
-          minScale: MIN_SCALE,
-          maxScale: MAX_SCALE,
-        }}
+        limitToBounds={false}
+        minScale={MIN_SCALE}
+        maxScale={MAX_SCALE}
+        wheel={{ step: 0.02 }}
       >
-        {(props) => <Graph {...props} />}
+        {(props) => (
+          <>
+            <Graph {...props} />
+            <Navigation
+              {...props}
+              drawingWidth={drawingWidth}
+              drawingHeight={drawingHeight}
+            />
+          </>
+        )}
       </TransformWrapper>
     </GraphWrapper>
   );
@@ -30,8 +46,8 @@ export default function DrawingArea() {
 const GraphWrapper = styled.div`
   position: relative;
   flex: 1;
-  .react-transform-component,
-  .react-transform-element {
+  .react-transform-wrapper,
+  .react-transform-content {
     width: 100%;
     height: 100%;
     position: relative;

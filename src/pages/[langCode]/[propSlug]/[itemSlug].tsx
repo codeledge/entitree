@@ -1,16 +1,3 @@
-import {
-  getChildEntities,
-  getParentEntities,
-  getRootEntity,
-} from "lib/getEntities";
-import {
-  setChildTree,
-  setCurrentEntity,
-  setCurrentEntityProps,
-  setCurrentProp,
-  setCurrentUpMap,
-  setParentTree,
-} from "store/treeSlice";
 import { useAppSelector, wrapper } from "store";
 
 import Div100vh from "react-div-100vh";

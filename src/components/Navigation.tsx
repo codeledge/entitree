@@ -13,23 +13,36 @@ import {
 } from "react-share";
 import { FiMinus, FiPlus, FiPrinter } from "react-icons/fi";
 import React, { memo, useState } from "react";
+import styled, { useTheme } from "styled-components";
 
 import { FaRegShareSquare } from "react-icons/fa";
 import { IoMdExpand } from "react-icons/io";
+import { MAX_SCALE } from "constants/tree";
 import ReactGA from "react-ga";
 import { RiFocus3Line } from "react-icons/ri";
 import { SITE_NAME } from "constants/meta";
-import styled from "styled-components";
+import { useAppSelector } from "store";
 import { useRouter } from "next/dist/client/router";
 
 export default memo(
-  ({ zoomIn, zoomOut, focusedNode, recenter, fitTree }: any) => {
+  ({
+    zoomIn,
+    zoomOut,
+    resetTransform,
+    setTransform,
+    drawingWidth,
+    drawingHeight,
+  }: any) => {
     return (
       <StyledNavigation>
         <ZoomInButton zoomIn={zoomIn} />
         <ZoomOutButton zoomOut={zoomOut} />
-        <CenterTreeButton focusedNode={focusedNode} recenter={recenter} />
-        <FitTreeButton fitTree={fitTree} />
+        <CenterTreeButton resetTransform={resetTransform} />
+        <FitTreeButton
+          setTransform={setTransform}
+          drawingWidth={drawingWidth}
+          drawingHeight={drawingHeight}
+        />
         <ShareButton />
       </StyledNavigation>
     );
@@ -37,12 +50,12 @@ export default memo(
 );
 
 const ZoomInButton = memo(({ zoomIn }: any) => {
-  const zoomInWrapper = (e) => {
+  const zoomInWrapper = () => {
     ReactGA.event({
       category: "Navigation",
       action: "zoomIn",
     });
-    zoomIn(e);
+    zoomIn();
   };
 
   return (
@@ -80,12 +93,12 @@ const StyledNavigation = styled.div`
 `;
 
 const ZoomOutButton = memo(({ zoomOut }: any) => {
-  const zoomOutWrapper = (e) => {
+  const zoomOutWrapper = () => {
     ReactGA.event({
       category: "Navigation",
       action: "zoomOut",
     });
-    zoomOut(e);
+    zoomOut();
   };
 
   return (
@@ -100,48 +113,83 @@ const ZoomOutButton = memo(({ zoomOut }: any) => {
   );
 });
 
-const CenterTreeButton = memo(({ recenter }: any) => {
-  const recenterWrapper = () => {
-    ReactGA.event({
-      category: "Navigation",
-      action: "recenter",
-      //label: focusedNode.data.label,
-    });
-    recenter();
-  };
+const CenterTreeButton = memo(
+  ({ resetTransform }: { resetTransform: () => void }) => {
+    const onRecenter = () => {
+      ReactGA.event({
+        category: "Navigation",
+        action: "recenter",
+        //label: focusedNode.data.label,
+      });
+      resetTransform();
+    };
 
-  return (
-    <OverlayTrigger
-      placement="right"
-      overlay={<Tooltip id="center">Center tree</Tooltip>}
-    >
-      <Button variant="light" onClick={recenterWrapper}>
-        <RiFocus3Line />
-      </Button>
-    </OverlayTrigger>
-  );
-});
+    return (
+      <OverlayTrigger
+        placement="right"
+        overlay={<Tooltip id="center">Center tree</Tooltip>}
+      >
+        <Button variant="light" onClick={onRecenter}>
+          <RiFocus3Line />
+        </Button>
+      </OverlayTrigger>
+    );
+  },
+);
 
-const FitTreeButton = memo(({ fitTree }: any) => {
-  const fitTreeWrapper = () => {
-    ReactGA.event({
-      category: "Navigation",
-      action: "fitTree",
-    });
-    fitTree();
-  };
+const FitTreeButton = memo(
+  ({ setTransform, drawingWidth, drawingHeight }: any) => {
+    const theme = useTheme();
+    const { maxLeft, maxTop, maxRight, maxBottom } = useAppSelector(
+      ({ tree }) => tree,
+    );
 
-  return (
-    <OverlayTrigger
-      placement="right"
-      overlay={<Tooltip id="fit">Fit tree to screen</Tooltip>}
-    >
-      <Button variant="light" onClick={fitTreeWrapper}>
-        <IoMdExpand />
-      </Button>
-    </OverlayTrigger>
-  );
-});
+    const onFitTree = () => {
+      ReactGA.event({
+        category: "Navigation",
+        action: "fitTree",
+      });
+
+      const leftEdge = maxLeft - theme.nodeWidth; //should be theme.nodeWidth / 2 but give some padding
+      const topEdge = maxTop - theme.nodeWidth / 2;
+      const rightEdge = maxRight + theme.nodeWidth;
+      const bottomEdge = maxBottom + theme.nodeWidth / 2;
+      const actualWidth = rightEdge - leftEdge;
+      const actualHeight = bottomEdge - topEdge;
+
+      let nextScale;
+      if (drawingWidth - actualWidth < drawingHeight - actualHeight) {
+        nextScale = drawingWidth / actualWidth;
+      } else {
+        nextScale = drawingHeight / actualHeight;
+      }
+      if (nextScale > MAX_SCALE) nextScale = MAX_SCALE;
+
+      const centerX = leftEdge + actualWidth / 2;
+      const centerY = topEdge + actualHeight / 2;
+
+      const halfWidth = drawingWidth / 2;
+      const calculatedPositionX = halfWidth - (halfWidth + centerX) * nextScale;
+
+      const halfHeight = drawingHeight / 2;
+      const calculatedPositionY =
+        halfHeight - (halfHeight + centerY) * nextScale;
+
+      setTransform(calculatedPositionX, calculatedPositionY, nextScale);
+    };
+
+    return (
+      <OverlayTrigger
+        placement="right"
+        overlay={<Tooltip id="fit">Fit tree to screen</Tooltip>}
+      >
+        <Button variant="light" onClick={onFitTree}>
+          <IoMdExpand />
+        </Button>
+      </OverlayTrigger>
+    );
+  },
+);
 
 const ShareButton = memo(() => {
   const [showShareModal, setShowShareModal] = useState(false);

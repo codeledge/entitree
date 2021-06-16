@@ -5367,10 +5367,10 @@ react-transition-group@^4.4.1:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
-react-zoom-pan-pinch@1.6.1:
-  version "1.6.1"
-  resolved "https://registry.yarnpkg.com/react-zoom-pan-pinch/-/react-zoom-pan-pinch-1.6.1.tgz#da16267c258ab37e8ebcdc7c252794a9633e91ec"
-  integrity sha512-J2eM0gZ04XiUWvmKZrOhSAB2zjyoK7kw2POIeN1X0yTTlmp6HPGV0zYfjnlkhgt8nQwpvXAbsF/oAnkuiwk1kA==
+react-zoom-pan-pinch@2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/react-zoom-pan-pinch/-/react-zoom-pan-pinch-2.0.2.tgz#902e170df065db1d4dc075f4479db5f18116c628"
+  integrity sha512-7czrWgZUSN04ZgdLqmPi9e9w7+kPHjj/HOdY4dybvFsbFNULGcQOrvJa+z7+LbMWcVOMXOpV/+G39Rxdcjd5+g==
 
 react@17.0.2:
   version "17.0.2"

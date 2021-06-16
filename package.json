@@ -36,7 +36,7 @@
     "react-icons": "4.2.0",
     "react-redux": "7.2.4",
     "react-share": "4.4.0",
-    "react-zoom-pan-pinch": "1.6.1",
+    "react-zoom-pan-pinch": "2.0.2",
     "redux": "4.1.0",
     "redux-persist": "6.0.0",
     "reselect": "4.0.0",

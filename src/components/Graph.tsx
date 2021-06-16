@@ -1,30 +1,30 @@
 import styled, { useTheme } from "styled-components";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { EntityNode } from "types/EntityNode";
 import EntityNodeCard from "components/EntityNodeCard";
-import Navigation from "components/Navigation";
 import Rel from "components/Rel";
 import { RelData } from "types/RelData";
 import { TransformComponent } from "react-zoom-pan-pinch";
 import { makeNode } from "treeHelpers/makeNode";
-import { showError } from "store/alertSlice";
+import { setSizes } from "store/treeSlice";
 import treeLayout from "lib/getTreeLayout";
 import { useAppSelector } from "store";
+import { useDispatch } from "react-redux";
 
 // import useElementSize from "hooks/useElementSize";
 
-export default function Graph(props) {
-  const settings = useAppSelector(({ settings: s }) => s);
-
-  const { currentEntity, parentTree, childTree } = useAppSelector(
-    ({ tree }) => tree,
-  );
-  const graphRef = useRef(null);
-
-  // const { width, height } = useElementSize(graphRef);
+export default function Graph() {
+  const {
+    currentEntity,
+    parentTree,
+    childTree,
+    width,
+    height,
+  } = useAppSelector(({ tree }) => tree);
 
   const theme = useTheme();
+  const dispatch = useDispatch();
 
   const [rootNode, setRootNode] = useState<EntityNode>();
   const [childNodes, setChildNodes] = useState<EntityNode[]>([]);
@@ -33,10 +33,6 @@ export default function Graph(props) {
   const [rootSpouses, setRootSpouses] = useState<EntityNode[]>();
   const [childRels, setChildRels] = useState<RelData[]>();
   const [parentRels, setParentRels] = useState<RelData[]>();
-  const [containerStyle, setContainerStyle] = useState<{
-    width: number;
-    height: number;
-  }>();
 
   useEffect(() => {
     if (currentEntity) {
@@ -102,29 +98,31 @@ export default function Graph(props) {
     parentNodes?.forEach(compare);
     childNodes?.forEach(compare);
 
-    setContainerStyle({
-      width: 2 * Math.max(Math.abs(maxLeft), maxRight) + theme.nodeWidth,
-      height: 2 * Math.max(Math.abs(maxTop), maxBottom) + theme.nodeHeight,
-    });
+    dispatch(
+      setSizes({
+        maxRight,
+        maxLeft,
+        maxBottom,
+        maxTop,
+        width: 2 * Math.max(Math.abs(maxLeft), maxRight) + theme.nodeWidth,
+        height: 2 * Math.max(Math.abs(maxTop), maxBottom) + theme.nodeHeight,
+      }),
+    );
   };
 
+  const containerStyle = useMemo(() => ({ width, height }), [width, height]);
+
   return (
-    <ThemedGraph ref={graphRef}>
+    <ThemedGraph>
       <TransformComponent>
-        {containerStyle && (
+        {!!width && !!height && (
           <Center
             style={{
-              transform: `translate(-${containerStyle.width / 2}px, -${
-                containerStyle.height / 2
-              }px)`,
+              transform: `translate(-${width / 2}px, -${height / 2}px)`,
             }}
           >
             <RelsContainer style={containerStyle}>
-              <g
-                transform={`translate(${containerStyle.width / 2} ${
-                  containerStyle.height / 2
-                })`}
-              >
+              <g transform={`translate(${width / 2} ${height / 2})`}>
                 {parentRels?.map((rel) => (
                   <Rel key={rel.source.treeId + rel.target.treeId} rel={rel} />
                 ))}
@@ -151,8 +149,8 @@ export default function Graph(props) {
               <div
                 style={{
                   position: "absolute",
-                  left: containerStyle.width / 2,
-                  top: containerStyle.height / 2,
+                  left: width / 2,
+                  top: height / 2,
                 }}
               >
                 {parentNodes?.map((node) => (
@@ -173,7 +171,6 @@ export default function Graph(props) {
           </Center>
         )}
       </TransformComponent>
-      <Navigation {...props} />
     </ThemedGraph>
   );
 }

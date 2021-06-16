@@ -16,6 +16,8 @@ export type TreeState = {
   maxRight: number;
   maxTop: number;
   maxBottom: number;
+  width: number;
+  height: number;
   childTree?: Entity;
   parentTree?: Entity;
 };
@@ -25,6 +27,8 @@ const initialState: TreeState = {
   maxLeft: 0,
   maxBottom: 0,
   maxTop: 0,
+  width: 0,
+  height: 0,
 };
 
 const hydrate = createAction<AppState>(HYDRATE);
@@ -36,6 +40,26 @@ export const treeSlice = createSlice({
     reset: (state) => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       state.loadingEntity = true;
+    },
+    setSizes: (
+      state,
+      {
+        payload,
+      }: PayloadAction<{
+        maxLeft: number;
+        maxRight: number;
+        maxTop: number;
+        maxBottom: number;
+        width: number;
+        height: number;
+      }>,
+    ) => {
+      state.maxLeft = payload.maxLeft;
+      state.maxRight = payload.maxRight;
+      state.maxTop = payload.maxTop;
+      state.maxBottom = payload.maxBottom;
+      state.width = payload.width;
+      state.height = payload.height;
     },
     setCurrentEntity: (state, action) => {
       state.currentEntity = action.payload;
@@ -316,6 +340,7 @@ export const {
   setLoadingSiblings,
   setLoadingSpouses,
   setParentTree,
+  setSizes,
 } = treeSlice.actions;
 
 export default treeSlice.reducer;
