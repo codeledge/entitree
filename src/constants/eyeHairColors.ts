@@ -1,4 +1,11 @@
-export const EYE_AND_HAIR_COLORS = [
+export type PropColor = {
+  item: string;
+  itemLabel: string;
+  colorLabel: string;
+  hex: string;
+};
+
+export const EYE_AND_HAIR_COLORS: PropColor[] = [
   {
     item: "http://www.wikidata.org/entity/Q202466",
     itemLabel: "blond hair",

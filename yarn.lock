@@ -4185,6 +4185,11 @@ json5@^2.1.2:
   dependencies:
     minimist "^1.2.5"
 
+jsonp-promise@0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/jsonp-promise/-/jsonp-promise-0.1.2.tgz#5c4365d9cbee99c79893a9c750a95f6db468997d"
+  integrity sha1-XENl2cvumceYk6nHUKlfbbRomX0=
+
 jsonp@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/jsonp/-/jsonp-0.2.1.tgz#a65b4fa0f10bda719a05441ea7b94c55f3e15bae"

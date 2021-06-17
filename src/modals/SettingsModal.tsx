@@ -2,7 +2,11 @@ import { Button, Collapse, Dropdown, Form, Modal } from "react-bootstrap";
 import { EXTRA_INFO_OPTIONS, RIGHT_ENTITY_OPTIONS } from "constants/properties";
 import { LANGS, SECOND_LABELS } from "constants/langs";
 import React, { useEffect, useState } from "react";
-import { setLangCode, setSecondLabel, setSetting } from "store/settingsSlice";
+import {
+  setLangCode,
+  setSecondLabelCode,
+  setSetting,
+} from "store/settingsSlice";
 import styled, { useTheme } from "styled-components";
 
 import { CustomMenu } from "./CustomMenu";
@@ -14,6 +18,7 @@ import { getEntityUrl } from "helpers/getEntityUrl";
 import { loadEntity } from "treeHelpers/loadEntity";
 import { useAppSelector } from "store";
 import { useCurrentLang } from "hooks/useCurrentLang";
+import { useCurrentSecondLabel } from "hooks/useCurrentSecondLabel";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 
@@ -29,10 +34,10 @@ export default function SettingsModal({ show, hideModal }) {
   const currentTheme = useTheme();
   const currentLang = useCurrentLang();
   const router = useRouter();
+  const currentSecondLabel = useCurrentSecondLabel();
 
   const {
     languageCode,
-    secondLabel,
     rightEntityOption,
     showGenderColor,
     showExtraInfo,
@@ -144,12 +149,12 @@ export default function SettingsModal({ show, hideModal }) {
         <Dropdown className="langDropdown">
           <Dropdown.Toggle as={CustomToggle}>
             <span className="label">Add second label</span>{" "}
-            {secondLabel ? secondLabel.name : <i>no</i>}
+            {currentSecondLabel ? currentSecondLabel.name : <i>no</i>}
           </Dropdown.Toggle>
           <Dropdown.Menu alignRight as={CustomMenu}>
             <Dropdown.Item
-              active={!secondLabel}
-              onClick={() => dispatch(setSecondLabel(undefined))}
+              active={!currentSecondLabel}
+              onClick={() => dispatch(setSecondLabelCode(undefined))}
             >
               - no second label -
             </Dropdown.Item>
@@ -159,10 +164,10 @@ export default function SettingsModal({ show, hideModal }) {
               <Dropdown.Item
                 key={secondLabelOption.code}
                 eventKey={index + 1}
-                active={
-                  secondLabel && secondLabelOption.code === secondLabel.code
+                active={secondLabelOption.code === currentSecondLabel?.code}
+                onClick={() =>
+                  dispatch(setSecondLabelCode(secondLabelOption.code))
                 }
-                onClick={() => dispatch(setSecondLabel(secondLabelOption))}
                 disabled={languageCode === secondLabelOption.code}
               >
                 {secondLabelOption.name}
@@ -175,8 +180,8 @@ export default function SettingsModal({ show, hideModal }) {
               <Dropdown.Item
                 key={lang.code}
                 eventKey={index + 1}
-                active={secondLabel && lang.code === secondLabel.code}
-                onClick={() => dispatch(setSecondLabel(lang))}
+                active={lang.code === currentSecondLabel?.code}
+                onClick={() => dispatch(setSecondLabelCode(lang.code))}
                 disabled={languageCode === lang.code}
               >
                 {lang.name}
@@ -198,10 +203,9 @@ export default function SettingsModal({ show, hideModal }) {
             )}
           </Dropdown.Toggle>
           <Dropdown.Menu>
-            {RIGHT_ENTITY_OPTIONS.map((option, index) => (
+            {RIGHT_ENTITY_OPTIONS.map((option) => (
               <Dropdown.Item
-                // eslint-disable-next-line react/no-array-index-key
-                key={index}
+                key={option.title}
                 active={
                   JSON.stringify(rightEntityOption.propIds) ===
                   JSON.stringify(option.propIds)
@@ -276,6 +280,7 @@ export default function SettingsModal({ show, hideModal }) {
               <Dropdown.Menu>
                 {EXTRA_INFO_OPTIONS.map((extraOption) => (
                   <Dropdown.Item
+                    key={extraOption.code}
                     active={extraInfo === extraOption.code}
                     onClick={() =>
                       dispatch(

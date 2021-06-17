@@ -37,6 +37,8 @@ export default function Graph() {
   useEffect(() => {
     if (currentEntity) {
       const rootNode = makeNode(currentEntity);
+      rootNode.x = 0;
+      rootNode.y = 0;
       setRootNode(rootNode);
 
       setRootSiblings(

@@ -1,5 +1,5 @@
 import { BIRTH_NAME_ID, NAME_IN_KANA_ID, NICKNAME_ID } from "./properties";
-import { Lang, LangCode, SecondLabel } from "types/Lang";
+import { Lang, SecondLabel } from "types/Lang";
 
 const DISAMBIGUATION_PAGE_DESC = {
   da: "Wikipedia-flertydigside",

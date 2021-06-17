@@ -1,6 +1,7 @@
 import { Claim } from "./Claim";
 import { Country } from "constants/countries";
 import { LangCode } from "types/Lang";
+import { PropColor } from "constants/eyeHairColors";
 import { Religion } from "constants/religions";
 
 export interface Sitelink {
@@ -56,6 +57,8 @@ export interface Entity extends WikiEntity {
   downIdsAlreadySorted?: boolean;
   endDate?: string;
   externalLinks?: ExternalLink[];
+  eyeColor?: PropColor;
+  hairColor?: PropColor;
   gender?: string;
   images?: Image[];
   inceptionAblishedSpan?: string;
@@ -76,6 +79,8 @@ export interface Entity extends WikiEntity {
   loadingSiblings?: boolean;
   loadingSpouses?: boolean;
   parents?: Entity[];
+  peoplepillImageUrl?: string;
+  peoplepillSlug?: string;
   religion?: Religion;
   rightIds?: string[];
   secondLabel?: string;

@@ -9,7 +9,7 @@ import { defaultTheme } from "constants/themes";
 export type SettingsState = {
   themeCode: string;
   languageCode: LangCode;
-  secondLabel?: Lang | SecondLabel;
+  secondLabelCode?: Lang["code"] | SecondLabel["code"];
   showGenderColor: boolean;
   showEyeHairColors: boolean;
   showBirthName: boolean;
@@ -53,11 +53,11 @@ export const settingsSlice = createSlice({
     setLangCode: (state, { payload }: PayloadAction<LangCode>) => {
       state.languageCode = payload;
     },
-    setSecondLabel: (
+    setSecondLabelCode: (
       state,
-      { payload }: PayloadAction<SettingsState["secondLabel"]>,
+      { payload }: PayloadAction<SettingsState["secondLabelCode"]>,
     ) => {
-      state.secondLabel = payload;
+      state.secondLabelCode = payload;
     },
     resetCurrentTheme: (state) => {
       delete state.customThemes[state.themeCode];
@@ -69,7 +69,7 @@ export const {
   resetCurrentTheme,
   setLangCode,
   setCustomTheme,
-  setSecondLabel,
+  setSecondLabelCode,
   setSetting,
 } = settingsSlice.actions;
 

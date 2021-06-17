@@ -1,10 +1,10 @@
 import { LANG_MAP } from "constants/langs";
 
-export type Lang = {
+// keep compatibility
+export interface Lang extends SecondLabel {
   code: LangCode;
-  name: string;
   disambPageDesc: string;
-};
+}
 
 export type SecondLabel = {
   code: string;

@@ -37,10 +37,12 @@ export default async function getEntities(
     if (!wikiEntitiesMap[id] || wikiEntitiesMap[id]["missing"] !== undefined)
       return acc;
 
-    const entity = formatEntity(wikiEntitiesMap[id]);
+    const entity = formatEntity(wikiEntitiesMap[id], languageCode);
 
-    //filter out by default
-    if (entity.isHuman && entity.isInfantDeath) return acc;
+    //filter out isInfantDeath by default
+    if (entity.isHuman && entity.isInfantDeath) {
+      return acc;
+    }
 
     // siblings and spouses don't need connectors, so no currentPropId is passed
     if (options?.currentPropId) {

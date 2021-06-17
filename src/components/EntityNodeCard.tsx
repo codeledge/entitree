@@ -3,7 +3,7 @@
 /* eslint-disable prefer-arrow-callback */
 
 import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
-import { CHILD_ID, EYE_COLOR_ID, HAIR_COLOR_ID } from "constants/properties";
+import { CHILD_ID, GENI_ID } from "constants/properties";
 import { FaEye, FaFemale, FaMale, FaUser } from "react-icons/fa";
 import {
   FiChevronDown,
@@ -12,7 +12,7 @@ import {
   FiChevronUp,
 } from "react-icons/fi";
 import { GiBigDiamondRing, GiPerson } from "react-icons/gi";
-import React, { memo, useMemo, useState } from "react";
+import React, { memo, useEffect, useMemo, useState } from "react";
 import { RiGroupLine, RiParentLine } from "react-icons/ri";
 import styled, { css, useTheme } from "styled-components";
 import {
@@ -29,20 +29,64 @@ import { Image } from "types/Entity";
 import { MdChildCare } from "react-icons/md";
 import { SettingsState } from "store/settingsSlice";
 import clsx from "clsx";
-import colorByProperty from "helpers/colorByProperty";
-import countryByQid from "helpers/countryByQid";
-import religionByQid from "helpers/religionByQid";
+import { getDataprickImages } from "services/imageService";
+import getGeniProfile from "services/geniService";
+import getSimpleClaimValue from "lib/getSimpleClaimValue";
+import { isValidImage } from "helpers/isValidImage";
 import { useAppSelector } from "store";
 import { useDispatch } from "react-redux";
 
 export default memo(({ node }: { node: EntityNode }) => {
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
+
   const [thumbnails, setThumbnails] = useState<Image[]>(
     node.data.thumbnails || [],
   );
   const [images, setImages] = useState<Image[]>(node.data.images || []);
   const [faceImage, setFaceImage] = useState<Image>();
+  useEffect(() => {
+    getDataprickImages(node.data.id.substr(1)).then((imageSet) => {
+      imageSet.forEach(({ faceImage, thumbnail }) => {
+        setFaceImage(faceImage);
+        setThumbnails((thumbnails) => [thumbnail, ...thumbnails]);
+        setImages((images) => [thumbnail, ...images]);
+      });
+    });
+    if (settings.showExternalImages) {
+      if (node.data.peoplepillImageUrl) {
+        isValidImage(node.data.peoplepillImageUrl).then((valid) => {
+          if (valid) {
+            const ppImage = {
+              url: node.data.peoplepillImageUrl,
+              alt: `Image from peoplepill`,
+            } as Image;
+            setThumbnails((thumbnails) => [ppImage, ...thumbnails]);
+            setImages((images) => [ppImage, ...images]);
+          }
+        });
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    const geniId = getSimpleClaimValue(node.data.simpleClaims, GENI_ID);
+    if (geniId) {
+      getGeniProfile(geniId).then((geniProfile) => {
+        if (geniProfile?.mugshot_urls?.thumb) {
+          const geniImg = {
+            url: geniProfile.mugshot_urls.thumb,
+            alt: `Geni.com image`,
+          } as Image;
+          setThumbnails((thumbnails) => thumbnails.concat(geniImg));
+          setImages((images) => images.concat(geniImg));
+        }
+
+        //TODO: Geni dates and country
+      });
+    }
+  }, []);
+
   const [thumbnailIndex, setThumbnailIndex] = useState(0);
   const theme = useTheme();
 
@@ -58,36 +102,23 @@ export default memo(({ node }: { node: EntityNode }) => {
   };
 
   const {
-    data: { gender, isHuman, religion },
+    data: { gender, isHuman, religion, eyeColor, hairColor },
   } = node;
-
-  console.log({ religion });
 
   const currentThumbnail = thumbnails[thumbnailIndex];
 
   const onThumbClick =
     thumbnails.length > 1
-      ? () => setThumbnailIndex((thumbnailIndex + 1) % thumbnails.length)
+      ? () =>
+          setThumbnailIndex(
+            (thumbnailIndex) => (thumbnailIndex + 1) % thumbnails.length,
+          )
       : undefined;
 
   const hasLabelOnly =
-    theme.descriptionDisplay === "none" && !settings.secondLabel;
+    theme.descriptionDisplay === "none" && !settings.secondLabelCode;
 
-  const hasSecondLabel = Boolean(
-    settings.secondLabel &&
-      node.data.secondLabel &&
-      node.data.label !== node.data.secondLabel,
-  );
-
-  const eyeColor = useMemo(
-    () => colorByProperty(node.data.simpleClaims?.[EYE_COLOR_ID]),
-    [node.data.simpleClaims],
-  );
-
-  const hairColor = useMemo(
-    () => colorByProperty(node.data.simpleClaims?.[HAIR_COLOR_ID]),
-    [node.data.simpleClaims],
-  );
+  const hasSecondLabel = Boolean(settings.secondLabelCode);
 
   return (
     <ThemedNodeOuter
