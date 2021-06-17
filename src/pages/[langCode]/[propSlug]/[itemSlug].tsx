@@ -14,6 +14,7 @@ import TreeLoader from "layout/TreeLoader";
 import fs from "fs";
 import getConfig from "next/config";
 import getWikipediaArticle from "wikipedia/getWikipediaArticle";
+import { isItemId } from "helpers/isItemId";
 import { loadEntity } from "treeHelpers/loadEntity";
 import path from "path";
 import styled from "styled-components";
@@ -92,7 +93,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     let itemId;
     let itemThumbnail;
-    if (itemSlug.match(/^Q\d+$/)) {
+    if (isItemId(itemSlug)) {
       itemId = itemSlug;
     } else {
       try {

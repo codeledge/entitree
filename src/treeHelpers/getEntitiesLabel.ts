@@ -1,5 +1,6 @@
 import { DEFAULT_LANGS_CODES } from "../constants/langs";
 import { Entity } from "types/Entity";
+import { LangCode } from "types/Lang";
 import addLabel from "../lib/addLabel";
 import getWikidataEntities from "wikidata/getWikidataEntities";
 

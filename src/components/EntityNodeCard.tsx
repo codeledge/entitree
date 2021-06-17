@@ -30,8 +30,10 @@ import { MdChildCare } from "react-icons/md";
 import { SettingsState } from "store/settingsSlice";
 import clsx from "clsx";
 import { getDataprickImages } from "services/imageService";
+import getEntitiesLabel from "treeHelpers/getEntitiesLabel";
 import getGeniProfile from "services/geniService";
 import getSimpleClaimValue from "lib/getSimpleClaimValue";
+import { isProperyId } from "helpers/isPropertyId";
 import { isValidImage } from "helpers/isValidImage";
 import { useAppSelector } from "store";
 import { useDispatch } from "react-redux";
@@ -118,7 +120,25 @@ export default memo(({ node }: { node: EntityNode }) => {
   const hasLabelOnly =
     theme.descriptionDisplay === "none" && !settings.secondLabelCode;
 
-  const hasSecondLabel = Boolean(settings.secondLabelCode);
+  const [secondLabel, setSecondLabel] = useState<string>();
+  const hasSecondLabel = Boolean(secondLabel);
+  useEffect(() => {
+    if (settings.secondLabelCode) {
+      if (isProperyId(settings.secondLabelCode)) {
+        //TODO get prop
+      } else {
+        //if(isLangCode(settings.secondLabelCode))
+        //check if language is already in the main languages
+        getEntitiesLabel([node.data.id], settings.secondLabelCode).then(
+          ([secondLabel]) => {
+            setSecondLabel(secondLabel);
+          },
+        );
+      }
+    } else {
+      setSecondLabel(undefined);
+    }
+  }, [settings.secondLabelCode]);
 
   return (
     <ThemedNodeOuter
@@ -233,9 +253,7 @@ export default memo(({ node }: { node: EntityNode }) => {
             {hasSecondLabel && (
               <>
                 <br />
-                <span className="label labelsecondLabel">
-                  {node.data.secondLabel}
-                </span>
+                <span className="label labelsecondLabel">{secondLabel}</span>
               </>
             )}
             {node.data.description && theme.descriptionDisplay !== "none" && (
