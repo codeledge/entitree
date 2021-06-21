@@ -31,7 +31,7 @@ test("JESUS birth date", () => {
       rank: "normal",
     },
   ] as unknown) as Claim[];
-  const formatted = formatDateClaim(claim);
+  const formatted = formatDateClaim(claim, "en");
   expect(formatted).toBe("7 BCE");
 });
 
@@ -64,7 +64,7 @@ test("JESUS death date", () => {
       rank: "normal",
     },
   ] as unknown) as Claim[];
-  const formatted = formatDateClaim(claim);
+  const formatted = formatDateClaim(claim, "en");
   expect(formatted).toBe("30");
 });
 
@@ -114,7 +114,7 @@ test("NAPOLEON birth date deprecated first", () => {
       rank: "normal",
     },
   ] as unknown) as Claim[];
-  const formatted = formatDateClaim(claim);
+  const formatted = formatDateClaim(claim, "en");
   expect(formatted).toBe("15 Aug 1769");
 });
 
@@ -143,7 +143,7 @@ test("test born in the 20th century", () => {
       rank: "normal",
     },
   ] as unknown) as Claim[];
-  const formatted = formatDateClaim(claim);
+  const formatted = formatDateClaim(claim, "en");
   expect(formatted).toBe("20th cent.");
 });
 
@@ -172,6 +172,6 @@ test("1940s", () => {
       rank: "normal",
     },
   ] as unknown) as Claim[];
-  const formatted = formatDateClaim(claim);
+  const formatted = formatDateClaim(claim, "en");
   expect(formatted).toBe("1940s");
 });

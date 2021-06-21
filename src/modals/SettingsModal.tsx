@@ -15,7 +15,7 @@ import { CustomToggle } from "./CustomToggle";
 import ReactGA from "react-ga";
 import { THEMES } from "constants/themes";
 import { getEntityUrl } from "helpers/getEntityUrl";
-import { loadEntity } from "treeHelpers/loadEntity";
+import { setLoadingEntity } from "store/treeSlice";
 import { useAppSelector } from "store";
 import { useCurrentLang } from "hooks/useCurrentLang";
 import { useCurrentSecondLabel } from "hooks/useCurrentSecondLabel";
@@ -118,23 +118,14 @@ export default function SettingsModal({ show, hideModal }) {
                 eventKey={index + 1}
                 active={lang.code === languageCode}
                 onClick={async () => {
+                  dispatch(setLoadingEntity(true));
                   dispatch(setLangCode(lang.code));
-                  const {
-                    currentEntity: nextCurrentEntity,
-                    currentProp: nextCurrentProp,
-                  } = await loadEntity({
-                    itemId: currentEntity!.id,
-                    langCode: lang.code,
-                    propSlug: currentProp?.slug,
-                    dispatch,
-                    redirectToFamilyTreeProp: true,
-                  });
                   const url = getEntityUrl(
                     lang.code,
-                    nextCurrentProp,
-                    nextCurrentEntity,
+                    currentProp,
+                    currentEntity,
                   );
-                  router.push(url, url, { shallow: true });
+                  router.push(url);
                 }}
               >
                 {lang.name}
@@ -217,13 +208,8 @@ export default function SettingsModal({ show, hideModal }) {
                       val: option,
                     }),
                   );
-                  await loadEntity({
-                    itemId: currentEntity!.id,
-                    langCode: languageCode,
-                    propSlug: currentProp?.slug,
-                    dispatch,
-                    redirectToFamilyTreeProp: true,
-                  });
+                  //TODO: previously it was reloading here, now it should become a client only feature
+                  // so should filter nodes on the client
                 }}
               >
                 {option.title}

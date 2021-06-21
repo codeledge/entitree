@@ -37,10 +37,10 @@ export const treeSlice = createSlice({
   name: "tree",
   initialState,
   reducers: {
-    reset: (state) => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      state.loadingEntity = true;
-    },
+    reset: () => ({
+      ...initialState,
+      loadingEntity: true,
+    }),
     setSizes: (
       state,
       {
@@ -79,6 +79,9 @@ export const treeSlice = createSlice({
     },
     setParentTree: (state, { payload: parentTree }: PayloadAction<Entity>) => {
       state.parentTree = parentTree;
+    },
+    setLoadingEntity: (state, { payload }: PayloadAction<boolean>) => {
+      state.loadingEntity = payload;
     },
     setLoadingChildren: (
       state,
@@ -336,6 +339,7 @@ export const {
   setCurrentProp,
   setCurrentUpMap,
   setLoadingChildren,
+  setLoadingEntity,
   setLoadingParents,
   setLoadingSiblings,
   setLoadingSpouses,

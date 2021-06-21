@@ -1,5 +1,6 @@
 import {
   CHILD_ID,
+  DEFAULT_PROPERTY_ALL,
   FAMILY_IDS_MAP,
   FAMILY_TREE_PROP,
   FAMILY_TREE_TRANSLATIONS,
@@ -20,6 +21,8 @@ import {
   setParentTree,
 } from "store/treeSlice";
 
+import { AnyAction } from "redux";
+import { Dispatch } from "react";
 import { LangCode } from "types/Lang";
 import getItemProps from "wikidata/getItemProps";
 import getUpMap from "wikidata/getUpMap";
@@ -29,30 +32,26 @@ export const loadEntity = async ({
   langCode,
   propSlug,
   dispatch,
-  redirectToFamilyTreeProp,
 }: {
   itemId: string;
   langCode: LangCode;
   propSlug?: string;
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  dispatch: Function;
-  redirectToFamilyTreeProp?: boolean;
+  dispatch: Dispatch<AnyAction>;
 }): Promise<{ currentEntity: Entity; currentProp?: EntityProp }> => {
   await dispatch(reset());
   let itemProps = await getItemProps(itemId, langCode);
 
   let currentProp;
-  if (propSlug) currentProp = itemProps.find(({ slug }) => slug === propSlug);
-  //not found, try by id
-  if (propSlug && !currentProp) {
-    currentProp = itemProps.find(({ id }) => id === propSlug);
+  if (propSlug && propSlug !== DEFAULT_PROPERTY_ALL) {
+    currentProp = itemProps.find(({ slug }) => slug === propSlug);
+    //not found, try by id
+    if (!currentProp) {
+      currentProp = itemProps.find(({ id }) => id === propSlug);
+    }
   }
 
-  //currentProp belongs to family stuff?
-  if (
-    redirectToFamilyTreeProp &&
-    itemProps.some((prop) => FAMILY_IDS_MAP[prop.id])
-  ) {
+  //still no currentProp, redirect to family tree if possible
+  if (!currentProp && itemProps.some((prop) => FAMILY_IDS_MAP[prop.id])) {
     const familyTreeProp = { ...FAMILY_TREE_PROP };
     //Remove all family-related props in favour of the custom
     itemProps = itemProps.filter((prop) => {

@@ -9,12 +9,11 @@ export default function addCountryOfCitizenship(entity: Entity) {
     COUNTRY_OF_CITIZENSHIP,
   );
 
-  const country = COUNTRIES.find(
-    (c) => c.item === "http://www.wikidata.org/entity/" + countryId,
-  );
+  if (!countryId) return;
+
+  const country = COUNTRIES[countryId];
 
   if (country) {
-    country.text = "Citizen of " + country.name + " (Wikidata)";
     entity.countryOfCitizenship = country;
   }
 }

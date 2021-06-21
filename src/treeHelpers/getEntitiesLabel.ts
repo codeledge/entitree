@@ -4,7 +4,10 @@ import { LangCode } from "types/Lang";
 import addLabel from "../lib/addLabel";
 import getWikidataEntities from "wikidata/getWikidataEntities";
 
-export default async function getEntitiesLabel(ids, languageCode) {
+export default async function getEntitiesLabel(
+  ids: string[],
+  languageCode: LangCode,
+) {
   if (!ids || !ids.length)
     throw new Error("You need valid ids to getItemsLabel");
 

@@ -5,8 +5,8 @@ import { FiExternalLink } from "react-icons/fi";
 import getEntitiesLabel from "treeHelpers/getEntitiesLabel";
 import { getEntityUrl } from "helpers/getEntityUrl";
 import getWikipediaArticle from "wikipedia/getWikipediaArticle";
-import { loadEntity } from "treeHelpers/loadEntity";
 import { missingImagesLink } from "services/imageService";
+import { setLoadingEntity } from "store/treeSlice";
 import styled from "styled-components";
 import { useAppSelector } from "store";
 import { useDispatch } from "react-redux";
@@ -171,24 +171,10 @@ export default function DetailsModal({ node, hideModal, nodeImages }) {
           <Button
             variant="light"
             className="mr-auto"
-            onClick={async () => {
-              const {
-                currentEntity: nextCurrentEntity,
-                currentProp: nextCurrentProp,
-              } = await loadEntity({
-                itemId: node.data.id,
-                langCode: languageCode,
-                propSlug: currentProp?.slug,
-                dispatch,
-                redirectToFamilyTreeProp: true,
-              });
-              const url = getEntityUrl(
-                languageCode,
-                nextCurrentProp,
-                nextCurrentEntity,
-              );
-              router.push(url, url, { shallow: true });
-
+            onClick={() => {
+              dispatch(setLoadingEntity(true));
+              const url = getEntityUrl(languageCode, currentProp, node.data);
+              router.push(url);
               hideModal();
             }}
           >

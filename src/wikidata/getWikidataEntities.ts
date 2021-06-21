@@ -23,7 +23,6 @@ export default async function getWikidataEntities({
   // 1 url for every 50 items
   const urls: string[] = await new Promise((resolve, reject) => {
     try {
-      if (!languages) throw new Error("languageCode Missing");
       resolve(
         wdk.getManyEntities({
           ids,
