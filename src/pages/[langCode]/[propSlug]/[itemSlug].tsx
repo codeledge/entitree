@@ -1,11 +1,13 @@
 import { useAppSelector, wrapper } from "store";
 
+import { DEFAULT_PROPERTY_ALL } from "constants/properties";
 import Div100vh from "react-div-100vh";
 import DrawingArea from "components/DrawingArea";
 import Error from "next/error";
 import Footer from "layout/Footer";
 import Head from "next/head";
 import Header from "layout/Header";
+import { LANG_MAP } from "constants/langs";
 import { LangCode } from "types/Lang";
 import React from "react";
 import { SITE_NAME } from "constants/meta";
@@ -17,6 +19,7 @@ import getWikipediaArticle from "wikipedia/getWikipediaArticle";
 import { isItemId } from "helpers/isItemId";
 import { loadEntity } from "treeHelpers/loadEntity";
 import path from "path";
+import { setLangCode } from "store/settingsSlice";
 import styled from "styled-components";
 
 const TreePage = ({
@@ -89,7 +92,15 @@ export const getServerSideProps = wrapper.getServerSideProps(
       itemSlug: string;
     };
 
+    if (!LANG_MAP[langCode]) return { props: { errorCode: 404 } };
+
+    // force settings to be as url, otherwise you get a mix up
+    // TODO: THIS IS NOT WORKING, check reduc dev tools it's not setting the lang
+    // eve tho it comes after the persistence
+    dispatch(setLangCode(langCode));
+
     const decodedPropSlug = decodeURIComponent(propSlug);
+    const decodedItemSlug = decodeURIComponent(itemSlug);
 
     let itemId;
     let itemThumbnail;
@@ -100,7 +111,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         //TODO: cache this
         const {
           data: { wikibase_item, thumbnail },
-        } = await getWikipediaArticle(itemSlug, langCode);
+        } = await getWikipediaArticle(decodedItemSlug, langCode);
         if (wikibase_item) itemId = wikibase_item;
         if (thumbnail) itemThumbnail = thumbnail.source;
       } catch (error) {
@@ -110,12 +121,33 @@ export const getServerSideProps = wrapper.getServerSideProps(
     }
 
     try {
-      const { currentEntity } = await loadEntity({
+      const { currentEntity, currentProp } = await loadEntity({
         itemId,
         langCode,
         propSlug: decodedPropSlug,
         dispatch,
       });
+
+      // TODO: Extract loadEntity here and put the redirects when needed to fetch less data
+      if (!currentEntity) return { props: { errorCode: 404 } };
+
+      // redirect all => family_tree or
+      if (currentProp && currentProp?.slug !== propSlug) {
+        return {
+          redirect: {
+            destination: `/${langCode}/${currentProp?.slug}/${itemSlug}`,
+          },
+        };
+      }
+
+      //family_tree => all if not found
+      if (propSlug !== DEFAULT_PROPERTY_ALL && !currentProp) {
+        return {
+          redirect: {
+            destination: `/${langCode}/${DEFAULT_PROPERTY_ALL}/${itemSlug}`,
+          },
+        };
+      }
 
       const featuredImageFile = path.join(
         "/screenshot",

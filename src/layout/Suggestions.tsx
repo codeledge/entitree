@@ -3,7 +3,8 @@ import React, { useRef } from "react";
 
 import { SearchResult } from "services/wikidataService";
 import { getEntityUrl } from "helpers/getEntityUrl";
-import { loadEntity } from "treeHelpers/loadEntity";
+import getEntityWikipediaSlug from "treeHelpers/getEntityWikipediaSlug";
+import { setLoadingEntity } from "store/treeSlice";
 import styled from "styled-components";
 import { useAppSelector } from "store";
 import { useDispatch } from "react-redux";
@@ -49,22 +50,16 @@ export default function Suggestions({
           variant="light"
           onClick={async () => {
             setShowSuggestions(false);
-            const {
-              currentEntity: nextCurrentEntity,
-              currentProp: nextCurrentProp,
-            } = await loadEntity({
-              itemId: result.id,
-              langCode: languageCode,
-              propSlug: currentProp?.slug,
-              dispatch,
-              redirectToFamilyTreeProp: true,
-            });
-            const url = getEntityUrl(
+            dispatch(setLoadingEntity(true));
+            const wikipediaSlug = await getEntityWikipediaSlug(
+              result.id,
               languageCode,
-              nextCurrentProp,
-              nextCurrentEntity,
             );
-            router.push(url, url, { shallow: true });
+
+            const url = getEntityUrl(languageCode, currentProp, {
+              wikipediaSlug,
+            });
+            router.push(url);
           }}
         >
           <b>{result.label}</b>

@@ -1,5 +1,5 @@
 import { BIRTH_NAME_ID, NAME_IN_KANA_ID, NICKNAME_ID } from "./properties";
-import { Lang, SecondLabel } from "types/Lang";
+import { Lang, LangCode, SecondLabel } from "types/Lang";
 
 const DISAMBIGUATION_PAGE_DESC = {
   da: "Wikipedia-flertydigside",
@@ -452,7 +452,15 @@ export const DEFAULT_LANG = {
   name: LANG_MAP[DEFAULT_LANG_CODE],
   disambPageDesc: DISAMBIGUATION_PAGE_DESC[DEFAULT_LANG_CODE],
 } as Lang;
-export const DEFAULT_LANGS_CODES = ["en", "fr", "de", "it", "es", "nl", "pt"];
+export const DEFAULT_LANGS_CODES: LangCode[] = [
+  "en",
+  "fr",
+  "de",
+  "it",
+  "es",
+  "nl",
+  "pt",
+];
 export const SECOND_LABELS: SecondLabel[] = [
   {
     code: NICKNAME_ID,

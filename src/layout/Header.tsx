@@ -10,6 +10,7 @@ import React, { useState } from "react";
 
 import { EXAMPLES } from "../constants/examples";
 import { FiSliders } from "react-icons/fi";
+import Link from "next/link";
 import Logo from "./Logo";
 import ReactGA from "react-ga";
 import { SITE_NAME } from "../constants/meta";
@@ -47,9 +48,9 @@ export default function Header({ simple }: { simple?: boolean }) {
             className="examplesButton"
           >
             {EXAMPLES.map(({ name, href }) => (
-              <Dropdown.Item key={name} href={href} onClick={openExampleLink}>
-                {name}
-              </Dropdown.Item>
+              <Link key={name} href={href} passHref>
+                <Dropdown.Item onClick={openExampleLink}>{name}</Dropdown.Item>
+              </Link>
             ))}
           </DropdownButton>
         )}

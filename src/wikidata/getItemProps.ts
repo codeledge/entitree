@@ -10,7 +10,7 @@ import { LangCode } from "types/Lang";
 import axios from "axios";
 import wdk from "wikidata-sdk";
 
-export default async function getItemProps(id: string, languageCode: LangCode) {
+export default async function getItemProps(id: string, langCode: LangCode) {
   const url = await new Promise<string>((resolve, reject) => {
     try {
       const query = `
@@ -27,7 +27,7 @@ export default async function getItemProps(id: string, languageCode: LangCode) {
           ?prop wikibase:directClaim ?p.
           MINUS { ?parent rdf:type ?pt. }
         }
-        SERVICE wikibase:label { bd:serviceParam wikibase:language "${languageCode}, ${DEFAULT_LANG.code}". }
+        SERVICE wikibase:label { bd:serviceParam wikibase:language "${langCode}, ${DEFAULT_LANG.code}". }
       }`.trim();
 
       const url = wdk.sparqlQuery(query);
@@ -55,7 +55,7 @@ export default async function getItemProps(id: string, languageCode: LangCode) {
             thisProp.isFav = true;
 
             //label is "child", you want "family tree" if available
-            const translatedFamilyTree = FAMILY_TREE_TRANSLATIONS[languageCode];
+            const translatedFamilyTree = FAMILY_TREE_TRANSLATIONS[langCode];
 
             if (translatedFamilyTree) {
               thisProp.overrideLabel = translatedFamilyTree;

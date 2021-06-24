@@ -3,14 +3,15 @@ import { Claim, ClaimSnakTimeValue } from "types/Claim";
 
 import { DEFAULT_LANG_CODE } from "../constants/langs";
 import { DateTime } from "luxon";
+import { LangCode } from "types/Lang";
 import { SOURCING_CIRCUMSTANCES_ID } from "../constants/properties";
 import ordinalize from "ordinalize";
 import wbk from "wikidata-sdk";
 
 export default function formatDateClaim(
   claims: Claim[],
-  languageCode = DEFAULT_LANG_CODE,
-  yearOnly = false,
+  languageCode: LangCode,
+  yearOnly = false, //TODO: make this an option object
 ): string {
   const cleanClaims: Claim[] = [];
   claims.forEach((claim) => {

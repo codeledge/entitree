@@ -26,6 +26,7 @@ import { BsImage } from "react-icons/bs";
 import DetailsModal from "modals/DetailsModal";
 import { EntityNode } from "types/EntityNode";
 import { Image } from "types/Entity";
+import { LangCode } from "types/Lang";
 import { MdChildCare } from "react-icons/md";
 import { SettingsState } from "store/settingsSlice";
 import clsx from "clsx";
@@ -129,11 +130,12 @@ export default memo(({ node }: { node: EntityNode }) => {
       } else {
         //if(isLangCode(settings.secondLabelCode))
         //check if language is already in the main languages
-        getEntitiesLabel([node.data.id], settings.secondLabelCode).then(
-          ([secondLabel]) => {
-            setSecondLabel(secondLabel);
-          },
-        );
+        getEntitiesLabel(
+          [node.data.id],
+          settings.secondLabelCode as LangCode,
+        ).then(([secondLabel]) => {
+          setSecondLabel(secondLabel);
+        });
       }
     } else {
       setSecondLabel(undefined);

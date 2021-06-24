@@ -1,3 +1,4 @@
+import { LangCode } from "types/Lang";
 import axios from "axios";
 
 type Response = {
@@ -36,9 +37,11 @@ type Response = {
 
 export default function getWikipediaArticle(
   wikipediaSlug: string,
-  currentLangCode: string,
+  langCode: LangCode,
 ) {
   return axios.get<Response>(
-    `https://${currentLangCode}.wikipedia.org/api/rest_v1/page/summary/${wikipediaSlug}`,
+    `https://${langCode}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(
+      wikipediaSlug,
+    )}`,
   );
 }

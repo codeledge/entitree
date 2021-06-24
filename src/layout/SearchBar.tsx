@@ -13,12 +13,15 @@ import {
 } from "services/wikidataService";
 
 import { FaSearch } from "react-icons/fa";
-import Link from "next/link";
 import Suggestions from "./Suggestions";
+import { getEntityUrl } from "helpers/getEntityUrl";
+import { setLoadingEntity } from "store/treeSlice";
 import styled from "styled-components";
 import { useAppSelector } from "store";
 import { useCurrentLang } from "hooks/useCurrentLang";
 import useDebounce from "../hooks/useDebounce";
+import { useDispatch } from "react-redux";
+import { useRouter } from "next/router";
 
 export default function SearchBar() {
   const {
@@ -29,6 +32,8 @@ export default function SearchBar() {
   } = useAppSelector(({ tree }) => tree);
 
   const currentLang = useCurrentLang();
+  const router = useRouter();
+  const dispatch = useDispatch();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [loadingSuggestions, setLoadingSuggestions] = useState(false);
@@ -132,18 +137,21 @@ export default function SearchBar() {
 
                   <Dropdown.Menu alignRight>
                     {currentEntityProps?.map((prop) => (
-                      <Link
+                      <Dropdown.Item
                         key={prop.id}
-                        href={`/${currentLang.code}/${prop.slug}/${currentEntity.wikipediaSlug}`}
-                        passHref
+                        className={prop.isFav ? "fav" : ""}
+                        onClick={() => {
+                          dispatch(setLoadingEntity(true));
+                          const url = getEntityUrl(
+                            currentLang.code,
+                            prop,
+                            currentEntity,
+                          );
+                          router.push(url);
+                        }}
                       >
-                        <Dropdown.Item
-                          className={prop.isFav ? "fav" : ""}
-                          // onClick={() => dispatch(setCurrentProp(prop))}
-                        >
-                          {prop.overrideLabel || prop.label}
-                        </Dropdown.Item>
-                      </Link>
+                        {prop.overrideLabel || prop.label}
+                      </Dropdown.Item>
                     ))}
                   </Dropdown.Menu>
                 </Dropdown>

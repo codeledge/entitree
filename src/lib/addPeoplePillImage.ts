@@ -9,12 +9,14 @@ export const addPeoplePillImage = (entity: Entity) => {
     !entity.sitelinks?.enwiki?.title?.includes("(") //peoplePill uses a counter for same names
   ) {
     //TODO: check for foreign characters
-    entity.peoplepillSlug = entity.sitelinks?.enwiki?.title
+    const peoplepillSlug = entity.sitelinks?.enwiki?.title
       ?.toLowerCase()
       .replace(/ /g, "-")
       .replace(/,/g, "")
       .replace(/./g, "")
       .replace(/ñ/g, "n");
+
+    if (peoplepillSlug) entity.peoplepillSlug = peoplepillSlug;
 
     //web archive will redirect to last cached version
     if (entity.peoplepillSlug) {
