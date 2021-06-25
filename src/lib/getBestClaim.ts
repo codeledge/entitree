@@ -1,4 +1,9 @@
-import { Claim, ClaimSnakEntityValue, ClaimSnakValue } from "types/Claim";
+import {
+  Claim,
+  ClaimSnakEntityValue,
+  ClaimSnakTextValue,
+  ClaimSnakValue,
+} from "types/Claim";
 
 export function getBestClaim(claims: Claim[]): Claim | undefined {
   if (!claims) return;
@@ -42,8 +47,9 @@ export function getBestClaimValueId(
 
 export function getBestClaimValueText(claims: Claim[]): string | undefined {
   if (!claims) return;
+  const bestClaimValue = getBestClaimValue(
+    claims,
+  ) as ClaimSnakTextValue["value"];
 
-  const bestClaimValue = getBestClaimValue(claims);
-
-  return bestClaimValue?.["text"]; //WTF? not existing in type?
+  return bestClaimValue?.text;
 }

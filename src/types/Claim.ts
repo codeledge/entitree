@@ -15,7 +15,17 @@ export interface ClaimSnak {
   property: string;
   snaktype: string;
 }
-export declare type ClaimSnakValue = ClaimSnakTimeValue | ClaimSnakEntityValue;
+export declare type ClaimSnakValue =
+  | ClaimSnakTimeValue
+  | ClaimSnakEntityValue
+  | ClaimSnakTextValue;
+export interface ClaimSnakTextValue {
+  type: "monolingualtext";
+  value: {
+    text: string;
+    language: string;
+  };
+}
 export interface ClaimSnakTimeValue {
   type: "time";
   value: {
