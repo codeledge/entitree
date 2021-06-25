@@ -1,19 +1,49 @@
-import { Claim } from "types/Claim";
+import { Claim, ClaimSnakEntityValue, ClaimSnakValue } from "types/Claim";
 
-export default function getBestClaim(claim: Claim[], prop = "id"): string {
-  if (!claim) return "";
+export function getBestClaim(claims: Claim[]): Claim | undefined {
+  if (!claims) return;
 
   const cleanClaims: Claim[] = [];
-  claim.forEach((c) => {
-    if (c.mainsnak.datavalue?.value[prop]) {
-      if (c.rank === "normal") cleanClaims.push(c);
-      if (c.rank === "preferred") cleanClaims.unshift(c);
+  claims.forEach((c) => {
+    if (c.rank === "normal") cleanClaims.push(c);
+    if (c.rank === "preferred") cleanClaims.unshift(c);
 
-      // What about the deprecated ones?
-    }
+    // What about the deprecated ones?
   });
 
   const bestClaim = cleanClaims[0];
 
-  return bestClaim?.mainsnak.datavalue?.value?.[prop] || "";
+  return bestClaim;
+}
+
+export function getBestClaimValue(
+  claims: Claim[],
+): ClaimSnakValue["value"] | undefined {
+  if (!claims) return;
+
+  const bestClaim = getBestClaim(claims);
+
+  const bestClaimValue = bestClaim?.mainsnak.datavalue?.value;
+
+  return bestClaimValue;
+}
+
+export function getBestClaimValueId(
+  claims: Claim[],
+): ClaimSnakEntityValue["value"]["id"] | undefined {
+  if (!claims) return;
+
+  const bestClaimValue = getBestClaimValue(
+    claims,
+  ) as ClaimSnakEntityValue["value"];
+
+  return bestClaimValue?.id;
+}
+
+export function getBestClaimValueText(claims: Claim[]): string | undefined {
+  if (!claims) return;
+
+  const bestClaimValue = getBestClaimValue(claims);
+
+  return bestClaimValue?.["text"]; //WTF? not existing in type?
 }
