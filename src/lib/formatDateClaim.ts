@@ -1,5 +1,6 @@
 import { CIRCA_ID, PRESUMABLY_ID } from "../constants/entities";
 import { Claim, ClaimSnakTimeValue } from "types/Claim";
+import { getBestClaim, getBestClaimValue } from "./getBestClaim";
 
 import { DEFAULT_LANG_CODE } from "../constants/langs";
 import { DateTime } from "luxon";
@@ -8,25 +9,20 @@ import { SOURCING_CIRCUMSTANCES_ID } from "../constants/properties";
 import ordinalize from "ordinalize";
 import wbk from "wikidata-sdk";
 
+export const getDateClaimISO = (dateClaim) =>
+  wbk.wikibaseTimeToISOString(
+    (getBestClaimValue(dateClaim) as ClaimSnakTimeValue["value"]).time,
+  );
+
 export default function formatDateClaim(
   claims: Claim[],
   languageCode: LangCode,
   yearOnly = false, //TODO: make this an option object
 ): string {
-  const cleanClaims: Claim[] = [];
-  claims.forEach((claim) => {
-    if (claim.mainsnak.datavalue?.value["time"]) {
-      if (claim.rank === "normal") cleanClaims.push(claim);
-      if (claim.rank === "preferred") cleanClaims.unshift(claim);
-
-      // What about the deprecated ones?
-    }
-  });
-  const firstDate = cleanClaims[0];
-  if (!firstDate) return "";
-  const { value } = firstDate.mainsnak.datavalue as ClaimSnakTimeValue;
+  const dateClaim = getBestClaim(claims);
+  const value = getBestClaimValue(claims) as ClaimSnakTimeValue["value"];
   const sourcingCircumstances =
-    firstDate.qualifiers?.[SOURCING_CIRCUMSTANCES_ID]?.[0]?.datavalue?.value[
+    dateClaim?.qualifiers?.[SOURCING_CIRCUMSTANCES_ID]?.[0]?.datavalue?.value[
       "id"
     ];
 

@@ -43,6 +43,7 @@ export interface Entity extends WikiEntity {
   _spouses?: Entity[];
   abolishedDate?: string;
   birthDate?: string;
+  birthISO?: string;
   birthName?: string;
   birthPlaceId?: string;
   birthYear?: string;
