@@ -95,7 +95,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     if (!LANG_MAP[langCode]) return { props: { errorCode: 404 } };
 
     // force settings to be as url, otherwise you get a mix up
-    // TODO: THIS IS NOT WORKING, check reduc dev tools it's not setting the lang
+    // TODO: THIS IS NOT WORKING, check redux dev tools it's not setting the lang
     // eve tho it comes after the persistence
     dispatch(setLangCode(langCode));
 

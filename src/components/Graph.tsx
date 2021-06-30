@@ -1,3 +1,4 @@
+import { resetFit, setSizes } from "store/treeSlice";
 import styled, { useTheme } from "styled-components";
 import { useEffect, useMemo, useState } from "react";
 
@@ -7,20 +8,22 @@ import Rel from "components/Rel";
 import { RelData } from "types/RelData";
 import { TransformComponent } from "react-zoom-pan-pinch";
 import { makeNode } from "treeHelpers/makeNode";
-import { setSizes } from "store/treeSlice";
 import treeLayout from "lib/getTreeLayout";
 import { useAppSelector } from "store";
 import { useDispatch } from "react-redux";
 
-// import useElementSize from "hooks/useElementSize";
-
-export default function Graph() {
+export default function Graph({
+  setTransform,
+  drawingWidth,
+  drawingHeight,
+}: any) {
   const {
     currentEntity,
     parentTree,
     childTree,
     width,
     height,
+    fit,
   } = useAppSelector(({ tree }) => tree);
 
   const theme = useTheme();
@@ -66,21 +69,82 @@ export default function Graph() {
       if (childTree) {
         const childHierarchy = makeNode(childTree, "children");
         treeLayout(childHierarchy);
-        setChildNodes(childHierarchy.descendants().slice(1));
+        setChildNodes(childHierarchy.descendants());
         setChildRels(childHierarchy.links() as RelData[]);
+      } else {
+        setChildNodes([]);
+        setChildRels([]);
       }
 
       if (parentTree) {
         const parentHierarchy = makeNode(parentTree, "parents");
         treeLayout(parentHierarchy);
-        setParentNodes(parentHierarchy.descendants().slice(1));
+        setParentNodes(parentHierarchy.descendants());
         setParentRels(parentHierarchy.links() as RelData[]);
+      } else {
+        setParentNodes([]);
+        setParentRels([]);
       }
     }
   }, [currentEntity, childTree, parentTree]);
 
+  const findNode = (entity) => {
+    return (
+      parentNodes.find((n) => n.data.id === entity.id) ||
+      childNodes.find((n) => n.data.id === entity.id) ||
+      rootSiblings?.find((n) => n.data.id === entity.id) ||
+      rootSpouses?.find((n) => n.data.id === entity.id)
+    );
+  };
+
   useEffect(() => {
     calcBounds();
+    if (fit) {
+      dispatch(resetFit());
+
+      const halfWidth = drawingWidth / 2;
+      const halfHeight = drawingHeight / 2;
+
+      let actualWidth = drawingWidth;
+      let centerX;
+      if (fit.leftEntity && fit.rightEntity) {
+        const fitRight = findNode(fit.rightEntity)!.x + theme.nodeWidth;
+        const fitLeft = findNode(fit.leftEntity)!.x - theme.nodeWidth;
+        actualWidth = fitRight - fitLeft;
+        centerX = fitLeft + actualWidth / 2;
+      }
+
+      let actualHeight = drawingHeight;
+      let centerY;
+      if (fit.topEntity && fit.bottomEntity) {
+        const fitBottom = findNode(fit.bottomEntity)!.y;
+        const fitTop = findNode(fit.topEntity)!.y;
+        actualHeight = fitBottom - fitTop;
+        centerY = fitTop + actualHeight / 2;
+      }
+
+      let nextScale;
+      if (actualWidth !== drawingWidth || actualHeight !== drawingHeight) {
+        if (drawingWidth - actualWidth < drawingHeight - actualHeight) {
+          nextScale = drawingWidth / actualWidth;
+        } else {
+          nextScale = drawingHeight / actualHeight;
+        }
+        if (nextScale > 1) nextScale = 1;
+      }
+
+      const calculatedPositionX =
+        centerX !== undefined
+          ? halfWidth - (halfWidth + centerX) * nextScale
+          : undefined;
+
+      const calculatedPositionY =
+        centerY !== undefined
+          ? halfHeight - (halfHeight + centerY) * nextScale
+          : undefined;
+
+      setTransform(calculatedPositionX, calculatedPositionY, nextScale);
+    }
   }, [rootNode, parentNodes, childNodes]);
 
   const calcBounds = () => {
@@ -155,17 +219,23 @@ export default function Graph() {
                   top: height / 2,
                 }}
               >
-                {parentNodes?.map((node) => (
+                {parentNodes?.slice(1).map((node) => (
                   <EntityNodeCard key={node.treeId} node={node} />
                 ))}
                 {rootSiblings?.map((node) => (
                   <EntityNodeCard key={node.treeId} node={node} />
                 ))}
-                {rootNode && <EntityNodeCard node={rootNode} />}
+                {rootNode && (
+                  <EntityNodeCard
+                    node={rootNode}
+                    childRoot={childNodes[0]}
+                    parentRoot={parentNodes[0]}
+                  />
+                )}
                 {rootSpouses?.map((node) => (
                   <EntityNodeCard key={node.treeId} node={node} />
                 ))}
-                {childNodes?.map((node) => (
+                {childNodes?.slice(1).map((node) => (
                   <EntityNodeCard key={node.treeId} node={node} />
                 ))}
               </div>

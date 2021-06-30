@@ -13,6 +13,7 @@ import addEndDate from "./addEndDate";
 import addExternalLinks from "./addExternalLinks";
 import addEyeColor from "./addEyeColor";
 import addGender from "./addGender";
+import addGeniId from "./addGeniId";
 import addHairColor from "./addHairColor";
 import addImages from "./addImages";
 import addInceptionAbolishedSpan from "./addInceptionAbolishedSpan";
@@ -23,7 +24,6 @@ import addLabel from "./addLabel";
 import addLifeSpan from "./addLifeSpan";
 import { addPeoplePillImage } from "./addPeoplePillImage";
 import addReligion from "./addReligion";
-import addSecondLabel from "./addSecondLabel";
 import addStartDate from "./addStartDate";
 import addStartEndSpan from "./addStartEndSpan";
 import addWebsite from "./addWebsite";
@@ -85,6 +85,8 @@ export default function formatEntity(
   addHairColor(entity);
 
   addPeoplePillImage(entity);
+
+  addGeniId(entity);
 
   return entity;
 }

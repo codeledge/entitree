@@ -8,6 +8,37 @@ import styled from "styled-components";
 import useElementSize from "hooks/useElementSize";
 
 export default function DrawingArea() {
+  return (
+    <TransformWrapper
+      velocityAnimation={{
+        disabled: false,
+      }}
+      doubleClick={{
+        disabled: true,
+      }}
+      limitToBounds={false}
+      minScale={MIN_SCALE}
+      maxScale={MAX_SCALE}
+      wheel={{ step: 0.02 }}
+    >
+      {({ zoomIn, zoomOut, resetTransform, setTransform }) => (
+        <GraphWrapper
+          zoomIn={zoomIn}
+          zoomOut={zoomOut}
+          resetTransform={resetTransform}
+          setTransform={setTransform}
+        />
+      )}
+    </TransformWrapper>
+  );
+}
+
+const GraphWrapper = ({
+  zoomIn,
+  zoomOut,
+  resetTransform,
+  setTransform,
+}: any) => {
   const wrapperRef = useRef(null);
 
   const { width: drawingWidth, height: drawingHeight } = useElementSize(
@@ -15,39 +46,29 @@ export default function DrawingArea() {
   );
 
   return (
-    <GraphWrapper ref={wrapperRef}>
-      <TransformWrapper
-        velocityAnimation={{
-          disabled: false,
-        }}
-        doubleClick={{
-          disabled: true,
-        }}
-        limitToBounds={false}
-        minScale={MIN_SCALE}
-        maxScale={MAX_SCALE}
-        wheel={{ step: 0.02 }}
-      >
-        {(props) => (
-          <>
-            <Graph {...props} />
-            <Navigation
-              {...props}
-              drawingWidth={drawingWidth}
-              drawingHeight={drawingHeight}
-            />
-          </>
-        )}
-      </TransformWrapper>
-    </GraphWrapper>
+    <DrawingAreaWrapper ref={wrapperRef}>
+      <Graph
+        setTransform={setTransform}
+        drawingWidth={drawingWidth}
+        drawingHeight={drawingHeight}
+      />
+      <Navigation
+        zoomIn={zoomIn}
+        zoomOut={zoomOut}
+        resetTransform={resetTransform}
+        setTransform={setTransform}
+        drawingWidth={drawingWidth}
+        drawingHeight={drawingHeight}
+      />
+    </DrawingAreaWrapper>
   );
-}
+};
 
-const GraphWrapper = styled.div`
+const DrawingAreaWrapper = styled.div`
   position: relative;
   flex: 1;
   .react-transform-wrapper,
-  .react-transform-content {
+  .react-transform-component {
     width: 100%;
     height: 100%;
     position: relative;

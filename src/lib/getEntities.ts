@@ -51,7 +51,7 @@ export default async function getEntities(
 
     //delete as non-serializeable and save on memory
     delete entity.claims;
-    delete entity.simpleClaims;
+    //delete entity.simpleClaims; //second label prop still needs this
 
     return acc.concat(entity);
   }, []);

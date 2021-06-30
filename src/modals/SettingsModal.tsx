@@ -208,8 +208,6 @@ export default function SettingsModal({ show, hideModal }) {
                       val: option,
                     }),
                   );
-                  //TODO: previously it was reloading here, now it should become a client only feature
-                  // so should filter nodes on the client
                 }}
               >
                 {option.title}

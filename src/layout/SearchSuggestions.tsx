@@ -4,14 +4,14 @@ import React, { useRef } from "react";
 import { SearchResult } from "services/wikidataService";
 import { getEntityUrl } from "helpers/getEntityUrl";
 import getEntityWikipediaSlug from "treeHelpers/getEntityWikipediaSlug";
-import { setLoadingEntity } from "store/treeSlice";
+import { reset } from "store/treeSlice";
 import styled from "styled-components";
 import { useAppSelector } from "store";
 import { useDispatch } from "react-redux";
 import useOnClickOutside from "hooks/useOnClickOutside";
 import { useRouter } from "next/router";
 
-export default function Suggestions({
+export default function SearchSuggestions({
   loadingSuggestions,
   searchResults,
   setShowSuggestions,
@@ -33,7 +33,7 @@ export default function Suggestions({
   return (
     <StyledSuggestions
       ref={wrapperRef}
-      className="Suggestions dropdown-menu show d-relative"
+      className="dropdown-menu show d-relative"
     >
       {loadingSuggestions && (
         <div className="searchingMessage">
@@ -50,12 +50,11 @@ export default function Suggestions({
           variant="light"
           onClick={async () => {
             setShowSuggestions(false);
-            dispatch(setLoadingEntity(true));
+            dispatch(reset());
             const wikipediaSlug = await getEntityWikipediaSlug(
               result.id,
               languageCode,
             );
-
             const url = getEntityUrl(languageCode, currentProp, {
               wikipediaSlug,
             });

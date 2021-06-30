@@ -38,7 +38,7 @@ export const loadEntity = async ({
   propSlug?: string;
   dispatch: Dispatch<AnyAction>;
 }): Promise<{ currentEntity: Entity; currentProp?: EntityProp }> => {
-  await dispatch(reset());
+  dispatch(reset());
   let itemProps = await getItemProps(itemId, langCode);
 
   let currentProp;

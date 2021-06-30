@@ -13,7 +13,7 @@ import {
 } from "services/wikidataService";
 
 import { FaSearch } from "react-icons/fa";
-import Suggestions from "./Suggestions";
+import SearchSuggestions from "./SearchSuggestions";
 import { getEntityUrl } from "helpers/getEntityUrl";
 import { setLoadingEntity } from "store/treeSlice";
 import styled from "styled-components";
@@ -159,7 +159,7 @@ export default function SearchBar() {
             )}
           </InputGroup>
           {showSuggestions && (
-            <Suggestions
+            <SearchSuggestions
               loadingSuggestions={loadingSuggestions}
               searchResults={searchResults}
               setShowSuggestions={setShowSuggestions}

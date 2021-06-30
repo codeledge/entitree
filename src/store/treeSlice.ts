@@ -7,28 +7,34 @@ import { UpMap } from "types/EntityNode";
 import { findEntity } from "treeHelpers/findEntity";
 
 export type TreeState = {
+  childTree?: Entity;
   currentEntity?: Entity;
   currentEntityProps?: EntityProp[];
   currentProp?: EntityProp;
   currentUpMap?: UpMap;
+  fit?: {
+    bottomEntity: Entity;
+    leftEntity: Entity;
+    rightEntity: Entity;
+    topEntity: Entity;
+  };
+  height: number;
   loadingEntity?: boolean;
+  maxBottom: number;
   maxLeft: number;
   maxRight: number;
   maxTop: number;
-  maxBottom: number;
-  width: number;
-  height: number;
-  childTree?: Entity;
   parentTree?: Entity;
+  width: number;
 };
 
 const initialState: TreeState = {
-  maxRight: 0,
-  maxLeft: 0,
+  height: 0,
   maxBottom: 0,
+  maxLeft: 0,
+  maxRight: 0,
   maxTop: 0,
   width: 0,
-  height: 0,
 };
 
 const hydrate = createAction<AppState>(HYDRATE);
@@ -41,6 +47,9 @@ export const treeSlice = createSlice({
       ...initialState,
       loadingEntity: true,
     }),
+    resetFit: (state) => {
+      state.fit = undefined;
+    },
     setSizes: (
       state,
       {
@@ -104,6 +113,13 @@ export const treeSlice = createSlice({
           entityRef.loadingChildren = false;
         }
       }
+
+      state.fit = {
+        leftEntity: entity,
+        rightEntity: entity,
+        topEntity: entity,
+        bottomEntity: entity,
+      };
     },
     expandChildren: (
       state,
@@ -118,6 +134,13 @@ export const treeSlice = createSlice({
           entityRef.loadingChildren = false;
         }
       }
+
+      state.fit = {
+        leftEntity: children[0],
+        rightEntity: children[children.length - 1],
+        topEntity: entity,
+        bottomEntity: children[0],
+      };
     },
     setLoadingParents: (
       state,
@@ -138,6 +161,12 @@ export const treeSlice = createSlice({
           entityRef._parents = entityRef.parents;
           entityRef.parents = undefined;
           entityRef.loadingParents = false;
+          state.fit = {
+            leftEntity: entity,
+            rightEntity: entity,
+            topEntity: entity,
+            bottomEntity: entity,
+          };
         }
       }
     },
@@ -152,6 +181,13 @@ export const treeSlice = createSlice({
         if (entityRef) {
           entityRef.parents = parents;
           entityRef.loadingParents = false;
+
+          state.fit = {
+            leftEntity: parents[0],
+            rightEntity: parents[parents.length - 1],
+            topEntity: parents[0],
+            bottomEntity: entity,
+          };
         }
       }
     },
@@ -203,6 +239,13 @@ export const treeSlice = createSlice({
         state.currentEntity!.siblings = undefined;
         state.currentEntity!.loadingSiblings = false;
       }
+
+      state.fit = {
+        leftEntity: entity,
+        rightEntity: entity,
+        topEntity: entity,
+        bottomEntity: entity,
+      };
     },
     expandSiblings: (
       state,
@@ -232,6 +275,13 @@ export const treeSlice = createSlice({
         state.currentEntity!.siblings = siblings;
         state.currentEntity!.loadingSiblings = false;
       }
+
+      state.fit = {
+        leftEntity: siblings[0],
+        rightEntity: siblings[siblings.length - 1],
+        topEntity: siblings[0],
+        bottomEntity: siblings[0],
+      };
     },
     setLoadingSpouses: (
       state,
@@ -282,6 +332,13 @@ export const treeSlice = createSlice({
         );
         entityRef!.loadingSpouses = false;
       }
+
+      state.fit = {
+        leftEntity: entity,
+        rightEntity: entity,
+        topEntity: entity,
+        bottomEntity: entity,
+      };
     },
     expandSpouses: (
       state,
@@ -297,7 +354,7 @@ export const treeSlice = createSlice({
         state.currentEntity!.spouses = spouses;
         state.currentEntity!.loadingSpouses = false;
       } else if (parentEntity) {
-        //add spouses after the node index, so that the node stays on the left
+        //add spouses after the node index, so that the node stays on the leftEntity
         const insertIndex = parentEntity.children!.indexOf(entity) + 1;
 
         const entityRef = findEntity(state.childTree!, entity, "children");
@@ -311,6 +368,13 @@ export const treeSlice = createSlice({
         entityRef!.spouses = spouses;
         entityRef!.loadingSpouses = false;
       }
+
+      state.fit = {
+        leftEntity: spouses[0],
+        rightEntity: spouses[spouses.length - 1],
+        topEntity: entity,
+        bottomEntity: entity,
+      };
     },
   },
   extraReducers(builder) {
@@ -345,6 +409,7 @@ export const {
   setLoadingSpouses,
   setParentTree,
   setSizes,
+  resetFit,
 } = treeSlice.actions;
 
 export default treeSlice.reducer;

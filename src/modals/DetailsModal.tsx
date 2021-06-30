@@ -24,7 +24,7 @@ export default function DetailsModal({ node, hideModal, nodeImages }) {
   const [wikipediaExtract, setWikipediaExtract] = useState<string>();
 
   useEffect(() => {
-    if (node.data.wikipediaSlug)
+    if (node.data.wikipediaSlug) {
       getWikipediaArticle(node.data.wikipediaSlug, languageCode).then(
         ({ data: { extract, thumbnail } }) => {
           if (extract) setWikipediaExtract(extract);
@@ -36,6 +36,7 @@ export default function DetailsModal({ node, hideModal, nodeImages }) {
           }
         },
       );
+    }
   }, [languageCode, images.length, node.data.wikipediaSlug, node.data.label]);
 
   useEffect(() => {
