@@ -187,28 +187,30 @@ export default memo(
                   )}
                 </span>
               )}
-              {currentThumbnail && (
+              {settings.showFace && faceImage ? (
+                <img
+                  alt={faceImage?.alt}
+                  src={
+                    faceImage.url +
+                    (settings.imageType === "head" ? "?factor=1.5" : "")
+                  }
+                  title={faceImage.alt}
+                />
+              ) : (
                 <>
-                  {settings.showFace && faceImage ? (
-                    <img
-                      alt={faceImage?.alt}
-                      src={
-                        faceImage.url +
-                        (settings.imageType === "head" ? "?factor=1.5" : "")
-                      }
-                      title={faceImage.alt}
-                    />
-                  ) : (
-                    <img
-                      alt={currentThumbnail.alt}
-                      src={currentThumbnail.url}
-                      title={currentThumbnail.alt}
-                    />
-                  )}
-                  {thumbnails.length > 1 && (
-                    <span className="thumbnailCounter">
-                      {thumbnailIndex + 1}/{thumbnails.length}
-                    </span>
+                  {currentThumbnail && (
+                    <>
+                      <img
+                        alt={currentThumbnail.alt}
+                        src={currentThumbnail.url}
+                        title={currentThumbnail.alt}
+                      />
+                      {thumbnails.length > 1 && (
+                        <span className="thumbnailCounter">
+                          {thumbnailIndex + 1}/{thumbnails.length}
+                        </span>
+                      )}
+                    </>
                   )}
                 </>
               )}
