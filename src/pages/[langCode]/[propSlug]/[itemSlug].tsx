@@ -1,3 +1,8 @@
+import {
+  setCurrentEntity,
+  setCurrentEntityProps,
+  setCurrentProp,
+} from "store/treeSlice";
 import { useAppSelector, wrapper } from "store";
 
 import { DEFAULT_PROPERTY_ALL } from "constants/properties";
@@ -94,11 +99,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     if (!LANG_MAP[langCode]) return { props: { errorCode: 404 } };
 
-    // force settings to be as url, otherwise you get a mix up
-    // TODO: THIS IS NOT WORKING, check redux dev tools it's not setting the lang
-    // eve tho it comes after the persistence
-    dispatch(setLangCode(langCode));
-
     const decodedPropSlug = decodeURIComponent(propSlug);
     const decodedItemSlug = decodeURIComponent(itemSlug);
 
@@ -121,11 +121,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
     }
 
     try {
-      const { currentEntity, currentProp } = await loadEntity({
+      const { currentEntity, currentProp, itemProps } = await loadEntity({
         itemId,
         langCode,
         propSlug: decodedPropSlug,
-        dispatch,
       });
 
       // TODO: Extract loadEntity here and put the redirects when needed to fetch less data
@@ -148,6 +147,14 @@ export const getServerSideProps = wrapper.getServerSideProps(
           },
         };
       }
+
+      // force settings to be as url, otherwise you get a mix up
+      // TODO: THIS IS NOT WORKING, check redux dev tools it's not setting the lang
+      // eve tho it comes after the persistence
+      dispatch(setLangCode(langCode));
+      dispatch(setCurrentEntity(currentEntity));
+      if (itemProps) dispatch(setCurrentEntityProps(itemProps));
+      if (currentProp) dispatch(setCurrentProp(currentProp));
 
       const featuredImageFile = path.join(
         "/screenshot",

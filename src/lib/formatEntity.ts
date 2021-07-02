@@ -29,6 +29,7 @@ import addStartEndSpan from "./addStartEndSpan";
 import addWebsite from "./addWebsite";
 import addWikidataUrl from "./addWikidataUrl";
 import addWikipediaUrl from "./addWikipediaUrl";
+import getTreeId from "treeHelpers/getTreeId";
 import wbk from "wikidata-sdk";
 
 export default function formatEntity(
@@ -40,6 +41,7 @@ export default function formatEntity(
   });
 
   const entity: Entity = {
+    treeId: getTreeId(),
     ...wikidataEntity,
     simpleClaims,
   };

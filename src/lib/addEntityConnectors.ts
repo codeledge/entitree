@@ -9,22 +9,30 @@ import getClaimIds, { checkIfClaimsHasSeriesOrdinal } from "./getClaimIds";
 import { Claim } from "types/Claim";
 import { Entity } from "types/Entity";
 import getSimpleClaimValue from "./getSimpleClaimValue";
+import getUpIds from "wikidata/getUpIds";
 import store from "store";
 
 export type ConnectorOptions = {
   currentPropId?: string;
   upMap?: Record<string, string[]>;
+  addUpIds?: boolean;
   addDownIds?: boolean;
   addRightIds?: boolean;
   addLeftIds?: boolean;
 };
 
-export default function addEntityConnectors(
+export default async function addEntityConnectors(
   entity: Entity,
   options: ConnectorOptions,
 ) {
   if (options.upMap && options.upMap[entity.id]) {
     entity.upIds = options.upMap[entity.id];
+  } else {
+    delete entity.upIds;
+  }
+
+  if (options.addUpIds && options.currentPropId) {
+    entity.upIds = await getUpIds(entity.id, options.currentPropId);
   } else {
     delete entity.upIds;
   }
@@ -54,6 +62,7 @@ export default function addEntityConnectors(
   else {
     delete entity.rightIds;
   }
+
   if (options.addLeftIds) entity.leftIds = getClaimIds(entity, SIBLINGS_ID);
   else delete entity.leftIds;
 }

@@ -81,17 +81,13 @@ export const toggleParents = (node: EntityNode): AppThunk => async (
   } else {
     try {
       const { languageCode } = getState().settings;
-      const { currentProp, currentUpMap } = getState().tree;
+      const { currentProp } = getState().tree;
 
-      const parents = await getParentEntities(
-        currentUpMap[node.data.id],
-        languageCode,
-        {
-          currentPropId: currentProp?.id,
-          upMap: currentUpMap,
-          addLeftIds: currentProp?.id === CHILD_ID,
-        },
-      );
+      const parents = await getParentEntities(node.data.upIds!, languageCode, {
+        currentPropId: currentProp?.id,
+        addUpIds: true,
+        addLeftIds: currentProp?.id === CHILD_ID,
+      });
 
       dispatch(expandParents({ entity: node.data, parents }));
     } catch (error) {
@@ -164,10 +160,15 @@ export const toggleSpouses = (node: EntityNode): AppThunk => async (
   } else {
     try {
       const { languageCode } = getState().settings;
+      const { currentProp } = getState().tree;
 
       const spouses = await getSpouseEntities(
         node.data.rightIds!,
         languageCode,
+        {
+          currentPropId: currentProp?.id,
+          addUpIds: true,
+        },
       );
 
       dispatch(

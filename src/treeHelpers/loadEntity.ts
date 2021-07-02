@@ -6,39 +6,24 @@ import {
   FAMILY_TREE_TRANSLATIONS,
 } from "constants/properties";
 import { Entity, EntityProp } from "types/Entity";
-import {
-  getChildEntities,
-  getParentEntities,
-  getRootEntity,
-} from "lib/getEntities";
-import {
-  reset,
-  setChildTree,
-  setCurrentEntity,
-  setCurrentEntityProps,
-  setCurrentProp,
-  setCurrentUpMap,
-  setParentTree,
-} from "store/treeSlice";
 
-import { AnyAction } from "redux";
-import { Dispatch } from "react";
 import { LangCode } from "types/Lang";
 import getItemProps from "wikidata/getItemProps";
-import getUpMap from "wikidata/getUpMap";
+import { getRootEntity } from "lib/getEntities";
 
 export const loadEntity = async ({
   itemId,
   langCode,
   propSlug,
-  dispatch,
 }: {
   itemId: string;
   langCode: LangCode;
   propSlug?: string;
-  dispatch: Dispatch<AnyAction>;
-}): Promise<{ currentEntity: Entity; currentProp?: EntityProp }> => {
-  dispatch(reset());
+}): Promise<{
+  currentEntity: Entity;
+  currentProp?: EntityProp;
+  itemProps?: EntityProp[];
+}> => {
   let itemProps = await getItemProps(itemId, langCode);
 
   let currentProp;
@@ -75,50 +60,13 @@ export const loadEntity = async ({
     }
   }
 
-  const upMap = currentProp && (await getUpMap(itemId, currentProp.id));
   const currentEntity = await getRootEntity(itemId, langCode, {
     currentPropId: currentProp?.id,
-    upMap,
+    addUpIds: true,
     addDownIds: true,
     addLeftIds: true,
     addRightIds: true,
   });
 
-  const [preloadedChildren, preloadedParents] = await Promise.all([
-    currentEntity.downIds &&
-      getChildEntities(currentEntity.downIds!, langCode, {
-        currentPropId: currentProp?.id,
-        addDownIds: true,
-        addRightIds: currentProp?.id === CHILD_ID,
-        downIdsAlreadySorted: currentEntity.downIdsAlreadySorted,
-      }),
-    upMap &&
-      getParentEntities(upMap[currentEntity.id], langCode, {
-        currentPropId: currentProp?.id,
-        upMap,
-        addLeftIds: currentProp?.id === CHILD_ID,
-      }),
-  ]);
-
-  if (preloadedChildren)
-    dispatch(
-      setChildTree({
-        ...currentEntity,
-        children: preloadedChildren,
-      }),
-    );
-  if (preloadedParents)
-    dispatch(
-      setParentTree({
-        ...currentEntity,
-        parents: preloadedParents,
-      }),
-    );
-
-  dispatch(setCurrentEntityProps(itemProps));
-  if (upMap) dispatch(setCurrentUpMap(upMap));
-  if (currentProp) dispatch(setCurrentProp(currentProp));
-  dispatch(setCurrentEntity(currentEntity));
-
-  return { currentEntity, currentProp };
+  return { currentEntity, currentProp, itemProps };
 };

@@ -33,28 +33,30 @@ export default async function getEntities(
     languages,
   });
 
-  const entities = ids.reduce((acc: Entity[], id) => {
+  const entities = await ids.reduce(async (acc: Promise<Entity[]>, id) => {
+    const accumulator = await Promise.resolve(acc);
+
     if (!wikiEntitiesMap[id] || wikiEntitiesMap[id]["missing"] !== undefined)
-      return acc;
+      return accumulator;
 
     const entity = formatEntity(wikiEntitiesMap[id], languageCode);
 
     //filter out isInfantDeath by default
     if (entity.isHuman && entity.isInfantDeath) {
-      return acc;
+      return accumulator;
     }
 
     // siblings and spouses don't need connectors, so no currentPropId is passed
     if (options?.currentPropId) {
-      addEntityConnectors(entity, options);
+      await addEntityConnectors(entity, options);
     }
 
     //delete as non-serializeable and save on memory
     delete entity.claims;
     //delete entity.simpleClaims; //second label prop still needs this
 
-    return acc.concat(entity);
-  }, []);
+    return Promise.resolve([...accumulator, entity]);
+  }, Promise.resolve([]));
 
   return entities;
 }
@@ -115,6 +117,8 @@ export const getSpouseEntities = async (
   options?: Options,
 ): Promise<Entity[]> => {
   const spouses = await getEntities(ids, languageCode, options);
+
+  console.log(spouses);
 
   spouses.forEach((spouse) => {
     spouse.isSpouse = true;

@@ -72,6 +72,8 @@ export const treeSlice = createSlice({
     },
     setCurrentEntity: (state, action) => {
       state.currentEntity = action.payload;
+      state.childTree = action.payload;
+      state.parentTree = action.payload;
       state.loadingEntity = false;
     },
     setCurrentProp: (state, action: PayloadAction<EntityProp>) => {

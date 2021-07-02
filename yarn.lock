@@ -6463,24 +6463,17 @@ which@^2.0.1, which@^2.0.2:
   dependencies:
     isexe "^2.0.0"
 
-wikibase-sdk@^7.12.0, wikibase-sdk@^7.13.0:
+wikibase-sdk@^7.13.0:
   version "7.13.0"
   resolved "https://registry.yarnpkg.com/wikibase-sdk/-/wikibase-sdk-7.13.0.tgz#e0ab43f9c26ea9f3c23694db5c989615c133d23f"
   integrity sha512-XVnmSmE4sYXmMQBTLzfKyxz1SvdVL2YiCfbvwObh23WBG2Dcer/HZsg6LN3l/KhUHo8g2Fse+b3PgZqJRSfRAg==
 
-wikidata-sdk@*:
+wikidata-sdk@*, wikidata-sdk@7.13.0:
   version "7.13.0"
   resolved "https://registry.yarnpkg.com/wikidata-sdk/-/wikidata-sdk-7.13.0.tgz#38560e47002e01348766edc712f0fce26b1f4054"
   integrity sha512-3LM3BrzJzs/Cfu4LqoU9ELo4DHTO6K6I8FVlHTkrohLh7vJbfgIJswkCmUmYGCXkc2b0FTCx9svU1aorzfs7kg==
   dependencies:
     wikibase-sdk "^7.13.0"
-
-wikidata-sdk@7.12.0:
-  version "7.12.0"
-  resolved "https://registry.yarnpkg.com/wikidata-sdk/-/wikidata-sdk-7.12.0.tgz#48c507b422d7c82fafa4159c40c9d3ecc31fbcbd"
-  integrity sha512-Xa+eATNWyRdG5j0kKPp5SkuPQTvzNAcAvQ7fWbh4voUaj7MN5L6oS5KMvR3MDL3O7q0LWsuvu7zq5MhgLiY3vA==
-  dependencies:
-    wikibase-sdk "^7.12.0"
 
 word-wrap@^1.2.3, word-wrap@~1.2.3:
   version "1.2.3"
