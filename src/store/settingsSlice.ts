@@ -7,34 +7,36 @@ import { RIGHT_ENTITY_OPTIONS } from "constants/properties";
 import { defaultTheme } from "constants/themes";
 
 export type SettingsState = {
-  themeCode: string;
-  languageCode: LangCode;
-  secondLabelCode?: Lang["code"] | SecondLabel["code"];
-  showGenderColor: boolean;
-  showEyeHairColors: boolean;
-  showBirthName: boolean;
-  hideToggleButton: boolean;
-  showExternalImages: boolean;
-  showFace: boolean;
-  rightEntityOption: typeof RIGHT_ENTITY_OPTIONS[0];
-  imageType: "face" | "head";
   customThemes: Record<DefaultTheme["name"], DefaultTheme>;
-  showExtraInfo?: boolean;
   extraInfo?: string;
+  followNavigation: boolean;
+  hideToggleButton: boolean;
+  imageType: "face" | "head";
+  languageCode: LangCode;
+  rightEntityOption: typeof RIGHT_ENTITY_OPTIONS[0];
+  secondLabelCode?: Lang["code"] | SecondLabel["code"];
+  showBirthName: boolean;
+  showExternalImages: boolean;
+  showExtraInfo?: boolean;
+  showEyeHairColors: boolean;
+  showFace: boolean;
+  showGenderColor: boolean;
+  themeCode: string;
 };
 
 const initialState: SettingsState = {
-  themeCode: defaultTheme.name,
-  languageCode: DEFAULT_LANG_CODE,
-  showGenderColor: false,
-  showEyeHairColors: false,
-  showBirthName: false,
-  hideToggleButton: false,
-  showExternalImages: false,
-  showFace: false,
-  rightEntityOption: RIGHT_ENTITY_OPTIONS[1],
-  imageType: "face",
   customThemes: {},
+  followNavigation: true,
+  hideToggleButton: false,
+  imageType: "face",
+  languageCode: DEFAULT_LANG_CODE,
+  rightEntityOption: RIGHT_ENTITY_OPTIONS[1],
+  showBirthName: false,
+  showExternalImages: false,
+  showEyeHairColors: false,
+  showFace: false,
+  showGenderColor: false,
+  themeCode: defaultTheme.name,
 };
 
 export const settingsSlice = createSlice({

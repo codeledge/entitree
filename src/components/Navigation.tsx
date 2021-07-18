@@ -21,6 +21,7 @@ import { MAX_SCALE } from "constants/tree";
 import ReactGA from "react-ga";
 import { RiFocus3Line } from "react-icons/ri";
 import { SITE_NAME } from "constants/meta";
+import fitEdges from "treeHelpers/fitEdges";
 import { useAppSelector } from "store";
 import { useRouter } from "next/dist/client/router";
 
@@ -149,32 +150,16 @@ const FitTreeButton = memo(
         action: "fitTree",
       });
 
-      const leftEdge = maxLeft - theme.nodeWidth; //should be theme.nodeWidth / 2 but give some padding
-      const topEdge = maxTop - theme.nodeWidth / 2;
-      const rightEdge = maxRight + theme.nodeWidth;
-      const bottomEdge = maxBottom + theme.nodeWidth / 2;
-      const actualWidth = rightEdge - leftEdge;
-      const actualHeight = bottomEdge - topEdge;
-
-      let nextScale;
-      if (drawingWidth - actualWidth < drawingHeight - actualHeight) {
-        nextScale = drawingWidth / actualWidth;
-      } else {
-        nextScale = drawingHeight / actualHeight;
-      }
-      if (nextScale > MAX_SCALE) nextScale = MAX_SCALE;
-
-      const centerX = leftEdge + actualWidth / 2;
-      const centerY = topEdge + actualHeight / 2;
-
-      const halfWidth = drawingWidth / 2;
-      const calculatedPositionX = halfWidth - (halfWidth + centerX) * nextScale;
-
-      const halfHeight = drawingHeight / 2;
-      const calculatedPositionY =
-        halfHeight - (halfHeight + centerY) * nextScale;
-
-      setTransform(calculatedPositionX, calculatedPositionY, nextScale);
+      //node is translated -50%, -50%, so leave som margins
+      fitEdges({
+        drawingWidth,
+        drawingHeight,
+        rightX: maxRight,
+        leftX: maxLeft - theme.nodeWidth,
+        bottomY: maxBottom,
+        topY: maxTop - theme.nodeHeight,
+        setTransform,
+      });
     };
 
     return (

@@ -47,6 +47,7 @@ export default function SettingsModal({ show, hideModal }) {
     showExternalImages,
     showFace,
     imageType,
+    followNavigation,
   } = useAppSelector(({ settings }) => settings);
   const { currentProp, currentEntity } = useAppSelector(({ tree }) => tree);
 
@@ -220,6 +221,25 @@ export default function SettingsModal({ show, hideModal }) {
           </Form.Text>
         </Dropdown>
         <hr />
+        <Form.Group controlId="followNavigation">
+          <Form.Check
+            custom
+            checked={followNavigation}
+            onChange={(e) =>
+              dispatch(
+                setSetting({
+                  key: "followNavigation",
+                  val: e.target.checked,
+                }),
+              )
+            }
+            type="checkbox"
+            label="Follow navigation automatically"
+          />
+          <Form.Text className="text-muted pl-4">
+            Center the new appearing nodes and or the most relevant node
+          </Form.Text>
+        </Form.Group>
         <Form.Group controlId="genderColors">
           <Form.Check
             custom

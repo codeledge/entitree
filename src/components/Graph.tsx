@@ -8,6 +8,7 @@ import EntityNodeCard from "components/EntityNodeCard";
 import { EntityRel } from "types/EntityRel";
 import Rel from "components/Rel";
 import { TransformComponent } from "react-zoom-pan-pinch";
+import fitEdges from "treeHelpers/fitEdges";
 import { fromMap } from "entitree-flex";
 import { useAppSelector } from "store";
 import { useDispatch } from "react-redux";
@@ -20,6 +21,7 @@ export default function Graph({
   const { currentEntity, entitiesMap, width, height, fit } = useAppSelector(
     ({ tree }) => tree,
   );
+  const { followNavigation } = useAppSelector(({ settings }) => settings);
 
   const theme = useTheme();
   const dispatch = useDispatch();
@@ -65,60 +67,32 @@ export default function Graph({
       setNodes(nodes);
       setRels(rels);
 
-      if (fit && map) {
+      if (fit && map && followNavigation) {
         dispatch(resetFit());
 
-        const halfWidth = drawingWidth / 2;
-        const halfHeight = drawingHeight / 2;
+        const rightNode = map[fit.rightEntityTreeId];
+        const leftNode = map[fit.leftEntityTreeId];
+        const bottomNode = map[fit.bottomEntityTreeId];
+        const topNode = map[fit.topEntityTreeId];
 
-        let actualWidth = drawingWidth;
-        let centerX;
+        // should be divide by 2 for perfect fit because of the node translation (centering on point), but leave some space
+        const rightX = rightNode.x + theme.nodeWidth;
+        const leftX = leftNode.x - theme.nodeWidth;
+        const bottomY = bottomNode.y + theme.nodeHeight;
+        const topY = topNode.y - theme.nodeHeight;
 
-        if (fit.leftEntityTreeId && fit.rightEntityTreeId) {
-          const rightNode = map[fit.rightEntityTreeId];
-          const leftNode = map[fit.leftEntityTreeId];
-
-          const fitRight = rightNode.x + theme.nodeWidth;
-          const fitLeft = leftNode.x - theme.nodeWidth;
-          actualWidth = fitRight - fitLeft;
-          centerX = fitLeft + actualWidth / 2;
-        }
-
-        let actualHeight = drawingHeight;
-        let centerY;
-        if (fit.topEntityTreeId && fit.bottomEntityTreeId) {
-          const bottomNode = map[fit.bottomEntityTreeId];
-          const topNode = map[fit.topEntityTreeId];
-          const fitBottom = bottomNode.y;
-          const fitTop = topNode.y;
-          actualHeight = fitBottom - fitTop;
-          centerY = fitTop + actualHeight / 2;
-        }
-
-        let nextScale;
-        if (actualWidth !== drawingWidth || actualHeight !== drawingHeight) {
-          if (drawingWidth - actualWidth < drawingHeight - actualHeight) {
-            nextScale = drawingWidth / actualWidth;
-          } else {
-            nextScale = drawingHeight / actualHeight;
-          }
-          if (nextScale > 1) nextScale = 1;
-        }
-
-        const calculatedPositionX =
-          centerX !== undefined
-            ? halfWidth - (halfWidth + centerX) * nextScale
-            : undefined;
-
-        const calculatedPositionY =
-          centerY !== undefined
-            ? halfHeight - (halfHeight + centerY) * nextScale
-            : undefined;
-
-        setTransform(calculatedPositionX, calculatedPositionY, nextScale);
+        fitEdges({
+          drawingWidth,
+          drawingHeight,
+          rightX,
+          leftX,
+          bottomY,
+          topY,
+          setTransform,
+        });
       }
     }
-  }, [currentEntity, entitiesMap]);
+  }, [currentEntity, entitiesMap, theme]);
 
   const containerStyle = useMemo(() => ({ width, height }), [width, height]);
 

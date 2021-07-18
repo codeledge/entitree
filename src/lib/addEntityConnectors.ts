@@ -1,7 +1,9 @@
 import {
   CHILD_ID,
   NUMBER_OF_CHILDREN_ID,
+  PARTNER_ID,
   SIBLINGS_ID,
+  SPOUSE_ID,
   START_DATE_ID,
 } from "../constants/properties";
 import getClaimIds, { checkIfClaimsHasSeriesOrdinal } from "./getClaimIds";
@@ -10,7 +12,6 @@ import { Claim } from "types/Claim";
 import { Entity } from "types/Entity";
 import getSimpleClaimValue from "./getSimpleClaimValue";
 import getUpIds from "wikidata/getUpIds";
-import store from "store";
 
 export type ConnectorOptions = {
   currentPropId?: string;
@@ -68,15 +69,13 @@ export default async function addEntityConnectors(
 }
 
 function addRightIds(entity: Entity) {
-  let claim: Claim[] = [];
-  const { rightEntityOption } = store.getState().settings;
-  if (rightEntityOption?.propIds) {
-    //cannot use simpleclaims here as only preferred will show up
-    claim = rightEntityOption.propIds.reduce(
-      (acc: Claim[], propId) => acc.concat(entity.claims?.[propId] || []),
-      [],
-    );
-  }
+  //cannot use simpleclaims here as only preferred will show up
+  const claim: Claim[] = [SPOUSE_ID, PARTNER_ID].reduce(
+    (acc: Claim[], propId) => acc.concat(entity.claims?.[propId] || []),
+    [],
+  );
+
+  //filter on the client!
 
   entity.rightIds = claim
     .sort((a, b) => {
@@ -98,7 +97,7 @@ function addRightIds(entity: Entity) {
     })
     .filter((id, index, ids) => {
       // Filter out 'No value' and 'Unknown'
-      // Filter people married twice with same person (e.g. elon musk)
+      // Filter people married twice with same person (e.g. elon musk -> Talulah Riley)
       return id && ids.indexOf(id) === index;
     });
 }
