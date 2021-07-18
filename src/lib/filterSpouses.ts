@@ -1,15 +1,14 @@
-import { EntityNode } from "types/EntityNode";
+import { Entity } from "types/Entity";
 
-export default function filterSpouses(originNode: EntityNode) {
+export default function filterSpouses(spouses: Entity[]) {
   //Remove spouses that are in the tree already
-  const potentialSpouses: Record<string, 1> = {};
-  originNode.children?.forEach(({ data: { id } }) => {
-    potentialSpouses[id] = 1;
-  });
-
-  originNode.children?.forEach((child) => {
-    child.data.rightIds = child.data.rightIds?.filter(
-      (spouseId) => !potentialSpouses[spouseId],
-    );
-  });
+  // const potentialSpouses: Record<string, 1> = {};
+  // originNode.children?.forEach(({ id }) => {
+  //   potentialSpouses[id] = 1;
+  // });
+  // originNode.children?.forEach((child) => {
+  //   child.rightIds = child.rightIds?.filter(
+  //     (spouseId) => !potentialSpouses[spouseId],
+  //   );
+  // });
 }

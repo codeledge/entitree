@@ -1,7 +1,9 @@
+import { Entity, WikiEntity } from "types/Entity";
+
 import { DEFAULT_LANGS_CODES } from "../constants/langs";
-import { Entity } from "types/Entity";
 import { LangCode } from "types/Lang";
 import addLabel from "../lib/addLabel";
+import getTreeId from "./getTreeId";
 import getWikidataEntities from "wikidata/getWikidataEntities";
 
 export default async function getEntitiesLabel(
@@ -17,10 +19,16 @@ export default async function getEntitiesLabel(
     props: ["labels"],
   });
 
-  const labels = Object.values(allentities).map((entity: Entity) => {
-    addLabel(entity, languageCode);
-    return entity.label;
-  });
+  const labels = Object.values(allentities).map(
+    (wikidataEntity: WikiEntity) => {
+      const entity: Entity = {
+        treeId: getTreeId(),
+        ...wikidataEntity,
+      };
+      addLabel(entity, languageCode);
+      return entity.label;
+    },
+  );
 
   return labels;
 }

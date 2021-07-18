@@ -37,17 +37,17 @@ export interface WikiEntity {
 }
 
 export interface Entity extends WikiEntity {
-  _children?: Entity[];
-  _parents?: Entity[];
-  _siblings?: Entity[];
-  _spouses?: Entity[];
+  _childrenTreeIds?: string[];
+  _parentsTreeIds?: string[];
+  _siblingsTreeIds?: string[];
+  _spousesTreeIds?: string[];
   abolishedDate?: string;
   birthDate?: string;
   birthISO?: string;
   birthName?: string;
   birthPlaceId?: string;
   birthYear?: string;
-  children?: Entity[];
+  childrenTreeIds?: string[];
   childrenCount?: number;
   countryOfCitizenship?: Country;
   deathDate?: string;
@@ -65,13 +65,8 @@ export interface Entity extends WikiEntity {
   images?: Image[];
   inceptionAblishedSpan?: string;
   inceptionDate?: string;
-  isChild?: boolean;
   isHuman?: boolean;
   isInfantDeath?: boolean;
-  isParent?: boolean;
-  isRoot?: boolean;
-  isSibling?: boolean;
-  isSpouse?: boolean;
   label?: string;
   leftIds?: string[];
   lifeSpan?: string;
@@ -80,19 +75,20 @@ export interface Entity extends WikiEntity {
   loadingParents?: boolean;
   loadingSiblings?: boolean;
   loadingSpouses?: boolean;
-  parents?: Entity[];
+  parentsTreeIds?: string[];
   peoplepillImageUrl?: string;
   peoplepillSlug?: string;
   religion?: Religion;
   rightIds?: string[];
-  secondLabel?: string;
-  siblings?: Entity[];
-  simpleClaims?: SimpleClaims;
-  spouses?: Entity[];
+  nickName?: string;
+  nameInKana?: string;
+  siblingsTreeIds?: string[];
+  simpleClaims?: SimpleClaims; //TODO not available on client
+  spousesTreeIds?: string[];
   startDate?: string;
   startEndSpan?: string;
   thumbnails?: Image[];
-  treeId: number;
+  treeId: string;
   upIds?: string[];
   website?: string;
   wikidataUrl?: string;

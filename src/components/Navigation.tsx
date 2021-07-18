@@ -119,7 +119,6 @@ const CenterTreeButton = memo(
       ReactGA.event({
         category: "Navigation",
         action: "recenter",
-        //label: focusedNode.data.label,
       });
       resetTransform();
     };

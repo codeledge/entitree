@@ -9,10 +9,12 @@ import { SOURCING_CIRCUMSTANCES_ID } from "../constants/properties";
 import ordinalize from "ordinalize";
 import wbk from "wikidata-sdk";
 
-export const getDateClaimISO = (dateClaim) =>
-  wbk.wikibaseTimeToISOString(
-    (getBestClaimValue(dateClaim) as ClaimSnakTimeValue["value"]).time,
-  );
+export const getDateClaimISO = (dateClaim): string | undefined => {
+  const bestClaimValue = getBestClaimValue(
+    dateClaim,
+  ) as ClaimSnakTimeValue["value"];
+  if (bestClaimValue) return wbk.wikibaseTimeToISOString(bestClaimValue.time);
+};
 
 export default function formatDateClaim(
   claims: Claim[],
@@ -21,6 +23,7 @@ export default function formatDateClaim(
 ): string {
   const dateClaim = getBestClaim(claims);
   const value = getBestClaimValue(claims) as ClaimSnakTimeValue["value"];
+  if (!value) return "";
   const sourcingCircumstances =
     dateClaim?.qualifiers?.[SOURCING_CIRCUMSTANCES_ID]?.[0]?.datavalue?.value[
       "id"

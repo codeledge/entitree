@@ -23,20 +23,19 @@ import { AppThunk } from "store";
 import { CHILD_ID } from "constants/properties";
 import { EntityNode } from "types/EntityNode";
 
-export const toggleChildren = (node: EntityNode): AppThunk => async (
+export const toggleChildren = (entityNode: EntityNode): AppThunk => async (
   dispatch,
   getState,
 ) => {
-  dispatch(setLoadingChildren({ entity: node.data }));
+  dispatch(setLoadingChildren({ entityNode }));
 
-  if (node.data.children) {
-    dispatch(collapseChildren({ entity: node.data }));
-  } else if (node.data._children) {
+  if (entityNode.childrenTreeIds) {
+    dispatch(collapseChildren({ entityNode }));
+  } else if (entityNode._childrenTreeIds) {
     //has cached data
     dispatch(
       expandChildren({
-        entity: node.data,
-        children: node.data._children,
+        entityNode,
       }),
     );
   } else {
@@ -45,37 +44,36 @@ export const toggleChildren = (node: EntityNode): AppThunk => async (
       const { currentProp } = getState().tree;
 
       const children = await getChildEntities(
-        node.data.downIds!,
+        entityNode.downIds!,
         languageCode,
         {
           currentPropId: currentProp?.id,
           addDownIds: true,
           addRightIds: currentProp?.id === CHILD_ID,
-          downIdsAlreadySorted: node.data.downIdsAlreadySorted,
+          downIdsAlreadySorted: entityNode.downIdsAlreadySorted,
         },
       );
 
-      dispatch(expandChildren({ entity: node.data, children }));
+      dispatch(expandChildren({ entityNode, children }));
     } catch (error) {
       console.error(error);
     }
   }
 };
 
-export const toggleParents = (node: EntityNode): AppThunk => async (
+export const toggleParents = (entityNode: EntityNode): AppThunk => async (
   dispatch,
   getState,
 ) => {
-  dispatch(setLoadingParents({ entity: node.data }));
+  dispatch(setLoadingParents({ entityNode }));
 
-  if (node.data.parents) {
-    dispatch(collapseParents({ entity: node.data }));
-  } else if (node.data._parents) {
+  if (entityNode.parentsTreeIds) {
+    dispatch(collapseParents({ entityNode }));
+  } else if (entityNode._parentsTreeIds) {
     //has cached data
     dispatch(
       expandParents({
-        entity: node.data,
-        parents: node.data._parents,
+        entityNode,
       }),
     );
   } else {
@@ -83,36 +81,32 @@ export const toggleParents = (node: EntityNode): AppThunk => async (
       const { languageCode } = getState().settings;
       const { currentProp } = getState().tree;
 
-      const parents = await getParentEntities(node.data.upIds!, languageCode, {
+      const parents = await getParentEntities(entityNode.upIds!, languageCode, {
         currentPropId: currentProp?.id,
         addUpIds: true,
         addLeftIds: currentProp?.id === CHILD_ID,
       });
 
-      dispatch(expandParents({ entity: node.data, parents }));
+      dispatch(expandParents({ entityNode, parents }));
     } catch (error) {
       console.error(error);
     }
   }
 };
 
-export const toggleSiblings = (node: EntityNode): AppThunk => async (
+export const toggleSiblings = (entityNode: EntityNode): AppThunk => async (
   dispatch,
   getState,
 ) => {
-  dispatch(setLoadingSiblings({ entity: node.data }));
+  dispatch(setLoadingSiblings({ entityNode }));
 
-  if (node.data.siblings) {
-    dispatch(
-      collapseSiblings({ entity: node.data, sourceEntity: node.parent?.data }),
-    );
-  } else if (node.data._siblings) {
+  if (entityNode.siblingsTreeIds) {
+    dispatch(collapseSiblings({ entityNode }));
+  } else if (entityNode._siblingsTreeIds) {
     //has cached data
     dispatch(
       expandSiblings({
-        entity: node.data,
-        siblings: node.data._siblings,
-        sourceEntity: node.parent?.data,
+        entityNode,
       }),
     );
   } else {
@@ -120,16 +114,15 @@ export const toggleSiblings = (node: EntityNode): AppThunk => async (
       const { languageCode } = getState().settings;
 
       const siblings = await getSiblingEntities(
-        node.data.leftIds!,
+        entityNode.leftIds!,
         languageCode,
         {},
       );
 
       dispatch(
         expandSiblings({
-          entity: node.data,
+          entityNode,
           siblings,
-          sourceEntity: node.parent?.data,
         }),
       );
     } catch (error) {
@@ -138,23 +131,19 @@ export const toggleSiblings = (node: EntityNode): AppThunk => async (
   }
 };
 
-export const toggleSpouses = (node: EntityNode): AppThunk => async (
+export const toggleSpouses = (entityNode: EntityNode): AppThunk => async (
   dispatch,
   getState,
 ) => {
-  dispatch(setLoadingSpouses({ entity: node.data }));
+  dispatch(setLoadingSpouses({ entityNode }));
 
-  if (node.data.spouses) {
-    dispatch(
-      collapseSpouses({ entity: node.data, parentEntity: node.parent?.data }),
-    );
-  } else if (node.data._spouses) {
+  if (entityNode.spousesTreeIds) {
+    dispatch(collapseSpouses({ entityNode }));
+  } else if (entityNode._spousesTreeIds) {
     //has cached data
     dispatch(
       expandSpouses({
-        entity: node.data,
-        parentEntity: node.parent?.data,
-        spouses: node.data._spouses,
+        entityNode,
       }),
     );
   } else {
@@ -163,18 +152,16 @@ export const toggleSpouses = (node: EntityNode): AppThunk => async (
       const { currentProp } = getState().tree;
 
       const spouses = await getSpouseEntities(
-        node.data.rightIds!,
+        entityNode.rightIds!,
         languageCode,
         {
           currentPropId: currentProp?.id,
-          addUpIds: true,
         },
       );
 
       dispatch(
         expandSpouses({
-          entity: node.data,
-          parentEntity: node.parent?.data,
+          entityNode,
           spouses,
         }),
       );

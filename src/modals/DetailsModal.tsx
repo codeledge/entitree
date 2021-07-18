@@ -24,42 +24,42 @@ export default function DetailsModal({ node, hideModal, nodeImages }) {
   const [wikipediaExtract, setWikipediaExtract] = useState<string>();
 
   useEffect(() => {
-    if (node.data.wikipediaSlug) {
-      getWikipediaArticle(node.data.wikipediaSlug, languageCode).then(
+    if (node.wikipediaSlug) {
+      getWikipediaArticle(node.wikipediaSlug, languageCode).then(
         ({ data: { extract, thumbnail } }) => {
           if (extract) setWikipediaExtract(extract);
           if (thumbnail && !images.length) {
             setImages({
               url: thumbnail.source,
-              alt: `${node.data.label}'s Wikipedia image`,
+              alt: `${node.label}'s Wikipedia image`,
             });
           }
         },
       );
     }
-  }, [languageCode, images.length, node.data.wikipediaSlug, node.data.label]);
+  }, [languageCode, images.length, node.wikipediaSlug, node.label]);
 
   useEffect(() => {
-    if (node.data.birthPlaceId || node.data.deathPlaceId) {
+    if (node.birthPlaceId || node.deathPlaceId) {
       getEntitiesLabel(
-        [node.data.birthPlaceId, node.data.deathPlaceId],
+        [node.birthPlaceId, node.deathPlaceId],
         languageCode,
       ).then(([birthPlaceLabel, deathPlaceLabel]) => {
         setBirthPlace(birthPlaceLabel);
         setDeathPlace(deathPlaceLabel);
       });
     }
-  }, [languageCode, node.data.birthPlaceId, node.data.deathPlaceId]);
+  }, [languageCode, node.birthPlaceId, node.deathPlaceId]);
 
   return (
     <StyledModal show onHide={hideModal}>
       <Modal.Header closeButton>
         <Modal.Title>
-          {node.data.label}
-          {node.data.secondLabel && (
+          {node.label}
+          {node.secondLabel && (
             <>
               <span className="labelsecondLabel">
-                &nbsp;({node.data.secondLabel})
+                &nbsp;({node.secondLabel})
               </span>
             </>
           )}
@@ -80,24 +80,21 @@ export default function DetailsModal({ node, hideModal, nodeImages }) {
           </div>
         )}
 
-        {(node.data.birthDate ||
-          birthPlace ||
-          node.data.deathDate ||
-          deathPlace) && (
+        {(node.birthDate || birthPlace || node.deathDate || deathPlace) && (
           <p>
             <i>
-              {node.data.birthDate} {birthPlace}
-              {(node.data.deathDate || deathPlace) && (
+              {node.birthDate} {birthPlace}
+              {(node.deathDate || deathPlace) && (
                 <>
                   {" "}
-                  - {node.data.deathDate} {deathPlace}
+                  - {node.deathDate} {deathPlace}
                 </>
               )}
             </i>
           </p>
         )}
         <p>
-          {wikipediaExtract || node.data.description || (
+          {wikipediaExtract || node.description || (
             <i>This entity has no description</i>
           )}
         </p>
@@ -106,54 +103,50 @@ export default function DetailsModal({ node, hideModal, nodeImages }) {
           className="addImagesLink"
           target="_blank"
           rel="noopener noreferrer"
-          href={missingImagesLink(node.data.id, node.data.label)}
+          href={missingImagesLink(node.id, node.label)}
         >
           Add missing image <FiExternalLink />
         </a>
 
-        {node.data.website && (
+        {node.website && (
           <p>
-            <a
-              href={node.data.website}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href={node.website} target="_blank" rel="noopener noreferrer">
               Open official website <FiExternalLink />
             </a>
           </p>
         )}
         <div className="externalLinks">
-          {node.data.wikidataUrl && (
+          {node.wikidataUrl && (
             <a
               target="_blank"
               rel="noopener noreferrer"
               title="Open Wikidata item in a new tab"
-              href={node.data.wikidataUrl}
+              href={node.wikidataUrl}
             >
               <img src="/icons/wikidata.png" alt="Wikidata" />
             </a>
           )}
-          {node.data.wikipediaUrl && (
+          {node.wikipediaUrl && (
             <a
               target="_blank"
               rel="noopener noreferrer"
               title="Open Wikipedia article in a new tab"
-              href={node.data.wikipediaUrl}
+              href={node.wikipediaUrl}
             >
               <img src="/icons/wikipedia.png" alt="Wikipedia" />
             </a>
           )}
-          {/*{node.data.wikipediaUrl && (*/}
+          {/*{node.wikipediaUrl && (*/}
           {/*  <a*/}
           {/*    target="_blank"*/}
           {/*    rel="noopener noreferrer"*/}
           {/*    title="Open Wikipedia article in a new tab"*/}
-          {/*    href={`https://peoplepill.com/people/${node.data.peoplepillSlug}`}*/}
+          {/*    href={`https://peoplepill.com/people/${node.peoplepillSlug}`}*/}
           {/*  >*/}
           {/*    <img src="/icons/pp.png" alt="PeoplePill" />*/}
           {/*  </a>*/}
           {/*)}*/}
-          {node.data.externalLinks?.map((link, index) => (
+          {node.externalLinks?.map((link, index) => (
             <a
               // eslint-disable-next-line react/no-array-index-key
               key={index}
@@ -168,13 +161,13 @@ export default function DetailsModal({ node, hideModal, nodeImages }) {
         </div>
       </Modal.Body>
       <Modal.Footer>
-        {node.data.id !== currentEntity?.id && (
+        {node.id !== currentEntity?.id && (
           <Button
             variant="light"
             className="mr-auto"
             onClick={() => {
               dispatch(setLoadingEntity(true));
-              const url = getEntityUrl(languageCode, currentProp, node.data);
+              const url = getEntityUrl(languageCode, currentProp, node);
               router.push(url);
               hideModal();
             }}

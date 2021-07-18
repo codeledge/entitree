@@ -5,6 +5,7 @@ import { CHILD_ID } from "constants/properties";
 import { DEFAULT_LANGS_CODES } from "../constants/langs";
 import { Entity } from "types/Entity";
 import { LangCode } from "types/Lang";
+import filterSpouses from "./filterSpouses";
 import formatEntity from "./formatEntity";
 import getWikidataEntities from "wikidata/getWikidataEntities";
 
@@ -53,7 +54,7 @@ export default async function getEntities(
 
     //delete as non-serializeable and save on memory
     delete entity.claims;
-    //delete entity.simpleClaims; //second label prop still needs this
+    delete entity.simpleClaims;
 
     return Promise.resolve([...accumulator, entity]);
   }, Promise.resolve([]));
@@ -68,8 +69,6 @@ export const getRootEntity = async (
 ): Promise<Entity> => {
   const [root] = await getEntities([id], languageCode, options);
 
-  root.isRoot = true;
-
   return root;
 };
 
@@ -79,10 +78,6 @@ export const getChildEntities = async (
   options?: Options,
 ): Promise<Entity[]> => {
   const children = await getEntities(ids, languageCode, options);
-
-  children.forEach((child) => {
-    child.isChild = true;
-  });
 
   if (options?.currentPropId === CHILD_ID) {
     sortByBirthDate(children);
@@ -100,10 +95,6 @@ export const getParentEntities = async (
 
   const parents = await getEntities(ids, languageCode, options);
 
-  parents.forEach((parent) => {
-    parent.isParent = true;
-  });
-
   if (options?.currentPropId === CHILD_ID) {
     sortByGender(parents);
   }
@@ -118,11 +109,8 @@ export const getSpouseEntities = async (
 ): Promise<Entity[]> => {
   const spouses = await getEntities(ids, languageCode, options);
 
-  console.log(spouses);
-
-  spouses.forEach((spouse) => {
-    spouse.isSpouse = true;
-  });
+  //TODO: not doing anything ATM, leave an example!
+  filterSpouses(spouses);
 
   return spouses;
 };
@@ -133,10 +121,6 @@ export const getSiblingEntities = async (
   options?: Options,
 ): Promise<Entity[]> => {
   const siblings = await getEntities(ids, languageCode, options);
-
-  siblings.forEach((sibling) => {
-    sibling.isSibling = true;
-  });
 
   sortByBirthDate(siblings);
 

@@ -1,5 +1,5 @@
-let currentId = 0;
+import { nanoid } from "nanoid";
+
 export default function getTreeId() {
-  currentId += 1;
-  return currentId;
+  return nanoid();
 }

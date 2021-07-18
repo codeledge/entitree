@@ -24,6 +24,7 @@ import addLabel from "./addLabel";
 import addLifeSpan from "./addLifeSpan";
 import { addPeoplePillImage } from "./addPeoplePillImage";
 import addReligion from "./addReligion";
+import addSecondLabels from "./addSecondLabels";
 import addStartDate from "./addStartDate";
 import addStartEndSpan from "./addStartEndSpan";
 import addWebsite from "./addWebsite";
@@ -70,6 +71,7 @@ export default function formatEntity(
   addExternalLinks(entity);
 
   addBirthName(entity);
+  addSecondLabels(entity);
 
   addWebsite(entity);
 
