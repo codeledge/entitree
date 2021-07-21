@@ -39,7 +39,7 @@ export default function Graph({
         maxLeft,
         maxBottom,
         maxTop,
-      } = fromMap<Entity>(currentEntity.treeId, entitiesMap, {
+      } = fromMap<Entity>(currentEntity.treeId!, entitiesMap, {
         clone: true,
         nodeWidth: theme.nodeWidth,
         nodeHeight: theme.nodeHeight,
@@ -70,10 +70,10 @@ export default function Graph({
       if (fit && map && followNavigation) {
         dispatch(resetFit());
 
-        const rightNode = map[fit.rightEntityTreeId];
-        const leftNode = map[fit.leftEntityTreeId];
-        const bottomNode = map[fit.bottomEntityTreeId];
-        const topNode = map[fit.topEntityTreeId];
+        const rightNode = map[fit.rightEntityTreeId!];
+        const leftNode = map[fit.leftEntityTreeId!];
+        const bottomNode = map[fit.bottomEntityTreeId!];
+        const topNode = map[fit.topEntityTreeId!];
 
         // should be divide by 2 for perfect fit because of the node translation (centering on point), but leave some space
         const rightX = rightNode.x + theme.nodeWidth;
@@ -108,7 +108,10 @@ export default function Graph({
             <RelsContainer style={containerStyle}>
               <g transform={`translate(${width / 2} ${height / 2})`}>
                 {rels?.map((rel) => (
-                  <Rel key={rel.source.treeId + rel.target.treeId} rel={rel} />
+                  <Rel
+                    key={rel.source.treeId! + rel.target.treeId!}
+                    rel={rel}
+                  />
                 ))}
               </g>
             </RelsContainer>
@@ -121,7 +124,7 @@ export default function Graph({
                 }}
               >
                 {nodes?.map((node) => (
-                  <EntityNodeCard key={node.treeId} node={node} />
+                  <EntityNodeCard key={node.treeId!} node={node} />
                 ))}
               </div>
             </NodesContainer>
