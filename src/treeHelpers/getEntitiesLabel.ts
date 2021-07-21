@@ -3,7 +3,6 @@ import { Entity, WikiEntity } from "types/Entity";
 import { DEFAULT_LANGS_CODES } from "../constants/langs";
 import { LangCode } from "types/Lang";
 import addLabel from "../lib/addLabel";
-import getTreeId from "./getTreeId";
 import getWikidataEntities from "wikidata/getWikidataEntities";
 
 export default async function getEntitiesLabel(
@@ -22,7 +21,6 @@ export default async function getEntitiesLabel(
   const labels = Object.values(allentities).map(
     (wikidataEntity: WikiEntity) => {
       const entity: Entity = {
-        treeId: getTreeId(),
         ...wikidataEntity,
       };
       addLabel(entity, languageCode);

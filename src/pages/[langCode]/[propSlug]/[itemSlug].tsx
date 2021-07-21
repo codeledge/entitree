@@ -37,9 +37,7 @@ const TreePage = ({
   twitterImage,
   twitterTitle,
 }) => {
-  const { currentEntity, currentProp, loadingEntity } = useAppSelector(
-    ({ tree }) => tree,
-  );
+  const { currentEntity, loadingEntity } = useAppSelector(({ tree }) => tree);
 
   if (errorCode) {
     return <Error statusCode={errorCode} />;
@@ -48,13 +46,7 @@ const TreePage = ({
   return (
     <>
       <Head>
-        <title>
-          {currentEntity?.label}
-          {currentProp
-            ? ` - ${currentProp.overrideLabel || currentProp.label}`
-            : ""}{" "}
-          - {SITE_NAME}
-        </title>
+        <title>{ogTitle}</title>
         {ogTitle && <meta property="og:title" content={ogTitle} />}
         {ogImage && <meta property="og:image" content={ogImage} />}
         {ogDescription && (
@@ -162,7 +154,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
         itemSlug + ".png",
       );
 
-      const ogTitle = currentEntity.label;
+      const ogTitle = `${currentEntity.label}${
+        currentProp && ` - ${currentProp.overrideLabel || currentProp.label}`
+      } - ${SITE_NAME}`;
+
       let ogImage = "";
       let twitterCard = "";
 

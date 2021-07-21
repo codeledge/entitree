@@ -9,6 +9,12 @@ import {
   NICKNAME_ID,
 } from "constants/properties";
 import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
+import {
+  CHILD_BOOKMARK_SYMBOL,
+  PARENT_BOOKMARK_SYMBOL,
+  SIBLING_BOOKMARK_SYMBOL,
+  SPOUSE_BOOKMARK_SYMBOL,
+} from "constants/bookmarks";
 import { FaEye, FaFemale, FaMale, FaUser } from "react-icons/fa";
 import {
   FiChevronDown,
@@ -42,9 +48,30 @@ import { isProperyId } from "helpers/isPropertyId";
 import { isValidImage } from "helpers/isValidImage";
 import { useAppSelector } from "store";
 import { useDispatch } from "react-redux";
+import { useRouter } from "next/router";
 
 export default memo(({ node }: { node: EntityNode }) => {
   const dispatch = useDispatch();
+
+  const router = useRouter();
+  useEffect(() => {
+    const bookmark = router.query?.[node.treeId];
+    if (bookmark) {
+      if (bookmark.indexOf(CHILD_BOOKMARK_SYMBOL) > -1) {
+        dispatch(toggleChildren(node, { followNavigation: false }));
+      }
+      if (bookmark.indexOf(PARENT_BOOKMARK_SYMBOL) > -1) {
+        dispatch(toggleParents(node, { followNavigation: false }));
+      }
+      if (bookmark.indexOf(SIBLING_BOOKMARK_SYMBOL) > -1) {
+        dispatch(toggleSiblings(node, { followNavigation: false }));
+      }
+      if (bookmark.indexOf(SPOUSE_BOOKMARK_SYMBOL) > -1) {
+        dispatch(toggleSpouses(node, { followNavigation: false }));
+      }
+    }
+  }, []);
+
   const [showModal, setShowModal] = useState(false);
 
   const [thumbnails, setThumbnails] = useState<Image[]>(node.thumbnails || []);
@@ -377,12 +404,12 @@ export default memo(({ node }: { node: EntityNode }) => {
               disabled={node.loadingParents}
               onClick={() => dispatch(toggleParents(node))}
             >
-              <span className="value">{node.upIds.length}</span>
-              <span className="chevron ml-1 mr-1">
+              <span className="value mr-1">{node.upIds.length}</span>
+              <span className="chevron">
                 {node.parentsTreeIds ? <FiChevronDown /> : <FiChevronUp />}
               </span>
               {currentProp?.id === CHILD_ID && (
-                <span className="icon">
+                <span className="icon ml-1">
                   <RiParentLine />
                 </span>
               )}
@@ -395,12 +422,12 @@ export default memo(({ node }: { node: EntityNode }) => {
               disabled={node.loadingChildren}
               onClick={() => dispatch(toggleChildren(node))}
             >
-              <span className="value">{node.childrenCount}</span>
-              <span className="chevron ml-1 mr-1">
+              <span className="value mr-1">{node.childrenCount}</span>
+              <span className="chevron">
                 {node.childrenTreeIds ? <FiChevronUp /> : <FiChevronDown />}
               </span>
               {currentProp?.id === CHILD_ID && (
-                <span className="icon">
+                <span className="icon ml-1">
                   <MdChildCare />
                 </span>
               )}
@@ -416,7 +443,7 @@ export default memo(({ node }: { node: EntityNode }) => {
                 variant="link"
                 title="Children not available, please add them on wikidata.org"
               >
-                <span className="value">{node.childrenCount}</span>
+                <span className="value mr-1">{node.childrenCount}</span>
                 <span className="icon">
                   <MdChildCare />
                 </span>
@@ -469,6 +496,9 @@ const ThemedNodeOuter = styled.div<SettingsState & { gender?: string }>`
     font-weight: bold;
     line-height: 1;
     transition: all;
+    min-height: 28px;
+    display: flex;
+    align-items: center;
     @media print {
       color: gray;
     }
@@ -497,10 +527,12 @@ const ThemedNodeOuter = styled.div<SettingsState & { gender?: string }>`
   .spouseToggle {
     top: 50%;
     transform: translateY(-50%);
+    flex-direction: column;
   }
   .parentToggle,
   .childrenToggle {
     left: 50%;
+    flex-direction: row;
     white-space: nowrap;
     transform: translateX(-50%);
     .value {

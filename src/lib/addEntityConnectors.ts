@@ -15,7 +15,6 @@ import getUpIds from "wikidata/getUpIds";
 
 export type ConnectorOptions = {
   currentPropId?: string;
-  upMap?: Record<string, string[]>;
   addUpIds?: boolean;
   addDownIds?: boolean;
   addRightIds?: boolean;
@@ -26,12 +25,6 @@ export default async function addEntityConnectors(
   entity: Entity,
   options: ConnectorOptions,
 ) {
-  if (options.upMap && options.upMap[entity.id]) {
-    entity.upIds = options.upMap[entity.id];
-  } else {
-    delete entity.upIds;
-  }
-
   if (options.addUpIds && options.currentPropId) {
     entity.upIds = await getUpIds(entity.id, options.currentPropId);
   } else {

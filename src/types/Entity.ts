@@ -88,7 +88,7 @@ export interface Entity extends WikiEntity {
   startDate?: string;
   startEndSpan?: string;
   thumbnails?: Image[];
-  treeId: string;
+  treeId?: string;
   upIds?: string[];
   website?: string;
   wikidataUrl?: string;

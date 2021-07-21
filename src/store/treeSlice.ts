@@ -4,6 +4,7 @@ import { PayloadAction, createAction, createSlice } from "@reduxjs/toolkit";
 import { AppState } from "store";
 import { EntityNode } from "types/EntityNode";
 import { HYDRATE } from "next-redux-wrapper";
+import { ToggleOptions } from "types/ToggleOptions";
 import last from "lib/last";
 
 export type TreeState = {
@@ -74,7 +75,7 @@ export const treeSlice = createSlice({
     ) => {
       state.currentEntity = currentEntity;
       state.entitiesMap = {
-        [currentEntity.treeId]: currentEntity,
+        [currentEntity.treeId!]: currentEntity,
       };
       state.loadingEntity = false;
     },
@@ -91,14 +92,14 @@ export const treeSlice = createSlice({
       state,
       { payload: { entityNode } }: PayloadAction<{ entityNode: EntityNode }>,
     ) => {
-      if (state.entitiesMap?.[entityNode.treeId])
-        state.entitiesMap[entityNode.treeId].loadingChildren = true;
+      if (state.entitiesMap?.[entityNode.treeId!])
+        state.entitiesMap[entityNode.treeId!].loadingChildren = true;
     },
     collapseChildren: (
       state,
       { payload: { entityNode } }: PayloadAction<{ entityNode: EntityNode }>,
     ) => {
-      const mapNode = state.entitiesMap?.[entityNode.treeId];
+      const mapNode = state.entitiesMap?.[entityNode.treeId!];
       if (mapNode) {
         mapNode._childrenTreeIds = mapNode.childrenTreeIds;
         mapNode.childrenTreeIds = undefined;
@@ -115,44 +116,46 @@ export const treeSlice = createSlice({
     expandChildren: (
       state,
       {
-        payload: { entityNode, children },
+        payload: { entityNode, children, options },
       }: PayloadAction<{
         entityNode: EntityNode;
         children?: Entity[];
+        options?: ToggleOptions;
       }>,
     ) => {
-      const mapNode = state.entitiesMap?.[entityNode.treeId];
+      const mapNode = state.entitiesMap?.[entityNode.treeId!];
       if (mapNode) {
         if (children) {
           children.forEach((child) => {
-            if (state.entitiesMap) state.entitiesMap[child.treeId] = child;
+            if (state.entitiesMap) state.entitiesMap[child.treeId!] = child;
           });
-          mapNode.childrenTreeIds = children.map((child) => child.treeId);
+          mapNode.childrenTreeIds = children.map((child) => child.treeId!);
         } else {
           mapNode.childrenTreeIds = mapNode._childrenTreeIds;
         }
         mapNode.loadingChildren = false;
 
-        state.fit = {
-          leftEntityTreeId: mapNode.childrenTreeIds![0],
-          rightEntityTreeId: last(mapNode.childrenTreeIds!),
-          topEntityTreeId: entityNode.treeId,
-          bottomEntityTreeId: mapNode.childrenTreeIds![0],
-        };
+        if (options?.followNavigation !== false)
+          state.fit = {
+            leftEntityTreeId: mapNode.childrenTreeIds![0],
+            rightEntityTreeId: last(mapNode.childrenTreeIds!),
+            topEntityTreeId: entityNode.treeId,
+            bottomEntityTreeId: mapNode.childrenTreeIds![0],
+          };
       }
     },
     setLoadingParents: (
       state,
       { payload: { entityNode } }: PayloadAction<{ entityNode: EntityNode }>,
     ) => {
-      if (state.entitiesMap?.[entityNode.treeId])
-        state.entitiesMap[entityNode.treeId].loadingParents = true;
+      if (state.entitiesMap?.[entityNode.treeId!])
+        state.entitiesMap[entityNode.treeId!].loadingParents = true;
     },
     collapseParents: (
       state,
       { payload: { entityNode } }: PayloadAction<{ entityNode: EntityNode }>,
     ) => {
-      const mapNode = state.entitiesMap?.[entityNode.treeId];
+      const mapNode = state.entitiesMap?.[entityNode.treeId!];
       if (mapNode) {
         mapNode._parentsTreeIds = mapNode.parentsTreeIds;
         mapNode.parentsTreeIds = undefined;
@@ -169,41 +172,47 @@ export const treeSlice = createSlice({
     expandParents: (
       state,
       {
-        payload: { entityNode, parents },
-      }: PayloadAction<{ entityNode: EntityNode; parents?: Entity[] }>,
+        payload: { entityNode, parents, options },
+      }: PayloadAction<{
+        entityNode: EntityNode;
+        parents?: Entity[];
+        options?: ToggleOptions;
+      }>,
     ) => {
-      const mapNode = state.entitiesMap?.[entityNode.treeId];
+      const mapNode = state.entitiesMap?.[entityNode.treeId!];
 
       if (mapNode) {
         if (parents) {
           parents.forEach((parent) => {
-            if (state.entitiesMap) state.entitiesMap[parent.treeId] = parent;
+            if (state.entitiesMap) state.entitiesMap[parent.treeId!] = parent;
           });
-          mapNode.parentsTreeIds = parents.map((child) => child.treeId);
+          mapNode.parentsTreeIds = parents.map((child) => child.treeId!);
         } else {
           mapNode.parentsTreeIds = mapNode._parentsTreeIds;
         }
         mapNode.loadingParents = false;
-        state.fit = {
-          leftEntityTreeId: mapNode.parentsTreeIds![0],
-          rightEntityTreeId: last(mapNode.parentsTreeIds!),
-          topEntityTreeId: mapNode.parentsTreeIds![0],
-          bottomEntityTreeId: entityNode.treeId,
-        };
+
+        if (options?.followNavigation !== false)
+          state.fit = {
+            leftEntityTreeId: mapNode.parentsTreeIds![0],
+            rightEntityTreeId: last(mapNode.parentsTreeIds!),
+            topEntityTreeId: mapNode.parentsTreeIds![0],
+            bottomEntityTreeId: entityNode.treeId,
+          };
       }
     },
     setLoadingSiblings: (
       state,
       { payload: { entityNode } }: PayloadAction<{ entityNode: EntityNode }>,
     ) => {
-      if (state.entitiesMap?.[entityNode.treeId])
-        state.entitiesMap[entityNode.treeId].loadingSiblings = true;
+      if (state.entitiesMap?.[entityNode.treeId!])
+        state.entitiesMap[entityNode.treeId!].loadingSiblings = true;
     },
     collapseSiblings: (
       state,
       { payload: { entityNode } }: PayloadAction<{ entityNode: EntityNode }>,
     ) => {
-      const mapNode = state.entitiesMap?.[entityNode.treeId];
+      const mapNode = state.entitiesMap?.[entityNode.treeId!];
       if (mapNode) {
         mapNode._siblingsTreeIds = mapNode.siblingsTreeIds;
         mapNode.siblingsTreeIds = undefined;
@@ -220,44 +229,47 @@ export const treeSlice = createSlice({
     expandSiblings: (
       state,
       {
-        payload: { entityNode, siblings },
+        payload: { entityNode, siblings, options },
       }: PayloadAction<{
         entityNode: EntityNode;
         siblings?: Entity[];
+        options?: ToggleOptions;
       }>,
     ) => {
-      const mapNode = state.entitiesMap?.[entityNode.treeId];
+      const mapNode = state.entitiesMap?.[entityNode.treeId!];
 
       if (mapNode) {
         if (siblings) {
           siblings.forEach((sibling) => {
-            if (state.entitiesMap) state.entitiesMap[sibling.treeId] = sibling;
+            if (state.entitiesMap) state.entitiesMap[sibling.treeId!] = sibling;
           });
-          mapNode.siblingsTreeIds = siblings.map((child) => child.treeId);
+          mapNode.siblingsTreeIds = siblings.map((child) => child.treeId!);
         } else {
           mapNode.siblingsTreeIds = mapNode._siblingsTreeIds;
         }
         mapNode.loadingSiblings = false;
-        state.fit = {
-          leftEntityTreeId: mapNode.siblingsTreeIds![0],
-          rightEntityTreeId: last(mapNode.siblingsTreeIds!),
-          topEntityTreeId: mapNode.siblingsTreeIds![0],
-          bottomEntityTreeId: entityNode.treeId,
-        };
+
+        if (options?.followNavigation !== false)
+          state.fit = {
+            leftEntityTreeId: mapNode.siblingsTreeIds![0],
+            rightEntityTreeId: last(mapNode.siblingsTreeIds!),
+            topEntityTreeId: mapNode.siblingsTreeIds![0],
+            bottomEntityTreeId: entityNode.treeId,
+          };
       }
     },
     setLoadingSpouses: (
       state,
       { payload: { entityNode } }: PayloadAction<{ entityNode: EntityNode }>,
     ) => {
-      if (state.entitiesMap?.[entityNode.treeId])
-        state.entitiesMap[entityNode.treeId].loadingSpouses = true;
+      if (state.entitiesMap?.[entityNode.treeId!])
+        state.entitiesMap[entityNode.treeId!].loadingSpouses = true;
     },
     collapseSpouses: (
       state,
       { payload: { entityNode } }: PayloadAction<{ entityNode: EntityNode }>,
     ) => {
-      const mapNode = state.entitiesMap?.[entityNode.treeId];
+      const mapNode = state.entitiesMap?.[entityNode.treeId!];
       if (mapNode) {
         mapNode._spousesTreeIds = mapNode.spousesTreeIds;
         mapNode.spousesTreeIds = undefined;
@@ -274,30 +286,33 @@ export const treeSlice = createSlice({
     expandSpouses: (
       state,
       {
-        payload: { entityNode, spouses },
+        payload: { entityNode, spouses, options },
       }: PayloadAction<{
         entityNode: EntityNode;
         spouses?: Entity[];
+        options?: ToggleOptions;
       }>,
     ) => {
-      const mapNode = state.entitiesMap?.[entityNode.treeId];
+      const mapNode = state.entitiesMap?.[entityNode.treeId!];
 
       if (mapNode) {
         if (spouses) {
           spouses.forEach((sibling) => {
-            if (state.entitiesMap) state.entitiesMap[sibling.treeId] = sibling;
+            if (state.entitiesMap) state.entitiesMap[sibling.treeId!] = sibling;
           });
-          mapNode.spousesTreeIds = spouses.map((child) => child.treeId);
+          mapNode.spousesTreeIds = spouses.map((child) => child.treeId!);
         } else {
           mapNode.spousesTreeIds = mapNode._spousesTreeIds;
         }
         mapNode.loadingSpouses = false;
-        state.fit = {
-          leftEntityTreeId: mapNode.spousesTreeIds![0],
-          rightEntityTreeId: last(mapNode.spousesTreeIds!),
-          topEntityTreeId: mapNode.spousesTreeIds![0],
-          bottomEntityTreeId: entityNode.treeId,
-        };
+
+        if (options?.followNavigation !== false)
+          state.fit = {
+            leftEntityTreeId: mapNode.spousesTreeIds![0],
+            rightEntityTreeId: last(mapNode.spousesTreeIds!),
+            topEntityTreeId: mapNode.spousesTreeIds![0],
+            bottomEntityTreeId: entityNode.treeId,
+          };
       }
     },
   },
