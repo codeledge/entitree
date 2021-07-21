@@ -55,7 +55,7 @@ export default memo(({ node }: { node: EntityNode }) => {
 
   const router = useRouter();
   useEffect(() => {
-    const bookmark = router.query?.[node.treeId];
+    const bookmark = router.query?.[node.treeId!];
     if (bookmark) {
       if (bookmark.indexOf(CHILD_BOOKMARK_SYMBOL) > -1) {
         dispatch(toggleChildren(node, { followNavigation: false }));
