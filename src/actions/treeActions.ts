@@ -36,11 +36,19 @@ export const toggleChildren = (
   entityNode: EntityNode,
   options?: ToggleOptions,
 ): AppThunk => async (dispatch, getState) => {
+  function collapseRecursive(node?: EntityNode) {
+    if (!node || !node.childrenTreeIds) return;
+    dispatch(collapseChildren({ entityNode: node }));
+    removeUrlBookmark(node.treeId!, CHILD_BOOKMARK_SYMBOL);
+    node.childrenTreeIds.forEach((treeId) => {
+      collapseRecursive(getState().tree.entitiesMap?.[treeId]);
+    });
+  }
+
   dispatch(setLoadingChildren({ entityNode }));
 
   if (entityNode.childrenTreeIds) {
-    dispatch(collapseChildren({ entityNode }));
-    removeUrlBookmark(entityNode.treeId!, CHILD_BOOKMARK_SYMBOL);
+    collapseRecursive(entityNode);
   } else if (entityNode._childrenTreeIds) {
     //has cached data
     dispatch(
@@ -83,11 +91,19 @@ export const toggleParents = (
   entityNode: EntityNode,
   options?: ToggleOptions,
 ): AppThunk => async (dispatch, getState) => {
+  function collapseRecursive(node?: EntityNode) {
+    if (!node || !node.parentsTreeIds) return;
+    dispatch(collapseParents({ entityNode: node }));
+    removeUrlBookmark(node.treeId!, PARENT_BOOKMARK_SYMBOL);
+    node.parentsTreeIds.forEach((parentTreeId) => {
+      collapseRecursive(getState().tree.entitiesMap?.[parentTreeId]);
+    });
+  }
+
   dispatch(setLoadingParents({ entityNode }));
 
   if (entityNode.parentsTreeIds) {
-    dispatch(collapseParents({ entityNode }));
-    removeUrlBookmark(entityNode.treeId!, PARENT_BOOKMARK_SYMBOL);
+    collapseRecursive(entityNode);
   } else if (entityNode._parentsTreeIds) {
     //has cached data
     dispatch(
