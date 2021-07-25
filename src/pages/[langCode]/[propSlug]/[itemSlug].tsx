@@ -148,11 +148,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
       if (itemProps) dispatch(setCurrentEntityProps(itemProps));
       if (currentProp) dispatch(setCurrentProp(currentProp));
 
-      const featuredImageFile = path.join(
-        "/screenshot",
-        decodedPropSlug,
-        itemSlug + ".png",
-      );
+      // const featuredImageFile = path.join(
+      //   "/screenshot",
+      //   decodedPropSlug,
+      //   itemSlug + ".png",
+      // );
 
       const ogTitle = `${currentEntity.label}${
         currentProp && ` - ${currentProp.overrideLabel || currentProp.label}`
@@ -161,17 +161,18 @@ export const getServerSideProps = wrapper.getServerSideProps(
       let ogImage = "";
       let twitterCard = "";
 
-      if (
-        fs.existsSync(
-          path.join(
-            getConfig().serverRuntimeConfig.PROJECT_ROOT,
-            `public`,
-            featuredImageFile,
-          ),
-        )
-      ) {
-        ogImage = featuredImageFile;
-      } else if (itemThumbnail) {
+      // if (
+      //   fs.existsSync(
+      //     path.join(
+      //       getConfig().serverRuntimeConfig.PROJECT_ROOT,
+      //       `public`,
+      //       featuredImageFile,
+      //     ),
+      //   )
+      // ) {
+      //   ogImage = featuredImageFile;
+      // } else
+        if (itemThumbnail) {
         ogImage = itemThumbnail;
       } else {
         ogImage = "icons/entitree_square.png";
