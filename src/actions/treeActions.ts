@@ -56,7 +56,8 @@ export const toggleChildren = (
         entityNode,
       }),
     );
-    addUrlBookmark(entityNode.treeId!, CHILD_BOOKMARK_SYMBOL);
+    if (!entityNode.isRoot)
+      addUrlBookmark(entityNode.treeId!, CHILD_BOOKMARK_SYMBOL);
   } else {
     try {
       const { languageCode } = getState().settings;
@@ -78,9 +79,10 @@ export const toggleChildren = (
         child.treeId = `${entityNode.treeId}${CHILD_BOOKMARK_SYMBOL}${index}`;
       });
 
-      addUrlBookmark(entityNode.treeId!, CHILD_BOOKMARK_SYMBOL);
-
       dispatch(expandChildren({ entityNode, children, options }));
+
+      if (!entityNode.isRoot)
+        addUrlBookmark(entityNode.treeId!, CHILD_BOOKMARK_SYMBOL);
     } catch (error) {
       console.error(error);
     }
@@ -111,7 +113,8 @@ export const toggleParents = (
         entityNode,
       }),
     );
-    addUrlBookmark(entityNode.treeId!, PARENT_BOOKMARK_SYMBOL);
+    if (!entityNode.isRoot)
+      addUrlBookmark(entityNode.treeId!, PARENT_BOOKMARK_SYMBOL);
   } else {
     try {
       const { languageCode } = getState().settings;
@@ -130,7 +133,8 @@ export const toggleParents = (
 
       dispatch(expandParents({ entityNode, parents, options }));
 
-      addUrlBookmark(entityNode.treeId!, PARENT_BOOKMARK_SYMBOL);
+      if (!entityNode.isRoot)
+        addUrlBookmark(entityNode.treeId!, PARENT_BOOKMARK_SYMBOL);
     } catch (error) {
       console.error(error);
     }
@@ -152,7 +156,8 @@ export const toggleSiblings = (
         entityNode,
       }),
     );
-    addUrlBookmark(entityNode.treeId!, SIBLING_BOOKMARK_SYMBOL);
+    if (!entityNode.isRoot)
+      addUrlBookmark(entityNode.treeId!, SIBLING_BOOKMARK_SYMBOL);
   } else {
     try {
       const { languageCode } = getState().settings;
@@ -176,7 +181,8 @@ export const toggleSiblings = (
         }),
       );
 
-      addUrlBookmark(entityNode.treeId!, SIBLING_BOOKMARK_SYMBOL);
+      if (!entityNode.isRoot)
+        addUrlBookmark(entityNode.treeId!, SIBLING_BOOKMARK_SYMBOL);
     } catch (error) {
       console.error(error);
     }
@@ -199,7 +205,8 @@ export const toggleSpouses = (
         entityNode,
       }),
     );
-    addUrlBookmark(entityNode.treeId!, SPOUSE_BOOKMARK_SYMBOL);
+    if (!entityNode.isRoot)
+      addUrlBookmark(entityNode.treeId!, SPOUSE_BOOKMARK_SYMBOL);
   } else {
     try {
       const { languageCode } = getState().settings;
@@ -226,7 +233,8 @@ export const toggleSpouses = (
         }),
       );
 
-      addUrlBookmark(entityNode.treeId!, SPOUSE_BOOKMARK_SYMBOL);
+      if (!entityNode.isRoot)
+        addUrlBookmark(entityNode.treeId!, SPOUSE_BOOKMARK_SYMBOL);
     } catch (error) {
       console.error(error);
     }
