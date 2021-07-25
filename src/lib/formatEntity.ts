@@ -22,7 +22,7 @@ import addIsHuman from "./addIsHuman";
 import addIsInfantDeath from "./addIsInfantDeath";
 import addLabel from "./addLabel";
 import addLifeSpan from "./addLifeSpan";
-import { addPeoplePillImage } from "./addPeoplePillImage";
+import addPeoplePillImage from "./addPeoplePillImage";
 import addReligion from "./addReligion";
 import addSecondLabels from "./addSecondLabels";
 import addStartDate from "./addStartDate";

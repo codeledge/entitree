@@ -3,7 +3,7 @@ import { HUMAN_ID } from "constants/entities";
 import { INSTANCE_OF_ID } from "constants/properties";
 import getSimpleClaimValue from "./getSimpleClaimValue";
 
-export const addPeoplePillImage = (entity: Entity) => {
+export default function addPeoplePillImage(entity: Entity) {
   if (
     getSimpleClaimValue(entity.simpleClaims, INSTANCE_OF_ID) === HUMAN_ID &&
     !entity.sitelinks?.enwiki?.title?.includes("(") //peoplePill uses a counter for same names
@@ -13,7 +13,7 @@ export const addPeoplePillImage = (entity: Entity) => {
       ?.toLowerCase()
       .replace(/ /g, "-")
       .replace(/,/g, "")
-      .replace(/./g, "")
+      .replace(/\./g, "")
       .replace(/ñ/g, "n");
 
     if (peoplepillSlug) entity.peoplepillSlug = peoplepillSlug;
@@ -28,4 +28,4 @@ export const addPeoplePillImage = (entity: Entity) => {
         ".jpg";
     }
   }
-};
+}
