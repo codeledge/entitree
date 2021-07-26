@@ -443,39 +443,54 @@ export default function CustomThemeForm() {
           <Col sm={9}>
             <Form.Group controlId="separationCousins">
               <Form.Label>Cousins Separation Factor</Form.Label>
-              <Form.Control
-                onChange={(e) =>
-                  setCustomProp("separationCousins", +e.target.value)
-                }
-                type="number"
-                value={currentCustomTheme.separationCousins}
-              />
+              <InputGroup>
+                <Form.Control
+                  onChange={(e) =>
+                    setCustomProp("separationCousins", +e.target.value)
+                  }
+                  type="number"
+                  value={currentCustomTheme.separationCousins}
+                />
+                <InputGroup.Append>
+                  <InputGroup.Text>px</InputGroup.Text>
+                </InputGroup.Append>
+              </InputGroup>
               <Form.Text className="text-muted">
                 The gap between the cousins
               </Form.Text>
             </Form.Group>
             <Form.Group controlId="separationSameGroup">
               <Form.Label>Same Group Separation</Form.Label>
-              <Form.Control
-                onChange={(e) =>
-                  setCustomProp("separationSameGroup", +e.target.value)
-                }
-                type="number"
-                value={currentCustomTheme.separationSameGroup}
-              />
+              <InputGroup>
+                <Form.Control
+                  onChange={(e) =>
+                    setCustomProp("separationSameGroup", +e.target.value)
+                  }
+                  type="number"
+                  value={currentCustomTheme.separationSameGroup}
+                />
+                <InputGroup.Append>
+                  <InputGroup.Text>px</InputGroup.Text>
+                </InputGroup.Append>
+              </InputGroup>
               <Form.Text className="text-muted">
                 The gap between the siblings
               </Form.Text>
             </Form.Group>
             <Form.Group controlId="separationSiblingSpouse">
               <Form.Label>Sibling/Spouse Separation</Form.Label>
-              <Form.Control
-                onChange={(e) =>
-                  setCustomProp("separationSiblingSpouse", +e.target.value)
-                }
-                type="number"
-                value={currentCustomTheme.separationSiblingSpouse}
-              />
+              <InputGroup>
+                <Form.Control
+                  onChange={(e) =>
+                    setCustomProp("separationSiblingSpouse", +e.target.value)
+                  }
+                  type="number"
+                  value={currentCustomTheme.separationSiblingSpouse}
+                />
+                <InputGroup.Append>
+                  <InputGroup.Text>px</InputGroup.Text>
+                </InputGroup.Append>
+              </InputGroup>
               <Form.Text className="text-muted">
                 The gap between the sibling and the spouse of a person
               </Form.Text>
@@ -570,13 +585,18 @@ export default function CustomThemeForm() {
             </Form.Group>
             <Form.Group controlId="relStrokeWidth">
               <Form.Label>Stroke Width</Form.Label>
-              <Form.Control
-                onChange={(e) =>
-                  setCustomProp("relStrokeWidth", e.target.value)
-                }
-                type="text"
-                value={currentCustomTheme.relStrokeWidth}
-              />
+              <InputGroup>
+                <Form.Control
+                  onChange={(e) =>
+                    setCustomProp("relStrokeWidth", e.target.value)
+                  }
+                  type="text"
+                  value={currentCustomTheme.relStrokeWidth}
+                />
+                <InputGroup.Append>
+                  <InputGroup.Text>px</InputGroup.Text>
+                </InputGroup.Append>
+              </InputGroup>
               <Form.Text className="text-muted">
                 The thickness of the line that forms the relationship
               </Form.Text>

@@ -1,58 +1,49 @@
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/26466516/107675802-36216b80-6c77-11eb-8db1-4d3407dc53d9.png" alt="Next.js and TypeScript">
-</p>
+# EntiTree.com
 
-<p align="center">
-  <img src="https://img.shields.io/static/v1?label=PRs&message=welcome&style=for-the-badge&color=24B36B&labelColor=000000" alt="PRs welcome!" />
+This project was bootstrapped with Next.js + Typescript (https://github.com/jpedroschmitz/typescript-nextjs-starter).
 
-  <img alt="License" src="https://img.shields.io/github/license/jpedroschmitz/typescript-nextjs-starter?style=for-the-badge&color=24B36B&labelColor=000000">
+Live website here https://www.entitree.com/
 
-  <a href="https://twitter.com/intent/follow?screen_name=jpedroschmitz">
-    <img src="https://img.shields.io/twitter/follow/jpedroschmitz?style=for-the-badge&color=24B36B&labelColor=000000" alt="Follow @jpedroschmitz" />
-  </a>
-</p>
+Test website here https://entitree-next.herokuapp.com/
 
-<br>
+![Interface example](https://github.com/codeledge/entitree-next/blob/main/public/examples/interface.png)
 
-A TypeScript starter for Next.js that includes all you need to build amazing projects 🔥
+## User instructions
 
-- 📏 **ESLint** — Pluggable JavaScript linter
-- 💖 **Prettier** - Opinionated Code Formatter
-- 🐶 **Husky** — Use git hooks with ease
-- 📄 **Commitizen** - Conventional commit messages CLI
-- 🚓 **Commitlint** - Lint commit messages
-- 🖌 **Renovate** - Dependency update tool
-- 🚫 **lint-staged** - Run linters against staged git files
-- 🗂 **Absolute import** - Import folders and files using the `@` prefix
+Search for items (people, organizations, anything!) from the top search bar and then select a property from the dropdown.
+Language can be changed from the top right 'settings' button.
 
-## 🚀 Getting started
-
-The best way to start with this template is using `create-next-app`.
+## Install
 
 ```
-npx create-next-app ts-next -e https://github.com/jpedroschmitz/typescript-nextjs-starter
+git clone https://github.com/codeledge/entitree-next
+cd entitree-next/
+yarn
 ```
 
-If you prefer you can clone this repository and run the following commands inside the project folder:
+## Run
 
-1. `npm install` or `yarn`;
-2. `yarn dev`;
+If you want the app served by node.js do:
 
-To view the project open `http://localhost:3000`.
+```
+yarn dev
+```
 
-## 🤝 Contributing
+Open [localhost:3009](http://localhost:3009/)
 
-1. Fork this repository;
-2. Create your branch: `git checkout -b my-new-feature`;
-3. Commit your changes: `git commit -m 'Add some feature'`;
-4. Push to the branch: `git push origin my-new-feature`.
+## Authors
 
-**After your pull request is merged**, you can safely delete your branch.
+- **Orlando Groppo** - [ogroppo](https://github.com/ogroppo)
+- **Martin Schibel** - [mshd](https://github.com/mshd)
 
-## 📝 License
+## Acknowledgments
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for more information.
+- Wikidata community
 
----
+## License
 
-Made with ♥ by João Pedro Schmitz
+Copyright (c) 2021, Codeledge
+
+Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted, provided that the above copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.

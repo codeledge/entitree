@@ -55,18 +55,27 @@ export default memo(({ node }: { node: EntityNode }) => {
 
   const router = useRouter();
   useEffect(() => {
+    //Make sure root is expanded by default
+    if (node.isRoot) {
+      dispatch(toggleChildren(node, { followNavigation: false }));
+      dispatch(toggleParents(node, { followNavigation: false }));
+      dispatch(toggleSiblings(node, { followNavigation: false }));
+      dispatch(toggleSpouses(node, { followNavigation: false }));
+    }
+
+    //Expand bookmarks, applies only to non-root
     const bookmark = router.query?.[node.treeId!];
-    if (bookmark) {
-      if (bookmark.indexOf(CHILD_BOOKMARK_SYMBOL) > -1) {
+    if (bookmark && !node.isRoot) {
+      if (bookmark?.indexOf(CHILD_BOOKMARK_SYMBOL) > -1) {
         dispatch(toggleChildren(node, { followNavigation: false }));
       }
-      if (bookmark.indexOf(PARENT_BOOKMARK_SYMBOL) > -1) {
+      if (bookmark?.indexOf(PARENT_BOOKMARK_SYMBOL) > -1) {
         dispatch(toggleParents(node, { followNavigation: false }));
       }
-      if (bookmark.indexOf(SIBLING_BOOKMARK_SYMBOL) > -1) {
+      if (bookmark?.indexOf(SIBLING_BOOKMARK_SYMBOL) > -1) {
         dispatch(toggleSiblings(node, { followNavigation: false }));
       }
-      if (bookmark.indexOf(SPOUSE_BOOKMARK_SYMBOL) > -1) {
+      if (bookmark?.indexOf(SPOUSE_BOOKMARK_SYMBOL) > -1) {
         dispatch(toggleSpouses(node, { followNavigation: false }));
       }
     }

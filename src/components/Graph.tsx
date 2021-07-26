@@ -75,7 +75,7 @@ export default function Graph({
         const bottomNode = map[fit.bottomEntityTreeId!];
         const topNode = map[fit.topEntityTreeId!];
 
-        // should be divide by 2 for perfect fit because of the node translation (centering on point), but leave some space
+        // should divide by 2 for perfect fit because of the node translation (centering on x/y point), but leave some space
         const rightX = rightNode.x + theme.nodeWidth;
         const leftX = leftNode.x - theme.nodeWidth;
         const bottomY = bottomNode.y + theme.nodeHeight;
@@ -95,18 +95,24 @@ export default function Graph({
   }, [currentEntity, entitiesMap, theme]);
 
   const containerStyle = useMemo(() => ({ width, height }), [width, height]);
+  const cssCenterTransformStyle = useMemo(
+    () => ({
+      transform: `translate(-${width / 2}px, -${height / 2}px)`,
+    }),
+    [width, height],
+  );
+  const centerTransformProp = useMemo(
+    () => `translate(${width / 2} ${height / 2})`,
+    [width, height],
+  );
 
   return (
     <ThemedGraph>
       <TransformComponent>
         {!!width && !!height && (
-          <Center
-            style={{
-              transform: `translate(-${width / 2}px, -${height / 2}px)`,
-            }}
-          >
+          <Center style={cssCenterTransformStyle}>
             <RelsContainer style={containerStyle}>
-              <g transform={`translate(${width / 2} ${height / 2})`}>
+              <g transform={centerTransformProp}>
                 {rels?.map((rel) => (
                   <Rel
                     key={rel.source.treeId! + rel.target.treeId!}
@@ -146,7 +152,6 @@ const Center = styled.div`
   position: absolute;
   left: 50%;
   top: 50%;
-  //transform: translate(-50%, -50%); //not freaking working for some reason?!
 `;
 
 const RelsContainer = styled.svg`
