@@ -25,13 +25,17 @@ import {
 import { GiBigDiamondRing, GiPerson } from "react-icons/gi";
 import React, { memo, useEffect, useState } from "react";
 import { RiGroupLine, RiParentLine } from "react-icons/ri";
-import styled, { css, useTheme } from "styled-components";
 import {
+  preloadChildren,
+  preloadParents,
+  preloadSiblings,
+  preloadSpouses,
   toggleChildren,
   toggleParents,
   toggleSiblings,
   toggleSpouses,
 } from "actions/treeActions";
+import styled, { css, useTheme } from "styled-components";
 
 import { BsImage } from "react-icons/bs";
 import DetailsModal from "modals/DetailsModal";
@@ -55,6 +59,14 @@ export default memo(({ node }: { node: EntityNode }) => {
 
   const router = useRouter();
   useEffect(() => {
+    //preload connected nodes
+    if (!node.isRoot) {
+      dispatch(preloadChildren(node));
+      dispatch(preloadParents(node));
+      dispatch(preloadSiblings(node));
+      dispatch(preloadSpouses(node));
+    }
+
     //Make sure root is expanded by default
     if (node.isRoot) {
       dispatch(toggleChildren(node, { followNavigation: false }));

@@ -1,9 +1,16 @@
+import {
+  CHILD_BOOKMARK_SYMBOL,
+  PARENT_BOOKMARK_SYMBOL,
+  SIBLING_BOOKMARK_SYMBOL,
+  SPOUSE_BOOKMARK_SYMBOL,
+} from "constants/bookmarks";
 import addEntityConnectors, { ConnectorOptions } from "./addEntityConnectors";
 import { sortByBirthDate, sortByGender } from "./sortEntities";
 
 import { CHILD_ID } from "constants/properties";
 import { DEFAULT_LANGS_CODES } from "../constants/langs";
 import { Entity } from "types/Entity";
+import { EntityNode } from "types/EntityNode";
 import { LangCode } from "types/Lang";
 import filterSpouses from "./filterSpouses";
 import formatEntity from "./formatEntity";
@@ -75,11 +82,17 @@ export const getRootEntity = async (
 };
 
 export const getChildEntities = async (
-  ids: string[],
+  entityNode: EntityNode,
   languageCode: LangCode,
   options?: Options,
 ): Promise<Entity[]> => {
-  const children = await getEntities(ids, languageCode, options);
+  if (!entityNode.downIds) return [];
+
+  const children = await getEntities(entityNode.downIds, languageCode, options);
+
+  children.forEach((node, index) => {
+    node.treeId = `${entityNode.treeId}${CHILD_BOOKMARK_SYMBOL}${index}`;
+  });
 
   if (options?.currentPropId === CHILD_ID) {
     sortByBirthDate(children);
@@ -89,13 +102,18 @@ export const getChildEntities = async (
 };
 
 export const getParentEntities = async (
-  ids: string[],
+  entityNode: EntityNode,
   languageCode: LangCode,
   options?: Options,
 ): Promise<Entity[]> => {
-  if (!ids) return [];
+  if (!entityNode.upIds) return [];
 
-  const parents = await getEntities(ids, languageCode, options);
+  const parents = await getEntities(entityNode.upIds, languageCode, options);
+
+  //todo: move this in get Entities
+  parents.forEach((node, index) => {
+    node.treeId = `${entityNode.treeId}${PARENT_BOOKMARK_SYMBOL}${index}`;
+  });
 
   if (options?.currentPropId === CHILD_ID) {
     sortByGender(parents);
@@ -105,11 +123,17 @@ export const getParentEntities = async (
 };
 
 export const getSpouseEntities = async (
-  ids: string[],
+  entityNode: EntityNode,
   languageCode: LangCode,
   options?: Options,
 ): Promise<Entity[]> => {
-  const spouses = await getEntities(ids, languageCode, options);
+  if (!entityNode.rightIds) return [];
+
+  const spouses = await getEntities(entityNode.rightIds, languageCode, options);
+
+  spouses.forEach((node, index) => {
+    node.treeId = `${entityNode.treeId}${SPOUSE_BOOKMARK_SYMBOL}${index}`;
+  });
 
   //TODO: not doing anything ATM, leave an example!
   filterSpouses(spouses);
@@ -118,11 +142,17 @@ export const getSpouseEntities = async (
 };
 
 export const getSiblingEntities = async (
-  ids: string[],
+  entityNode: EntityNode,
   languageCode: LangCode,
   options?: Options,
 ): Promise<Entity[]> => {
-  const siblings = await getEntities(ids, languageCode, options);
+  if (!entityNode.leftIds) return [];
+
+  const siblings = await getEntities(entityNode.leftIds, languageCode, options);
+
+  siblings.forEach((node, index) => {
+    node.treeId = `${entityNode.treeId}${SIBLING_BOOKMARK_SYMBOL}${index}`;
+  });
 
   sortByBirthDate(siblings);
 

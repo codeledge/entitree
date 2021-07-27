@@ -143,6 +143,25 @@ export const treeSlice = createSlice({
           };
       }
     },
+    setPreloadedChildren: (
+      state,
+      {
+        payload: { entityNode, children },
+      }: PayloadAction<{
+        entityNode: EntityNode;
+        children: Entity[];
+      }>,
+    ) => {
+      const mapNode = state.entitiesMap?.[entityNode.treeId!];
+      if (mapNode) {
+        if (children) {
+          children.forEach((child) => {
+            if (state.entitiesMap) state.entitiesMap[child.treeId!] = child;
+          });
+          mapNode._childrenTreeIds = children.map((child) => child.treeId!);
+        }
+      }
+    },
     setLoadingParents: (
       state,
       { payload: { entityNode } }: PayloadAction<{ entityNode: EntityNode }>,
@@ -198,6 +217,25 @@ export const treeSlice = createSlice({
             topEntityTreeId: mapNode.parentsTreeIds![0],
             bottomEntityTreeId: entityNode.treeId,
           };
+      }
+    },
+    setPreloadedParents: (
+      state,
+      {
+        payload: { entityNode, parents },
+      }: PayloadAction<{
+        entityNode: EntityNode;
+        parents: Entity[];
+      }>,
+    ) => {
+      const mapNode = state.entitiesMap?.[entityNode.treeId!];
+      if (mapNode) {
+        if (parents) {
+          parents.forEach((parent) => {
+            if (state.entitiesMap) state.entitiesMap[parent.treeId!] = parent;
+          });
+          mapNode._parentsTreeIds = parents.map((parent) => parent.treeId!);
+        }
       }
     },
     setLoadingSiblings: (
@@ -257,6 +295,25 @@ export const treeSlice = createSlice({
           };
       }
     },
+    setPreloadedSiblings: (
+      state,
+      {
+        payload: { entityNode, siblings },
+      }: PayloadAction<{
+        entityNode: EntityNode;
+        siblings: Entity[];
+      }>,
+    ) => {
+      const mapNode = state.entitiesMap?.[entityNode.treeId!];
+      if (mapNode) {
+        if (siblings) {
+          siblings.forEach((sibling) => {
+            if (state.entitiesMap) state.entitiesMap[sibling.treeId!] = sibling;
+          });
+          mapNode._siblingsTreeIds = siblings.map((sibling) => sibling.treeId!);
+        }
+      }
+    },
     setLoadingSpouses: (
       state,
       { payload: { entityNode } }: PayloadAction<{ entityNode: EntityNode }>,
@@ -314,7 +371,27 @@ export const treeSlice = createSlice({
           };
       }
     },
+    setPreloadedSpouses: (
+      state,
+      {
+        payload: { entityNode, spouses },
+      }: PayloadAction<{
+        entityNode: EntityNode;
+        spouses: Entity[];
+      }>,
+    ) => {
+      const mapNode = state.entitiesMap?.[entityNode.treeId!];
+      if (mapNode) {
+        if (spouses) {
+          spouses.forEach((spouse) => {
+            if (state.entitiesMap) state.entitiesMap[spouse.treeId!] = spouse;
+          });
+          mapNode._spousesTreeIds = spouses.map((spouse) => spouse.treeId!);
+        }
+      }
+    },
   },
+
   extraReducers(builder) {
     builder.addCase(hydrate, (state, action) => {
       return {
@@ -335,6 +412,7 @@ export const {
   expandSiblings,
   expandSpouses,
   reset,
+  resetFit,
   setCurrentEntity,
   setCurrentEntityProps,
   setCurrentProp,
@@ -343,8 +421,11 @@ export const {
   setLoadingParents,
   setLoadingSiblings,
   setLoadingSpouses,
+  setPreloadedChildren,
+  setPreloadedParents,
+  setPreloadedSiblings,
+  setPreloadedSpouses,
   setSizes,
-  resetFit,
 } = treeSlice.actions;
 
 export default treeSlice.reducer;

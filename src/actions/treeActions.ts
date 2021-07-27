@@ -17,6 +17,10 @@ import {
   setLoadingParents,
   setLoadingSiblings,
   setLoadingSpouses,
+  setPreloadedChildren,
+  setPreloadedParents,
+  setPreloadedSiblings,
+  setPreloadedSpouses,
 } from "store/treeSlice";
 import {
   getChildEntities,
@@ -63,20 +67,11 @@ export const toggleChildren = (
       const { languageCode } = getState().settings;
       const { currentProp } = getState().tree;
 
-      const children = await getChildEntities(
-        entityNode.downIds!,
-        languageCode,
-        {
-          currentPropId: currentProp?.id,
-          addDownIds: true,
-          addRightIds: currentProp?.id === CHILD_ID,
-          downIdsAlreadySorted: entityNode.downIdsAlreadySorted,
-        },
-      );
-
-      //todo: move this in get Entities
-      children.forEach((child, index) => {
-        child.treeId = `${entityNode.treeId}${CHILD_BOOKMARK_SYMBOL}${index}`;
+      const children = await getChildEntities(entityNode, languageCode, {
+        currentPropId: currentProp?.id,
+        addDownIds: true,
+        addRightIds: currentProp?.id === CHILD_ID,
+        downIdsAlreadySorted: entityNode.downIdsAlreadySorted,
       });
 
       dispatch(expandChildren({ entityNode, children, options }));
@@ -87,6 +82,30 @@ export const toggleChildren = (
       console.error(error);
     }
   }
+};
+
+export const preloadChildren = (entityNode: EntityNode) => async (
+  dispatch,
+  getState,
+) => {
+  if (
+    entityNode._childrenTreeIds ||
+    entityNode.childrenTreeIds ||
+    !entityNode.downIds
+  )
+    return;
+
+  const { languageCode } = getState().settings;
+  const { currentProp } = getState().tree;
+
+  const children = await getChildEntities(entityNode, languageCode, {
+    currentPropId: currentProp?.id,
+    addDownIds: true,
+    addRightIds: currentProp?.id === CHILD_ID,
+    downIdsAlreadySorted: entityNode.downIdsAlreadySorted,
+  });
+
+  dispatch(setPreloadedChildren({ entityNode, children }));
 };
 
 export const toggleParents = (
@@ -120,15 +139,10 @@ export const toggleParents = (
       const { languageCode } = getState().settings;
       const { currentProp } = getState().tree;
 
-      const parents = await getParentEntities(entityNode.upIds!, languageCode, {
+      const parents = await getParentEntities(entityNode, languageCode, {
         currentPropId: currentProp?.id,
         addUpIds: true,
         addLeftIds: currentProp?.id === CHILD_ID,
-      });
-
-      //todo: move this in get Entities
-      parents.forEach((child, index) => {
-        child.treeId = `${entityNode.treeId}${PARENT_BOOKMARK_SYMBOL}${index}`;
       });
 
       dispatch(expandParents({ entityNode, parents, options }));
@@ -139,6 +153,30 @@ export const toggleParents = (
       console.error(error);
     }
   }
+};
+
+export const preloadParents = (entityNode: EntityNode) => async (
+  dispatch,
+  getState,
+) => {
+  // do not start preload if there are nodes loaded
+  if (
+    entityNode._parentsTreeIds ||
+    entityNode.parentsTreeIds ||
+    !entityNode.upIds
+  )
+    return;
+
+  const { languageCode } = getState().settings;
+  const { currentProp } = getState().tree;
+
+  const parents = await getParentEntities(entityNode, languageCode, {
+    currentPropId: currentProp?.id,
+    addUpIds: true,
+    addLeftIds: currentProp?.id === CHILD_ID,
+  });
+
+  dispatch(setPreloadedParents({ entityNode, parents }));
 };
 
 export const toggleSiblings = (
@@ -162,16 +200,7 @@ export const toggleSiblings = (
     try {
       const { languageCode } = getState().settings;
 
-      const siblings = await getSiblingEntities(
-        entityNode.leftIds!,
-        languageCode,
-        {},
-      );
-
-      //todo: move this in get Entities
-      siblings.forEach((child, index) => {
-        child.treeId = `${entityNode.treeId}${SIBLING_BOOKMARK_SYMBOL}${index}`;
-      });
+      const siblings = await getSiblingEntities(entityNode, languageCode, {});
 
       dispatch(
         expandSiblings({
@@ -187,6 +216,24 @@ export const toggleSiblings = (
       console.error(error);
     }
   }
+};
+
+export const preloadSiblings = (entityNode: EntityNode) => async (
+  dispatch,
+  getState,
+) => {
+  // do not start preload if there are nodes loaded
+  if (
+    entityNode._siblingsTreeIds ||
+    entityNode.siblingsTreeIds ||
+    !entityNode.leftIds
+  )
+    return;
+
+  const { languageCode } = getState().settings;
+  const siblings = await getSiblingEntities(entityNode, languageCode, {});
+
+  dispatch(setPreloadedSiblings({ entityNode, siblings }));
 };
 
 export const toggleSpouses = (
@@ -210,20 +257,8 @@ export const toggleSpouses = (
   } else {
     try {
       const { languageCode } = getState().settings;
-      const { currentProp } = getState().tree;
 
-      const spouses = await getSpouseEntities(
-        entityNode.rightIds!,
-        languageCode,
-        {
-          currentPropId: currentProp?.id,
-        },
-      );
-
-      //todo: move this in get Entities
-      spouses.forEach((child, index) => {
-        child.treeId = `${entityNode.treeId}${SPOUSE_BOOKMARK_SYMBOL}${index}`;
-      });
+      const spouses = await getSpouseEntities(entityNode, languageCode, {});
 
       dispatch(
         expandSpouses({
@@ -239,4 +274,22 @@ export const toggleSpouses = (
       console.error(error);
     }
   }
+};
+
+export const preloadSpouses = (entityNode: EntityNode) => async (
+  dispatch,
+  getState,
+) => {
+  // do not start preload if there are nodes loaded
+  if (
+    entityNode._spousesTreeIds ||
+    entityNode.spousesTreeIds ||
+    !entityNode.rightIds
+  )
+    return;
+
+  const { languageCode } = getState().settings;
+  const spouses = await getSpouseEntities(entityNode, languageCode, {});
+
+  dispatch(setPreloadedSpouses({ entityNode, spouses }));
 };
