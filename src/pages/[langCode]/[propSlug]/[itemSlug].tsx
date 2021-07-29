@@ -172,7 +172,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
       // ) {
       //   ogImage = featuredImageFile;
       // } else
-        if (itemThumbnail) {
+      if (itemThumbnail) {
         ogImage = itemThumbnail;
       } else {
         ogImage = "icons/entitree_square.png";

@@ -47,6 +47,7 @@ import { SettingsState } from "store/settingsSlice";
 import clsx from "clsx";
 import { getDataprickImages } from "services/imageService";
 import getEntitiesLabel from "treeHelpers/getEntitiesLabel";
+import getFandomPageProps from "../services/fandomService";
 import getGeniProfile from "services/geniService";
 import { isProperyId } from "helpers/isPropertyId";
 import { isValidImage } from "helpers/isValidImage";
@@ -135,6 +136,35 @@ export default memo(({ node }: { node: EntityNode }) => {
         }
 
         //TODO: Geni dates and country
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (node.fandomHost && node.fandomId) {
+      getFandomPageProps(node.fandomHost, node.fandomId).then((fandomData) => {
+        if (fandomData?.query?.pages) {
+          const page: any = Object.values(fandomData.query.pages)[0];
+
+          if (page.pageprops) {
+            const pageprops = JSON.parse(page.pageprops.infoboxes);
+            if (pageprops[0] && pageprops[0].data) {
+              const image = pageprops[0].data.find(
+                (entry) => entry.type === "image",
+              ).data[0];
+
+              if (image) {
+                const fandomImage = {
+                  url: image.url.split("/revision/")[0],
+                  alt: `Fandom image, ${image.name}`,
+                  source: node.fandomUrl,
+                };
+                setThumbnails((thumbnails) => thumbnails.concat(fandomImage));
+                setImages((images) => images.concat(fandomImage));
+              }
+            }
+          }
+        }
       });
     }
   }, []);

@@ -9,6 +9,7 @@ export const HUMAN_MALE_ID = "Q6581097";
 export const ANIMAL_MALE_ID = "Q44148";
 export const HUMAN_FEMALE_ID = "Q6581072";
 export const ANIMAL_FEMALE_ID = "Q43445";
+export const ENGLISH_ID = "Q1860";
 // qualifiers
 export const CIRCA_ID = "Q5727902";
 export const PRESUMABLY_ID = "Q18122778";
