@@ -567,7 +567,19 @@ const ThemedNodeOuter = styled.div<SettingsState & { gender?: string }>`
   .childrenToggle {
     top: 100%;
   }
-
+  //  .colorIcons {
+  //   position: absolute;
+  //   bottom: 0;
+  //   right: 2px;
+  //   z-index: 2; //needed for tooltip
+  // }
+  .flagIcons {
+    position: absolute;
+    bottom: -5px;
+    right: 0px;
+    width: 32px;
+    z-index: 2; //needed for tooltip
+  }
   ${
     ({ showGenderColor, gender }) =>
       showGenderColor &&
@@ -591,9 +603,9 @@ const ThemedNodeOuter = styled.div<SettingsState & { gender?: string }>`
 
 const Badge = styled.div`
   position: absolute;
-  top: 0;
-  left: 0;
-  transform: translate(-50%, -50%);
+  bottom: 0;
+  right: 0;
+  // transform: translate(-50%, -50%);
 `;
 
 const ThemedNodeInner = styled.div`
