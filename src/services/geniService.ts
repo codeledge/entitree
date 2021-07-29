@@ -1,5 +1,25 @@
 import jsonp from "jsonp-promise";
 
+type GeniLocation = {
+  city: string;
+  state: string;
+  country: string;
+  country_code: string;
+  latitude: number;
+  longitude: number;
+  formatted_location: string;
+};
+type GeniEvent = {
+  date: {
+    day: number;
+    month: number;
+    year: number;
+    formatted_date: string;
+    circa: boolean;
+  };
+  location: GeniLocation;
+};
+
 export type GeniProfile = {
   id: string;
   url: string;
@@ -43,23 +63,8 @@ export type GeniProfile = {
   // birth_order: 2,
   // living: false,
   // creator: "https://www.geni.com/api/user-1",
-  // birth: {
-  // date: {
-  // day: 22,
-  // month: 4,
-  // year: 1918,
-  // formatted_date: "April 22, 1918"
-  // },
-  // location: {
-  // city: "New York",
-  // state: "New York",
-  // country: "United States",
-  // country_code: "US",
-  // latitude: 40.71449,
-  // longitude: -74.00713,
-  // formatted_location: "New York, New York, United States"
-  // }
-  // },
+  birth: GeniEvent;
+  death: GeniEvent;
   // death: {
   // date: {
   // day: 31,
@@ -67,6 +72,7 @@ export type GeniProfile = {
   // year: 1996,
   // formatted_date: "July 31, 1996"
   // },
+  location: GeniLocation;
   // location: {
   // city: "Houston",
   // state: "Texas",
@@ -86,6 +92,9 @@ export type GeniProfile = {
   // created_at: "1166895284",
   // updated_at: "1573975321",
   // deleted: false
+  //add custom fields
+  birthYear: string;
+  deahtYear: string;
 };
 
 export default async function getGeniProfile(

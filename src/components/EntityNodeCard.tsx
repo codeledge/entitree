@@ -47,12 +47,14 @@ import { SettingsState } from "store/settingsSlice";
 import clsx from "clsx";
 import { getDataprickImages } from "services/imageService";
 import getEntitiesLabel from "treeHelpers/getEntitiesLabel";
+import getFandomPageProps from "../services/fandomService";
 import getGeniProfile from "services/geniService";
 import { isProperyId } from "helpers/isPropertyId";
 import { isValidImage } from "helpers/isValidImage";
 import { useAppSelector } from "store";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
+import addLifeSpan from "../lib/addLifeSpan";
 
 export default memo(({ node }: { node: EntityNode }) => {
   const dispatch = useDispatch();
@@ -94,7 +96,7 @@ export default memo(({ node }: { node: EntityNode }) => {
   }, []);
 
   const [showModal, setShowModal] = useState(false);
-
+  const [lifeSpanInYears, setLifeSpanInYears] = useState(node.lifeSpanInYears);
   const [thumbnails, setThumbnails] = useState<Image[]>(node.thumbnails || []);
   const [images, setImages] = useState<Image[]>(node.images || []);
   const [faceImage, setFaceImage] = useState<Image>();
@@ -134,7 +136,86 @@ export default memo(({ node }: { node: EntityNode }) => {
           setImages((images) => images.concat(geniImg));
         }
 
-        //TODO: Geni dates and country
+        //add Geni dates and country
+        if (
+          geniProfile &&
+          (geniProfile.birth || geniProfile.death) &&
+          node.lifeSpanInYears === undefined
+        ) {
+          if (geniProfile.birth && geniProfile.birth.date) {
+            node.birthYear = "" + geniProfile.birth.date.year; //convert to string
+            if (
+              geniProfile.birth.date.circa &&
+              geniProfile.birth.date.circa === true
+            ) {
+              node.birthYear = "~" + node.birthYear;
+            }
+          }
+          if (geniProfile.death && geniProfile.death.date) {
+            node.deathYear = "" + geniProfile.death.date.year;
+            if (
+              geniProfile.death.date.circa &&
+              geniProfile.death.date.circa === true
+            ) {
+              node.deathYear = "~" + node.deathYear;
+            }
+          }
+          addLifeSpan(node);
+          setLifeSpanInYears(node.lifeSpanInYears);
+        }
+        if (
+          geniProfile &&
+          geniProfile.birth &&
+          geniProfile.birth.location &&
+          geniProfile.birth.location.country_code &&
+          !birthCountry
+        ) {
+          setBirthCountry({
+            code: geniProfile.birth.location.country_code,
+            name: geniProfile.birth.location.country,
+            text: "Born in " + geniProfile.birth.location.country + " (geni)",
+          });
+        } else if (
+          geniProfile &&
+          geniProfile.location &&
+          geniProfile.location.country_code &&
+          !birthCountry
+        ) {
+          setBirthCountry({
+            code: geniProfile.location.country_code,
+            name: geniProfile.location.country,
+            text: "Lived in " + geniProfile.location.country + " (geni)",
+          });
+        }
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (node.fandomHost && node.fandomId) {
+      getFandomPageProps(node.fandomHost, node.fandomId).then((fandomData) => {
+        if (fandomData?.query?.pages) {
+          const page: any = Object.values(fandomData.query.pages)[0];
+
+          if (page.pageprops) {
+            const pageprops = JSON.parse(page.pageprops.infoboxes);
+            if (pageprops[0] && pageprops[0].data) {
+              const image = pageprops[0].data.find(
+                (entry) => entry.type === "image",
+              ).data[0];
+
+              if (image) {
+                const fandomImage = {
+                  url: image.url.split("/revision/")[0],
+                  alt: `Fandom image, ${image.name}`,
+                  source: node.fandomUrl,
+                };
+                setThumbnails((thumbnails) => thumbnails.concat(fandomImage));
+                setImages((images) => images.concat(fandomImage));
+              }
+            }
+          }
+        }
       });
     }
   }, []);
@@ -316,9 +397,9 @@ export default memo(({ node }: { node: EntityNode }) => {
             )}
           </div>
           <div className="dates">
-            {node.lifeSpan
+            {node.lifeSpan || lifeSpanInYears
               ? theme.datesYearOnly
-                ? node.lifeSpanInYears
+                ? lifeSpanInYears
                 : node.lifeSpan
               : node.startEndSpan
               ? node.startEndSpan
@@ -567,7 +648,19 @@ const ThemedNodeOuter = styled.div<SettingsState & { gender?: string }>`
   .childrenToggle {
     top: 100%;
   }
-
+  //  .colorIcons {
+  //   position: absolute;
+  //   bottom: 0;
+  //   right: 2px;
+  //   z-index: 2; //needed for tooltip
+  // }
+  .flagIcons {
+    position: absolute;
+    bottom: -5px;
+    right: 0px;
+    width: 32px;
+    z-index: 2; //needed for tooltip
+  }
   ${
     ({ showGenderColor, gender }) =>
       showGenderColor &&
@@ -591,9 +684,9 @@ const ThemedNodeOuter = styled.div<SettingsState & { gender?: string }>`
 
 const Badge = styled.div`
   position: absolute;
-  top: 0;
-  left: 0;
-  transform: translate(-50%, -50%);
+  bottom: 0;
+  right: 0;
+  // transform: translate(-50%, -50%);
 `;
 
 const ThemedNodeInner = styled.div`

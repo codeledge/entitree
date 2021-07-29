@@ -12,6 +12,7 @@ import addDescription from "./addDescription";
 import addEndDate from "./addEndDate";
 import addExternalLinks from "./addExternalLinks";
 import addEyeColor from "./addEyeColor";
+import addFandom from "./addFandom";
 import addGender from "./addGender";
 import addGeniId from "./addGeniId";
 import addHairColor from "./addHairColor";
@@ -87,6 +88,8 @@ export default function formatEntity(
   addHairColor(entity);
 
   addPeoplePillImage(entity);
+
+  addFandom(entity);
 
   addGeniId(entity);
 

@@ -59,6 +59,9 @@ export interface Entity extends WikiEntity {
   endDate?: string;
   externalLinks?: ExternalLink[];
   eyeColor?: PropColor;
+  fandomHost?: string;
+  fandomId?: string;
+  fandomUrl?: string;
   gender?: string;
   geniId?: string;
   hairColor?: PropColor;
