@@ -1,6 +1,7 @@
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { FaCreativeCommons, FaGithub } from "react-icons/fa";
 
+import Link from "next/link";
 import React from "react";
 import styled from "styled-components";
 
@@ -26,7 +27,10 @@ export default function Footer() {
           >
             <FaCreativeCommons />
           </Nav.Link>
-          <Nav.Link target="_blank" href="https://github.com/ogroppo/entitree">
+          <Nav.Link
+            target="_blank"
+            href="https://github.com/codeledge/entitree-next"
+          >
             <FaGithub />
           </Nav.Link>
           <Nav.Item id="twitterFollowButton">
@@ -42,8 +46,12 @@ export default function Footer() {
           </Nav.Item>
         </Nav>
         <Nav className="ml-auto rightLinks">
-          <Nav.Link href="/about">About</Nav.Link>
-          <Nav.Link href="/privacy">Privacy</Nav.Link>
+          <Link href="/about" passHref>
+            <Nav.Link>About</Nav.Link>
+          </Link>
+          <Link href="/privacy" passHref>
+            <Nav.Link>Privacy</Nav.Link>
+          </Link>
         </Nav>
       </Container>
     </StyledFooter>

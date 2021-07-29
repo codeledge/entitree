@@ -15,10 +15,13 @@ import Logo from "./Logo";
 import ReactGA from "react-ga";
 import { SITE_NAME } from "../constants/meta";
 import SettingsModal from "modals/SettingsModal";
+import { setLoadingEntity } from "store/treeSlice";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
 
 export default function Header({ simple }: { simple?: boolean }) {
   const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const dispatch = useDispatch();
 
   const openSettingsModal = () => {
     ReactGA.modalview("settings");
@@ -26,6 +29,7 @@ export default function Header({ simple }: { simple?: boolean }) {
   };
 
   const openExampleLink = (e) => {
+    dispatch(setLoadingEntity(true));
     ReactGA.event({
       category: "Examples",
       action: "Clicked on example",

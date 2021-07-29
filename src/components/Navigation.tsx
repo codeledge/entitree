@@ -12,18 +12,16 @@ import {
   WhatsappShareButton,
 } from "react-share";
 import { FiMinus, FiPlus, FiPrinter } from "react-icons/fi";
-import React, { memo, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import styled, { useTheme } from "styled-components";
 
 import { FaRegShareSquare } from "react-icons/fa";
 import { IoMdExpand } from "react-icons/io";
-import { MAX_SCALE } from "constants/tree";
 import ReactGA from "react-ga";
 import { RiFocus3Line } from "react-icons/ri";
 import { SITE_NAME } from "constants/meta";
 import fitEdges from "treeHelpers/fitEdges";
 import { useAppSelector } from "store";
-import { useRouter } from "next/dist/client/router";
 
 export default memo(
   ({
@@ -177,9 +175,13 @@ const FitTreeButton = memo(
 
 const ShareButton = memo(() => {
   const [showShareModal, setShowShareModal] = useState(false);
-  const router = useRouter();
-  const location = "";
-  const title = "";
+  const [url, setUrl] = useState("");
+  const [title, seTitle] = useState("");
+  useEffect(() => {
+    setUrl(window.location.href);
+    seTitle(document.title);
+  }, []);
+
   return (
     <>
       <OverlayTrigger
@@ -200,40 +202,32 @@ const ShareButton = memo(() => {
           <Modal.Title>Share this tree</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className="shareButton">
-            <FacebookShareButton
-              url={location}
-              quote={title}
-              hashtag={SITE_NAME}
-            >
+          <ShareButtonContainer>
+            <FacebookShareButton url={url} quote={title} hashtag={SITE_NAME}>
               <FacebookIcon /> Share on Facebook
             </FacebookShareButton>
-          </div>
-          <div className="shareButton">
-            <TwitterShareButton
-              url={location}
-              title={title}
-              hashtags={[SITE_NAME]}
-            >
+          </ShareButtonContainer>
+          <ShareButtonContainer>
+            <TwitterShareButton url={url} title={title} hashtags={[SITE_NAME]}>
               <TwitterIcon /> Share on Twitter
             </TwitterShareButton>
-          </div>
-          <div className="shareButton">
-            <RedditShareButton url={location} title={title}>
+          </ShareButtonContainer>
+          <ShareButtonContainer>
+            <RedditShareButton url={url} title={title}>
               <RedditIcon /> Share on Reddit
             </RedditShareButton>
-          </div>
-          <div className="shareButton">
-            <WhatsappShareButton url={location} title={title}>
+          </ShareButtonContainer>
+          <ShareButtonContainer>
+            <WhatsappShareButton url={url} title={title}>
               <WhatsappIcon /> Share on Whatsapp
             </WhatsappShareButton>
-          </div>
-          <div className="shareButton">
-            <TelegramShareButton url={location} title={title}>
+          </ShareButtonContainer>
+          <ShareButtonContainer>
+            <TelegramShareButton url={url} title={title}>
               <TelegramIcon /> Share on Telegram
             </TelegramShareButton>
-          </div>
-          <div className="shareButton">
+          </ShareButtonContainer>
+          <ShareButtonContainer>
             <Button
               variant="none"
               onClick={async () => {
@@ -243,7 +237,7 @@ const ShareButton = memo(() => {
             >
               <FiPrinter /> Print this page
             </Button>
-          </div>
+          </ShareButtonContainer>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={() => setShowShareModal(false)}>Close</Button>
@@ -252,3 +246,22 @@ const ShareButton = memo(() => {
     </>
   );
 });
+
+const ShareButtonContainer = styled.div`
+  margin-bottom: 12px;
+  svg {
+    height: 3em;
+    width: 3em;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 5px;
+  }
+  .btn {
+    svg {
+      font-size: 0.65em;
+      margin: 0.5em 10px 0.5em 0.5em;
+    }
+
+    padding: 0 0.5em 0 0;
+  }
+`;

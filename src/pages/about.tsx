@@ -9,8 +9,6 @@ import { Title } from "layout/Title";
 import styled from "styled-components";
 
 export default function AboutPage() {
-  //usePageView();
-
   return (
     <Page>
       <Head>
