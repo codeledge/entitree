@@ -54,6 +54,7 @@ import { isValidImage } from "helpers/isValidImage";
 import { useAppSelector } from "store";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
+import addLifeSpan from "../lib/addLifeSpan";
 
 export default memo(({ node }: { node: EntityNode }) => {
   const dispatch = useDispatch();
@@ -95,7 +96,7 @@ export default memo(({ node }: { node: EntityNode }) => {
   }, []);
 
   const [showModal, setShowModal] = useState(false);
-
+  const [lifeSpanInYears, setLifeSpanInYears] = useState(node.lifeSpanInYears);
   const [thumbnails, setThumbnails] = useState<Image[]>(node.thumbnails || []);
   const [images, setImages] = useState<Image[]>(node.images || []);
   const [faceImage, setFaceImage] = useState<Image>();
@@ -135,7 +136,57 @@ export default memo(({ node }: { node: EntityNode }) => {
           setImages((images) => images.concat(geniImg));
         }
 
-        //TODO: Geni dates and country
+        //add Geni dates and country
+        if (
+          geniProfile &&
+          (geniProfile.birth || geniProfile.death) &&
+          node.lifeSpanInYears === undefined
+        ) {
+          if (geniProfile.birth && geniProfile.birth.date) {
+            node.birthYear = "" + geniProfile.birth.date.year; //convert to string
+            if (
+              geniProfile.birth.date.circa &&
+              geniProfile.birth.date.circa === true
+            ) {
+              node.birthYear = "~" + node.birthYear;
+            }
+          }
+          if (geniProfile.death && geniProfile.death.date) {
+            node.deathYear = "" + geniProfile.death.date.year;
+            if (
+              geniProfile.death.date.circa &&
+              geniProfile.death.date.circa === true
+            ) {
+              node.deathYear = "~" + node.deathYear;
+            }
+          }
+          addLifeSpan(node);
+          setLifeSpanInYears(node.lifeSpanInYears);
+        }
+        if (
+          geniProfile &&
+          geniProfile.birth &&
+          geniProfile.birth.location &&
+          geniProfile.birth.location.country_code &&
+          !birthCountry
+        ) {
+          setBirthCountry({
+            code: geniProfile.birth.location.country_code,
+            name: geniProfile.birth.location.country,
+            text: "Born in " + geniProfile.birth.location.country + " (geni)",
+          });
+        } else if (
+          geniProfile &&
+          geniProfile.location &&
+          geniProfile.location.country_code &&
+          !birthCountry
+        ) {
+          setBirthCountry({
+            code: geniProfile.location.country_code,
+            name: geniProfile.location.country,
+            text: "Lived in " + geniProfile.location.country + " (geni)",
+          });
+        }
       });
     }
   }, []);
@@ -346,9 +397,9 @@ export default memo(({ node }: { node: EntityNode }) => {
             )}
           </div>
           <div className="dates">
-            {node.lifeSpan
+            {node.lifeSpan || lifeSpanInYears
               ? theme.datesYearOnly
-                ? node.lifeSpanInYears
+                ? lifeSpanInYears
                 : node.lifeSpan
               : node.startEndSpan
               ? node.startEndSpan
