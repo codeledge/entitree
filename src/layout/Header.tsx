@@ -70,7 +70,7 @@ export default function Header({ simple }: { simple?: boolean }) {
             </Button>
             <SettingsModal
               show={showSettingsModal}
-              hideModal={() => setShowSettingsModal(false)}
+              onHideModal={() => setShowSettingsModal(false)}
             />
           </Nav>
         )}
