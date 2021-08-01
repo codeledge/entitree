@@ -2296,9 +2296,9 @@ enquirer@^2.3.5:
     ansi-colors "^4.1.1"
 
 entitree-flex@*:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/entitree-flex/-/entitree-flex-0.2.0.tgz#8617341cda42087504606c433b02593df2b2cdf8"
-  integrity sha512-kgp0WAywPUWPPfNFwLaapGEYkc9JcLeGVucLiXNZXkyM1eiO7rA2BgcxGZUnbG282X08yMuJ10H9sr83SVUy+w==
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/entitree-flex/-/entitree-flex-0.3.0.tgz#c7f21ce4dff325cfb5ed89f1fe6bc252023582b2"
+  integrity sha512-ts2QjPU+Idccwa8xAQxs2RpkaA4XUpC5pDkeIhE4Micc9m1+9YowM+x95tcg8yNxV4keAa0Nc3jvB+DAb8ho+A==
 
 error-ex@^1.2.0, error-ex@^1.3.1:
   version "1.3.2"
@@ -5106,7 +5106,7 @@ react-dom@17.0.2:
 
 react-ga@3.3.0:
   version "3.3.0"
-  resolved "https://registry.yarnpkg.com/react-ga/-/react-ga-3.3.0.tgz#c91f407198adcb3b49e2bc5c12b3fe460039b3ca"
+  resolved "https://registry.npmjs.org/react-ga/-/react-ga-3.3.0.tgz"
   integrity sha512-o8RScHj6Lb8cwy3GMrVH6NJvL+y0zpJvKtc0+wmH7Bt23rszJmnqEQxRbyrqUzk9DTJIHoP42bfO5rswC9SWBQ==
 
 react-icons@4.2.0:

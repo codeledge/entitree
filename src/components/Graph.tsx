@@ -9,7 +9,7 @@ import { EntityRel } from "types/EntityRel";
 import Rel from "components/Rel";
 import { TransformComponent } from "react-zoom-pan-pinch";
 import fitEdges from "treeHelpers/fitEdges";
-import { fromMap } from "entitree-flex";
+import { layoutFromMap } from "entitree-flex";
 import { useAppSelector } from "store";
 import { useDispatch } from "react-redux";
 
@@ -39,17 +39,18 @@ export default function Graph({
         maxLeft,
         maxBottom,
         maxTop,
-      } = fromMap<Entity>(currentEntity.treeId!, entitiesMap, {
+      } = layoutFromMap<Entity>(currentEntity.treeId!, entitiesMap, {
         clone: true,
-        nodeWidth: theme.nodeWidth,
+        differentGroupSpacing: theme.separationCousins,
+        nextAfterAccessor: "spousesTreeIds",
+        nextAfterSpacing: theme.separationSameGroup,
+        nextBeforeAccessor: "siblingsTreeIds",
+        nextBeforeSpacing: theme.separationSameGroup,
         nodeHeight: theme.nodeHeight,
-        verticalSpacing: theme.nodeVerticalSpacing,
-        siblingSpacing: theme.separationSameGroup,
-        cousinSpacing: theme.separationCousins,
-        childrenAccessor: "childrenTreeIds",
-        parentsAccessor: "parentsTreeIds",
-        siblingsAccessor: "siblingsTreeIds",
-        partnersAccessor: "spousesTreeIds",
+        nodeWidth: theme.nodeWidth,
+        sourcesAccessor: "parentsTreeIds",
+        sourceTargetSpacing: theme.nodeVerticalSpacing,
+        targetsAccessor: "childrenTreeIds",
       });
 
       //console.log({ nodes, rels, maxRight, maxLeft, maxBottom, maxTop });
