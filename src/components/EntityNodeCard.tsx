@@ -220,6 +220,24 @@ export default memo(({ node }: { node: EntityNode }) => {
     }
   }, []);
 
+  // const occupation = useMemo(
+  //   () =>
+  //     renderOccupations(addOccupations(node.simpleClaims?.[OCCUPATION_ID])),
+  //   [node.simpleClaims],
+  // );
+  const occupation = renderOccupations(node.occupations);
+
+  function renderOccupations(occ) {
+    console.log(occ);
+    if (!occ) {
+      return;
+    }
+    const listItems = occ.map((entry) => (
+      <span title={entry.itemLabel}>{entry.emoji}</span>
+    ));
+    return <div>{listItems}</div>;
+  }
+
   const [thumbnailIndex, setThumbnailIndex] = useState(0);
   const theme = useTheme();
 
@@ -395,6 +413,9 @@ export default memo(({ node }: { node: EntityNode }) => {
                 </span>
               </>
             )}
+            {settings.showExtraInfo &&
+              settings.extraInfo === "occupation" &&
+              occupation && <div className="occupation">{occupation}</div>}
           </div>
           <div className="dates">
             {node.lifeSpan || lifeSpanInYears

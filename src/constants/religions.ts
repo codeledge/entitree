@@ -1,10 +1,6 @@
-export type Religion = {
-  item: string;
-  itemLabel: string;
-  emoji: string;
-};
+import { SparqlEmoji } from "./properties";
 
-export const RELIGIONS: Religion[] = [
+export const RELIGIONS: SparqlEmoji[] = [
   {
     item: "http://www.wikidata.org/entity/Q1458238",
     itemLabel: "United Reformed Church",
