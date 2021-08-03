@@ -21,15 +21,6 @@
           }
         ]
       ]
-    },
-    "test": {
-      "presets": ["env", "react"],
-      "plugins": [
-        [
-          "babel-plugin-styled-components",
-          { "displayName": true, "fileName": true }
-        ]
-      ]
     }
   }
 }

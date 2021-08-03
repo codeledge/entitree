@@ -1,7 +1,7 @@
 import { Entity, SimpleClaim } from "types/Entity";
 
-import { OCCUPATIONS } from "constants/occupations";
 import { OCCUPATION_ID } from "constants/properties";
+import { OCCUPATION_MAP } from "constants/occupations";
 import { SparqlEmoji } from "types/SparqlEmoji";
 
 export default function addOccupations(entity: Entity) {
@@ -15,20 +15,16 @@ function getEmojisByOccupations(
   occupations: SimpleClaim[] | undefined,
 ): SparqlEmoji[] {
   // const occupations = entity.simpleClaims?.[OCCUPATION_ID];
-  console.log(occupations);
   if (!occupations) {
     return [];
   }
-  const result: SparqlEmoji[] = [];
-  occupations.forEach((occ) => {
-    if (occ.value) {
-      const search = OCCUPATIONS.find(
-        (c) => c.item === "http://www.wikidata.org/entity/" + occ.value,
-      );
-      if (search) {
-        result.push(search);
-      }
+
+  return occupations.reduce((sparqlEmojis: SparqlEmoji[], occupation) => {
+    if (occupation.value) {
+      const occupationEmoji =
+        OCCUPATION_MAP["http://www.wikidata.org/entity/" + occupation.value];
+      if (occupationEmoji) return sparqlEmojis.concat(occupationEmoji);
     }
-  });
-  return result;
+    return sparqlEmojis;
+  }, []);
 }
