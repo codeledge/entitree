@@ -19,14 +19,10 @@ import { SITE_NAME } from "constants/meta";
 import SearchBar from "layout/SearchBar";
 import TreeLoader from "layout/TreeLoader";
 import VideoPopup from "../../../layout/VideoPopup";
-import fs from "fs";
-import getConfig from "next/config";
 import getWikipediaArticle from "wikipedia/getWikipediaArticle";
 import { isItemId } from "helpers/isItemId";
 import { loadEntity } from "treeHelpers/loadEntity";
-import path from "path";
 import { setLangCode } from "store/settingsSlice";
-import { staticFileExists } from "helpers/server";
 import styled from "styled-components";
 
 const TreePage = ({
