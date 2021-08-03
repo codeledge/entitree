@@ -44,6 +44,7 @@ import { Image } from "types/Entity";
 import { LangCode } from "types/Lang";
 import { MdChildCare } from "react-icons/md";
 import { SettingsState } from "store/settingsSlice";
+import addLifeSpan from "../lib/addLifeSpan";
 import clsx from "clsx";
 import { getDataprickImages } from "services/imageService";
 import getEntitiesLabel from "treeHelpers/getEntitiesLabel";
@@ -54,7 +55,6 @@ import { isValidImage } from "helpers/isValidImage";
 import { useAppSelector } from "store";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
-import addLifeSpan from "../lib/addLifeSpan";
 
 export default memo(({ node }: { node: EntityNode }) => {
   const dispatch = useDispatch();
@@ -228,7 +228,7 @@ export default memo(({ node }: { node: EntityNode }) => {
   const settings = useAppSelector(({ settings: s }) => s);
   const { currentProp } = useAppSelector(({ tree }) => tree);
 
-  const hideModal = () => {
+  const onHideModal = () => {
     setShowModal(false);
   };
 
@@ -555,7 +555,11 @@ export default memo(({ node }: { node: EntityNode }) => {
       )}
 
       {showModal && (
-        <DetailsModal hideModal={hideModal} node={node} nodeImages={images} />
+        <DetailsModal
+          onHideModal={onHideModal}
+          node={node}
+          nodeImages={images}
+        />
       )}
     </ThemedNodeOuter>
   );

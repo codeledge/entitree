@@ -22,7 +22,7 @@ import { useCurrentSecondLabel } from "hooks/useCurrentSecondLabel";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 
-export default function SettingsModal({ show, hideModal }) {
+export default function SettingsModal({ show, onHideModal }) {
   useEffect(() => {
     ReactGA.event({
       category: "Settings",
@@ -58,7 +58,7 @@ export default function SettingsModal({ show, hideModal }) {
   return (
     <StyledModal
       show={show}
-      onHide={hideModal}
+      onHide={onHideModal}
       dialogClassName="SettingsModalDialog"
       className="SettingsModal"
     >
@@ -419,10 +419,10 @@ export default function SettingsModal({ show, hideModal }) {
         </Form.Group>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="link" className="mr-auto ml-0" onClick={hideModal}>
+        <Button variant="link" className="mr-auto ml-0" onClick={onHideModal}>
           Close
         </Button>
-        <Button variant="primary" onClick={hideModal}>
+        <Button variant="primary" onClick={onHideModal}>
           Done
         </Button>
       </Modal.Footer>
