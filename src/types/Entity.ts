@@ -2,7 +2,7 @@ import { Claim } from "./Claim";
 import { Country } from "constants/countries";
 import { LangCode } from "types/Lang";
 import { PropColor } from "constants/eyeHairColors";
-import { SparqlEmoji } from "constants/properties";
+import { SparqlEmoji } from "types/SparqlEmoji";
 
 export interface Sitelink {
   site: string;
@@ -47,8 +47,8 @@ export interface Entity extends WikiEntity {
   birthName?: string;
   birthPlaceId?: string;
   birthYear?: string;
-  childrenTreeIds?: string[];
   childrenCount?: number;
+  childrenTreeIds?: string[];
   countryOfCitizenship?: Country;
   deathDate?: string;
   deathPlaceId?: string;
@@ -78,14 +78,14 @@ export interface Entity extends WikiEntity {
   loadingParents?: boolean;
   loadingSiblings?: boolean;
   loadingSpouses?: boolean;
+  nameInKana?: string;
+  nickName?: string;
+  occupations?: SparqlEmoji[];
   parentsTreeIds?: string[];
   peoplepillImageUrl?: string;
   peoplepillSlug?: string;
   religion?: SparqlEmoji;
   rightIds?: string[];
-  nickName?: string;
-  nameInKana?: string;
-  occupations: SparqlEmoji[];
   siblingsTreeIds?: string[];
   simpleClaims?: SimpleClaims; //TODO not available on client
   spousesTreeIds?: string[];

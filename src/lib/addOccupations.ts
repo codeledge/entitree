@@ -1,6 +1,8 @@
 import { Entity, SimpleClaim } from "types/Entity";
+
 import { OCCUPATIONS } from "constants/occupations";
-import { OCCUPATION_ID, SparqlEmoji } from "constants/properties";
+import { OCCUPATION_ID } from "constants/properties";
+import { SparqlEmoji } from "types/SparqlEmoji";
 
 export default function addOccupations(entity: Entity) {
   const occs = entity.simpleClaims?.[OCCUPATION_ID];

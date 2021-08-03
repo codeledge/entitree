@@ -236,9 +236,3 @@ export const EXTRA_INFO_OPTIONS = [
     title: "Occupations",
   },
 ];
-
-export type SparqlEmoji = {
-  item: string;
-  itemLabel: string;
-  emoji: string;
-};
