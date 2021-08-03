@@ -9,12 +9,6 @@ import {
   NICKNAME_ID,
 } from "constants/properties";
 import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
-import {
-  CHILD_BOOKMARK_SYMBOL,
-  PARENT_BOOKMARK_SYMBOL,
-  SIBLING_BOOKMARK_SYMBOL,
-  SPOUSE_BOOKMARK_SYMBOL,
-} from "constants/bookmarks";
 import { FaEye, FaFemale, FaMale, FaUser } from "react-icons/fa";
 import {
   FiChevronDown,
@@ -25,17 +19,13 @@ import {
 import { GiBigDiamondRing, GiPerson } from "react-icons/gi";
 import React, { memo, useEffect, useState } from "react";
 import { RiGroupLine, RiParentLine } from "react-icons/ri";
+import styled, { css, useTheme } from "styled-components";
 import {
-  preloadChildren,
-  preloadParents,
-  preloadSiblings,
-  preloadSpouses,
   toggleChildren,
   toggleParents,
   toggleSiblings,
   toggleSpouses,
 } from "actions/treeActions";
-import styled, { css, useTheme } from "styled-components";
 
 import { BsImage } from "react-icons/bs";
 import DetailsModal from "modals/DetailsModal";
@@ -53,47 +43,19 @@ import getGeniProfile from "services/geniService";
 import { isProperyId } from "helpers/isPropertyId";
 import { isValidImage } from "helpers/isValidImage";
 import { useAppSelector } from "store";
+import useBookmarks from "hooks/useBookmarks";
 import { useDispatch } from "react-redux";
-import { useRouter } from "next/router";
+import usePreload from "hooks/usePreload";
+import useRootExpanded from "hooks/useRootExpanded";
+import useVideoOverlay from "hooks/useVideoOverlay";
 
 export default memo(({ node }: { node: EntityNode }) => {
   const dispatch = useDispatch();
 
-  const router = useRouter();
-  useEffect(() => {
-    //preload connected nodes
-    if (!node.isRoot) {
-      dispatch(preloadChildren(node));
-      dispatch(preloadParents(node));
-      dispatch(preloadSiblings(node));
-      dispatch(preloadSpouses(node));
-    }
-
-    //Make sure root is expanded by default
-    if (node.isRoot) {
-      dispatch(toggleChildren(node, { followNavigation: false }));
-      dispatch(toggleParents(node, { followNavigation: false }));
-      dispatch(toggleSiblings(node, { followNavigation: false }));
-      dispatch(toggleSpouses(node, { followNavigation: false }));
-    }
-
-    //Expand bookmarks, applies only to non-root
-    const bookmark = router.query?.[node.treeId!];
-    if (bookmark && !node.isRoot) {
-      if (bookmark?.indexOf(CHILD_BOOKMARK_SYMBOL) > -1) {
-        dispatch(toggleChildren(node, { followNavigation: false }));
-      }
-      if (bookmark?.indexOf(PARENT_BOOKMARK_SYMBOL) > -1) {
-        dispatch(toggleParents(node, { followNavigation: false }));
-      }
-      if (bookmark?.indexOf(SIBLING_BOOKMARK_SYMBOL) > -1) {
-        dispatch(toggleSiblings(node, { followNavigation: false }));
-      }
-      if (bookmark?.indexOf(SPOUSE_BOOKMARK_SYMBOL) > -1) {
-        dispatch(toggleSpouses(node, { followNavigation: false }));
-      }
-    }
-  }, []);
+  usePreload(node);
+  useRootExpanded(node);
+  useBookmarks(node);
+  useVideoOverlay(node);
 
   const [showModal, setShowModal] = useState(false);
   const [lifeSpanInYears, setLifeSpanInYears] = useState(node.lifeSpanInYears);
@@ -219,24 +181,6 @@ export default memo(({ node }: { node: EntityNode }) => {
       });
     }
   }, []);
-
-  // const occupation = useMemo(
-  //   () =>
-  //     renderOccupations(addOccupations(node.simpleClaims?.[OCCUPATION_ID])),
-  //   [node.simpleClaims],
-  // );
-  const occupation = renderOccupations(node.occupations);
-
-  function renderOccupations(occ) {
-    console.log(occ);
-    if (!occ) {
-      return;
-    }
-    const listItems = occ.map((entry) => (
-      <span title={entry.itemLabel}>{entry.emoji}</span>
-    ));
-    return <div>{listItems}</div>;
-  }
 
   const [thumbnailIndex, setThumbnailIndex] = useState(0);
   const theme = useTheme();
@@ -415,7 +359,13 @@ export default memo(({ node }: { node: EntityNode }) => {
             )}
             {settings.showExtraInfo &&
               settings.extraInfo === "occupation" &&
-              occupation && <div className="occupation">{occupation}</div>}
+              node.occupations && (
+                <div className="occupation">
+                  {node.occupations.map((entry) => (
+                    <span title={entry.itemLabel}>{entry.emoji}</span>
+                  ))}
+                </div>
+              )}
           </div>
           <div className="dates">
             {node.lifeSpan || lifeSpanInYears

@@ -1,37 +1,37 @@
-import { Container, Toast } from "react-bootstrap";
-
-import React, { useState } from "react";
+import Draggable from "react-draggable";
+import React from "react";
+import { Toast } from "react-bootstrap";
+import { setVideo } from "store/alertSlice";
 import styled from "styled-components";
-import Div100vh from "react-div-100vh";
+import { useAppSelector } from "store";
+import { useDispatch } from "react-redux";
 
 export default function VideoPopup() {
-  const [show, setShow] = useState(true);
+  const dispatch = useDispatch();
+  const video = useAppSelector(({ alert }) => alert.video);
+
+  if (!video) return null;
 
   return (
-    <StyledVideoPopup>
-  {/*<Container>*/}
-    <Toast onClose={() => setShow(false)} show={show}>
-      <Toast.Header>
-        <img src="holder.js/20x20?text=%20" className="rounded me-2" alt="" />
-        <strong className="me-auto">Video of </strong>
-        <small>11 mins ago</small>
-      </Toast.Header>
-      <Toast.Body>
-
-        <IFrameWrapper className="mb-2">
-          <iframe
-            src="https://www.youtube.com/embed/NgK4fJ709Xo"
-            title="YouTube video player"
-            allowFullScreen
-          />
-        </IFrameWrapper>
-
-      </Toast.Body>
-    </Toast>
-  {/*</Container>*/}
-    </StyledVideoPopup>
-);
+    <Draggable>
+      <StyledToast onClose={() => dispatch(setVideo(undefined))} show>
+        <Toast.Header>
+          <strong className="mr-auto">{video.label}</strong>
+        </Toast.Header>
+        <StyledBody>
+          <IFrameWrapper className="mb-2">
+            <iframe
+              src="https://www.youtube.com/embed/NgK4fJ709Xo"
+              title="YouTube video player"
+              allowFullScreen
+            />
+          </IFrameWrapper>
+        </StyledBody>
+      </StyledToast>
+    </Draggable>
+  );
 }
+
 const IFrameWrapper = styled.div`
   position: relative;
   padding-bottom: 56.25%; /* 16:9, for an aspect ratio of 1:1 change to this value to 100% */
@@ -45,18 +45,15 @@ const IFrameWrapper = styled.div`
   }
 `;
 
-const StyledVideoPopup = styled(Div100vh)`
-  position:absolute;
-  bottom:20px;
-  right:20px;
-  // width:200px;
-      height:250px;
-  z-index: 3;//overlap the footer
-  
-  .toast {
-      width: 350px;
-      height:250px;
-  }
+const StyledToast = styled(Toast)`
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  width: 330px;
+  cursor: move;
+  z-index: 99;
 `;
 
-
+const StyledBody = styled(Toast.Body)`
+  padding-bottom: 5px;
+`;

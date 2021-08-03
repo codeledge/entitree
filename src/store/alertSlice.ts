@@ -1,7 +1,10 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
+import { VideoLink } from "constants/videos";
+
 type AlertState = {
   errors: string[];
+  video?: VideoLink;
 };
 
 const initialState: AlertState = {
@@ -15,12 +18,12 @@ export const alertSlice = createSlice({
     setError: (state, { payload }: PayloadAction<string>) => {
       state.errors?.push(payload);
     },
+    setVideo: (state, { payload }: PayloadAction<VideoLink | undefined>) => {
+      state.video = payload;
+    },
   },
 });
 
-export const { setError } = alertSlice.actions;
-
-export const showError = (message: string) => (dispatch) =>
-  dispatch(setError(message));
+export const { setError, setVideo } = alertSlice.actions;
 
 export default alertSlice.reducer;
