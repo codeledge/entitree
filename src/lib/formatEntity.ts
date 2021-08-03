@@ -23,6 +23,7 @@ import addIsHuman from "./addIsHuman";
 import addIsInfantDeath from "./addIsInfantDeath";
 import addLabel from "./addLabel";
 import addLifeSpan from "./addLifeSpan";
+import addOccupations from "./addOccupations";
 import addPeoplePillImage from "./addPeoplePillImage";
 import addReligion from "./addReligion";
 import addSecondLabels from "./addSecondLabels";
@@ -83,6 +84,8 @@ export default function formatEntity(
   addCountryOfCitizenship(entity);
 
   addReligion(entity);
+
+  addOccupations(entity);
 
   addEyeColor(entity);
   addHairColor(entity);

@@ -11,7 +11,7 @@ import styled from "styled-components";
 import { useAppSelector } from "store";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
-import videos from "constants/videos";
+import getVideoByQid from "../helpers/getVideoByQid";
 
 export default function DetailsModal({ node, onHideModal, nodeImages }) {
   const { languageCode } = useAppSelector(({ settings }) => settings);
@@ -52,6 +52,8 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
     }
   }, [languageCode, node.birthPlaceId, node.deathPlaceId]);
 
+  const video = getVideoByQid(node.id);
+
   return (
     <StyledModal show onHide={onHideModal}>
       <Modal.Header closeButton>
@@ -67,10 +69,10 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {videos[node.id] && (
+        {video && (
           <IFrameWrapper className="mb-2">
             <iframe
-              src={videos[node.id].src}
+              src={video.embedLink}
               title="YouTube video player"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

@@ -279,7 +279,8 @@ export default function SettingsModal({ show, onHideModal }) {
           {showExtraInfo && (
             <Dropdown className="imageDropdown d-inline-block ml-1">
               <Dropdown.Toggle as={CustomToggle}>
-                {EXTRA_INFO_OPTIONS.find((c) => c.code === extraInfo)?.title}
+                {EXTRA_INFO_OPTIONS.find((c) => c.code === extraInfo)
+                  ?.title || <i>Select</i>}
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 {EXTRA_INFO_OPTIONS.map((extraOption) => (

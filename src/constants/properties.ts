@@ -25,6 +25,7 @@ export const MOTHER_ID = "P25";
 export const NAME_IN_KANA_ID = "P1814";
 export const NICKNAME_ID = "P1449";
 export const NUMBER_OF_CHILDREN_ID = "P1971";
+export const OCCUPATION_ID = "P106";
 export const PARTNER_ID = "P451"; // unmarried partner
 export const RELIGION_ID = "P140";
 export const SIBLINGS_ID = "P3373";
@@ -229,5 +230,9 @@ export const EXTRA_INFO_OPTIONS = [
   {
     code: "religion",
     title: "Religion",
+  },
+  {
+    code: "occupation",
+    title: "Occupations",
   },
 ];

@@ -1,13 +1,21 @@
+import { Entity } from "types/Entity";
+import { INSTANCE_OF_ID } from "constants/properties";
 import addPeoplePillImage from "./addPeoplePillImage";
 import getWikidataEntities from "../wikidata/getWikidataEntities";
-import formatEntity from "./formatEntity";
 
-// describe("addPeoplePillImage", () => {
-//   test("it should give the correct name", async () => {
-//     const id = "Q47122";
-//     const res = await getWikidataEntities({ ids: [id] });
-//     const entity = formatEntity(res[id], "en");
-//     addPeoplePillImage(entity);
-//     expect(res[id].id).toBe("enrique-iglesias");
-//   });
-// });
+describe("addPeoplePillImage", () => {
+  test("it should give the correct name", async () => {
+    const id = "Q47122";
+    const res = await getWikidataEntities({ ids: [id] });
+
+    const entity: Entity = {
+      ...res[id],
+      simpleClaims: {
+        [INSTANCE_OF_ID]: [{ value: "Q5", qualifiers: {} }],
+      },
+    };
+
+    addPeoplePillImage(entity);
+    expect(entity.peoplepillSlug).toBe("enrique-iglesias");
+  });
+});

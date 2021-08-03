@@ -17,11 +17,13 @@ import {
 } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
+import alertReducer from "./alertSlice";
 import settingsReducer from "./settingsSlice";
 import storage from "redux-persist/lib/storage";
 import treeReducer from "./treeSlice";
 
 const rootReducer = combineReducers({
+  alert: alertReducer,
   settings: settingsReducer,
   tree: treeReducer,
 });
