@@ -26,6 +26,7 @@ import { loadEntity } from "treeHelpers/loadEntity";
 import path from "path";
 import { setLangCode } from "store/settingsSlice";
 import styled from "styled-components";
+import VideoPopup from "../../../layout/VideoPopup";
 
 const TreePage = ({
   errorCode,
@@ -70,6 +71,7 @@ const TreePage = ({
         <Header />
         <SearchBar />
         {loadingEntity ? <TreeLoader /> : <DrawingArea />}
+        <VideoPopup />
       </Page>
       <Footer />
     </>
