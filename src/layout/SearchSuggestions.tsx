@@ -43,26 +43,27 @@ export default function SearchSuggestions({
       {!loadingSuggestions && !searchResults.length && (
         <div className="searchingMessage">Sorry, no results found</div>
       )}
-      {searchResults.map((result) => (
+      {searchResults.map((searchResult) => (
         <Button
-          key={result.id}
+          key={searchResult.id}
           className="searchResultBtn"
           variant="light"
           onClick={async () => {
             setShowSuggestions(false);
             dispatch(reset());
             const wikipediaSlug = await getEntityWikipediaSlug(
-              result.id,
+              searchResult.id,
               languageCode,
             );
             const url = getEntityUrl(languageCode, currentProp, {
+              id: searchResult.id,
               wikipediaSlug,
             });
             router.push(url);
           }}
         >
-          <b>{result.label}</b>
-          {result.description && <i>{result.description}</i>}
+          <b>{searchResult.label}</b>
+          {searchResult.description && <i>{searchResult.description}</i>}
         </Button>
       ))}
     </StyledSuggestions>
