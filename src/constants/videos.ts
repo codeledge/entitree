@@ -5,9 +5,17 @@ export interface VideoLink {
   label?: string;
   title?: string;
   embedLink?: string;
+  language?: string;
 }
 
 export const YOUTUBE_LINKS: Record<string, VideoLink> = {
+  Q712401: {
+    qid: "Q712401",
+    url: "https://www.youtube.com/watch?v=xL2PpDXvfXA",
+    embedLink: "https://www.youtube.com/embed/xL2PpDXvfXA",
+    channel: "Entitree",
+    label: "Salim family",
+  },
   Q8409: {
     qid: "Q8409",
     url: "https://www.youtube.com/watch?v=NgK4fJ709Xo",

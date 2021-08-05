@@ -13,7 +13,7 @@ export default function VideoPopup() {
   if (!video) return null;
 
   return (
-    <Draggable>
+    <Draggable bounds="parent">
       <StyledToast onClose={() => dispatch(setVideo(undefined))} show>
         <Toast.Header>
           <strong className="mr-auto">{video.label}</strong>
@@ -21,7 +21,7 @@ export default function VideoPopup() {
         <StyledBody>
           <IFrameWrapper className="mb-2">
             <iframe
-              src="https://www.youtube.com/embed/NgK4fJ709Xo"
+              src={video.embedLink}
               title="YouTube video player"
               allowFullScreen
             />
@@ -49,11 +49,11 @@ const StyledToast = styled(Toast)`
   position: absolute;
   left: 10px;
   top: 10px;
-  width: 330px;
+  width: 400px;
   cursor: move;
   z-index: 99;
 `;
 
 const StyledBody = styled(Toast.Body)`
-  padding-bottom: 5px;
+  padding: 0;
 `;
