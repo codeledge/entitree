@@ -70,15 +70,18 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
       </Modal.Header>
       <Modal.Body>
         {video && (
-          <IFrameWrapper className="mb-2">
-            <iframe
-              src={video.embedLink}
-              title="YouTube video player"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          </IFrameWrapper>
+          <>
+            <a href={video.url}>Youtube Video</a>
+          </>
+          // <IFrameWrapper className="mb-2">
+          //   <iframe
+          //     src={video.embedLink}
+          //     title="YouTube video player"
+          //     frameBorder="0"
+          //     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          //     allowFullScreen
+          //   />
+          // </IFrameWrapper>
         )}
         {!!images.length && (
           <div className="allImages">
