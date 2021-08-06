@@ -301,13 +301,13 @@ export default memo(({ node }: { node: EntityNode }) => {
         <ThemedContent className="content" hasSecondLabel={hasSecondLabel}>
           <div
             className={clsx({
-              "four-line-clamp": !hasLabelOnly,
+              "line-clamp": !hasLabelOnly,
             })}
           >
             {node.isRoot ? (
               <h1
                 className={clsx(`label btn btn-link mb-0`, {
-                  "four-line-clamp": hasLabelOnly,
+                  "line-clamp": hasLabelOnly,
                 })}
                 role="button"
                 tabIndex={0}
@@ -326,7 +326,7 @@ export default memo(({ node }: { node: EntityNode }) => {
             ) : (
               <span
                 className={clsx(`label btn btn-link`, {
-                  "four-line-clamp": hasLabelOnly,
+                  "line-clamp": hasLabelOnly,
                 })}
                 role="button"
                 tabIndex={0}
@@ -728,7 +728,7 @@ const ThemedContent = styled.div<{ hasSecondLabel?: boolean }>`
   //use margin to get width 100% calculations eg dates
   margin-left: ${({ theme }) => theme.contentPaddingLeft}px;
   margin-top: ${({ theme }) => theme.contentPaddingTop}px;
-  .four-line-clamp {
+  .line-clamp {
     -webkit-line-clamp: ${({ theme }) => theme.contentLineClamp};
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -759,7 +759,7 @@ const ThemedContent = styled.div<{ hasSecondLabel?: boolean }>`
     //but only ONE can be display block
     display: ${({ theme, hasSecondLabel }) =>
       theme.descriptionDisplay === "none" && !hasSecondLabel
-        ? "block"
+        ? ""
         : "inline"};
   }
   .description {
