@@ -64,8 +64,8 @@ export const loadEntity = async ({
     currentPropId: currentProp?.id,
     addUpIds: true,
     addDownIds: true,
-    addLeftIds: true,
-    addRightIds: true,
+    addLeftIds: currentProp?.id === CHILD_ID,
+    addRightIds: currentProp?.id === CHILD_ID,
   });
 
   return { currentEntity, currentProp, itemProps };
