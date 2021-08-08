@@ -119,14 +119,18 @@ export default function SettingsModal({ show, onHideModal }) {
                 eventKey={index + 1}
                 active={lang.code === languageCode}
                 onClick={async () => {
-                  dispatch(setLoadingEntity(true));
                   dispatch(setLangCode(lang.code));
-                  const url = getEntityUrl(
-                    lang.code,
-                    currentProp,
-                    currentEntity,
-                  );
-                  router.push(url);
+
+                  //don't reload on start page
+                  if (currentProp && currentEntity) {
+                    dispatch(setLoadingEntity(true));
+                    const url = getEntityUrl(
+                      lang.code,
+                      currentProp,
+                      currentEntity,
+                    );
+                    router.push(url);
+                  }
                 }}
               >
                 {lang.name}
