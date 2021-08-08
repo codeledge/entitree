@@ -9,27 +9,26 @@ import { reset } from "store/treeSlice";
 import router from "next/router";
 
 export const switchLanguage = (
-  entityId: Entity["id"],
-  propId: EntityProp["id"],
   langCode: LangCode,
+  entityId: Entity["id"],
+  propId?: EntityProp["id"],
 ): AppThunk => async (dispatch) => {
   dispatch(reset());
 
   const wikipediaSlug = await getEntityWikipediaSlug(entityId, langCode);
 
-  const translatedProps = await getItemProps(entityId, langCode);
+  let propSlug = "";
+  if (propId) {
+    const translatedProps = await getItemProps(entityId, langCode);
 
-  const translatedProp = translatedProps.find(({ id }) => id === propId);
+    const translatedProp = translatedProps.find(({ id }) => id === propId);
 
-  if (translatedProp) {
-    const url = getEntityUrl(
-      langCode,
-      { id: translatedProp.id, slug: translatedProp.slug },
-      {
-        id: entityId,
-        wikipediaSlug,
-      },
-    );
-    router.push(url);
+    if (translatedProp) propSlug = translatedProp.slug;
   }
+
+  const url = getEntityUrl(langCode, propSlug, {
+    id: entityId,
+    wikipediaSlug,
+  });
+  router.push(url);
 };

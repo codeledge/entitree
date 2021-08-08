@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { FiExternalLink } from "react-icons/fi";
 import getEntitiesLabel from "treeHelpers/getEntitiesLabel";
 import { getEntityUrl } from "helpers/getEntityUrl";
+import getVideoByQid from "../helpers/getVideoByQid";
 import getWikipediaArticle from "wikipedia/getWikipediaArticle";
 import { missingImagesLink } from "services/imageService";
 import { setLoadingEntity } from "store/treeSlice";
@@ -11,7 +12,6 @@ import styled from "styled-components";
 import { useAppSelector } from "store";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
-import getVideoByQid from "../helpers/getVideoByQid";
 
 export default function DetailsModal({ node, onHideModal, nodeImages }) {
   const { languageCode } = useAppSelector(({ settings }) => settings);
@@ -69,20 +69,20 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {video && (
+        {/* {video && (
           <>
             <a href={video.url}>Youtube Video</a>
           </>
-          // <IFrameWrapper className="mb-2">
-          //   <iframe
-          //     src={video.embedLink}
-          //     title="YouTube video player"
-          //     frameBorder="0"
-          //     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          //     allowFullScreen
-          //   />
-          // </IFrameWrapper>
-        )}
+          <IFrameWrapper className="mb-2">
+            <iframe
+              src={video.embedLink}
+              title="YouTube video player"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </IFrameWrapper>
+        )} */}
         {!!images.length && (
           <div className="allImages">
             {images &&
@@ -202,7 +202,11 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
             className="mr-auto"
             onClick={() => {
               dispatch(setLoadingEntity(true));
-              const url = getEntityUrl(languageCode, currentProp, node);
+              const url = getEntityUrl(
+                languageCode,
+                currentProp?.slug || "",
+                node,
+              );
               router.push(url);
               onHideModal();
             }}
@@ -218,18 +222,18 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
   );
 }
 
-const IFrameWrapper = styled.div`
-  position: relative;
-  padding-bottom: 56.25%; /* 16:9, for an aspect ratio of 1:1 change to this value to 100% */
+// const IFrameWrapper = styled.div`
+//   position: relative;
+//   padding-bottom: 56.25%; /* 16:9, for an aspect ratio of 1:1 change to this value to 100% */
 
-  iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-`;
+//   iframe {
+//     position: absolute;
+//     top: 0;
+//     left: 0;
+//     width: 100%;
+//     height: 100%;
+//   }
+// `;
 
 const StyledModal = styled(Modal)`
   .allImages {

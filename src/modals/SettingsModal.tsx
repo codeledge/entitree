@@ -107,7 +107,7 @@ export default function SettingsModal({ show, onHideModal }) {
         <hr />
         <Dropdown className="langDropdown">
           <Dropdown.Toggle as={CustomToggle}>
-            <span className="label">Language</span> {currentLang.name}
+            <span className="label">Language</span> {currentLang?.name}
           </Dropdown.Toggle>
           <Dropdown.Menu alignRight as={CustomMenu}>
             {LANGS.map((lang, index) => (
@@ -117,13 +117,15 @@ export default function SettingsModal({ show, onHideModal }) {
                 active={lang.code === languageCode}
                 onClick={() => {
                   dispatch(setLangCode(lang.code));
-                  dispatch(
-                    switchLanguage(
-                      currentEntity!.id,
-                      currentProp!.id,
-                      lang.code,
-                    ),
-                  );
+                  if (currentEntity) {
+                    dispatch(
+                      switchLanguage(
+                        lang.code,
+                        currentEntity.id,
+                        currentProp?.id,
+                      ),
+                    );
+                  }
                 }}
               >
                 {lang.name}

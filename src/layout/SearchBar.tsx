@@ -144,7 +144,7 @@ export default function SearchBar() {
                           dispatch(setLoadingEntity(true));
                           const url = getEntityUrl(
                             currentLang.code,
-                            prop,
+                            prop.slug,
                             currentEntity,
                           );
                           router.push(url);
