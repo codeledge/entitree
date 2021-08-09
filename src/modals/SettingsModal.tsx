@@ -14,13 +14,11 @@ import CustomThemeForm from "./CustomThemeForm";
 import { CustomToggle } from "./CustomToggle";
 import ReactGA from "react-ga";
 import { THEMES } from "constants/themes";
-import { getEntityUrl } from "helpers/getEntityUrl";
-import { setLoadingEntity } from "store/treeSlice";
+import { switchLanguage } from "actions/loadActions";
 import { useAppSelector } from "store";
 import { useCurrentLang } from "hooks/useCurrentLang";
 import { useCurrentSecondLabel } from "hooks/useCurrentSecondLabel";
 import { useDispatch } from "react-redux";
-import { useRouter } from "next/router";
 
 export default function SettingsModal({ show, onHideModal }) {
   useEffect(() => {
@@ -33,7 +31,6 @@ export default function SettingsModal({ show, onHideModal }) {
 
   const currentTheme = useTheme();
   const currentLang = useCurrentLang();
-  const router = useRouter();
   const currentSecondLabel = useCurrentSecondLabel();
 
   const {
@@ -110,7 +107,7 @@ export default function SettingsModal({ show, onHideModal }) {
         <hr />
         <Dropdown className="langDropdown">
           <Dropdown.Toggle as={CustomToggle}>
-            <span className="label">Language</span> {currentLang.name}
+            <span className="label">Language</span> {currentLang?.name}
           </Dropdown.Toggle>
           <Dropdown.Menu alignRight as={CustomMenu}>
             {LANGS.map((lang, index) => (
@@ -118,15 +115,17 @@ export default function SettingsModal({ show, onHideModal }) {
                 key={lang.code}
                 eventKey={index + 1}
                 active={lang.code === languageCode}
-                onClick={async () => {
-                  dispatch(setLoadingEntity(true));
+                onClick={() => {
                   dispatch(setLangCode(lang.code));
-                  const url = getEntityUrl(
-                    lang.code,
-                    currentProp,
-                    currentEntity,
-                  );
-                  router.push(url);
+                  if (currentEntity) {
+                    dispatch(
+                      switchLanguage(
+                        lang.code,
+                        currentEntity.id,
+                        currentProp?.id,
+                      ),
+                    );
+                  }
                 }}
               >
                 {lang.name}

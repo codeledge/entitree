@@ -31,7 +31,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: "root",
   whitelist: ["settings"],
-  version: 2,
+  version: 3,
   storage,
   debug: process.env.NODE_ENV === "development",
 };

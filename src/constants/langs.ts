@@ -2,6 +2,7 @@ import { BIRTH_NAME_ID, NAME_IN_KANA_ID, NICKNAME_ID } from "./properties";
 import { Lang, LangCode, SecondLabel } from "types/Lang";
 
 const DISAMBIGUATION_PAGE_DESC = {
+  ar: "صفحة توضيح لويكيميديا",
   da: "Wikipedia-flertydigside",
   de: "Wikimedia-Begriffsklärungsseite",
   en: "Wikimedia disambiguation page",
@@ -9,11 +10,14 @@ const DISAMBIGUATION_PAGE_DESC = {
   fr: "page d'homonymie de Wikimedia",
   id: "halaman disambiguasi Wikimedia",
   it: "pagina di disambiguazione di un progetto Wikimedia",
-  hi: "बहुविकल्पी पृष्ठ",
-  nl: "Wikimedia-doorverwijspagina",
-  zh: "維基媒體消歧義頁",
-  ru: "страница значений в проекте Викимедиа",
   ja: "ウィキメディアの曖昧さ回避ページ",
+  hi: "बहुविकल्पी पृष्ठ",
+  hu: "egyértelműsítő lap",
+  nl: "Wikimedia-doorverwijspagina",
+  pl: "strona ujednoznaczniająca",
+  pt: "página de desambiguação de um projeto da Wikimedia",
+  ru: "страница значений в проекте Викимедиа",
+  zh: "維基媒體消歧義頁",
 };
 
 export const LANG_MAP = {
@@ -438,7 +442,9 @@ export const LANG_MAP = {
   zu: "Zulu",
 };
 
-export const LANGS = Object.keys(LANG_MAP).map((code) => {
+const SUPPORTED_LANGS = Object.keys(DISAMBIGUATION_PAGE_DESC); //.push('th', 'ne');
+
+export const LANGS = SUPPORTED_LANGS.map((code) => {
   return {
     code,
     name: LANG_MAP[code],

@@ -758,9 +758,7 @@ const ThemedContent = styled.div<{ hasSecondLabel?: boolean }>`
     //if there is no description we can have this block and have the dots of the same color of the text
     //but only ONE can be display block
     display: ${({ theme, hasSecondLabel }) =>
-      theme.descriptionDisplay === "none" && !hasSecondLabel
-        ? ""
-        : "inline"};
+      theme.descriptionDisplay === "none" && !hasSecondLabel ? "" : "inline"};
   }
   .description {
     //if "block" the dots will have the same color of the text

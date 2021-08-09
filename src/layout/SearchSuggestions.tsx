@@ -55,7 +55,7 @@ export default function SearchSuggestions({
               searchResult.id,
               languageCode,
             );
-            const url = getEntityUrl(languageCode, currentProp, {
+            const url = getEntityUrl(languageCode, currentProp?.slug || "", {
               id: searchResult.id,
               wikipediaSlug,
             });
