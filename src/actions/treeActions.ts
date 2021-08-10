@@ -4,6 +4,7 @@ import {
   SIBLING_BOOKMARK_SYMBOL,
   SPOUSE_BOOKMARK_SYMBOL,
 } from "constants/bookmarks";
+import { CHILD_ID, PARTNER_ID, SPOUSE_ID } from "constants/properties";
 import {
   collapseChildren,
   collapseParents,
@@ -30,7 +31,6 @@ import {
 } from "lib/getEntities";
 
 import { AppThunk } from "store";
-import { CHILD_ID } from "constants/properties";
 import { EntityNode } from "types/EntityNode";
 import { ToggleOptions } from "../types/ToggleOptions";
 import { addUrlBookmark } from "treeHelpers/addUrlBookmark";
@@ -256,14 +256,29 @@ export const toggleSpouses = (
       addUrlBookmark(entityNode.treeId!, SPOUSE_BOOKMARK_SYMBOL);
   } else {
     try {
-      const { languageCode } = getState().settings;
+      const { languageCode, rightEntityOption } = getState().settings;
 
       const spouses = await getSpouseEntities(entityNode, languageCode, {});
+
+      const filteredRightEntities = spouses?.filter((spouse) => {
+        if (
+          rightEntityOption.propIds.indexOf(SPOUSE_ID) > -1 &&
+          entityNode.spousesIds?.includes(spouse.id)
+        )
+          return true;
+        if (
+          rightEntityOption.propIds.indexOf(PARTNER_ID) > -1 &&
+          entityNode.partnersIds?.includes(spouse.id)
+        )
+          return true;
+
+        return false;
+      });
 
       dispatch(
         expandSpouses({
           entityNode,
-          spouses,
+          spouses: filteredRightEntities,
           options,
         }),
       );

@@ -13,7 +13,7 @@ export type SettingsState = {
   hideToggleButton: boolean;
   imageType: "face" | "head";
   languageCode: LangCode;
-  rightEntityOption: typeof RIGHT_ENTITY_OPTIONS[0];
+  rightEntityOption: typeof RIGHT_ENTITY_OPTIONS[1];
   secondLabelCode?: Lang["code"] | SecondLabel["code"];
   showBirthName: boolean;
   showExternalImages: boolean;

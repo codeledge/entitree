@@ -44,9 +44,11 @@ export default async function getEntities(
   const entities = await ids.reduce(async (acc: Promise<Entity[]>, id) => {
     const accumulator = await Promise.resolve(acc);
 
+    //get rid of unwanted records
     if (!wikiEntitiesMap[id] || wikiEntitiesMap[id]["missing"] !== undefined)
       return accumulator;
 
+    //add all custom fields
     const entity = formatEntity(wikiEntitiesMap[id], languageCode);
 
     //filter out isInfantDeath by default

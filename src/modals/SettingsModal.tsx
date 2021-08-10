@@ -187,7 +187,7 @@ export default function SettingsModal({ show, onHideModal }) {
         <Dropdown className="spousesDropdown">
           <Dropdown.Toggle as={CustomToggle}>
             <span className="label">Show on the right</span>{" "}
-            {rightEntityOption.propIds ? (
+            {rightEntityOption.propIds?.length ? (
               rightEntityOption.title
             ) : (
               <i>{rightEntityOption.title}</i>
