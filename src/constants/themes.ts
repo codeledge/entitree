@@ -165,6 +165,41 @@ const mattsTheme: DefaultTheme = {
   thumbBorderRadius: 10,
 };
 
+const mattsHorizontalTheme: DefaultTheme = {
+  ...defaultTheme,
+  datesDisplay: "block",
+  datesFontColor: "black",
+  datesFontSize: 14,
+  datesYearOnly: true,
+  descriptionDisplay: "none",
+  graphBackgroundColor: "#eee7db",
+  labelFontSize: 15,
+  labelFontColor: "white",
+  labelTextAlign: "center",
+  name: "Matt's horizontal theme",
+  nodeBorder: "none",
+  nodeCss: `.dates {
+color:white;
+font-style: italic;
+}`,
+  nodeFlexDirection: "row",
+  nodeHeight: 100,
+  nodeVerticalSpacing: 60,
+  nodeWidth: 200,
+  nodeBorderRadius: 0,
+  nodeBackgroundColor: "#c13340",
+  relStroke: "#c13340",
+  relStrokeWidth: 5,
+  separationCousins: 35,
+  separationSameGroup: 30,
+  separationSiblingSpouse: 30,
+  thumbCounterDisplay: "none",
+  thumbHeight: 100,
+  thumbWidth: 100,
+  thumbBorderRadius: 0,
+};
+
+
 const onlyText: DefaultTheme = {
   ...defaultTheme,
   name: "Only Text",
@@ -213,6 +248,7 @@ export const THEMES = [
   onlyLabelTheme,
   verticalTheme,
   mattsTheme,
+  mattsHorizontalTheme,
   rawTheme,
   onlyText,
 ];
