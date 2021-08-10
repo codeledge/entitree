@@ -216,7 +216,7 @@ export default function SettingsModal({ show, onHideModal }) {
           </Dropdown.Menu>
           <Form.Text className="text-muted mt-0">
             Decide what to show on the right of each person, this applies only
-            to humans and fictional characters.
+            to humans and fictional characters. Reload the page (F5) to apply settings.
           </Form.Text>
         </Dropdown>
         <hr />
