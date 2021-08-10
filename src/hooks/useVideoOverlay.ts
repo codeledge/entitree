@@ -9,9 +9,11 @@ export default function useVideoOverlay(node: EntityNode) {
 
   //Make sure root is expanded by default
   useEffect(() => {
-    const video = getVideoByQid(node.id);
-    if (video) {
-      dispatch(setVideo(video));
+    if (window.innerWidth > 1000) {
+      const video = getVideoByQid(node.id);
+      if (video) {
+        dispatch(setVideo(video));
+      }
     }
   }, []);
 }
