@@ -68,6 +68,7 @@ export default function Graph({
       setNodes(nodes);
       setRels(rels);
 
+      //Todo move this into its own useEffect
       if (fit && map && followNavigation) {
         dispatch(resetFit());
 

@@ -195,7 +195,7 @@ export const SOCIAL_PROPS_IDS = {
 
 export const RIGHT_ENTITY_OPTIONS = [
   {
-    propIds: null,
+    propIds: [],
     title: "Nothing",
   },
   {

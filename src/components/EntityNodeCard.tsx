@@ -7,6 +7,8 @@ import {
   CHILD_ID,
   NAME_IN_KANA_ID,
   NICKNAME_ID,
+  PARTNER_ID,
+  SPOUSE_ID,
 } from "constants/properties";
 import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { FaEye, FaFemale, FaMale, FaUser } from "react-icons/fa";
@@ -239,6 +241,22 @@ export default memo(({ node }: { node: EntityNode }) => {
     }
   }, [settings.secondLabelCode]);
 
+  //this is needed to make it work with root being server side rightIds added!
+  const filteredRightIds = node.rightIds?.filter((rightId) => {
+    if (
+      settings.rightEntityOption.propIds.indexOf(SPOUSE_ID) > -1 &&
+      node.spousesIds?.includes(rightId)
+    )
+      return true;
+    if (
+      settings.rightEntityOption.propIds.indexOf(PARTNER_ID) > -1 &&
+      node.partnersIds?.includes(rightId)
+    )
+      return true;
+
+    return false;
+  });
+
   return (
     <ThemedNodeOuter
       style={{
@@ -450,7 +468,7 @@ export default memo(({ node }: { node: EntityNode }) => {
               </div>
             </Button>
           )}
-          {node.rightIds && !!node.rightIds.length && (
+          {!!filteredRightIds?.length && (
             <Button
               className="spouseToggle relativeToggle"
               variant="link"
@@ -461,7 +479,7 @@ export default memo(({ node }: { node: EntityNode }) => {
                 " spouses/partners"
               }
             >
-              <div className="value">{node.rightIds.length}</div>
+              <div className="value">{filteredRightIds.length}</div>
               <div className="chevron mt-1 mb-1">
                 {node.spousesTreeIds ? <FiChevronLeft /> : <FiChevronRight />}
               </div>

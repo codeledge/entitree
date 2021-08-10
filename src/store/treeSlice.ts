@@ -366,7 +366,7 @@ export const treeSlice = createSlice({
           state.fit = {
             leftEntityTreeId: mapNode.spousesTreeIds![0],
             rightEntityTreeId: last(mapNode.spousesTreeIds!),
-            topEntityTreeId: mapNode.spousesTreeIds![0],
+            topEntityTreeId: entityNode.treeId,
             bottomEntityTreeId: entityNode.treeId,
           };
       }

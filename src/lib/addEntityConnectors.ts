@@ -4,14 +4,13 @@ import {
   PARTNER_ID,
   SIBLINGS_ID,
   SPOUSE_ID,
-  START_DATE_ID,
 } from "../constants/properties";
 import getClaimIds, { checkIfClaimsHasSeriesOrdinal } from "./getClaimIds";
 
-import { Claim } from "types/Claim";
 import { Entity } from "types/Entity";
 import getSimpleClaimValue from "./getSimpleClaimValue";
 import getUpIds from "wikidata/getUpIds";
+import { sortClaimsByStartDate } from "claims/sortClaims";
 
 export type ConnectorOptions = {
   currentPropId?: string;
@@ -53,9 +52,6 @@ export default async function addEntityConnectors(
   }
 
   if (options.addRightIds) addRightIds(entity);
-  else {
-    delete entity.rightIds;
-  }
 
   if (options.addLeftIds) entity.leftIds = getClaimIds(entity, SIBLINGS_ID);
   else delete entity.leftIds;
@@ -63,34 +59,19 @@ export default async function addEntityConnectors(
 
 function addRightIds(entity: Entity) {
   //cannot use simpleclaims here as only preferred will show up
-  const claim: Claim[] = [SPOUSE_ID, PARTNER_ID].reduce(
-    (acc: Claim[], propId) => acc.concat(entity.claims?.[propId] || []),
-    [],
-  );
+  //load everything here then you filter on the client
 
-  //filter on the client!
+  const spousesClaim = entity.claims?.[SPOUSE_ID];
+  const partnersClaim = entity.claims?.[PARTNER_ID];
+  const combinedClaim = [...(spousesClaim || []), ...(partnersClaim || [])];
 
-  entity.rightIds = claim
-    .sort((a, b) => {
-      try {
-        return a.qualifiers?.[START_DATE_ID][0].datavalue?.value["time"] <
-          b.qualifiers?.[START_DATE_ID][0].datavalue?.value["time"]
-          ? 1
-          : -1;
-      } catch (error) {
-        return 1;
-      }
-    })
-    .map(({ mainsnak }) => {
-      try {
-        return mainsnak.datavalue?.value["id"]; //for 'No value' and 'Unknown'
-      } catch (error) {
-        return null;
-      }
-    })
-    .filter((id, index, ids) => {
-      // Filter out 'No value' and 'Unknown'
-      // Filter people married twice with same person (e.g. elon musk -> Talulah Riley)
-      return id && ids.indexOf(id) === index;
-    });
+  if (spousesClaim) {
+    entity.spousesIds = sortClaimsByStartDate(spousesClaim);
+  }
+  if (partnersClaim) {
+    entity.partnersIds = sortClaimsByStartDate(partnersClaim);
+  }
+  if (combinedClaim) {
+    entity.rightIds = sortClaimsByStartDate(combinedClaim);
+  }
 }

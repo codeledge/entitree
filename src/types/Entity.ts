@@ -87,6 +87,8 @@ export interface Entity extends WikiEntity {
   religion?: SparqlEmoji;
   rightIds?: string[];
   siblingsTreeIds?: string[];
+  spousesIds?: string[];
+  partnersIds?: string[];
   simpleClaims?: SimpleClaims; //TODO not available on client
   spousesTreeIds?: string[];
   startDate?: string;
