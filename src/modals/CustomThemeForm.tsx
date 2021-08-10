@@ -485,7 +485,7 @@ export default function CustomThemeForm() {
                     setCustomProp("separationSiblingSpouse", +e.target.value)
                   }
                   type="number"
-                  value={currentCustomTheme.separationSiblingSpouse}
+                  value={currentCustomTheme.separationSameGroup}
                 />
                 <InputGroup.Append>
                   <InputGroup.Text>px</InputGroup.Text>
