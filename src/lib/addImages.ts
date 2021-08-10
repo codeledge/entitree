@@ -17,7 +17,7 @@ export default function addImages(
       //catch undefined value
       if (image.value) {
         entity.thumbnails?.push({
-          url: getCommonsUrlByFile(image.value, THUMB_SIZE),
+          url: getCommonsUrlByFile(image.value, THUMB_SIZE * 2),
           alt: `${entity.label}'s Image ${
             index + 1
           } from Wikimedia Commons\nPlease refer to https://commons.wikimedia.org/wiki/File:${
