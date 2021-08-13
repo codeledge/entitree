@@ -12,12 +12,15 @@ import ReactGA from "react-ga";
 import { ThemeProvider } from "styled-components";
 import { useCurrentTheme } from "hooks/useCurrentTheme";
 import usePageView from "hooks/usePageView";
+import useReadQuery from "../hooks/useReadQuery";
 
 ReactGA.initialize("UA-171207101-1");
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const currentTheme = useCurrentTheme();
   usePageView();
+  useReadQuery();
+
   return (
     <>
       <Head>
