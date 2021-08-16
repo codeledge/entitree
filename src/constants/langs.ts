@@ -454,7 +454,7 @@ export const DEFAULT_LANG_CODE = "en";
 
 export const DEFAULT_LANG = LANGS.find(
   (lang) => lang.code === DEFAULT_LANG_CODE,
-);
+)!;
 
 //TODO This could match all supported langs, so changing lang doesn't need a reload
 export const DEFAULT_LANGS_CODES: LangCode[] = [

@@ -23,7 +23,9 @@ export default async function getItemProps(id: string, langCode: LangCode) {
           ?prop wikibase:directClaim ?p.
           MINUS { ?parent rdf:type ?pt. }
         }
-        SERVICE wikibase:label { bd:serviceParam wikibase:language "${langCode}, ${DEFAULT_LANG.code}". }
+        SERVICE wikibase:label { bd:serviceParam wikibase:language "${langCode}, ${
+        DEFAULT_LANG!.code
+      }". }
       }`.trim();
 
       const url = wdk.sparqlQuery(query);

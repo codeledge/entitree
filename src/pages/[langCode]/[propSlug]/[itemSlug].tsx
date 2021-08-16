@@ -36,9 +36,7 @@ const TreePage = ({
   twitterImage,
   twitterTitle,
 }) => {
-  const { currentEntity, loadingEntity, currentProp } = useAppSelector(
-    ({ tree }) => tree,
-  );
+  const { loadingEntity } = useAppSelector(({ tree }) => tree);
 
   if (errorCode) {
     return <Error statusCode={errorCode} />;
@@ -161,6 +159,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           : ""
       } - ${SITE_NAME}`;
 
+      //Example: Discover the family tree of Elizabeth II: queen of the UK, Canada, Australia, and New Zealand, and head of the Commonwealth of Nations, 4 children, 1 sibling, 1 spouse
       const ogDescription = `${
         currentProp
           ? `Discover the ${
