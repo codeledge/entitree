@@ -2,6 +2,7 @@ import { DefaultTheme } from "styled-components";
 
 declare module "styled-components" {
   export interface DefaultTheme {
+    code: string;
     contentLineClamp: number;
     contentPaddingLeft: number;
     contentPaddingTop: number;
@@ -42,6 +43,7 @@ declare module "styled-components" {
 }
 
 export const defaultTheme: DefaultTheme = {
+  code: "default",
   contentPaddingLeft: 3,
   contentPaddingTop: 0,
   datesDisplay: "block",
@@ -80,6 +82,7 @@ export const defaultTheme: DefaultTheme = {
 
 const bigTheme: DefaultTheme = {
   ...defaultTheme,
+  code: "big",
   name: "Big",
   datesFontSize: 9,
   labelFontSize: 16,
@@ -87,6 +90,7 @@ const bigTheme: DefaultTheme = {
 
 const lightTheme: DefaultTheme = {
   ...defaultTheme,
+  code: "light",
   name: "Light",
   labelFontSize: 16,
   nodeBackgroundColor: "rgb(250, 238, 222)",
@@ -97,12 +101,14 @@ const lightTheme: DefaultTheme = {
 
 const darkTheme: DefaultTheme = {
   ...defaultTheme,
+  code: "dark",
   name: "Dark",
   disabled: true,
 };
 
 const onlyLabelTheme: DefaultTheme = {
   ...defaultTheme,
+  code: "onlyLabel",
   datesDisplay: "none",
   datesFontSize: 14,
   datesYearOnly: true,
@@ -119,6 +125,7 @@ const onlyLabelTheme: DefaultTheme = {
 
 const verticalTheme: DefaultTheme = {
   ...defaultTheme,
+  code: "vertical",
   datesDisplay: "none",
   datesFontSize: 14,
   datesYearOnly: true,
@@ -139,6 +146,7 @@ const verticalTheme: DefaultTheme = {
 
 const mattsTheme: DefaultTheme = {
   ...defaultTheme,
+  code: "matt1",
   datesDisplay: "block",
   datesFontColor: "black",
   datesFontSize: 14,
@@ -167,6 +175,7 @@ const mattsTheme: DefaultTheme = {
 
 const mattsHorizontalTheme: DefaultTheme = {
   ...defaultTheme,
+  code: "matt2",
   datesDisplay: "block",
   datesFontColor: "black",
   datesFontSize: 14,
@@ -202,12 +211,14 @@ font-style: italic;
 
 const onlyText: DefaultTheme = {
   ...defaultTheme,
+  code: "only-text",
   name: "Only Text",
   thumbDisplay: false,
 };
 
 const rawTheme: DefaultTheme = {
   ...defaultTheme,
+  code: "borderless",
   name: "Borderless",
   contentPaddingLeft: 0,
   contentPaddingTop: 3,

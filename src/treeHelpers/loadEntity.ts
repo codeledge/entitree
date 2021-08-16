@@ -3,10 +3,10 @@ import {
   DEFAULT_PROPERTY_ALL,
   FAMILY_IDS_MAP,
   FAMILY_TREE_PROP,
-  FAMILY_TREE_TRANSLATIONS,
 } from "constants/properties";
 import { Entity, EntityProp } from "types/Entity";
 
+import { FAMILY_TREE_TRANSLATIONS } from "constants/langs";
 import { LangCode } from "types/Lang";
 import getItemProps from "wikidata/getItemProps";
 import { getRootEntity } from "lib/getEntities";

@@ -1,10 +1,6 @@
-import {
-  CHILD_ID,
-  FAMILY_IDS_MAP,
-  FAMILY_TREE_TRANSLATIONS,
-} from "constants/properties";
+import { CHILD_ID, FAMILY_IDS_MAP } from "constants/properties";
+import { DEFAULT_LANG, FAMILY_TREE_TRANSLATIONS } from "constants/langs";
 
-import { DEFAULT_LANG } from "../constants/langs";
 import { EntityProp } from "types/Entity";
 import { LangCode } from "types/Lang";
 import axios from "axios";
@@ -27,7 +23,9 @@ export default async function getItemProps(id: string, langCode: LangCode) {
           ?prop wikibase:directClaim ?p.
           MINUS { ?parent rdf:type ?pt. }
         }
-        SERVICE wikibase:label { bd:serviceParam wikibase:language "${langCode}, ${DEFAULT_LANG.code}". }
+        SERVICE wikibase:label { bd:serviceParam wikibase:language "${langCode}, ${
+        DEFAULT_LANG!.code
+      }". }
       }`.trim();
 
       const url = wdk.sparqlQuery(query);

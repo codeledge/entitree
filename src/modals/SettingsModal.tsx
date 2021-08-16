@@ -1,6 +1,9 @@
 import { Button, Collapse, Dropdown, Form, Modal } from "react-bootstrap";
-import { EXTRA_INFO_OPTIONS, RIGHT_ENTITY_OPTIONS } from "constants/properties";
-import { LANGS, SECOND_LABELS } from "constants/langs";
+import {
+  EXTRA_INFO_OPTIONS,
+  RIGHT_ENTITY_OPTIONS,
+  SECOND_LABELS,
+} from "constants/properties";
 import React, { useEffect, useState } from "react";
 import {
   setLangCode,
@@ -12,6 +15,7 @@ import styled, { useTheme } from "styled-components";
 import { CustomMenu } from "./CustomMenu";
 import CustomThemeForm from "./CustomThemeForm";
 import { CustomToggle } from "./CustomToggle";
+import { LANGS } from "constants/langs";
 import ReactGA from "react-ga";
 import { THEMES } from "constants/themes";
 import { switchLanguage } from "actions/loadActions";
@@ -78,7 +82,7 @@ export default function SettingsModal({ show, onHideModal }) {
                   active={theme.name === currentTheme.name}
                   disabled={theme.disabled}
                   onClick={() =>
-                    dispatch(setSetting({ key: "themeCode", val: theme.name }))
+                    dispatch(setSetting({ key: "themeCode", val: theme.code }))
                   }
                 >
                   {theme.name}
@@ -216,7 +220,8 @@ export default function SettingsModal({ show, onHideModal }) {
           </Dropdown.Menu>
           <Form.Text className="text-muted mt-0">
             Decide what to show on the right of each person, this applies only
-            to humans and fictional characters. Reload the page (F5) to apply settings.
+            to humans and fictional characters. Reload the page (F5) to apply
+            settings.
           </Form.Text>
         </Dropdown>
         <hr />

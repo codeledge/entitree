@@ -15,6 +15,21 @@ Language can be changed from the top right 'settings' button.
 
 ## Install
 
+For new coders:
+
+```
+sudo apt install git
+sudo apt install npm
+
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+sudo apt-get update
+sudo apt-get install yarn -y
+
+```
+
+reopen the terminal:
+
 ```
 git clone https://github.com/codeledge/entitree-next
 cd entitree-next/
