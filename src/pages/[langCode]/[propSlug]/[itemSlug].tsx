@@ -12,7 +12,7 @@ import Error from "next/error";
 import Footer from "layout/Footer";
 import Head from "next/head";
 import Header from "layout/Header";
-import { LANG_MAP } from "constants/langs";
+import { LANGS } from "constants/langs";
 import { LangCode } from "types/Lang";
 import React from "react";
 import { SITE_NAME } from "constants/meta";
@@ -22,6 +22,7 @@ import VideoPopup from "../../../layout/VideoPopup";
 import getWikipediaArticle from "wikipedia/getWikipediaArticle";
 import { isItemId } from "helpers/isItemId";
 import { loadEntity } from "treeHelpers/loadEntity";
+import pluralize from "pluralize";
 import { setLangCode } from "store/settingsSlice";
 import styled from "styled-components";
 
@@ -35,7 +36,7 @@ const TreePage = ({
   twitterImage,
   twitterTitle,
 }) => {
-  const { currentEntity, loadingEntity } = useAppSelector(({ tree }) => tree);
+  const { loadingEntity } = useAppSelector(({ tree }) => tree);
 
   if (errorCode) {
     return <Error statusCode={errorCode} />;
@@ -60,9 +61,7 @@ const TreePage = ({
         {twitterImage && (
           <meta property="twitter:image" content={twitterImage} />
         )}
-        {currentEntity?.description && (
-          <meta name="description" content={currentEntity?.description} />
-        )}
+        {ogDescription && <meta name="description" content={ogDescription} />}
       </Head>
       <Page>
         <Header />
@@ -88,7 +87,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
       itemSlug: string;
     };
 
-    if (!LANG_MAP[langCode]) return { props: { errorCode: 404 } };
+    if (!LANGS.find(({ code }) => code === langCode))
+      return { props: { errorCode: 404 } };
 
     const decodedPropSlug = decodeURIComponent(propSlug);
     const decodedItemSlug = decodeURIComponent(itemSlug);
@@ -154,8 +154,35 @@ export const getServerSideProps = wrapper.getServerSideProps(
       // );
 
       const ogTitle = `${currentEntity.label}${
-        currentProp && ` - ${currentProp.overrideLabel || currentProp.label}`
+        currentProp
+          ? ` - ${currentProp.overrideLabel || currentProp.label}`
+          : ""
       } - ${SITE_NAME}`;
+
+      //Example: Discover the family tree of Elizabeth II: queen of the UK, Canada, Australia, and New Zealand, and head of the Commonwealth of Nations, 4 children, 1 sibling, 1 spouse
+      const ogDescription = `${
+        currentProp
+          ? `Discover the ${
+              currentProp?.overrideLabel || currentProp?.label
+            } of ${currentEntity.label}: `
+          : ""
+      }${currentEntity?.description}${
+        currentEntity.downIds?.length
+          ? `, ${pluralize("child", currentEntity.downIds.length, true)}`
+          : ""
+      }${
+        currentEntity.leftIds?.length
+          ? `, ${pluralize("sibling", currentEntity.leftIds.length, true)}`
+          : ""
+      }${
+        currentEntity.spousesIds?.length
+          ? `, ${pluralize("spouse", currentEntity.spousesIds.length, true)}`
+          : ""
+      }${
+        currentEntity.partnersIds?.length
+          ? `, ${pluralize("partner", currentEntity.partnersIds.length, true)}`
+          : ""
+      }`;
 
       let ogImage = "";
       let twitterCard = "";
@@ -178,7 +205,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         twitterCard = "summary";
       }
 
-      return { props: { ogTitle, ogImage, twitterCard } };
+      return { props: { ogTitle, ogImage, twitterCard, ogDescription } };
     } catch (error) {
       console.error(error);
 

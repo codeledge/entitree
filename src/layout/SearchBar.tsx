@@ -217,7 +217,7 @@ const ThemedSearchBar = styled(Form)`
     width: 100%;
   }
   .dropdown-menu {
-    max-height: 32 * 8px + 8px !important;
+    max-height: 60vh;
     overflow-y: auto;
     .fav {
       font-weight: bold;
