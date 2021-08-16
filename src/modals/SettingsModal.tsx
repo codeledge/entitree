@@ -78,7 +78,7 @@ export default function SettingsModal({ show, onHideModal }) {
                   active={theme.name === currentTheme.name}
                   disabled={theme.disabled}
                   onClick={() =>
-                    dispatch(setSetting({ key: "themeCode", val: theme.name }))
+                    dispatch(setSetting({ key: "themeCode", val: theme.code }))
                   }
                 >
                   {theme.name}
