@@ -1,3 +1,5 @@
+import { SecondLabel } from "types/Lang";
+
 export const INSTANCE_OF_ID = "P31";
 
 export const BIRTH_DATE_ID = "P569";
@@ -44,76 +46,6 @@ export const FAMILY_IDS_MAP = {
   [SPOUSE_ID]: true,
   [FATHER_ID]: true,
   [MOTHER_ID]: true,
-};
-
-export const FAMILY_TREE_TRANSLATIONS = {
-  "zh-hans": "家族树",
-  "zh-hant": "家族樹",
-  "zh-hk": "家族樹",
-  "zh-cn": "家族树",
-  "zh-sg": "家族树",
-  "zh-tw": "家族樹",
-  pl: "Drzewo genealogiczne",
-  eu: "Zuhaitz genealogiko",
-  es: "árbol genealógico",
-  or: "ବଂଶାବଳୀ",
-  hu: "családfa",
-  ms: "Salasilah keluarga",
-  it: "albero genealogico",
-  et: "Sugupuu",
-  de: "Stammbaum",
-  id: "Bagan silsilah",
-  br: "Gwezenn-gerentiezh",
-  el: "Γενεαλογικό δέντρο",
-  sh: "Obiteljsko stablo",
-  ar: "شجرة العائلة",
-  sv: "Släktträd",
-  nl: "stamboom",
-  pt: "árvore genealógica",
-  eo: "genealogia arbo",
-  sk: "Rodokmeň",
-  ru: "генеалогическое древо",
-  tt: "Шәҗәрә",
-  en: "family tree",
-  tr: "Soy ağacı",
-  ro: "Arbore genealogic",
-  ca: "arbre genealògic",
-  fi: "Sukupuu",
-  cy: "Coeden deulu",
-  sl: "Družinsko drevo",
-  cs: "rodokmen",
-  fa: "تبارنامه",
-  hr: "Obiteljsko stablo",
-  "kk-arab": "گەنەالوگىييالىك اعاش",
-  "kk-cn": "گەنەالوگىييالىك اعاش",
-  "kk-tr": "Genealogïyalık ağaş",
-  "kk-kz": "Генеалогиялык ағаш",
-  "kk-cyrl": "Генеалогиялык ағаш",
-  "kk-latn": "Genealogïyalık ağaş",
-  da: "Efterslægtstavle",
-  ko: "가계도",
-  kk: "Генеалогиялык ағаш",
-  sah: "Төрүччү",
-  zh: "谱系图",
-  gl: "Árbore xenealóxica",
-  bn: "কুলজিনামা",
-  uk: "Генеалогічне дерево",
-  ta: "குடும்ப மரம்",
-  fr: "arbre généalogique",
-  sr: "породично стабло",
-  "sr-ec": "породично стабло",
-  "sr-el": "porodično stablo",
-  lv: "Ciltskoks",
-  sco: "faimily tree",
-  az: "Nəsil şəcərəsi",
-  ja: "系図",
-  hi: "वंशावली",
-  he: "אילן יוחסין",
-  la: "Arbor familiaris",
-  nb: "stamtre",
-  hyw: "Տոհմածառ",
-  hy: "տոհմածառ",
-  vro: "Sugupuu",
 };
 
 export const FAMILY_TREE_PROP = {
@@ -234,5 +166,20 @@ export const EXTRA_INFO_OPTIONS = [
   {
     code: "occupation",
     title: "Occupations",
+  },
+];
+
+export const SECOND_LABELS: SecondLabel[] = [
+  {
+    code: NICKNAME_ID,
+    name: "Nickname",
+  },
+  {
+    code: BIRTH_NAME_ID,
+    name: "Birth name",
+  },
+  {
+    code: NAME_IN_KANA_ID,
+    name: "Name in Kana",
   },
 ];

@@ -1,5 +1,5 @@
-import { LANGS, SECOND_LABELS } from "constants/langs";
-
+import { LANGS } from "constants/langs";
+import { SECOND_LABELS } from "constants/properties";
 import { createSelector } from "reselect";
 import { useAppSelector } from "store";
 
