@@ -41,15 +41,16 @@ export default function Graph({
         maxTop,
       } = layoutFromMap<Entity>(currentEntity.treeId!, entitiesMap, {
         clone: true,
-        differentGroupSpacing: theme.separationCousins,
+        secondDegreeSpacing: theme.separationCousins,
+        firstDegreeSpacing: theme.separationSameGroup,
         nextAfterAccessor: "spousesTreeIds",
-        nextAfterSpacing: theme.separationSameGroup,
+        nextAfterSpacing: theme.separationSiblingSpouse,
         nextBeforeAccessor: "siblingsTreeIds",
-        nextBeforeSpacing: theme.separationSameGroup,
+        nextBeforeSpacing: theme.separationSiblingSpouse,
         nodeHeight: theme.nodeHeight,
         nodeWidth: theme.nodeWidth,
         sourcesAccessor: "parentsTreeIds",
-        sourceTargetSpacing: theme.nodeVerticalSpacing,
+        sourceTargetSpacing: theme.separationVertical,
         targetsAccessor: "childrenTreeIds",
       });
 
