@@ -442,7 +442,7 @@ export default function CustomThemeForm() {
           </Form.Label>
           <Col sm={9}>
             <Form.Group controlId="separationCousins">
-              <Form.Label>Cousins Separation Factor</Form.Label>
+              <Form.Label>Cousins Separation</Form.Label>
               <InputGroup>
                 <Form.Control
                   onChange={(e) =>
@@ -474,7 +474,7 @@ export default function CustomThemeForm() {
                 </InputGroup.Append>
               </InputGroup>
               <Form.Text className="text-muted">
-                The gap between the siblings
+                The gap between siblings or parents
               </Form.Text>
             </Form.Group>
             <Form.Group controlId="separationSiblingSpouse">
@@ -485,7 +485,7 @@ export default function CustomThemeForm() {
                     setCustomProp("separationSiblingSpouse", +e.target.value)
                   }
                   type="number"
-                  value={currentCustomTheme.separationSameGroup}
+                  value={currentCustomTheme.separationSiblingSpouse}
                 />
                 <InputGroup.Append>
                   <InputGroup.Text>px</InputGroup.Text>
@@ -495,15 +495,15 @@ export default function CustomThemeForm() {
                 The gap between the sibling and the spouse of a person
               </Form.Text>
             </Form.Group>
-            <Form.Group controlId="nodeVerticalSpacing">
-              <Form.Label>Node Vertical Spacing</Form.Label>
+            <Form.Group controlId="separationVertical">
+              <Form.Label>Vertical Spacing</Form.Label>
               <InputGroup>
                 <Form.Control
                   onChange={(e) =>
-                    setCustomProp("nodeVerticalSpacing", +e.target.value)
+                    setCustomProp("separationVertical", +e.target.value)
                   }
                   type="number"
-                  value={currentCustomTheme.nodeVerticalSpacing}
+                  value={currentCustomTheme.separationVertical}
                 />
                 <InputGroup.Append>
                   <InputGroup.Text>px</InputGroup.Text>

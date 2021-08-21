@@ -26,7 +26,6 @@ declare module "styled-components" {
     nodeFlexDirection: "row" | "column";
     nodeFocusedBoxShadow: string;
     nodeHeight: number;
-    nodeVerticalSpacing: number;
     nodeWidth: number;
     relStroke: string;
     relStrokeWidth: number;
@@ -34,16 +33,18 @@ declare module "styled-components" {
     separationCousins: number;
     separationSameGroup: number;
     separationSiblingSpouse: number;
+    separationVertical: number;
     thumbBorderRadius: number;
     thumbCounterDisplay: "block" | "none";
+    thumbDisplay: boolean;
     thumbHeight: number;
     thumbWidth: number;
-    thumbDisplay: boolean;
   }
 }
 
 export const defaultTheme: DefaultTheme = {
   code: "default",
+  contentLineClamp: 4,
   contentPaddingLeft: 3,
   contentPaddingTop: 0,
   datesDisplay: "block",
@@ -55,7 +56,6 @@ export const defaultTheme: DefaultTheme = {
   labelFontColor: "",
   labelFontSize: 13,
   labelTextAlign: "left",
-  contentLineClamp: 4,
   name: "Default",
   nodeBackgroundColor: "#eee",
   nodeBorder: "1px solid lightgrey",
@@ -65,7 +65,6 @@ export const defaultTheme: DefaultTheme = {
   nodeFlexDirection: "row",
   nodeFocusedBoxShadow: "0px 0px 12px steelblue",
   nodeHeight: 90,
-  nodeVerticalSpacing: 80,
   nodeWidth: 250,
   relStroke: "#eee",
   relStrokeWidth: 14,
@@ -73,26 +72,27 @@ export const defaultTheme: DefaultTheme = {
   separationCousins: 40,
   separationSameGroup: 30,
   separationSiblingSpouse: 20,
+  separationVertical: 80,
   thumbBorderRadius: 3,
   thumbCounterDisplay: "block",
+  thumbDisplay: true,
   thumbHeight: 84,
   thumbWidth: 84,
-  thumbDisplay: true,
 };
 
 const bigTheme: DefaultTheme = {
   ...defaultTheme,
   code: "big",
-  name: "Big",
   datesFontSize: 9,
   labelFontSize: 16,
+  name: "Big",
 };
 
 const lightTheme: DefaultTheme = {
   ...defaultTheme,
   code: "light",
-  name: "Light",
   labelFontSize: 16,
+  name: "Light",
   nodeBackgroundColor: "rgb(250, 238, 222)",
   nodeWidth: 260,
   thumbHeight: 84,
@@ -102,8 +102,8 @@ const lightTheme: DefaultTheme = {
 const darkTheme: DefaultTheme = {
   ...defaultTheme,
   code: "dark",
-  name: "Dark",
   disabled: true,
+  name: "Dark",
 };
 
 const onlyLabelTheme: DefaultTheme = {
@@ -116,8 +116,8 @@ const onlyLabelTheme: DefaultTheme = {
   labelFontSize: 16,
   name: "Only Label",
   nodeHeight: 86,
-  nodeVerticalSpacing: 60,
   nodeWidth: 230,
+  separationVertical: 60,
   thumbCounterDisplay: "none",
   thumbHeight: 86,
   thumbWidth: 86,
@@ -134,11 +134,11 @@ const verticalTheme: DefaultTheme = {
   name: "Vertical",
   nodeFlexDirection: "column",
   nodeHeight: 160,
-  nodeVerticalSpacing: 60,
   nodeWidth: 84,
   separationCousins: 35,
   separationSameGroup: 45,
   separationSiblingSpouse: 25,
+  separationVertical: 60,
   thumbCounterDisplay: "none",
   thumbHeight: 84,
   thumbWidth: 84,
@@ -153,24 +153,24 @@ const mattsTheme: DefaultTheme = {
   datesYearOnly: true,
   descriptionDisplay: "none",
   graphBackgroundColor: "#eee7db",
-  labelFontSize: 14,
   labelFontColor: "black",
+  labelFontSize: 14,
   name: "Matt's theme",
+  nodeBackgroundColor: "#f16f61",
   nodeBorder: "none",
+  nodeBorderRadius: 10,
   nodeFlexDirection: "column",
   nodeHeight: 190,
-  nodeVerticalSpacing: 60,
   nodeWidth: 100,
-  nodeBorderRadius: 10,
-  nodeBackgroundColor: "#f16f61",
   relStroke: "#c2b9ac",
   separationCousins: 35,
   separationSameGroup: 65,
   separationSiblingSpouse: 35,
+  separationVertical: 60,
+  thumbBorderRadius: 10,
   thumbCounterDisplay: "none",
   thumbHeight: 100,
   thumbWidth: 100,
-  thumbBorderRadius: 10,
 };
 
 const mattsHorizontalTheme: DefaultTheme = {
@@ -182,8 +182,8 @@ const mattsHorizontalTheme: DefaultTheme = {
   datesYearOnly: true,
   descriptionDisplay: "none",
   graphBackgroundColor: "#eee7db",
-  labelFontSize: 15,
   labelFontColor: "white",
+  labelFontSize: 15,
   labelTextAlign: "center",
   name: "Matt's horizontal theme",
   nodeBorder: "none",
@@ -191,23 +191,22 @@ const mattsHorizontalTheme: DefaultTheme = {
 color:white;
 font-style: italic;
 }`,
+  nodeBackgroundColor: "#c13340",
+  nodeBorderRadius: 0,
   nodeFlexDirection: "row",
   nodeHeight: 100,
-  nodeVerticalSpacing: 60,
   nodeWidth: 200,
-  nodeBorderRadius: 0,
-  nodeBackgroundColor: "#c13340",
   relStroke: "#c13340",
   relStrokeWidth: 5,
   separationCousins: 35,
   separationSameGroup: 30,
   separationSiblingSpouse: 30,
+  separationVertical: 60,
+  thumbBorderRadius: 0,
   thumbCounterDisplay: "none",
   thumbHeight: 100,
   thumbWidth: 100,
-  thumbBorderRadius: 0,
 };
-
 
 const onlyText: DefaultTheme = {
   ...defaultTheme,
@@ -219,20 +218,20 @@ const onlyText: DefaultTheme = {
 const rawTheme: DefaultTheme = {
   ...defaultTheme,
   code: "borderless",
-  name: "Borderless",
   contentPaddingLeft: 0,
   contentPaddingTop: 3,
-  nodeCss: `.colorIcons{
-  position: absolute;
-  bottom: 0;
-  right: 30px;
-  }`,
   datesDisplay: "none",
   datesFontSize: 14,
   datesYearOnly: true,
   descriptionDisplay: "none",
   labelFontSize: 14,
   labelTextAlign: "center",
+  name: "Borderless",
+  nodeCss: `.colorIcons{
+  position: absolute;
+  bottom: 0;
+  right: 30px;
+  }`,
   nodeBackgroundColor: "white",
   nodeBorder: "none",
   nodeBorderRadius: 30,
@@ -240,11 +239,11 @@ const rawTheme: DefaultTheme = {
   nodeFlexDirection: "column",
   nodeFocusedBoxShadow: "none",
   nodeHeight: 130,
-  nodeVerticalSpacing: 60,
   nodeWidth: 84,
   separationCousins: 35,
   separationSameGroup: 45,
   separationSiblingSpouse: 25,
+  separationVertical: 60,
   thumbBorderRadius: 30,
   thumbCounterDisplay: "none",
   thumbHeight: 84,
