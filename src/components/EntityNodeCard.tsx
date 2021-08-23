@@ -89,7 +89,7 @@ export default memo(({ node }: { node: EntityNode }) => {
   }, []);
 
   useEffect(() => {
-    if (node.geniId) {
+    if (node.geniId && settings.showExternalImages) {
       getGeniProfile(node.geniId).then((geniProfile) => {
         if (geniProfile?.mugshot_urls?.thumb) {
           const geniImg = {
@@ -201,9 +201,9 @@ export default memo(({ node }: { node: EntityNode }) => {
   const onThumbClick =
     thumbnails.length > 1
       ? () =>
-          setThumbnailIndex(
-            (thumbnailIndex) => (thumbnailIndex + 1) % thumbnails.length,
-          )
+        setThumbnailIndex(
+          (thumbnailIndex) => (thumbnailIndex + 1) % thumbnails.length,
+        )
       : undefined;
 
   const hasLabelOnly =
@@ -391,10 +391,10 @@ export default memo(({ node }: { node: EntityNode }) => {
                 ? lifeSpanInYears
                 : node.lifeSpan
               : node.startEndSpan
-              ? node.startEndSpan
-              : node.inceptionAblishedSpan
-              ? node.inceptionAblishedSpan
-              : ""}
+                ? node.startEndSpan
+                : node.inceptionAblishedSpan
+                  ? node.inceptionAblishedSpan
+                  : ""}
           </div>
         </ThemedContent>
       </ThemedNodeInner>
@@ -654,24 +654,23 @@ const ThemedNodeOuter = styled.div<SettingsState & { gender?: string }>`
     width: 32px;
     z-index: 2; //needed for tooltip
   }
-  ${
-    ({ showGenderColor, gender }) =>
-      showGenderColor &&
-      gender &&
-      (gender === "female"
-        ? css`
+  ${({ showGenderColor, gender }) =>
+    showGenderColor &&
+    gender &&
+    (gender === "female"
+      ? css`
             background-color: #ffcccc;
           `
-        : gender === "male"
+      : gender === "male"
         ? css`
             background-color: #ccd9ff;
           `
         : "")
-    // gender === "thirdgender"
-    // ? css`
-    //     background-color: rgba(238, 130, 238, 0.11);
-    //   `
-    // : ""
+  // gender === "thirdgender"
+  // ? css`
+  //     background-color: rgba(238, 130, 238, 0.11);
+  //   `
+  // : ""
   }
 `;
 
@@ -776,7 +775,7 @@ const ThemedContent = styled.div<{ hasSecondLabel?: boolean }>`
     //if there is no description we can have this block and have the dots of the same color of the text
     //but only ONE can be display block
     display: ${({ theme, hasSecondLabel }) =>
-      theme.descriptionDisplay === "none" && !hasSecondLabel ? "" : "inline"};
+    theme.descriptionDisplay === "none" && !hasSecondLabel ? "" : "inline"};
   }
   .description {
     //if "block" the dots will have the same color of the text
