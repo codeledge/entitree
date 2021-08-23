@@ -77,9 +77,9 @@ export default function SettingsModal({ show, onHideModal }) {
             <Dropdown.Menu>
               {THEMES.map((theme, index) => (
                 <Dropdown.Item
-                  key={theme.name}
+                  key={theme.code}
                   eventKey={index + 1}
-                  active={theme.name === currentTheme.name}
+                  active={theme.code === currentTheme.code}
                   disabled={theme.disabled}
                   onClick={() =>
                     dispatch(setSetting({ key: "themeCode", val: theme.code }))

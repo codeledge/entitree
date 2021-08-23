@@ -36,7 +36,7 @@ const initialState: SettingsState = {
   showEyeHairColors: false,
   showFace: false,
   showGenderColor: false,
-  themeCode: defaultTheme.name,
+  themeCode: defaultTheme.code,
 };
 
 export const settingsSlice = createSlice({
@@ -50,7 +50,7 @@ export const settingsSlice = createSlice({
       state[key] = val;
     },
     setCustomTheme: (state, { payload }: PayloadAction<DefaultTheme>) => {
-      state.customThemes[payload.name] = payload;
+      state.customThemes[payload.code] = payload;
     },
     setLangCode: (state, { payload }: PayloadAction<LangCode>) => {
       state.languageCode = payload;
