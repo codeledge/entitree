@@ -41,19 +41,19 @@ export const toggleChildren = (
   options?: ToggleOptions,
 ): AppThunk => async (dispatch, getState) => {
   function collapseRecursive(node?: EntityNode) {
-    if (!node || !node.childrenTreeIds) return;
+    if (!node || !node.openChildTreeIds) return;
     dispatch(collapseChildren({ entityNode: node }));
     removeUrlBookmark(node.treeId!, CHILD_BOOKMARK_SYMBOL);
-    node.childrenTreeIds.forEach((treeId) => {
+    node.openChildTreeIds.forEach((treeId) => {
       collapseRecursive(getState().tree.entitiesMap?.[treeId]);
     });
   }
 
   dispatch(setLoadingChildren({ entityNode }));
 
-  if (entityNode.childrenTreeIds) {
+  if (entityNode.openChildTreeIds) {
     collapseRecursive(entityNode);
-  } else if (entityNode._childrenTreeIds) {
+  } else if (entityNode.closedChildTreeIds) {
     //has cached data
     dispatch(
       expandChildren({
@@ -89,8 +89,8 @@ export const preloadChildren = (entityNode: EntityNode) => async (
   getState,
 ) => {
   if (
-    entityNode._childrenTreeIds ||
-    entityNode.childrenTreeIds ||
+    entityNode.closedChildTreeIds ||
+    entityNode.openChildTreeIds ||
     !entityNode.downIds
   )
     return;
@@ -113,19 +113,19 @@ export const toggleParents = (
   options?: ToggleOptions,
 ): AppThunk => async (dispatch, getState) => {
   function collapseRecursive(node?: EntityNode) {
-    if (!node || !node.parentsTreeIds) return;
+    if (!node || !node.openParentTreeIds) return;
     dispatch(collapseParents({ entityNode: node }));
     removeUrlBookmark(node.treeId!, PARENT_BOOKMARK_SYMBOL);
-    node.parentsTreeIds.forEach((parentTreeId) => {
+    node.openParentTreeIds.forEach((parentTreeId) => {
       collapseRecursive(getState().tree.entitiesMap?.[parentTreeId]);
     });
   }
 
   dispatch(setLoadingParents({ entityNode }));
 
-  if (entityNode.parentsTreeIds) {
+  if (entityNode.openParentTreeIds) {
     collapseRecursive(entityNode);
-  } else if (entityNode._parentsTreeIds) {
+  } else if (entityNode.closedParentTreeIds) {
     //has cached data
     dispatch(
       expandParents({
@@ -161,8 +161,8 @@ export const preloadParents = (entityNode: EntityNode) => async (
 ) => {
   // do not start preload if there are nodes loaded
   if (
-    entityNode._parentsTreeIds ||
-    entityNode.parentsTreeIds ||
+    entityNode.closedParentTreeIds ||
+    entityNode.openParentTreeIds ||
     !entityNode.upIds
   )
     return;
@@ -185,10 +185,10 @@ export const toggleSiblings = (
 ): AppThunk => async (dispatch, getState) => {
   dispatch(setLoadingSiblings({ entityNode }));
 
-  if (entityNode.siblingsTreeIds) {
+  if (entityNode.openSiblingTreeIds) {
     dispatch(collapseSiblings({ entityNode }));
     removeUrlBookmark(entityNode.treeId!, SIBLING_BOOKMARK_SYMBOL);
-  } else if (entityNode._siblingsTreeIds) {
+  } else if (entityNode.closedSiblingTreeIds) {
     dispatch(
       expandSiblings({
         entityNode,
@@ -224,8 +224,8 @@ export const preloadSiblings = (entityNode: EntityNode) => async (
 ) => {
   // do not start preload if there are nodes loaded
   if (
-    entityNode._siblingsTreeIds ||
-    entityNode.siblingsTreeIds ||
+    entityNode.closedSiblingTreeIds ||
+    entityNode.openSiblingTreeIds ||
     !entityNode.leftIds
   )
     return;
@@ -242,10 +242,10 @@ export const toggleSpouses = (
 ): AppThunk => async (dispatch, getState) => {
   dispatch(setLoadingSpouses({ entityNode }));
 
-  if (entityNode.spousesTreeIds) {
+  if (entityNode.openSpouseTreeIds) {
     dispatch(collapseSpouses({ entityNode }));
     removeUrlBookmark(entityNode.treeId!, SPOUSE_BOOKMARK_SYMBOL);
-  } else if (entityNode._spousesTreeIds) {
+  } else if (entityNode.closedSpouseTreeIds) {
     //has cached data
     dispatch(
       expandSpouses({
@@ -297,8 +297,8 @@ export const preloadSpouses = (entityNode: EntityNode) => async (
 ) => {
   // do not start preload if there are nodes loaded
   if (
-    entityNode._spousesTreeIds ||
-    entityNode.spousesTreeIds ||
+    entityNode.closedSpouseTreeIds ||
+    entityNode.openSpouseTreeIds ||
     !entityNode.rightIds
   )
     return;

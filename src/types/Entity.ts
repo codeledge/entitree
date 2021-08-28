@@ -37,10 +37,6 @@ export interface WikiEntity {
 }
 
 export interface Entity extends WikiEntity {
-  _childrenTreeIds?: string[];
-  _parentsTreeIds?: string[];
-  _siblingsTreeIds?: string[];
-  _spousesTreeIds?: string[];
   abolishedDate?: string;
   birthDate?: string;
   birthISO?: string;
@@ -48,7 +44,10 @@ export interface Entity extends WikiEntity {
   birthPlaceId?: string;
   birthYear?: string;
   childrenCount?: number;
-  childrenTreeIds?: string[];
+  closedChildTreeIds?: string[];
+  closedParentTreeIds?: string[];
+  closedSiblingTreeIds?: string[];
+  closedSpouseTreeIds?: string[];
   countryOfCitizenship?: Country;
   deathDate?: string;
   deathPlaceId?: string;
@@ -81,16 +80,17 @@ export interface Entity extends WikiEntity {
   nameInKana?: string;
   nickName?: string;
   occupations?: SparqlEmoji[];
-  parentsTreeIds?: string[];
+  openChildTreeIds?: string[];
+  openParentTreeIds?: string[];
+  openSiblingTreeIds?: string[];
+  openSpouseTreeIds?: string[];
+  partnersIds?: string[];
   peoplepillImageUrl?: string;
   peoplepillSlug?: string;
   religion?: SparqlEmoji;
   rightIds?: string[];
-  siblingsTreeIds?: string[];
-  spousesIds?: string[];
-  partnersIds?: string[];
   simpleClaims?: SimpleClaims; //TODO not available on client
-  spousesTreeIds?: string[];
+  spousesIds?: string[];
   startDate?: string;
   startEndSpan?: string;
   thumbnails?: Image[];

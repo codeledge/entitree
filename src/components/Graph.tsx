@@ -43,15 +43,15 @@ export default function Graph({
         clone: true,
         secondDegreeSpacing: theme.separationCousins,
         firstDegreeSpacing: theme.separationSameGroup,
-        nextAfterAccessor: "spousesTreeIds",
+        nextAfterAccessor: "openSpouseTreeIds",
         nextAfterSpacing: theme.separationSiblingSpouse,
-        nextBeforeAccessor: "siblingsTreeIds",
+        nextBeforeAccessor: "openSiblingTreeIds",
         nextBeforeSpacing: theme.separationSiblingSpouse,
         nodeHeight: theme.nodeHeight,
         nodeWidth: theme.nodeWidth,
-        sourcesAccessor: "parentsTreeIds",
+        sourcesAccessor: "openParentTreeIds",
         sourceTargetSpacing: theme.separationVertical,
-        targetsAccessor: "childrenTreeIds",
+        targetsAccessor: "openChildTreeIds",
       });
 
       //console.log({ nodes, rels, maxRight, maxLeft, maxBottom, maxTop });
