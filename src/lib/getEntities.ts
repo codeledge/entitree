@@ -96,7 +96,7 @@ export const getChildEntities = async (
     node.treeId = `${entityNode.treeId}${CHILD_BOOKMARK_SYMBOL}${index}`;
   });
 
-  if (options?.currentPropId === CHILD_ID) {
+  if (options?.currentPropId === CHILD_ID && !options?.downIdsAlreadySorted) {
     sortByBirthDate(children);
   }
 

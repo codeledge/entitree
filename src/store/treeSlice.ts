@@ -100,9 +100,9 @@ export const treeSlice = createSlice({
       { payload: { entityNode } }: PayloadAction<{ entityNode: EntityNode }>,
     ) => {
       const mapEntity = state.entitiesMap?.[entityNode.treeId!];
-      if (!mapEntity || !mapEntity.childrenTreeIds) return;
-      mapEntity._childrenTreeIds = [...mapEntity.childrenTreeIds];
-      mapEntity.childrenTreeIds = undefined;
+      if (!mapEntity || !mapEntity.openChildTreeIds) return;
+      mapEntity.closedChildTreeIds = [...mapEntity.openChildTreeIds];
+      mapEntity.openChildTreeIds = undefined;
       mapEntity.loadingChildren = false;
 
       state.fit = {
@@ -128,18 +128,18 @@ export const treeSlice = createSlice({
           children.forEach((child) => {
             if (state.entitiesMap) state.entitiesMap[child.treeId!] = child;
           });
-          mapNode.childrenTreeIds = children.map((child) => child.treeId!);
+          mapNode.openChildTreeIds = children.map((child) => child.treeId!);
         } else {
-          mapNode.childrenTreeIds = mapNode._childrenTreeIds;
+          mapNode.openChildTreeIds = mapNode.closedChildTreeIds;
         }
         mapNode.loadingChildren = false;
 
         if (options?.followNavigation !== false)
           state.fit = {
-            leftEntityTreeId: mapNode.childrenTreeIds![0],
-            rightEntityTreeId: last(mapNode.childrenTreeIds!),
+            leftEntityTreeId: mapNode.openChildTreeIds![0],
+            rightEntityTreeId: last(mapNode.openChildTreeIds!),
             topEntityTreeId: entityNode.treeId,
-            bottomEntityTreeId: mapNode.childrenTreeIds![0],
+            bottomEntityTreeId: mapNode.openChildTreeIds![0],
           };
       }
     },
@@ -158,7 +158,7 @@ export const treeSlice = createSlice({
           children.forEach((child) => {
             if (state.entitiesMap) state.entitiesMap[child.treeId!] = child;
           });
-          mapNode._childrenTreeIds = children.map((child) => child.treeId!);
+          mapNode.closedChildTreeIds = children.map((child) => child.treeId!);
         }
       }
     },
@@ -174,10 +174,10 @@ export const treeSlice = createSlice({
       { payload: { entityNode } }: PayloadAction<{ entityNode: EntityNode }>,
     ) => {
       const mapEntity = state.entitiesMap?.[entityNode.treeId!];
-      if (!mapEntity || !mapEntity.parentsTreeIds) return;
+      if (!mapEntity || !mapEntity.openParentTreeIds) return;
 
-      mapEntity._parentsTreeIds = [...mapEntity.parentsTreeIds];
-      mapEntity.parentsTreeIds = undefined;
+      mapEntity.closedParentTreeIds = [...mapEntity.openParentTreeIds];
+      mapEntity.openParentTreeIds = undefined;
       mapEntity.loadingParents = false;
 
       state.fit = {
@@ -204,17 +204,17 @@ export const treeSlice = createSlice({
           parents.forEach((parent) => {
             if (state.entitiesMap) state.entitiesMap[parent.treeId!] = parent;
           });
-          mapNode.parentsTreeIds = parents.map((child) => child.treeId!);
+          mapNode.openParentTreeIds = parents.map((child) => child.treeId!);
         } else {
-          mapNode.parentsTreeIds = mapNode._parentsTreeIds;
+          mapNode.openParentTreeIds = mapNode.closedParentTreeIds;
         }
         mapNode.loadingParents = false;
 
         if (options?.followNavigation !== false)
           state.fit = {
-            leftEntityTreeId: mapNode.parentsTreeIds![0],
-            rightEntityTreeId: last(mapNode.parentsTreeIds!),
-            topEntityTreeId: mapNode.parentsTreeIds![0],
+            leftEntityTreeId: mapNode.openParentTreeIds![0],
+            rightEntityTreeId: last(mapNode.openParentTreeIds!),
+            topEntityTreeId: mapNode.openParentTreeIds![0],
             bottomEntityTreeId: entityNode.treeId,
           };
       }
@@ -234,7 +234,7 @@ export const treeSlice = createSlice({
           parents.forEach((parent) => {
             if (state.entitiesMap) state.entitiesMap[parent.treeId!] = parent;
           });
-          mapNode._parentsTreeIds = parents.map((parent) => parent.treeId!);
+          mapNode.closedParentTreeIds = parents.map((parent) => parent.treeId!);
         }
       }
     },
@@ -251,8 +251,8 @@ export const treeSlice = createSlice({
     ) => {
       const mapNode = state.entitiesMap?.[entityNode.treeId!];
       if (mapNode) {
-        mapNode._siblingsTreeIds = mapNode.siblingsTreeIds;
-        mapNode.siblingsTreeIds = undefined;
+        mapNode.closedSiblingTreeIds = mapNode.openSiblingTreeIds;
+        mapNode.openSiblingTreeIds = undefined;
         mapNode.loadingSiblings = false;
 
         state.fit = {
@@ -280,17 +280,17 @@ export const treeSlice = createSlice({
           siblings.forEach((sibling) => {
             if (state.entitiesMap) state.entitiesMap[sibling.treeId!] = sibling;
           });
-          mapNode.siblingsTreeIds = siblings.map((child) => child.treeId!);
+          mapNode.openSiblingTreeIds = siblings.map((child) => child.treeId!);
         } else {
-          mapNode.siblingsTreeIds = mapNode._siblingsTreeIds;
+          mapNode.openSiblingTreeIds = mapNode.closedSiblingTreeIds;
         }
         mapNode.loadingSiblings = false;
 
         if (options?.followNavigation !== false)
           state.fit = {
-            leftEntityTreeId: mapNode.siblingsTreeIds![0],
-            rightEntityTreeId: last(mapNode.siblingsTreeIds!),
-            topEntityTreeId: mapNode.siblingsTreeIds![0],
+            leftEntityTreeId: mapNode.openSiblingTreeIds![0],
+            rightEntityTreeId: last(mapNode.openSiblingTreeIds!),
+            topEntityTreeId: mapNode.openSiblingTreeIds![0],
             bottomEntityTreeId: entityNode.treeId,
           };
       }
@@ -310,7 +310,9 @@ export const treeSlice = createSlice({
           siblings.forEach((sibling) => {
             if (state.entitiesMap) state.entitiesMap[sibling.treeId!] = sibling;
           });
-          mapNode._siblingsTreeIds = siblings.map((sibling) => sibling.treeId!);
+          mapNode.closedSiblingTreeIds = siblings.map(
+            (sibling) => sibling.treeId!,
+          );
         }
       }
     },
@@ -327,8 +329,8 @@ export const treeSlice = createSlice({
     ) => {
       const mapNode = state.entitiesMap?.[entityNode.treeId!];
       if (mapNode) {
-        mapNode._spousesTreeIds = mapNode.spousesTreeIds;
-        mapNode.spousesTreeIds = undefined;
+        mapNode.closedSpouseTreeIds = mapNode.openSpouseTreeIds;
+        mapNode.openSpouseTreeIds = undefined;
         mapNode.loadingSpouses = false;
 
         state.fit = {
@@ -356,16 +358,16 @@ export const treeSlice = createSlice({
           spouses.forEach((sibling) => {
             if (state.entitiesMap) state.entitiesMap[sibling.treeId!] = sibling;
           });
-          mapNode.spousesTreeIds = spouses.map((child) => child.treeId!);
+          mapNode.openSpouseTreeIds = spouses.map((child) => child.treeId!);
         } else {
-          mapNode.spousesTreeIds = mapNode._spousesTreeIds;
+          mapNode.openSpouseTreeIds = mapNode.closedSpouseTreeIds;
         }
         mapNode.loadingSpouses = false;
 
         if (options?.followNavigation !== false)
           state.fit = {
-            leftEntityTreeId: mapNode.spousesTreeIds![0],
-            rightEntityTreeId: last(mapNode.spousesTreeIds!),
+            leftEntityTreeId: mapNode.openSpouseTreeIds![0],
+            rightEntityTreeId: last(mapNode.openSpouseTreeIds!),
             topEntityTreeId: entityNode.treeId,
             bottomEntityTreeId: entityNode.treeId,
           };
@@ -386,7 +388,7 @@ export const treeSlice = createSlice({
           spouses.forEach((spouse) => {
             if (state.entitiesMap) state.entitiesMap[spouse.treeId!] = spouse;
           });
-          mapNode._spousesTreeIds = spouses.map((spouse) => spouse.treeId!);
+          mapNode.closedSpouseTreeIds = spouses.map((spouse) => spouse.treeId!);
         }
       }
     },

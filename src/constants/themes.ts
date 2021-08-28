@@ -71,7 +71,7 @@ export const defaultTheme: DefaultTheme = {
   searchBarHeight: 58,
   separationCousins: 40,
   separationSameGroup: 30,
-  separationSiblingSpouse: 20,
+  separationSiblingSpouse: 25,
   separationVertical: 80,
   thumbBorderRadius: 3,
   thumbCounterDisplay: "block",

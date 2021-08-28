@@ -201,9 +201,9 @@ export default memo(({ node }: { node: EntityNode }) => {
   const onThumbClick =
     thumbnails.length > 1
       ? () =>
-        setThumbnailIndex(
-          (thumbnailIndex) => (thumbnailIndex + 1) % thumbnails.length,
-        )
+          setThumbnailIndex(
+            (thumbnailIndex) => (thumbnailIndex + 1) % thumbnails.length,
+          )
       : undefined;
 
   const hasLabelOnly =
@@ -391,10 +391,10 @@ export default memo(({ node }: { node: EntityNode }) => {
                 ? lifeSpanInYears
                 : node.lifeSpan
               : node.startEndSpan
-                ? node.startEndSpan
-                : node.inceptionAblishedSpan
-                  ? node.inceptionAblishedSpan
-                  : ""}
+              ? node.startEndSpan
+              : node.inceptionAblishedSpan
+              ? node.inceptionAblishedSpan
+              : ""}
           </div>
         </ThemedContent>
       </ThemedNodeInner>
@@ -456,12 +456,16 @@ export default memo(({ node }: { node: EntityNode }) => {
               disabled={node.loadingSiblings}
               onClick={() => dispatch(toggleSiblings(node))}
               title={
-                (node.siblingsTreeIds ? "Collapse" : "Expand") + " siblings"
+                (node.openSiblingTreeIds ? "Collapse" : "Expand") + " siblings"
               }
             >
               <div className="value">{node.leftIds.length}</div>
               <div className="chevron mt-1 mb-1">
-                {node.siblingsTreeIds ? <FiChevronRight /> : <FiChevronLeft />}
+                {node.openSiblingTreeIds ? (
+                  <FiChevronRight />
+                ) : (
+                  <FiChevronLeft />
+                )}
               </div>
               <div className="icon">
                 <RiGroupLine />
@@ -475,13 +479,17 @@ export default memo(({ node }: { node: EntityNode }) => {
               disabled={node.loadingSpouses}
               onClick={() => dispatch(toggleSpouses(node))}
               title={
-                (node.spousesTreeIds ? "Collapse" : "Expand") +
+                (node.openSpouseTreeIds ? "Collapse" : "Expand") +
                 " spouses/partners"
               }
             >
               <div className="value">{filteredRightIds.length}</div>
               <div className="chevron mt-1 mb-1">
-                {node.spousesTreeIds ? <FiChevronLeft /> : <FiChevronRight />}
+                {node.openSpouseTreeIds ? (
+                  <FiChevronLeft />
+                ) : (
+                  <FiChevronRight />
+                )}
               </div>
               <div className="icon">
                 <GiBigDiamondRing />
@@ -497,7 +505,7 @@ export default memo(({ node }: { node: EntityNode }) => {
             >
               <span className="value mr-1">{node.upIds.length}</span>
               <span className="chevron">
-                {node.parentsTreeIds ? <FiChevronDown /> : <FiChevronUp />}
+                {node.openParentTreeIds ? <FiChevronDown /> : <FiChevronUp />}
               </span>
               {currentProp?.id === CHILD_ID && (
                 <span className="icon ml-1">
@@ -515,7 +523,7 @@ export default memo(({ node }: { node: EntityNode }) => {
             >
               <span className="value mr-1">{node.childrenCount}</span>
               <span className="chevron">
-                {node.childrenTreeIds ? <FiChevronUp /> : <FiChevronDown />}
+                {node.openChildTreeIds ? <FiChevronUp /> : <FiChevronDown />}
               </span>
               {currentProp?.id === CHILD_ID && (
                 <span className="icon ml-1">
@@ -654,23 +662,24 @@ const ThemedNodeOuter = styled.div<SettingsState & { gender?: string }>`
     width: 32px;
     z-index: 2; //needed for tooltip
   }
-  ${({ showGenderColor, gender }) =>
-    showGenderColor &&
-    gender &&
-    (gender === "female"
-      ? css`
+  ${
+    ({ showGenderColor, gender }) =>
+      showGenderColor &&
+      gender &&
+      (gender === "female"
+        ? css`
             background-color: #ffcccc;
           `
-      : gender === "male"
+        : gender === "male"
         ? css`
             background-color: #ccd9ff;
           `
         : "")
-  // gender === "thirdgender"
-  // ? css`
-  //     background-color: rgba(238, 130, 238, 0.11);
-  //   `
-  // : ""
+    // gender === "thirdgender"
+    // ? css`
+    //     background-color: rgba(238, 130, 238, 0.11);
+    //   `
+    // : ""
   }
 `;
 
@@ -775,7 +784,7 @@ const ThemedContent = styled.div<{ hasSecondLabel?: boolean }>`
     //if there is no description we can have this block and have the dots of the same color of the text
     //but only ONE can be display block
     display: ${({ theme, hasSecondLabel }) =>
-    theme.descriptionDisplay === "none" && !hasSecondLabel ? "" : "inline"};
+      theme.descriptionDisplay === "none" && !hasSecondLabel ? "" : "inline"};
   }
   .description {
     //if "block" the dots will have the same color of the text
