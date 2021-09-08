@@ -528,7 +528,7 @@ export default function CustomThemeForm() {
                 onChange={(e) =>
                   setCustomProp("graphBackgroundColor", e.target.value)
                 }
-                type="text"
+                type="color"
                 value={currentCustomTheme.graphBackgroundColor}
               />
               <Form.Text className="text-muted">
@@ -541,7 +541,7 @@ export default function CustomThemeForm() {
                 onChange={(e) =>
                   setCustomProp("nodeBackgroundColor", e.target.value)
                 }
-                type="text"
+                type="color"
                 value={currentCustomTheme.nodeBackgroundColor}
               />
               <Form.Text className="text-muted">
@@ -555,7 +555,7 @@ export default function CustomThemeForm() {
                   onChange={(e) =>
                     setCustomProp("labelFontColor", e.target.value)
                   }
-                  type="text"
+                  type="color"
                   value={currentCustomTheme.labelFontColor}
                 />
               </InputGroup>
