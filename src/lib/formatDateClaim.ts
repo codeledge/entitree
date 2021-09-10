@@ -67,7 +67,7 @@ function parseDate(
   const { year } = parsedDate;
   let eraSuffix = ""; // moment has only BC
   if (year <= 0) {
-    parsedDate.plus({ year: 1 }); // adjust year formatting for BCE
+    parsedDate.plus({ years: 1 }); // adjust year formatting for BCE
     eraSuffix = " BCE";
   }
   if (yearOnly && precision > 9) {

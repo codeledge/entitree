@@ -105,7 +105,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         } = await getWikipediaArticle(decodedItemSlug, langCode);
         if (wikibase_item) itemId = wikibase_item;
         if (thumbnail) itemThumbnail = thumbnail.source;
-      } catch (error) {
+      } catch (error: any) {
         console.error(error);
         return { props: { errorCode: error.response?.status || 500 } };
       }
@@ -206,7 +206,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
       }
 
       return { props: { ogTitle, ogImage, twitterCard, ogDescription } };
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
 
       return { props: { errorCode: error.response?.status || 500 } };
