@@ -9,7 +9,6 @@ import {
   persistReducer,
   persistStore,
 } from "redux-persist";
-import { MakeStore, createWrapper } from "next-redux-wrapper";
 import {
   ThunkAction,
   configureStore,
@@ -18,6 +17,7 @@ import {
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 import alertReducer from "./alertSlice";
+import { createWrapper } from "next-redux-wrapper";
 import settingsReducer from "./settingsSlice";
 import storage from "redux-persist/lib/storage";
 import treeReducer from "./treeSlice";
@@ -47,7 +47,7 @@ const store = configureStore({
   }),
 });
 
-const makeStore: MakeStore = () => store;
+const makeStore = () => store;
 
 export const persistor = persistStore(store);
 

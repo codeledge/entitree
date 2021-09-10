@@ -97,19 +97,19 @@ export const treeSlice = createSlice({
     },
     collapseChildren: (
       state,
-      { payload: { entityNode } }: PayloadAction<{ entityNode: EntityNode }>,
+      { payload: { entity } }: PayloadAction<{ entity: Entity }>,
     ) => {
-      const mapEntity = state.entitiesMap?.[entityNode.treeId!];
+      const mapEntity = state.entitiesMap?.[entity.treeId!];
       if (!mapEntity || !mapEntity.openChildTreeIds) return;
       mapEntity.closedChildTreeIds = [...mapEntity.openChildTreeIds];
       mapEntity.openChildTreeIds = undefined;
       mapEntity.loadingChildren = false;
 
       state.fit = {
-        leftEntityTreeId: entityNode.treeId,
-        rightEntityTreeId: entityNode.treeId,
-        topEntityTreeId: entityNode.treeId,
-        bottomEntityTreeId: entityNode.treeId,
+        leftEntityTreeId: entity.treeId,
+        rightEntityTreeId: entity.treeId,
+        topEntityTreeId: entity.treeId,
+        bottomEntityTreeId: entity.treeId,
       };
     },
     expandChildren: (
@@ -171,9 +171,9 @@ export const treeSlice = createSlice({
     },
     collapseParents: (
       state,
-      { payload: { entityNode } }: PayloadAction<{ entityNode: EntityNode }>,
+      { payload: { entity } }: PayloadAction<{ entity: Entity }>,
     ) => {
-      const mapEntity = state.entitiesMap?.[entityNode.treeId!];
+      const mapEntity = state.entitiesMap?.[entity.treeId!];
       if (!mapEntity || !mapEntity.openParentTreeIds) return;
 
       mapEntity.closedParentTreeIds = [...mapEntity.openParentTreeIds];
@@ -181,10 +181,10 @@ export const treeSlice = createSlice({
       mapEntity.loadingParents = false;
 
       state.fit = {
-        leftEntityTreeId: entityNode.treeId,
-        rightEntityTreeId: entityNode.treeId,
-        topEntityTreeId: entityNode.treeId,
-        bottomEntityTreeId: entityNode.treeId,
+        leftEntityTreeId: entity.treeId,
+        rightEntityTreeId: entity.treeId,
+        topEntityTreeId: entity.treeId,
+        bottomEntityTreeId: entity.treeId,
       };
     },
     expandParents: (

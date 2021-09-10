@@ -31,6 +31,7 @@ import {
 } from "lib/getEntities";
 
 import { AppThunk } from "store";
+import { Entity } from "types/Entity";
 import { EntityNode } from "types/EntityNode";
 import { ToggleOptions } from "../types/ToggleOptions";
 import { addUrlBookmark } from "treeHelpers/addUrlBookmark";
@@ -40,11 +41,11 @@ export const toggleChildren = (
   entityNode: EntityNode,
   options?: ToggleOptions,
 ): AppThunk => async (dispatch, getState) => {
-  function collapseRecursive(node?: EntityNode) {
-    if (!node || !node.openChildTreeIds) return;
-    dispatch(collapseChildren({ entityNode: node }));
-    removeUrlBookmark(node.treeId!, CHILD_BOOKMARK_SYMBOL);
-    node.openChildTreeIds.forEach((treeId) => {
+  function collapseRecursive(entity?: Entity) {
+    if (!entity || !entity.openChildTreeIds) return;
+    dispatch(collapseChildren({ entity }));
+    removeUrlBookmark(entity.treeId!, CHILD_BOOKMARK_SYMBOL);
+    entity.openChildTreeIds.forEach((treeId) => {
       collapseRecursive(getState().tree.entitiesMap?.[treeId]);
     });
   }
@@ -112,11 +113,11 @@ export const toggleParents = (
   entityNode: EntityNode,
   options?: ToggleOptions,
 ): AppThunk => async (dispatch, getState) => {
-  function collapseRecursive(node?: EntityNode) {
-    if (!node || !node.openParentTreeIds) return;
-    dispatch(collapseParents({ entityNode: node }));
-    removeUrlBookmark(node.treeId!, PARENT_BOOKMARK_SYMBOL);
-    node.openParentTreeIds.forEach((parentTreeId) => {
+  function collapseRecursive(entity?: Entity) {
+    if (!entity || !entity.openParentTreeIds) return;
+    dispatch(collapseParents({ entity }));
+    removeUrlBookmark(entity.treeId!, PARENT_BOOKMARK_SYMBOL);
+    entity.openParentTreeIds.forEach((parentTreeId) => {
       collapseRecursive(getState().tree.entitiesMap?.[parentTreeId]);
     });
   }

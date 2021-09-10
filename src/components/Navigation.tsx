@@ -23,30 +23,28 @@ import { SITE_NAME } from "constants/meta";
 import fitEdges from "treeHelpers/fitEdges";
 import { useAppSelector } from "store";
 
-export default memo(
-  ({
-    zoomIn,
-    zoomOut,
-    resetTransform,
-    setTransform,
-    drawingWidth,
-    drawingHeight,
-  }: any) => {
-    return (
-      <StyledNavigation>
-        <ZoomInButton zoomIn={zoomIn} />
-        <ZoomOutButton zoomOut={zoomOut} />
-        <CenterTreeButton resetTransform={resetTransform} />
-        <FitTreeButton
-          setTransform={setTransform}
-          drawingWidth={drawingWidth}
-          drawingHeight={drawingHeight}
-        />
-        <ShareButton />
-      </StyledNavigation>
-    );
-  },
-);
+export const Navigation = ({
+  zoomIn,
+  zoomOut,
+  resetTransform,
+  setTransform,
+  drawingWidth,
+  drawingHeight,
+}: any) => {
+  return (
+    <StyledNavigation>
+      <ZoomInButton zoomIn={zoomIn} />
+      <ZoomOutButton zoomOut={zoomOut} />
+      <CenterTreeButton resetTransform={resetTransform} />
+      <FitTreeButton
+        setTransform={setTransform}
+        drawingWidth={drawingWidth}
+        drawingHeight={drawingHeight}
+      />
+      <ShareButton />
+    </StyledNavigation>
+  );
+};
 
 const ZoomInButton = memo(({ zoomIn }: any) => {
   const zoomInWrapper = () => {
