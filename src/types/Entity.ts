@@ -105,6 +105,7 @@ export interface Entity extends WikiEntity {
 export type Image = {
   url: string;
   alt: string;
+  sourceUrl?: string;
 };
 
 export type EntityProp = {

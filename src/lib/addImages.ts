@@ -16,22 +16,18 @@ export default function addImages(
     imageClaim.forEach((image, index) => {
       //catch undefined value
       if (image.value) {
-        entity.thumbnails?.push({
+        const imageData = {
           url: getCommonsUrlByFile(image.value, THUMB_SIZE * 2),
+          sourceUrl: `https://commons.wikimedia.org/wiki/File:${image.value}`,
+          // wikimediaFilename: image.value,
           alt: `${entity.label}'s Image ${
             index + 1
           } from Wikimedia Commons\nPlease refer to https://commons.wikimedia.org/wiki/File:${
             image.value
           } for credits`,
-        });
-        entity.images?.push({
-          url: getCommonsUrlByFile(image.value, THUMB_SIZE * 2),
-          alt: `${entity.label}'s Image ${
-            index + 1
-          } from Wikimedia Commons\nPlease refer to https://commons.wikimedia.org/wiki/File:${
-            image.value
-          } for credits`,
-        });
+        };
+        entity.thumbnails?.push(imageData);
+        entity.images?.push(imageData);
       }
     });
   }

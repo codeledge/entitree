@@ -201,9 +201,9 @@ export default memo(({ node }: { node: EntityNode }) => {
   const onThumbClick =
     thumbnails.length > 1
       ? () =>
-        setThumbnailIndex(
-          (thumbnailIndex) => (thumbnailIndex + 1) % thumbnails.length,
-        )
+          setThumbnailIndex(
+            (thumbnailIndex) => (thumbnailIndex + 1) % thumbnails.length,
+          )
       : undefined;
 
   const hasLabelOnly =
@@ -272,6 +272,9 @@ export default memo(({ node }: { node: EntityNode }) => {
             className={clsx("imgWrapper", {
               hasThumbnails: thumbnails.length > 1,
             })}
+            style={{
+              overflow: "visible",
+            }}
             onClick={onThumbClick}
           >
             {(!thumbnails || !thumbnails.length) && (
@@ -289,12 +292,13 @@ export default memo(({ node }: { node: EntityNode }) => {
             )}
             {settings.showFace && faceImage ? (
               <img
-                alt={faceImage?.alt}
+                alt=""
+                className="imgDatabase"
                 src={
                   faceImage.url +
                   (settings.imageType === "head" ? "?factor=1.5" : "")
                 }
-                title={faceImage.alt}
+                title={faceImage?.title}
               />
             ) : (
               <>
@@ -391,10 +395,10 @@ export default memo(({ node }: { node: EntityNode }) => {
                 ? lifeSpanInYears
                 : node.lifeSpan
               : node.startEndSpan
-                ? node.startEndSpan
-                : node.inceptionAblishedSpan
-                  ? node.inceptionAblishedSpan
-                  : ""}
+              ? node.startEndSpan
+              : node.inceptionAblishedSpan
+              ? node.inceptionAblishedSpan
+              : ""}
           </div>
         </ThemedContent>
       </ThemedNodeInner>
@@ -654,23 +658,24 @@ const ThemedNodeOuter = styled.div<SettingsState & { gender?: string }>`
     width: 32px;
     z-index: 2; //needed for tooltip
   }
-  ${({ showGenderColor, gender }) =>
-    showGenderColor &&
-    gender &&
-    (gender === "female"
-      ? css`
+  ${
+    ({ showGenderColor, gender }) =>
+      showGenderColor &&
+      gender &&
+      (gender === "female"
+        ? css`
             background-color: #ffcccc;
           `
-      : gender === "male"
+        : gender === "male"
         ? css`
             background-color: #ccd9ff;
           `
         : "")
-  // gender === "thirdgender"
-  // ? css`
-  //     background-color: rgba(238, 130, 238, 0.11);
-  //   `
-  // : ""
+    // gender === "thirdgender"
+    // ? css`
+    //     background-color: rgba(238, 130, 238, 0.11);
+    //   `
+    // : ""
   }
 `;
 
@@ -722,6 +727,10 @@ const ThemedThumbnail = styled.div`
     object-position: top;
     width: 100%;
     font-size: 12px; //for alt text
+  }
+  .imgDatabase {
+    transform: translateY(-26px) scale(1.5);
+    // border-bottom-left-radius: 30px;
   }
   .thumbnailCounter {
     position: absolute;
@@ -775,7 +784,7 @@ const ThemedContent = styled.div<{ hasSecondLabel?: boolean }>`
     //if there is no description we can have this block and have the dots of the same color of the text
     //but only ONE can be display block
     display: ${({ theme, hasSecondLabel }) =>
-    theme.descriptionDisplay === "none" && !hasSecondLabel ? "" : "inline"};
+      theme.descriptionDisplay === "none" && !hasSecondLabel ? "" : "inline"};
   }
   .description {
     //if "block" the dots will have the same color of the text
