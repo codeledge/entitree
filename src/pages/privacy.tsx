@@ -65,7 +65,7 @@ export default function PrivacyPolicyPage() {
 
         <ul>
           <li>
-            <h4>a)    Personal data</h4>
+            <h4>a) Personal data</h4>
             <p>
               Personal data means any information relating to an identified or
               identifiable natural person (“data subject”). An identifiable
@@ -86,7 +86,7 @@ export default function PrivacyPolicyPage() {
             </p>
           </li>
           <li>
-            <h4>c)    Processing</h4>
+            <h4>c) Processing</h4>
             <p>
               Processing is any operation or set of operations which is
               performed on personal data or on sets of personal data, whether or
@@ -98,14 +98,14 @@ export default function PrivacyPolicyPage() {
             </p>
           </li>
           <li>
-            <h4>d)    Restriction of processing</h4>
+            <h4>d) Restriction of processing</h4>
             <p>
               Restriction of processing is the marking of stored personal data
               with the aim of limiting their processing in the future.{" "}
             </p>
           </li>
           <li>
-            <h4>e)    Profiling</h4>
+            <h4>e) Profiling</h4>
             <p>
               Profiling means any form of automated processing of personal data
               consisting of the use of personal data to evaluate certain
@@ -117,7 +117,7 @@ export default function PrivacyPolicyPage() {
             </p>
           </li>
           <li>
-            <h4>f)     Pseudonymisation</h4>
+            <h4>f) Pseudonymisation</h4>
             <p>
               Pseudonymisation is the processing of personal data in such a
               manner that the personal data can no longer be attributed to a
@@ -129,9 +129,7 @@ export default function PrivacyPolicyPage() {
             </p>
           </li>
           <li>
-            <h4>
-              g)    Controller or controller responsible for the processing
-            </h4>
+            <h4>g) Controller or controller responsible for the processing</h4>
             <p>
               Controller or controller responsible for the processing is the
               natural or legal person, public authority, agency or other body
@@ -143,7 +141,7 @@ export default function PrivacyPolicyPage() {
             </p>
           </li>
           <li>
-            <h4>h)    Processor</h4>
+            <h4>h) Processor</h4>
             <p>
               Processor is a natural or legal person, public authority, agency
               or other body which processes personal data on behalf of the
@@ -151,7 +149,7 @@ export default function PrivacyPolicyPage() {
             </p>
           </li>
           <li>
-            <h4>i)      Recipient</h4>
+            <h4>i) Recipient</h4>
             <p>
               Recipient is a natural or legal person, public authority, agency
               or another body, to which the personal data are disclosed, whether
@@ -164,7 +162,7 @@ export default function PrivacyPolicyPage() {
             </p>
           </li>
           <li>
-            <h4>j)      Third party</h4>
+            <h4>j) Third party</h4>
             <p>
               Third party is a natural or legal person, public authority, agency
               or body other than the data subject, controller, processor and
@@ -173,7 +171,7 @@ export default function PrivacyPolicyPage() {
             </p>
           </li>
           <li>
-            <h4>k)    Consent</h4>
+            <h4>k) Consent</h4>
             <p>
               Consent of the data subject is any freely given, specific,
               informed and unambiguous indication of the data subject's wishes
