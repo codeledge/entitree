@@ -1,8 +1,8 @@
 import { MAX_SCALE, MIN_SCALE } from "constants/tree";
-import React, { useRef } from "react";
+import React, { memo, useRef } from "react";
 
 import Graph from "./Graph";
-import Navigation from "components/Navigation";
+import { Navigation } from "components/Navigation";
 import { TransformWrapper } from "react-zoom-pan-pinch";
 import styled from "styled-components";
 import useElementSize from "hooks/useElementSize";
@@ -33,36 +33,34 @@ export default function DrawingArea() {
   );
 }
 
-const GraphWrapper = ({
-  zoomIn,
-  zoomOut,
-  resetTransform,
-  setTransform,
-}: any) => {
-  const wrapperRef = useRef(null);
+const GraphWrapper = memo(
+  ({ zoomIn, zoomOut, resetTransform, setTransform }: any) => {
+    const wrapperRef = useRef(null);
 
-  const { width: drawingWidth, height: drawingHeight } = useElementSize(
-    wrapperRef,
-  );
+    const { width: drawingWidth, height: drawingHeight } = useElementSize(
+      wrapperRef,
+    );
 
-  return (
-    <DrawingAreaWrapper ref={wrapperRef}>
-      <Graph
-        setTransform={setTransform}
-        drawingWidth={drawingWidth}
-        drawingHeight={drawingHeight}
-      />
-      <Navigation
-        zoomIn={zoomIn}
-        zoomOut={zoomOut}
-        resetTransform={resetTransform}
-        setTransform={setTransform}
-        drawingWidth={drawingWidth}
-        drawingHeight={drawingHeight}
-      />
-    </DrawingAreaWrapper>
-  );
-};
+    return (
+      <DrawingAreaWrapper ref={wrapperRef}>
+        <Graph
+          setTransform={setTransform}
+          drawingWidth={drawingWidth}
+          drawingHeight={drawingHeight}
+        />
+        <Navigation
+          zoomIn={zoomIn}
+          zoomOut={zoomOut}
+          resetTransform={resetTransform}
+          setTransform={setTransform}
+          drawingWidth={drawingWidth}
+          drawingHeight={drawingHeight}
+        />
+      </DrawingAreaWrapper>
+    );
+  },
+  () => true, //do not update, ever, the props are always the same functions
+);
 
 const DrawingAreaWrapper = styled.div`
   position: relative;
