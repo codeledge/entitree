@@ -3,11 +3,9 @@ import serviceSuccessInterceptor from "./serviceSuccessInterceptor";
 
 export const IMAGE_SERVER_BASE_URL = "http://localhost:3010";
 
-export const missingImagesLink = (id, label, extra = {}) => {
+export const missingImagesLink = (extra = {}) => {
   const params = new URLSearchParams({
     ...extra,
-    qId: id,
-    qLabel: label,
   });
 
   return IMAGE_SERVER_BASE_URL + "/#/images/create?" + params.toString();
@@ -48,12 +46,12 @@ export const getDataprickImages = (numericId: string) => {
 
         return {
           faceImage: {
-            url: dpImg.url.transparent_head,
+            url: dpImg.url.transparent_face,
             title: descr,
             imageDb: true,
           },
           thumbnail: {
-            url: dpImg.url.transparent_head,
+            url: dpImg.url.transparent_face,
             title: descr,
             imageDb: true,
             sourceUrl:

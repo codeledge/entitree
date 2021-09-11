@@ -111,8 +111,13 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
                           className="addImagesLink"
                           target="_blank"
                           rel="noopener noreferrer"
-                          href={missingImagesLink(node.id, node.label, {
-                            sourceUrl: image.sourceUrl,
+                          href={missingImagesLink({
+                            source: JSON.stringify({
+                              wikidataEntity: node.id,
+                              wikidataLabel: node.label,
+                              sourceUrl: image.sourceUrl,
+                              downloadUrl: image.downloadUrl,
+                            }),
                           })}
                         >
                           Add

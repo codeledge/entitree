@@ -57,12 +57,13 @@ export default memo(({ node }: { node: EntityNode }) => {
   usePreload(node);
   useRootExpanded(node);
   useBookmarks(node);
-  useVideoOverlay(node);
+  // useVideoOverlay(node);
 
   const [showModal, setShowModal] = useState(false);
   const [lifeSpanInYears, setLifeSpanInYears] = useState(node.lifeSpanInYears);
   const [thumbnails, setThumbnails] = useState<Image[]>(node.thumbnails || []);
   const [images, setImages] = useState<Image[]>(node.images || []);
+  let processedImageUrls = []; //Don't ask users to import images that have already been imported
   const [faceImage, setFaceImage] = useState<Image>();
   useEffect(() => {
     getDataprickImages(node.id.substr(1)).then((imageSet) => {
@@ -78,6 +79,8 @@ export default memo(({ node }: { node: EntityNode }) => {
           if (valid) {
             const ppImage = {
               url: node.peoplepillImageUrl,
+              sourceUrl: `https://peoplepill.com/people/${node.peoplepillSlug}`,
+              downloadUrl: node.peoplepillImageUrl,
               alt: `Image from peoplepill`,
             } as Image;
             setThumbnails((thumbnails) => [ppImage, ...thumbnails]);
@@ -93,8 +96,10 @@ export default memo(({ node }: { node: EntityNode }) => {
       getGeniProfile(node.geniId).then((geniProfile) => {
         if (geniProfile?.mugshot_urls?.thumb) {
           const geniImg = {
-            url: geniProfile.mugshot_urls.thumb,
+            url: geniProfile.mugshot_urls.medium,
             alt: `Geni.com image`,
+            sourceUrl: geniProfile.profile_url,
+            downloadUrl: geniProfile.mugshot_urls.large,
           } as Image;
           setThumbnails((thumbnails) => thumbnails.concat(geniImg));
           setImages((images) => images.concat(geniImg));
@@ -272,9 +277,11 @@ export default memo(({ node }: { node: EntityNode }) => {
             className={clsx("imgWrapper", {
               hasThumbnails: thumbnails.length > 1,
             })}
-            style={{
-              overflow: "visible",
-            }}
+            style={
+              {
+                // overflow: "visible",
+              }
+            }
             onClick={onThumbClick}
           >
             {(!thumbnails || !thumbnails.length) && (
