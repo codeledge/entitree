@@ -261,7 +261,12 @@ export default memo(({ node }: { node: EntityNode }) => {
 
     return false;
   });
-
+  let thumbnailStyle = {};
+  if (settings.showFace && faceImage) {
+    thumbnailStyle = {
+      overflow: "visible",
+    };
+  }
   return (
     <ThemedNodeOuter
       style={{
@@ -277,11 +282,7 @@ export default memo(({ node }: { node: EntityNode }) => {
             className={clsx("imgWrapper", {
               hasThumbnails: thumbnails.length > 1,
             })}
-            style={
-              {
-                // overflow: "visible",
-              }
-            }
+            style={thumbnailStyle}
             onClick={onThumbClick}
           >
             {(!thumbnails || !thumbnails.length) && (
@@ -736,7 +737,7 @@ const ThemedThumbnail = styled.div`
     font-size: 12px; //for alt text
   }
   .imgDatabase {
-    transform: translateY(-26px) scale(1.5);
+    transform: translateY(-25px) scale(1.5);
     // border-bottom-left-radius: 30px;
   }
   .thumbnailCounter {

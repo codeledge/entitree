@@ -112,12 +112,10 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
                           target="_blank"
                           rel="noopener noreferrer"
                           href={missingImagesLink({
-                            source: JSON.stringify({
-                              wikidataEntity: node.id,
-                              wikidataLabel: node.label,
-                              sourceUrl: image.sourceUrl,
-                              downloadUrl: image.downloadUrl,
-                            }),
+                            wikidataEntity: node.id,
+                            wikidataLabel: node.label,
+                            sourceUrl: image.sourceUrl,
+                            downloadUrl: image.downloadUrl,
                           })}
                         >
                           Add
@@ -153,7 +151,10 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
           className="addImagesLink"
           target="_blank"
           rel="noopener noreferrer"
-          href={missingImagesLink(node.id, node.label)}
+          href={missingImagesLink({
+            wikidataEntity: node.id,
+            wikidataLabel: node.label,
+          })}
         >
           Add missing image <FiExternalLink />
         </a>
