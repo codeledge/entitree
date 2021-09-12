@@ -19,6 +19,10 @@ import {
   FiChevronUp,
 } from "react-icons/fi";
 import { GiBigDiamondRing, GiPerson } from "react-icons/gi";
+import {
+  IMAGE_SERVER_BASE_URL,
+  getDataprickImages,
+} from "services/imageService";
 import React, { memo, useEffect, useState } from "react";
 import { RiGroupLine, RiParentLine } from "react-icons/ri";
 import styled, { css, useTheme } from "styled-components";
@@ -38,7 +42,6 @@ import { MdChildCare } from "react-icons/md";
 import { SettingsState } from "store/settingsSlice";
 import addLifeSpan from "../lib/addLifeSpan";
 import clsx from "clsx";
-import { getDataprickImages } from "services/imageService";
 import getEntitiesLabel from "treeHelpers/getEntitiesLabel";
 import getFandomPageProps from "../services/fandomService";
 import getGeniProfile from "services/geniService";
@@ -99,7 +102,8 @@ export default memo(({ node }: { node: EntityNode }) => {
             url: geniProfile.mugshot_urls.medium,
             alt: `Geni.com image`,
             sourceUrl: geniProfile.profile_url,
-            downloadUrl: geniProfile.mugshot_urls.large,
+            downloadUrl:
+              geniProfile.mugshot_urls.large ?? geniProfile.mugshot_urls.medium,
           } as Image;
           setThumbnails((thumbnails) => thumbnails.concat(geniImg));
           setImages((images) => images.concat(geniImg));
@@ -738,6 +742,8 @@ const ThemedThumbnail = styled.div`
   }
   .imgDatabase {
     transform: translateY(-25px) scale(1.5);
+    -webkit-mask-image: url(${IMAGE_SERVER_BASE_URL}/api/canvas.png?size=100&b22b);
+
     // border-bottom-left-radius: 30px;
   }
   .thumbnailCounter {
