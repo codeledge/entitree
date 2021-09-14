@@ -65,7 +65,6 @@ export interface Entity extends WikiEntity {
   gender?: string;
   geniId?: string;
   hairColor?: PropColor;
-  images?: Image[];
   inceptionAblishedSpan?: string;
   inceptionDate?: string;
   isHuman?: boolean;
@@ -104,8 +103,10 @@ export interface Entity extends WikiEntity {
 
 export type Image = {
   url: string;
-  alt: string;
+  alt?: string;
   sourceUrl?: string;
+  imageDb?: boolean;
+  urlByType?: string[];
 };
 
 export type EntityProp = {

@@ -3,6 +3,12 @@ import serviceSuccessInterceptor from "./serviceSuccessInterceptor";
 
 export const IMAGE_SERVER_BASE_URL = "http://localhost:3010";
 
+export const IMAGE_SERVER_TYPES = [
+  { code: "transparent_face" },
+  { code: "transparent_head" },
+  { code: "face" },
+];
+
 export const missingImagesLink = (extra = {}) => {
   const params = new URLSearchParams({
     source: JSON.stringify(extra),
@@ -45,18 +51,11 @@ export const getDataprickImages = (numericId: string) => {
         }
 
         return {
-          faceImage: {
-            url: dpImg.url.transparent_head,
-            title: descr,
-            imageDb: true,
-          },
-          thumbnail: {
-            url: dpImg.url.transparent_face,
-            title: descr,
-            imageDb: true,
-            sourceUrl:
-              IMAGE_SERVER_BASE_URL + "/#/images/" + dpImg.id + "/show",
-          },
+          url: dpImg.url.transparent_face,
+          urlByType: dpImg.url,
+          title: descr,
+          imageDb: true,
+          sourceUrl: IMAGE_SERVER_BASE_URL + "/#/images/" + dpImg.id + "/show",
         };
       });
     })

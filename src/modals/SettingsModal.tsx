@@ -15,6 +15,7 @@ import styled, { useTheme } from "styled-components";
 import { CustomMenu } from "./CustomMenu";
 import CustomThemeForm from "./CustomThemeForm";
 import { CustomToggle } from "./CustomToggle";
+import { IMAGE_SERVER_TYPES } from "services/imageService";
 import { LANGS } from "constants/langs";
 import ReactGA from "react-ga";
 import { THEMES } from "constants/themes";
@@ -46,7 +47,7 @@ export default function SettingsModal({ show, onHideModal }) {
     showBirthName,
     hideToggleButton,
     showExternalImages,
-    showFace,
+    // showFace,
     imageType,
     followNavigation,
   } = useAppSelector(({ settings }) => settings);
@@ -370,51 +371,42 @@ export default function SettingsModal({ show, onHideModal }) {
         <Form.Group controlId="faceDisplay">
           <Form.Check
             custom
-            checked={showFace}
+            checked="true"
             className="d-inline-block"
-            onChange={(e) =>
-              dispatch(
-                setSetting({
-                  key: "showFace",
-                  val: e.target.checked,
-                }),
-              )
-            }
+            // onChange={(e) =>
+            //   dispatch(
+            //     setSetting({
+            //       key: "showFace",
+            //       val: e.target.checked,
+            //     }),
+            //   )
+            // }
             type="checkbox"
-            label="Zoom in picture"
+            label="Show image database"
           />
-          {showFace && (
+          {true && (
             <Dropdown className="imageDropdown d-inline-block ml-1">
               <Dropdown.Toggle as={CustomToggle}>
                 <span className="imageDropdownLabel">show</span> {imageType}
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                <Dropdown.Item
-                  active={imageType === "head"}
-                  onClick={() =>
-                    dispatch(
-                      setSetting({
-                        key: "imageType",
-                        val: "head",
-                      }),
-                    )
-                  }
-                >
-                  Head
-                </Dropdown.Item>
-                <Dropdown.Item
-                  active={imageType === "face"}
-                  onClick={() =>
-                    dispatch(
-                      setSetting({
-                        key: "imageType",
-                        val: "face",
-                      }),
-                    )
-                  }
-                >
-                  Face
-                </Dropdown.Item>
+                {IMAGE_SERVER_TYPES.map((imageIndex, index) => (
+                  <Dropdown.Item
+                    key={imageIndex.code}
+                    eventKey={index + 1}
+                    active={imageIndex.code === imageType}
+                    onClick={() =>
+                      dispatch(
+                        setSetting({
+                          key: "imageType",
+                          val: imageIndex.code,
+                        }),
+                      )
+                    }
+                  >
+                    {imageIndex.code}
+                  </Dropdown.Item>
+                ))}
               </Dropdown.Menu>
             </Dropdown>
           )}

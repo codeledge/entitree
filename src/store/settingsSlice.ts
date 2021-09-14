@@ -11,7 +11,7 @@ export type SettingsState = {
   extraInfo?: string;
   followNavigation: boolean;
   hideToggleButton: boolean;
-  imageType: "face" | "head";
+  imageType: "transparent_face" | "transparent_head" | "face";
   languageCode: LangCode;
   rightEntityOption: typeof RIGHT_ENTITY_OPTIONS[1];
   secondLabelCode?: Lang["code"] | SecondLabel["code"];
@@ -34,7 +34,7 @@ const initialState: SettingsState = {
   showBirthName: false,
   showExternalImages: false,
   showEyeHairColors: false,
-  showFace: false,
+  showFace: true,
   showGenderColor: false,
   themeCode: defaultTheme.code,
 };

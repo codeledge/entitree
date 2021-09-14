@@ -65,15 +65,11 @@ export default memo(({ node }: { node: EntityNode }) => {
   const [showModal, setShowModal] = useState(false);
   const [lifeSpanInYears, setLifeSpanInYears] = useState(node.lifeSpanInYears);
   const [thumbnails, setThumbnails] = useState<Image[]>(node.thumbnails || []);
-  const [images, setImages] = useState<Image[]>(node.images || []);
   let processedImageUrls = []; //Don't ask users to import images that have already been imported
-  const [faceImage, setFaceImage] = useState<Image>();
   useEffect(() => {
     getDataprickImages(node.id.substr(1)).then((imageSet) => {
-      imageSet.forEach(({ faceImage, thumbnail }) => {
-        setFaceImage(faceImage);
+      imageSet.forEach((thumbnail) => {
         setThumbnails((thumbnails) => [thumbnail, ...thumbnails]);
-        setImages((images) => [thumbnail, ...images]);
       });
     });
     if (settings.showExternalImages) {
@@ -87,7 +83,6 @@ export default memo(({ node }: { node: EntityNode }) => {
               alt: `Image from peoplepill`,
             } as Image;
             setThumbnails((thumbnails) => [ppImage, ...thumbnails]);
-            setImages((images) => [ppImage, ...images]);
           }
         });
       }
@@ -106,7 +101,6 @@ export default memo(({ node }: { node: EntityNode }) => {
               geniProfile.mugshot_urls.large ?? geniProfile.mugshot_urls.medium,
           } as Image;
           setThumbnails((thumbnails) => thumbnails.concat(geniImg));
-          setImages((images) => images.concat(geniImg));
         }
 
         //add Geni dates and country
@@ -184,7 +178,6 @@ export default memo(({ node }: { node: EntityNode }) => {
                   source: node.fandomUrl,
                 };
                 setThumbnails((thumbnails) => thumbnails.concat(fandomImage));
-                setImages((images) => images.concat(fandomImage));
               }
             }
           }
@@ -266,7 +259,10 @@ export default memo(({ node }: { node: EntityNode }) => {
     return false;
   });
   let thumbnailStyle = {};
-  if (settings.showFace && faceImage) {
+  if (
+    currentThumbnail?.imageDb === true &&
+    settings.imageType === "transparent_head"
+  ) {
     thumbnailStyle = {
       overflow: "visible",
     };
@@ -302,31 +298,27 @@ export default memo(({ node }: { node: EntityNode }) => {
                 )}
               </span>
             )}
-            {settings.showFace && faceImage ? (
-              <img
-                alt=""
-                className="imgDatabase"
-                src={
-                  faceImage.url +
-                  (settings.imageType === "head" ? "?factor=1.5" : "")
-                }
-                title={faceImage?.title}
-              />
-            ) : (
+            {currentThumbnail && (
               <>
-                {currentThumbnail && (
-                  <>
-                    <img
-                      alt={currentThumbnail.alt}
-                      src={currentThumbnail.url}
-                      title={currentThumbnail.alt}
-                    />
-                    {thumbnails.length > 1 && (
-                      <span className="thumbnailCounter">
-                        {thumbnailIndex + 1}/{thumbnails.length}
-                      </span>
-                    )}
-                  </>
+                <img
+                  alt={settings.imageType}
+                  className={
+                    currentThumbnail?.imageDb === true &&
+                    settings.imageType === "transparent_head"
+                      ? "imgDatabase"
+                      : ""
+                  }
+                  src={
+                    currentThumbnail?.imageDb
+                      ? currentThumbnail.urlByType?.[settings.imageType]
+                      : currentThumbnail.url
+                  }
+                  title={currentThumbnail.alt}
+                />
+                {thumbnails.length > 1 && (
+                  <span className="thumbnailCounter">
+                    {thumbnailIndex + 1}/{thumbnails.length}
+                  </span>
                 )}
               </>
             )}
@@ -563,7 +555,7 @@ export default memo(({ node }: { node: EntityNode }) => {
         <DetailsModal
           onHideModal={onHideModal}
           node={node}
-          nodeImages={images}
+          nodeImages={thumbnails}
         />
       )}
     </ThemedNodeOuter>
