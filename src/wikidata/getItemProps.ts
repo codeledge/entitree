@@ -4,8 +4,9 @@ import { DEFAULT_LANG, FAMILY_TREE_TRANSLATIONS } from "constants/langs";
 import { EntityProp } from "types/Entity";
 import { LangCode } from "types/Lang";
 import axios from "axios";
-import wdk from "wikidata-sdk";
+import { wikibaseInstance } from "lib/wikibaseInstance";
 
+const wdk = wikibaseInstance();
 export default async function getItemProps(id: string, langCode: LangCode) {
   const url = await new Promise<string>((resolve, reject) => {
     try {

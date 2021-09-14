@@ -32,7 +32,8 @@ import addStartEndSpan from "./addStartEndSpan";
 import addWebsite from "./addWebsite";
 import addWikidataUrl from "./addWikidataUrl";
 import addWikipediaUrl from "./addWikipediaUrl";
-import wbk from "wikidata-sdk";
+import { baseDomain } from "./wikibaseInstance";
+import wbk from "wikibase-sdk";
 
 export default function formatEntity(
   wikidataEntity: WikiEntity,
@@ -50,51 +51,52 @@ export default function formatEntity(
   addLabel(entity, languageCode);
   addDescription(entity, languageCode);
 
-  addBirthDate(entity, languageCode);
-  addDeathDate(entity, languageCode);
-  addIsInfantDeath(entity);
-  addLifeSpan(entity);
+  if (baseDomain === "www.wikidata.org") {
+    addBirthDate(entity, languageCode);
+    addDeathDate(entity, languageCode);
+    addIsInfantDeath(entity);
+    addLifeSpan(entity);
 
-  addBirthPlaceId(entity);
-  addDeathPlaceId(entity);
+    addBirthPlaceId(entity);
+    addDeathPlaceId(entity);
 
-  addStartDate(entity, languageCode);
-  addEndDate(entity, languageCode);
-  addStartEndSpan(entity);
+    addStartDate(entity, languageCode);
+    addEndDate(entity, languageCode);
+    addStartEndSpan(entity);
 
-  addInceptionDate(entity, languageCode);
-  addAbolishedDate(entity, languageCode);
-  addInceptionAbolishedSpan(entity);
+    addInceptionDate(entity, languageCode);
+    addAbolishedDate(entity, languageCode);
+    addInceptionAbolishedSpan(entity);
 
-  addWikidataUrl(entity);
-  addWikipediaUrl(entity, languageCode);
-  addExternalLinks(entity);
+    addWikidataUrl(entity);
+    addWikipediaUrl(entity, languageCode);
+    addExternalLinks(entity);
 
-  addBirthName(entity);
-  addSecondLabels(entity);
+    addBirthName(entity);
+    addSecondLabels(entity);
 
-  addWebsite(entity);
+    addWebsite(entity);
 
-  addGender(entity);
+    addGender(entity);
 
-  addIsHuman(entity);
+    addIsHuman(entity);
 
-  addImages(entity);
+    addImages(entity);
 
-  addCountryOfCitizenship(entity);
+    addCountryOfCitizenship(entity);
 
-  addReligion(entity);
+    addReligion(entity);
 
-  addOccupations(entity);
+    addOccupations(entity);
 
-  addEyeColor(entity);
-  addHairColor(entity);
+    addEyeColor(entity);
+    addHairColor(entity);
 
-  addPeoplePillImage(entity);
+    addPeoplePillImage(entity);
 
-  addFandom(entity);
+    addFandom(entity);
 
-  addGeniId(entity);
-
+    addGeniId(entity);
+  }
   return entity;
 }

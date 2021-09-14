@@ -1,6 +1,8 @@
 import { LangCode } from "types/Lang";
 import axios from "axios";
-import wdk from "wikidata-sdk";
+import { wikibaseInstance } from "lib/wikibaseInstance";
+
+const wdk = wikibaseInstance();
 
 export default async function getEntityWikipediaSlug(
   id: string,

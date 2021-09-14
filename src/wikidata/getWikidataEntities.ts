@@ -1,7 +1,8 @@
 import { WikiEntity } from "types/Entity";
 import axios from "axios";
-import wdk from "wikidata-sdk";
+import { wikibaseInstance } from "lib/wikibaseInstance";
 
+const wdk = wikibaseInstance();
 type getWikidataEntitiesProps = {
   ids: string[]; // ['Q1', 'Q2', 'Q3', ..., 'Q123']
   languages?: string[]; // ['en', 'fr', 'de']

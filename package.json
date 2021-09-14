@@ -46,6 +46,7 @@
     "reselect": "4.0.0",
     "styled-components": "5.2.3",
     "url-join": "4.0.1",
+    "wikibase-sdk": "7.13.0",
     "wikidata-sdk": "7.13.0"
   },
   "devDependencies": {
