@@ -12,6 +12,7 @@ import addDescription from "./addDescription";
 import addEndDate from "./addEndDate";
 import addExternalLinks from "./addExternalLinks";
 import addEyeColor from "./addEyeColor";
+import addFactgridUrl from "./addFactgridUrl";
 import addFandom from "./addFandom";
 import addGender from "./addGender";
 import addGeniId from "./addGeniId";
@@ -50,6 +51,9 @@ export default function formatEntity(
 
   addLabel(entity, languageCode);
   addDescription(entity, languageCode);
+  if (baseDomain === "database.factgrid.de") {
+    addFactgridUrl(entity);
+  }
 
   if (baseDomain === "www.wikidata.org") {
     addBirthDate(entity, languageCode);

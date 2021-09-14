@@ -177,6 +177,20 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
               <img src="/icons/wikidata.png" alt="Wikidata" />
             </a>
           )}
+          {node.factgridUrl && (
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Open FactGrid item in a new tab"
+              href={node.factgridUrl}
+            >
+              <img
+                src="/icons/factgrid.png"
+                style={{ width: "100px" }}
+                alt="FactGrid Link"
+              />
+            </a>
+          )}
           {node.wikipediaUrl && (
             <a
               target="_blank"
