@@ -9,7 +9,6 @@ export default function addImages(
   //theme: DefaultTheme = defaultTheme, // is gonna be hard to get theme here, e.g. on the server
 ) {
   entity.thumbnails = [];
-  entity.images = [];
 
   const imageClaim = entity.simpleClaims?.[IMAGE_ID];
   if (imageClaim) {
@@ -27,7 +26,6 @@ export default function addImages(
           } for credits`,
         };
         entity.thumbnails?.push(imageData);
-        entity.images?.push(imageData);
       }
     });
   }
@@ -53,10 +51,6 @@ export default function addImages(
       if (image.value) {
         entity.thumbnails?.push({
           url: getCommonsUrlByFile(image.value, THUMB_SIZE),
-          alt: `${entity.label}'s Logo ${index + 1} from Wikimedia Commons`,
-        });
-        entity.images?.push({
-          url: getCommonsUrlByFile(image.value, THUMB_SIZE * 2),
           alt: `${entity.label}'s Logo ${index + 1} from Wikimedia Commons`,
         });
       }
