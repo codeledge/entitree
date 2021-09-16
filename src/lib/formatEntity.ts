@@ -51,9 +51,9 @@ export default function formatEntity(
 
   addLabel(entity, languageCode);
   addDescription(entity, languageCode);
-  if (baseDomain === "database.factgrid.de") {
-    addFactgridUrl(entity);
-  }
+  // if (baseDomain === "database.factgrid.de") {
+  //   addFactgridUrl(entity);
+  // }
 
   if (baseDomain === "www.wikidata.org") {
     addBirthDate(entity, languageCode);
