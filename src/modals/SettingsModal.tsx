@@ -4,6 +4,10 @@ import {
   RIGHT_ENTITY_OPTIONS,
   SECOND_LABELS,
 } from "constants/properties";
+import {
+  IMAGE_SERVER_OVERFLOW,
+  IMAGE_SERVER_TYPES,
+} from "services/imageService";
 import React, { useEffect, useState } from "react";
 import {
   setLangCode,
@@ -46,8 +50,9 @@ export default function SettingsModal({ show, onHideModal }) {
     showBirthName,
     hideToggleButton,
     showExternalImages,
-    showFace,
+    // showFace,
     imageType,
+    imageOverflow,
     followNavigation,
   } = useAppSelector(({ settings }) => settings);
   const { currentProp, currentEntity } = useAppSelector(({ tree }) => tree);
@@ -370,56 +375,74 @@ export default function SettingsModal({ show, onHideModal }) {
         <Form.Group controlId="faceDisplay">
           <Form.Check
             custom
-            checked={showFace}
+            checked={imageType === "transparent_head"}
             className="d-inline-block"
             onChange={(e) =>
               dispatch(
                 setSetting({
-                  key: "showFace",
-                  val: e.target.checked,
+                  key: "imageType",
+                  val: e.target.checked ? "transparent_head" : "face",
                 }),
               )
             }
             type="checkbox"
-            label="Zoom in picture"
+            label="Remove image background (NEW)"
           />
-          {showFace && (
+          {/* {true && (
             <Dropdown className="imageDropdown d-inline-block ml-1">
               <Dropdown.Toggle as={CustomToggle}>
                 <span className="imageDropdownLabel">show</span> {imageType}
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                <Dropdown.Item
-                  active={imageType === "head"}
-                  onClick={() =>
-                    dispatch(
-                      setSetting({
-                        key: "imageType",
-                        val: "head",
-                      }),
-                    )
-                  }
-                >
-                  Head
-                </Dropdown.Item>
-                <Dropdown.Item
-                  active={imageType === "face"}
-                  onClick={() =>
-                    dispatch(
-                      setSetting({
-                        key: "imageType",
-                        val: "face",
-                      }),
-                    )
-                  }
-                >
-                  Face
-                </Dropdown.Item>
+                {IMAGE_SERVER_TYPES.map((imageIndex, index) => (
+                  <Dropdown.Item
+                    key={imageIndex.code}
+                    eventKey={index + 1}
+                    active={imageIndex.code === imageType}
+                    onClick={() =>
+                      dispatch(
+                        setSetting({
+                          key: "imageType",
+                          val: imageIndex.code,
+                        }),
+                      )
+                    }
+                  >
+                    {imageIndex.code}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
+          )} */}
+          {imageType === "transparent_head" && (
+            <Dropdown className="imageDropdown d-inline-block ml-1">
+              <Dropdown.Toggle as={CustomToggle}>
+                <span className="imageDropdownLabel">overflow</span>{" "}
+                {imageOverflow.label}
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                {IMAGE_SERVER_OVERFLOW.map((item, index) => (
+                  <Dropdown.Item
+                    key={item.code}
+                    eventKey={index + 1}
+                    active={item.code === imageOverflow}
+                    onClick={() =>
+                      dispatch(
+                        setSetting({
+                          key: "imageOverflow",
+                          val: item,
+                        }),
+                      )
+                    }
+                  >
+                    {item.label}
+                  </Dropdown.Item>
+                ))}
               </Dropdown.Menu>
             </Dropdown>
           )}
           <Form.Text className="text-muted pl-4">
-            Try to zoom into the person's most relevant features
+            {/* Try to zoom into the person's most relevant features */}
           </Form.Text>
         </Form.Group>
       </Modal.Body>

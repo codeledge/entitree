@@ -46,6 +46,7 @@ export type GeniProfile = {
   // big_tree: true,
   // claimed: false,
   mugshot_urls: {
+    large?: string;
     medium: string;
     small: string;
     thumb: string;

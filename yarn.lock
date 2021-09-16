@@ -6039,7 +6039,7 @@ which@^2.0.1:
   dependencies:
     isexe "^2.0.0"
 
-wikibase-sdk@^7.13.0:
+wikibase-sdk@7.13.0, wikibase-sdk@^7.13.0:
   version "7.13.0"
   resolved "https://registry.npmjs.org/wikibase-sdk/-/wikibase-sdk-7.13.0.tgz"
   integrity sha512-XVnmSmE4sYXmMQBTLzfKyxz1SvdVL2YiCfbvwObh23WBG2Dcer/HZsg6LN3l/KhUHo8g2Fse+b3PgZqJRSfRAg==

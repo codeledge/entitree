@@ -1,4 +1,4 @@
-import { Button, Modal } from "react-bootstrap";
+import { Button, Figure, Modal } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 
 import { FiExternalLink } from "react-icons/fi";
@@ -87,12 +87,43 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
           <div className="allImages">
             {images &&
               images.map((image) => (
-                <img
-                  key={image.url}
-                  alt={image.alt}
-                  src={image.url}
-                  title={image.alt}
-                />
+                <Figure>
+                  <Figure.Image
+                    key={image.url}
+                    alt={image.alt}
+                    src={image.url}
+                    title={image.alt}
+                  />
+                  <Figure.Caption>
+                    <>
+                      {image.sourceUrl && (
+                        <a
+                          className="addImagesLink"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          href={image.sourceUrl}
+                        >
+                          Source
+                        </a>
+                      )}{" "}
+                      {image.sourceUrl && !image.imageDb && (
+                        <a
+                          className="addImagesLink"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          href={missingImagesLink({
+                            wikidataEntity: node.id,
+                            wikidataLabel: node.label,
+                            sourceUrl: image.sourceUrl,
+                            downloadUrl: image.downloadUrl,
+                          })}
+                        >
+                          Add
+                        </a>
+                      )}
+                    </>
+                  </Figure.Caption>
+                </Figure>
               ))}
           </div>
         )}
@@ -120,7 +151,10 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
           className="addImagesLink"
           target="_blank"
           rel="noopener noreferrer"
-          href={missingImagesLink(node.id, node.label)}
+          href={missingImagesLink({
+            wikidataEntity: node.id,
+            wikidataLabel: node.label,
+          })}
         >
           Add missing image <FiExternalLink />
         </a>
@@ -141,6 +175,20 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
               href={node.wikidataUrl}
             >
               <img src="/icons/wikidata.png" alt="Wikidata" />
+            </a>
+          )}
+          {node.factgridUrl && (
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Open FactGrid item in a new tab"
+              href={node.factgridUrl}
+            >
+              <img
+                src="/icons/factgrid.png"
+                style={{ width: "100px" }}
+                alt="FactGrid Link"
+              />
             </a>
           )}
           {node.wikipediaUrl && (

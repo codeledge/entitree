@@ -1,15 +1,31 @@
 import axios from "axios";
 import serviceSuccessInterceptor from "./serviceSuccessInterceptor";
 
-export const IMAGE_SERVER_BASE_URL = "https://images.dataprick.com";
+export const IMAGE_SERVER_BASE_URL = "http://localhost:3010";
 
-export const missingImagesLink = (id, label) => {
+export const IMAGE_SERVER_TYPES = [
+  { code: "transparent_face" },
+  { code: "transparent_head" },
+  { code: "face" },
+];
+
+export const IMAGE_SERVER_OVERFLOW = [
+  { code: "no", label: "no" },
+  { code: "yes", label: "yes" },
+  // { code: "both_sides", image_cut: "both_sides", label: "cut sides" },
+  // {
+  //   code: "left_shoulder",
+  //   image_cut: "left_shoulder",
+  //   label: "cut left shoulder",
+  // },
+];
+
+export const missingImagesLink = (extra = {}) => {
   const params = new URLSearchParams({
-    qId: id,
-    qLabel: label,
+    source: JSON.stringify(extra),
   });
 
-  return IMAGE_SERVER_BASE_URL + "/image/single_upload?" + params.toString();
+  return IMAGE_SERVER_BASE_URL + "/#/images/create?" + params.toString();
 };
 
 export const imageServer = axios.create({
@@ -25,6 +41,7 @@ type DPImage = {
   comment?: string;
   recordedDate?: string;
   sourceUrl?: string;
+  url?: any;
 };
 
 export const getDataprickImages = (numericId: string) => {
@@ -45,16 +62,11 @@ export const getDataprickImages = (numericId: string) => {
         }
 
         return {
-          faceImage: {
-            url: `${IMAGE_SERVER_BASE_URL}/api/v1/image/facecrop/id/${dpImg.id}`,
-            alt: descr,
-            imageDb: true,
-          },
-          thumbnail: {
-            url: `${IMAGE_SERVER_BASE_URL}/api/v1/image/thumbnail/id/${dpImg.id}`,
-            alt: descr,
-            imageDb: true,
-          },
+          url: dpImg.url.transparent_face,
+          urlByType: dpImg.url,
+          title: descr,
+          imageDb: true,
+          sourceUrl: IMAGE_SERVER_BASE_URL + "/#/images/" + dpImg.id + "/show",
         };
       });
     })

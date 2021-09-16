@@ -1,8 +1,10 @@
 import axios from "axios";
+import { baseURL } from "lib/wikibaseInstance";
 import serviceSuccessInterceptor from "./serviceSuccessInterceptor";
 
 const wikidataService = axios.create({
-  baseURL: "https://www.wikidata.org",
+  //baseURL: "https://www.wikidata.org",
+  baseURL,
 });
 
 wikidataService.interceptors.response.use(serviceSuccessInterceptor);
