@@ -1,8 +1,8 @@
 import wbk from "wikibase-sdk";
 import wdk from "wikidata-sdk";
 
-export function wikibaseInstance() {
-  const instance = "wikidata";
+export function wikibaseInstance(instance = "wikidata") {
+  // const instance = "wikidata";
 
   let wikibaseInstance: any;
   if (instance === "factgrid") {

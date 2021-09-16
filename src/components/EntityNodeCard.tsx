@@ -60,12 +60,12 @@ export default memo(({ node }: { node: EntityNode }) => {
   usePreload(node);
   useRootExpanded(node);
   useBookmarks(node);
-  // useVideoOverlay(node);
+  useVideoOverlay(node);
 
   const [showModal, setShowModal] = useState(false);
   const [lifeSpanInYears, setLifeSpanInYears] = useState(node.lifeSpanInYears);
   const [thumbnails, setThumbnails] = useState<Image[]>(node.thumbnails || []);
-  let processedImageUrls = []; //Don't ask users to import images that have already been imported
+  // let processedImageUrls = []; //Don't ask users to import images that have already been imported
   useEffect(() => {
     getDataprickImages(node.id.substr(1)).then((imageSet) => {
       imageSet.forEach((thumbnail) => {
