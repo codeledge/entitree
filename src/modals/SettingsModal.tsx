@@ -4,10 +4,6 @@ import {
   RIGHT_ENTITY_OPTIONS,
   SECOND_LABELS,
 } from "constants/properties";
-import {
-  IMAGE_SERVER_OVERFLOW,
-  IMAGE_SERVER_TYPES,
-} from "services/imageService";
 import React, { useEffect, useState } from "react";
 import {
   setLangCode,
@@ -19,6 +15,7 @@ import styled, { useTheme } from "styled-components";
 import { CustomMenu } from "./CustomMenu";
 import CustomThemeForm from "./CustomThemeForm";
 import { CustomToggle } from "./CustomToggle";
+import { IMAGE_SERVER_OVERFLOW } from "services/imageService";
 import { LANGS } from "constants/langs";
 import ReactGA from "react-ga";
 import { THEMES } from "constants/themes";
@@ -418,7 +415,7 @@ export default function SettingsModal({ show, onHideModal }) {
             <Dropdown className="imageDropdown d-inline-block ml-1">
               <Dropdown.Toggle as={CustomToggle}>
                 <span className="imageDropdownLabel">overflow</span>{" "}
-                {imageOverflow.label}
+                {imageOverflow}
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 {IMAGE_SERVER_OVERFLOW.map((item, index) => (
@@ -430,7 +427,7 @@ export default function SettingsModal({ show, onHideModal }) {
                       dispatch(
                         setSetting({
                           key: "imageOverflow",
-                          val: item,
+                          val: item.code,
                         }),
                       )
                     }

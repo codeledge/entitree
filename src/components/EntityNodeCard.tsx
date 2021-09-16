@@ -262,7 +262,7 @@ export default memo(({ node }: { node: EntityNode }) => {
   if (
     currentThumbnail?.imageDb === true &&
     settings.imageType === "transparent_head" &&
-    settings.imageOverflow.code !== "no"
+    settings.imageOverflow !== "no"
   ) {
     thumbnailStyle = {
       overflow: "visible",
@@ -302,7 +302,7 @@ export default memo(({ node }: { node: EntityNode }) => {
             {currentThumbnail && (
               <>
                 <img
-                  alt={settings.imageOverflow.image_cut}
+                  alt=""
                   className={
                     currentThumbnail?.imageDb === true &&
                     settings.imageType === "transparent_head"

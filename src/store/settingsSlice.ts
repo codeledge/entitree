@@ -12,7 +12,7 @@ export type SettingsState = {
   followNavigation: boolean;
   hideToggleButton: boolean;
   imageType: "transparent_face" | "transparent_head" | "face";
-  imageOverflow: any;
+  imageOverflow: "yes" | "no";
   languageCode: LangCode;
   rightEntityOption: typeof RIGHT_ENTITY_OPTIONS[1];
   secondLabelCode?: Lang["code"] | SecondLabel["code"];
@@ -30,6 +30,7 @@ const initialState: SettingsState = {
   followNavigation: true,
   hideToggleButton: false,
   imageType: "face",
+  imageOverflow: "no",
   languageCode: DEFAULT_LANG_CODE,
   rightEntityOption: RIGHT_ENTITY_OPTIONS[1],
   showBirthName: false,
