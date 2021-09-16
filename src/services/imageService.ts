@@ -9,6 +9,17 @@ export const IMAGE_SERVER_TYPES = [
   { code: "face" },
 ];
 
+export const IMAGE_SERVER_OVERFLOW = [
+  { code: "no", label: "no" },
+  { code: "yes", label: "yes" },
+  // { code: "both_sides", image_cut: "both_sides", label: "cut sides" },
+  // {
+  //   code: "left_shoulder",
+  //   image_cut: "left_shoulder",
+  //   label: "cut left shoulder",
+  // },
+];
+
 export const missingImagesLink = (extra = {}) => {
   const params = new URLSearchParams({
     source: JSON.stringify(extra),

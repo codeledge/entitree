@@ -261,7 +261,8 @@ export default memo(({ node }: { node: EntityNode }) => {
   let thumbnailStyle = {};
   if (
     currentThumbnail?.imageDb === true &&
-    settings.imageType === "transparent_head"
+    settings.imageType === "transparent_head" &&
+    settings.imageOverflow.code !== "no"
   ) {
     thumbnailStyle = {
       overflow: "visible",
@@ -301,12 +302,19 @@ export default memo(({ node }: { node: EntityNode }) => {
             {currentThumbnail && (
               <>
                 <img
-                  alt={settings.imageType}
+                  alt={settings.imageOverflow.image_cut}
                   className={
                     currentThumbnail?.imageDb === true &&
                     settings.imageType === "transparent_head"
                       ? "imgDatabase"
                       : ""
+                  }
+                  style={
+                    {
+                      // maskImage: settings.imageOverflow.image_cut
+                      //   ? `url(${IMAGE_SERVER_BASE_URL}/api/canvas.png?size=100&cut=${settings.imageOverflow.image_cut});`
+                      //   : "", // doesn't work
+                    }
                   }
                   src={
                     currentThumbnail?.imageDb
@@ -734,9 +742,7 @@ const ThemedThumbnail = styled.div`
   }
   .imgDatabase {
     transform: translateY(-25px) scale(1.5);
-    -webkit-mask-image: url(${IMAGE_SERVER_BASE_URL}/api/canvas.png?size=100&b22b);
-
-    // border-bottom-left-radius: 30px;
+    //-webkit-mask-image: url(${IMAGE_SERVER_BASE_URL}/api/canvas.png?size=100&b22b);
   }
   .thumbnailCounter {
     position: absolute;

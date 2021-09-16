@@ -4,6 +4,10 @@ import {
   RIGHT_ENTITY_OPTIONS,
   SECOND_LABELS,
 } from "constants/properties";
+import {
+  IMAGE_SERVER_OVERFLOW,
+  IMAGE_SERVER_TYPES,
+} from "services/imageService";
 import React, { useEffect, useState } from "react";
 import {
   setLangCode,
@@ -15,7 +19,6 @@ import styled, { useTheme } from "styled-components";
 import { CustomMenu } from "./CustomMenu";
 import CustomThemeForm from "./CustomThemeForm";
 import { CustomToggle } from "./CustomToggle";
-import { IMAGE_SERVER_TYPES } from "services/imageService";
 import { LANGS } from "constants/langs";
 import ReactGA from "react-ga";
 import { THEMES } from "constants/themes";
@@ -49,6 +52,7 @@ export default function SettingsModal({ show, onHideModal }) {
     showExternalImages,
     // showFace,
     imageType,
+    imageOverflow,
     followNavigation,
   } = useAppSelector(({ settings }) => settings);
   const { currentProp, currentEntity } = useAppSelector(({ tree }) => tree);
@@ -371,20 +375,20 @@ export default function SettingsModal({ show, onHideModal }) {
         <Form.Group controlId="faceDisplay">
           <Form.Check
             custom
-            checked="true"
+            checked={imageType === "transparent_head"}
             className="d-inline-block"
-            // onChange={(e) =>
-            //   dispatch(
-            //     setSetting({
-            //       key: "showFace",
-            //       val: e.target.checked,
-            //     }),
-            //   )
-            // }
+            onChange={(e) =>
+              dispatch(
+                setSetting({
+                  key: "imageType",
+                  val: e.target.checked ? "transparent_head" : "face",
+                }),
+              )
+            }
             type="checkbox"
-            label="Show image database"
+            label="Remove image background (NEW)"
           />
-          {true && (
+          {/* {true && (
             <Dropdown className="imageDropdown d-inline-block ml-1">
               <Dropdown.Toggle as={CustomToggle}>
                 <span className="imageDropdownLabel">show</span> {imageType}
@@ -409,9 +413,36 @@ export default function SettingsModal({ show, onHideModal }) {
                 ))}
               </Dropdown.Menu>
             </Dropdown>
+          )} */}
+          {imageType === "transparent_head" && (
+            <Dropdown className="imageDropdown d-inline-block ml-1">
+              <Dropdown.Toggle as={CustomToggle}>
+                <span className="imageDropdownLabel">overflow</span>{" "}
+                {imageOverflow.label}
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                {IMAGE_SERVER_OVERFLOW.map((item, index) => (
+                  <Dropdown.Item
+                    key={item.code}
+                    eventKey={index + 1}
+                    active={item.code === imageOverflow}
+                    onClick={() =>
+                      dispatch(
+                        setSetting({
+                          key: "imageOverflow",
+                          val: item,
+                        }),
+                      )
+                    }
+                  >
+                    {item.label}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
           )}
           <Form.Text className="text-muted pl-4">
-            Try to zoom into the person's most relevant features
+            {/* Try to zoom into the person's most relevant features */}
           </Form.Text>
         </Form.Group>
       </Modal.Body>
