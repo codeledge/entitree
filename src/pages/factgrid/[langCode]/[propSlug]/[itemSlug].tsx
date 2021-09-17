@@ -37,8 +37,6 @@ const TreePage = ({
   twitterTitle,
 }) => {
   const { loadingEntity } = useAppSelector(({ tree }) => tree);
-  const dispatch = useDispatch();
-  dispatch(setSetting({ key: "wikibase", val: "factgrid" }));
 
   if (errorCode) {
     return <Error statusCode={errorCode} />;
@@ -87,6 +85,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
       propSlug: string;
       itemSlug: string;
     };
+    dispatch(setSetting({ key: "wikibase", val: "factgrid" }));
 
     if (!LANGS.find(({ code }) => code === langCode))
       return { props: { errorCode: 404 } };

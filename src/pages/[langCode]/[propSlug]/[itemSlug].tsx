@@ -38,8 +38,6 @@ const TreePage = ({
   twitterTitle,
 }) => {
   const { loadingEntity } = useAppSelector(({ tree }) => tree);
-  const dispatch = useDispatch();
-  dispatch(setSetting({ key: "wikibase", val: "wikidata" }));
 
   if (errorCode) {
     return <Error statusCode={errorCode} />;
@@ -89,6 +87,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
       propSlug: string;
       itemSlug: string;
     };
+    dispatch(setSetting({ key: "wikibase", val: "wikidata" }));
 
     if (!LANGS.find(({ code }) => code === langCode))
       return { props: { errorCode: 404 } };
