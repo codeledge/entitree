@@ -23,6 +23,7 @@ export type SettingsState = {
   showFace: boolean;
   showGenderColor: boolean;
   themeCode: string;
+  wikibase: "wikidata" | "factgrid";
 };
 
 const initialState: SettingsState = {
@@ -39,6 +40,7 @@ const initialState: SettingsState = {
   showFace: true,
   showGenderColor: false,
   themeCode: defaultTheme.code,
+  wikibase: "wikidata",
 };
 
 export const settingsSlice = createSlice({

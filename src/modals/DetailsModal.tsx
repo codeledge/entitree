@@ -14,7 +14,7 @@ import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 
 export default function DetailsModal({ node, onHideModal, nodeImages }) {
-  const { languageCode } = useAppSelector(({ settings }) => settings);
+  const { languageCode, wikibase } = useAppSelector(({ settings }) => settings);
   const { currentEntity, currentProp } = useAppSelector(({ tree }) => tree);
   const router = useRouter();
 
@@ -38,19 +38,20 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
         },
       );
     }
-  }, [languageCode, images.length, node.wikipediaSlug, node.label]);
+  }, [languageCode, wikibase, images.length, node.wikipediaSlug, node.label]);
 
   useEffect(() => {
     if (node.birthPlaceId || node.deathPlaceId) {
       getEntitiesLabel(
         [node.birthPlaceId, node.deathPlaceId],
         languageCode,
+        wikibase,
       ).then(([birthPlaceLabel, deathPlaceLabel]) => {
         setBirthPlace(birthPlaceLabel);
         setDeathPlace(deathPlaceLabel);
       });
     }
-  }, [languageCode, node.birthPlaceId, node.deathPlaceId]);
+  }, [languageCode, wikibase, node.birthPlaceId, node.deathPlaceId]);
 
   const video = getVideoByQid(node.id);
 
@@ -254,6 +255,7 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
                 languageCode,
                 currentProp?.slug || "",
                 node,
+                wikibase,
               );
               router.push(url);
               onHideModal();

@@ -40,6 +40,7 @@ export default function SettingsModal({ show, onHideModal }) {
 
   const {
     languageCode,
+    wikibase,
     rightEntityOption,
     showGenderColor,
     showExtraInfo,
@@ -127,6 +128,7 @@ export default function SettingsModal({ show, onHideModal }) {
                     dispatch(
                       switchLanguage(
                         lang.code,
+                        wikibase,
                         currentEntity.id,
                         currentProp?.id,
                       ),
@@ -246,91 +248,6 @@ export default function SettingsModal({ show, onHideModal }) {
             Center the new appearing nodes and or the most relevant node
           </Form.Text>
         </Form.Group>
-        <Form.Group controlId="genderColors">
-          <Form.Check
-            custom
-            checked={showGenderColor}
-            onChange={(e) =>
-              dispatch(
-                setSetting({
-                  key: "showGenderColor",
-                  val: e.target.checked,
-                }),
-              )
-            }
-            type="checkbox"
-            label="Use colors based on gender"
-          />
-          <Form.Text className="text-muted pl-4">
-            If browsing family trees, the nodes will have a background color
-            (blue for men, red for women)
-          </Form.Text>
-        </Form.Group>
-        <Form.Group controlId="extraInfo">
-          <Form.Check
-            custom
-            className="d-inline-block"
-            checked={showExtraInfo}
-            onChange={(e) =>
-              dispatch(
-                setSetting({
-                  key: "showExtraInfo",
-                  val: e.target.checked,
-                }),
-              )
-            }
-            type="checkbox"
-            label="Show badge"
-          />
-          {showExtraInfo && (
-            <Dropdown className="imageDropdown d-inline-block ml-1">
-              <Dropdown.Toggle as={CustomToggle}>
-                {EXTRA_INFO_OPTIONS.find((c) => c.code === extraInfo)
-                  ?.title || <i>Select</i>}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                {EXTRA_INFO_OPTIONS.map((extraOption) => (
-                  <Dropdown.Item
-                    key={extraOption.code}
-                    active={extraInfo === extraOption.code}
-                    onClick={() =>
-                      dispatch(
-                        setSetting({
-                          key: "extraInfo",
-                          val: extraOption.code,
-                        }),
-                      )
-                    }
-                  >
-                    {extraOption.title}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
-          )}
-          <Form.Text className="text-muted pl-4">
-            An icon with extra infos (beta)
-          </Form.Text>
-        </Form.Group>
-        <Form.Group controlId="birthName">
-          <Form.Check
-            custom
-            checked={showBirthName}
-            onChange={(e) =>
-              dispatch(
-                setSetting({
-                  key: "showBirthName",
-                  val: e.target.checked,
-                }),
-              )
-            }
-            type="checkbox"
-            label="Show birth name instead of label"
-          />
-          <Form.Text className="text-muted pl-4">
-            Often people change their names during their life
-          </Form.Text>
-        </Form.Group>
         <Form.Group controlId="iconsDisplay">
           <Form.Check
             custom
@@ -350,42 +267,130 @@ export default function SettingsModal({ show, onHideModal }) {
             If this option is selected, it's not possible to navigate the tree
           </Form.Text>
         </Form.Group>
-        <Form.Group controlId="showExternalImages">
-          <Form.Check
-            custom
-            checked={showExternalImages}
-            onChange={(e) =>
-              dispatch(
-                setSetting({
-                  key: "showExternalImages",
-                  val: e.target.checked,
-                }),
-              )
-            }
-            type="checkbox"
-            label="Show external images"
-          />
-          <Form.Text className="text-muted pl-4">
-            Allow entitree to fetch images from other websites
-          </Form.Text>
-        </Form.Group>
-        <Form.Group controlId="faceDisplay">
-          <Form.Check
-            custom
-            checked={imageType === "transparent_head"}
-            className="d-inline-block"
-            onChange={(e) =>
-              dispatch(
-                setSetting({
-                  key: "imageType",
-                  val: e.target.checked ? "transparent_head" : "face",
-                }),
-              )
-            }
-            type="checkbox"
-            label="Remove image background (NEW)"
-          />
-          {/* {true && (
+        {wikibase === "wikidata" && (
+          <>
+            <Form.Group controlId="genderColors">
+              <Form.Check
+                custom
+                checked={showGenderColor}
+                onChange={(e) =>
+                  dispatch(
+                    setSetting({
+                      key: "showGenderColor",
+                      val: e.target.checked,
+                    }),
+                  )
+                }
+                type="checkbox"
+                label="Use colors based on gender"
+              />
+              <Form.Text className="text-muted pl-4">
+                If browsing family trees, the nodes will have a background color
+                (blue for men, red for women)
+              </Form.Text>
+            </Form.Group>
+            <Form.Group controlId="extraInfo">
+              <Form.Check
+                custom
+                className="d-inline-block"
+                checked={showExtraInfo}
+                onChange={(e) =>
+                  dispatch(
+                    setSetting({
+                      key: "showExtraInfo",
+                      val: e.target.checked,
+                    }),
+                  )
+                }
+                type="checkbox"
+                label="Show badge"
+              />
+              {showExtraInfo && (
+                <Dropdown className="imageDropdown d-inline-block ml-1">
+                  <Dropdown.Toggle as={CustomToggle}>
+                    {EXTRA_INFO_OPTIONS.find((c) => c.code === extraInfo)
+                      ?.title || <i>Select</i>}
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    {EXTRA_INFO_OPTIONS.map((extraOption) => (
+                      <Dropdown.Item
+                        key={extraOption.code}
+                        active={extraInfo === extraOption.code}
+                        onClick={() =>
+                          dispatch(
+                            setSetting({
+                              key: "extraInfo",
+                              val: extraOption.code,
+                            }),
+                          )
+                        }
+                      >
+                        {extraOption.title}
+                      </Dropdown.Item>
+                    ))}
+                  </Dropdown.Menu>
+                </Dropdown>
+              )}
+              <Form.Text className="text-muted pl-4">
+                An icon with extra infos (beta)
+              </Form.Text>
+            </Form.Group>
+            <Form.Group controlId="birthName">
+              <Form.Check
+                custom
+                checked={showBirthName}
+                onChange={(e) =>
+                  dispatch(
+                    setSetting({
+                      key: "showBirthName",
+                      val: e.target.checked,
+                    }),
+                  )
+                }
+                type="checkbox"
+                label="Show birth name instead of label"
+              />
+              <Form.Text className="text-muted pl-4">
+                Often people change their names during their life
+              </Form.Text>
+            </Form.Group>
+
+            <Form.Group controlId="showExternalImages">
+              <Form.Check
+                custom
+                checked={showExternalImages}
+                onChange={(e) =>
+                  dispatch(
+                    setSetting({
+                      key: "showExternalImages",
+                      val: e.target.checked,
+                    }),
+                  )
+                }
+                type="checkbox"
+                label="Show external images"
+              />
+              <Form.Text className="text-muted pl-4">
+                Allow entitree to fetch images from other websites
+              </Form.Text>
+            </Form.Group>
+            <Form.Group controlId="faceDisplay">
+              <Form.Check
+                custom
+                checked={imageType === "transparent_head"}
+                className="d-inline-block"
+                onChange={(e) =>
+                  dispatch(
+                    setSetting({
+                      key: "imageType",
+                      val: e.target.checked ? "transparent_head" : "face",
+                    }),
+                  )
+                }
+                type="checkbox"
+                label="Remove image background (NEW)"
+              />
+              {/* {true && (
             <Dropdown className="imageDropdown d-inline-block ml-1">
               <Dropdown.Toggle as={CustomToggle}>
                 <span className="imageDropdownLabel">show</span> {imageType}
@@ -411,37 +416,39 @@ export default function SettingsModal({ show, onHideModal }) {
               </Dropdown.Menu>
             </Dropdown>
           )} */}
-          {imageType === "transparent_head" && (
-            <Dropdown className="imageDropdown d-inline-block ml-1">
-              <Dropdown.Toggle as={CustomToggle}>
-                <span className="imageDropdownLabel">overflow</span>{" "}
-                {imageOverflow}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                {IMAGE_SERVER_OVERFLOW.map((item, index) => (
-                  <Dropdown.Item
-                    key={item.code}
-                    eventKey={index + 1}
-                    active={item.code === imageOverflow}
-                    onClick={() =>
-                      dispatch(
-                        setSetting({
-                          key: "imageOverflow",
-                          val: item.code,
-                        }),
-                      )
-                    }
-                  >
-                    {item.label}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
-          )}
-          <Form.Text className="text-muted pl-4">
-            {/* Try to zoom into the person's most relevant features */}
-          </Form.Text>
-        </Form.Group>
+              {imageType === "transparent_head" && (
+                <Dropdown className="imageDropdown d-inline-block ml-1">
+                  <Dropdown.Toggle as={CustomToggle}>
+                    <span className="imageDropdownLabel">overflow</span>{" "}
+                    {imageOverflow}
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    {IMAGE_SERVER_OVERFLOW.map((item, index) => (
+                      <Dropdown.Item
+                        key={item.code}
+                        eventKey={index + 1}
+                        active={item.code === imageOverflow}
+                        onClick={() =>
+                          dispatch(
+                            setSetting({
+                              key: "imageOverflow",
+                              val: item.code,
+                            }),
+                          )
+                        }
+                      >
+                        {item.label}
+                      </Dropdown.Item>
+                    ))}
+                  </Dropdown.Menu>
+                </Dropdown>
+              )}
+              <Form.Text className="text-muted pl-4">
+                {/* Try to zoom into the person's most relevant features */}
+              </Form.Text>
+            </Form.Group>
+          </>
+        )}
       </Modal.Body>
       <Modal.Footer>
         <Button variant="link" className="mr-auto ml-0" onClick={onHideModal}>

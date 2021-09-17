@@ -8,14 +8,15 @@ import getWikidataEntities from "wikidata/getWikidataEntities";
 export default async function getEntitiesLabel(
   ids: string[],
   languageCode: LangCode,
+  wikibase: string,
 ) {
   if (!ids || !ids.length)
     throw new Error("You need valid ids to getItemsLabel");
-
   const allentities = await getWikidataEntities({
     ids,
     languages: [languageCode].concat(DEFAULT_LANGS_CODES),
     props: ["labels"],
+    wikibase,
   });
 
   const labels = Object.values(allentities).map(

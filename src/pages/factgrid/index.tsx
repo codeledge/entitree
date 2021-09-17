@@ -6,10 +6,15 @@ import React from "react";
 import SearchBar from "layout/SearchBar";
 import { Title } from "layout/Title";
 import TreeLoader from "layout/TreeLoader";
+import { setSetting } from "store/settingsSlice";
 import styled from "styled-components";
 import { useAppSelector } from "store";
+import { useDispatch } from "react-redux";
 
 export default function Home() {
+  const dispatch = useDispatch();
+  dispatch(setSetting({ key: "wikibase", val: "factgrid" }));
+
   const { loadingEntity } = useAppSelector(({ tree }) => tree);
   return (
     <Page>

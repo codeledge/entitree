@@ -3,6 +3,7 @@ import {
   setCurrentEntityProps,
   setCurrentProp,
 } from "store/treeSlice";
+import { setLangCode, setSetting } from "store/settingsSlice";
 import { useAppSelector, wrapper } from "store";
 
 import { DEFAULT_PROPERTY_ALL } from "constants/properties";
@@ -23,8 +24,8 @@ import getWikipediaArticle from "wikipedia/getWikipediaArticle";
 import { isItemId } from "helpers/isItemId";
 import { loadEntity } from "treeHelpers/loadEntity";
 import pluralize from "pluralize";
-import { setLangCode } from "store/settingsSlice";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
 
 const TreePage = ({
   errorCode,
@@ -37,6 +38,8 @@ const TreePage = ({
   twitterTitle,
 }) => {
   const { loadingEntity } = useAppSelector(({ tree }) => tree);
+  const dispatch = useDispatch();
+  dispatch(setSetting({ key: "wikibase", val: "wikidata" }));
 
   if (errorCode) {
     return <Error statusCode={errorCode} />;
@@ -114,6 +117,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     try {
       const { currentEntity, currentProp, itemProps } = await loadEntity({
         itemId,
+        wikibase: "wikidata",
         langCode,
         propSlug: decodedPropSlug,
       });
