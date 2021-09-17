@@ -8,8 +8,16 @@ export const getEntityUrl = (
   entity: Pick<Entity, "id" | "wikipediaSlug">,
   wikibase: string,
 ) => {
-  console.log("url", wikibase);
-  const wikibasePrefix = wikibase !== "wikidata" ? "/" + wikibase : "";
+  let wikibasePrefix = "";
+  switch (wikibase) {
+    case "wikidata":
+      break;
+    case "factgrid":
+      wikibasePrefix += "/factgrid";
+      break;
+    default:
+      break;
+  }
   return `${wikibasePrefix}/${langCode}/${
     (propSlug && encodeURIComponent(propSlug)) || DEFAULT_PROPERTY_ALL
   }/${entity.wikipediaSlug || entity.id}`;

@@ -1,9 +1,9 @@
+import React, { useEffect } from "react";
 import {
   setCurrentEntity,
   setCurrentEntityProps,
   setCurrentProp,
 } from "store/treeSlice";
-import { setLangCode, setSetting } from "store/settingsSlice";
 import { useAppSelector, wrapper } from "store";
 
 import { DEFAULT_PROPERTY_ALL } from "constants/properties";
@@ -15,7 +15,6 @@ import Head from "next/head";
 import Header from "layout/Header";
 import { LANGS } from "constants/langs";
 import { LangCode } from "types/Lang";
-import React from "react";
 import { SITE_NAME } from "constants/meta";
 import SearchBar from "layout/SearchBar";
 import TreeLoader from "layout/TreeLoader";
@@ -24,6 +23,7 @@ import getWikipediaArticle from "wikipedia/getWikipediaArticle";
 import { isItemId } from "helpers/isItemId";
 import { loadEntity } from "treeHelpers/loadEntity";
 import pluralize from "pluralize";
+import { setSetting } from "store/settingsSlice";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 
@@ -36,8 +36,16 @@ const TreePage = ({
   twitterDescription,
   twitterImage,
   twitterTitle,
+  langCode,
 }) => {
   const { loadingEntity } = useAppSelector(({ tree }) => tree);
+
+  const dispatch = useDispatch();
+
+  // force settings to be as url, otherwise you get a mix up
+  useEffect(() => {
+    dispatch(setSetting({ languageCode: langCode, wikibase: "wikidata" }));
+  }, []);
 
   if (errorCode) {
     return <Error statusCode={errorCode} />;
@@ -87,7 +95,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
       propSlug: string;
       itemSlug: string;
     };
-    dispatch(setSetting({ key: "wikibase", val: "wikidata" }));
 
     if (!LANGS.find(({ code }) => code === langCode))
       return { props: { errorCode: 404 } };
@@ -142,10 +149,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
         };
       }
 
-      // force settings to be as url, otherwise you get a mix up
-      // TODO: THIS IS NOT WORKING, check redux dev tools it's not setting the lang
-      // eve tho it comes after the persistence
-      dispatch(setLangCode(langCode));
       dispatch(setCurrentEntity(currentEntity));
       if (itemProps) dispatch(setCurrentEntityProps(itemProps));
       if (currentProp) dispatch(setCurrentProp(currentProp));
@@ -208,7 +211,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
         twitterCard = "summary";
       }
 
-      return { props: { ogTitle, ogImage, twitterCard, ogDescription } };
+      return {
+        props: { ogTitle, ogImage, twitterCard, ogDescription, langCode },
+      };
     } catch (error: any) {
       console.error(error);
 

@@ -1,8 +1,9 @@
+import React, { useEffect } from "react";
+
 import { Container } from "react-bootstrap";
 import Div100vh from "react-div-100vh";
 import Footer from "layout/Footer";
 import Header from "../../layout/Header";
-import React from "react";
 import SearchBar from "layout/SearchBar";
 import { Title } from "layout/Title";
 import TreeLoader from "layout/TreeLoader";
@@ -13,7 +14,11 @@ import { useDispatch } from "react-redux";
 
 export default function Home() {
   const dispatch = useDispatch();
-  dispatch(setSetting({ key: "wikibase", val: "factgrid" }));
+
+  // force settings to be as url, otherwise you get a mix up
+  useEffect(() => {
+    dispatch(setSetting({ wikibase: "factgrid" }));
+  }, []);
 
   const { loadingEntity } = useAppSelector(({ tree }) => tree);
   return (

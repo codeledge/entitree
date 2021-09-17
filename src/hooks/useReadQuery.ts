@@ -1,6 +1,5 @@
 import Router, { useRouter } from "next/router";
 
-import ReactGA from "react-ga";
 import { THEMES } from "constants/themes";
 import { setSetting } from "../store/settingsSlice";
 import { useDispatch } from "react-redux";
@@ -17,7 +16,7 @@ export default function useReadQuery() {
         ({ code }) => Router.router?.query.theme === code,
       );
       if (reqTheme) {
-        dispatch(setSetting({ key: "themeCode", val: reqTheme.code }));
+        dispatch(setSetting({ themeCode: reqTheme.code }));
       }
 
       delete Router.router?.query.theme;

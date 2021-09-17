@@ -5,11 +5,7 @@ import {
   SECOND_LABELS,
 } from "constants/properties";
 import React, { useEffect, useState } from "react";
-import {
-  setLangCode,
-  setSecondLabelCode,
-  setSetting,
-} from "store/settingsSlice";
+import { setSecondLabelCode, setSetting } from "store/settingsSlice";
 import styled, { useTheme } from "styled-components";
 
 import { CustomMenu } from "./CustomMenu";
@@ -85,7 +81,7 @@ export default function SettingsModal({ show, onHideModal }) {
                   active={theme.code === currentTheme.code}
                   disabled={theme.disabled}
                   onClick={() =>
-                    dispatch(setSetting({ key: "themeCode", val: theme.code }))
+                    dispatch(setSetting({ themeCode: theme.code }))
                   }
                 >
                   {theme.name}
@@ -123,7 +119,7 @@ export default function SettingsModal({ show, onHideModal }) {
                 eventKey={index + 1}
                 active={lang.code === languageCode}
                 onClick={() => {
-                  dispatch(setLangCode(lang.code));
+                  dispatch(setSetting({ languageCode: lang.code }));
                   if (currentEntity) {
                     dispatch(
                       switchLanguage(
@@ -212,8 +208,7 @@ export default function SettingsModal({ show, onHideModal }) {
                 onClick={async () => {
                   dispatch(
                     setSetting({
-                      key: "rightEntityOption",
-                      val: option,
+                      rightEntityOption: option,
                     }),
                   );
                 }}
@@ -236,8 +231,7 @@ export default function SettingsModal({ show, onHideModal }) {
             onChange={(e) =>
               dispatch(
                 setSetting({
-                  key: "followNavigation",
-                  val: e.target.checked,
+                  followNavigation: e.target.checked,
                 }),
               )
             }
@@ -255,8 +249,7 @@ export default function SettingsModal({ show, onHideModal }) {
             onChange={(e) =>
               dispatch(
                 setSetting({
-                  key: "hideToggleButton",
-                  val: e.target.checked,
+                  hideToggleButton: e.target.checked,
                 }),
               )
             }
@@ -276,8 +269,7 @@ export default function SettingsModal({ show, onHideModal }) {
                 onChange={(e) =>
                   dispatch(
                     setSetting({
-                      key: "showGenderColor",
-                      val: e.target.checked,
+                      showGenderColor: e.target.checked,
                     }),
                   )
                 }
@@ -297,8 +289,7 @@ export default function SettingsModal({ show, onHideModal }) {
                 onChange={(e) =>
                   dispatch(
                     setSetting({
-                      key: "showExtraInfo",
-                      val: e.target.checked,
+                      showExtraInfo: e.target.checked,
                     }),
                   )
                 }
@@ -319,8 +310,7 @@ export default function SettingsModal({ show, onHideModal }) {
                         onClick={() =>
                           dispatch(
                             setSetting({
-                              key: "extraInfo",
-                              val: extraOption.code,
+                              extraInfo: extraOption.code,
                             }),
                           )
                         }
@@ -342,8 +332,7 @@ export default function SettingsModal({ show, onHideModal }) {
                 onChange={(e) =>
                   dispatch(
                     setSetting({
-                      key: "showBirthName",
-                      val: e.target.checked,
+                      showBirthName: e.target.checked,
                     }),
                   )
                 }
@@ -362,8 +351,7 @@ export default function SettingsModal({ show, onHideModal }) {
                 onChange={(e) =>
                   dispatch(
                     setSetting({
-                      key: "showExternalImages",
-                      val: e.target.checked,
+                      showExternalImages: e.target.checked,
                     }),
                   )
                 }
@@ -382,8 +370,7 @@ export default function SettingsModal({ show, onHideModal }) {
                 onChange={(e) =>
                   dispatch(
                     setSetting({
-                      key: "imageType",
-                      val: e.target.checked ? "transparent_head" : "face",
+                      imageType: e.target.checked ? "transparent_head" : "face",
                     }),
                   )
                 }
@@ -404,8 +391,7 @@ export default function SettingsModal({ show, onHideModal }) {
                     onClick={() =>
                       dispatch(
                         setSetting({
-                          key: "imageType",
-                          val: imageIndex.code,
+                          imageType: imageIndex.code,
                         }),
                       )
                     }
@@ -431,8 +417,7 @@ export default function SettingsModal({ show, onHideModal }) {
                         onClick={() =>
                           dispatch(
                             setSetting({
-                              key: "imageOverflow",
-                              val: item.code,
+                              imageOverflow: item.code,
                             }),
                           )
                         }
