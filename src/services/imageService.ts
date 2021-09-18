@@ -1,23 +1,24 @@
+import { ImageOverflowType, ImageType } from "types/Image";
+
 import axios from "axios";
 import serviceSuccessInterceptor from "./serviceSuccessInterceptor";
 
-export const IMAGE_SERVER_BASE_URL = "https://images.entitree.com";
+// export const IMAGE_SERVER_BASE_URL = "https://images.entitree.com";
+export const IMAGE_SERVER_BASE_URL = "http://localhost:3010";
 
-export const IMAGE_SERVER_TYPES = [
+export const IMAGE_SERVER_TYPES: ImageType[] = [
   { code: "transparent_face" },
   { code: "transparent_head" },
   { code: "face" },
 ];
-
-export const IMAGE_SERVER_OVERFLOW = [
+export const IMAGE_SERVER_OVERFLOW: ImageOverflowType[] = [
   { code: "no", label: "no" },
   { code: "yes", label: "yes" },
-  // { code: "both_sides", image_cut: "both_sides", label: "cut sides" },
-  // {
-  //   code: "left_shoulder",
-  //   image_cut: "left_shoulder",
-  //   label: "cut left shoulder",
-  // },
+  { code: "both_sides", label: "cut sides" },
+  {
+    code: "left_shoulder",
+    label: "cut left shoulder",
+  },
 ];
 
 export const missingImagesLink = (extra = {}) => {

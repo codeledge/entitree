@@ -11,7 +11,7 @@ export type SettingsState = {
   extraInfo?: string;
   followNavigation: boolean;
   hideToggleButton: boolean;
-  imageOverflow: "yes" | "no";
+  imageOverflow: string;
   imageType: "transparent_face" | "transparent_head" | "face";
   languageCode: LangCode;
   rightEntityOption: typeof RIGHT_ENTITY_OPTIONS[1];
