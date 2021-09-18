@@ -1,16 +1,24 @@
+import React, { useEffect } from "react";
+
 import { Container } from "react-bootstrap";
 import Div100vh from "react-div-100vh";
 import Footer from "layout/Footer";
 import Header from "../layout/Header";
-import React from "react";
 import SearchBar from "layout/SearchBar";
 import { Title } from "layout/Title";
 import TreeLoader from "layout/TreeLoader";
+import { setSetting } from "store/settingsSlice";
 import styled from "styled-components";
 import { useAppSelector } from "store";
+import { useDispatch } from "react-redux";
 
 export default function Home() {
   const { loadingEntity } = useAppSelector(({ tree }) => tree);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setSetting({ wikibase: "wikidata" }));
+  }, []);
   return (
     <Page>
       <Header />
