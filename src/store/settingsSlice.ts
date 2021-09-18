@@ -11,8 +11,8 @@ export type SettingsState = {
   extraInfo?: string;
   followNavigation: boolean;
   hideToggleButton: boolean;
-  imageType: "transparent_face" | "transparent_head" | "face";
   imageOverflow: "yes" | "no";
+  imageType: "transparent_face" | "transparent_head" | "face";
   languageCode: LangCode;
   rightEntityOption: typeof RIGHT_ENTITY_OPTIONS[1];
   secondLabelCode?: Lang["code"] | SecondLabel["code"];
@@ -23,14 +23,15 @@ export type SettingsState = {
   showFace: boolean;
   showGenderColor: boolean;
   themeCode: string;
+  wikibase: "wikidata" | "factgrid";
 };
 
 const initialState: SettingsState = {
   customThemes: {},
   followNavigation: true,
   hideToggleButton: false,
-  imageType: "face",
   imageOverflow: "no",
+  imageType: "face",
   languageCode: DEFAULT_LANG_CODE,
   rightEntityOption: RIGHT_ENTITY_OPTIONS[1],
   showBirthName: false,
@@ -39,23 +40,23 @@ const initialState: SettingsState = {
   showFace: true,
   showGenderColor: false,
   themeCode: defaultTheme.code,
+  wikibase: "wikidata",
 };
 
+export const SETTINGS_SLICE_NAME = "settings";
 export const settingsSlice = createSlice({
-  name: "settings",
+  name: SETTINGS_SLICE_NAME,
   initialState,
   reducers: {
     setSetting: (
       state,
-      { payload: { key, val } }: PayloadAction<{ key: string; val: any }>,
-    ) => {
-      state[key] = val;
-    },
+      { payload: partialState }: PayloadAction<Partial<SettingsState>>,
+    ) => ({
+      ...state,
+      ...partialState,
+    }),
     setCustomTheme: (state, { payload }: PayloadAction<DefaultTheme>) => {
       state.customThemes[payload.code] = payload;
-    },
-    setLangCode: (state, { payload }: PayloadAction<LangCode>) => {
-      state.languageCode = payload;
     },
     setSecondLabelCode: (
       state,
@@ -71,7 +72,6 @@ export const settingsSlice = createSlice({
 
 export const {
   resetCurrentTheme,
-  setLangCode,
   setCustomTheme,
   setSecondLabelCode,
   setSetting,

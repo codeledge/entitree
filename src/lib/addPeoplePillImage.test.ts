@@ -6,7 +6,7 @@ import getWikidataEntities from "../wikidata/getWikidataEntities";
 describe("addPeoplePillImage", () => {
   test("it should give the correct name", async () => {
     const id = "Q47122";
-    const res = await getWikidataEntities({ ids: [id] });
+    const res = await getWikidataEntities({ ids: [id], wikibase: "wikidata" });
 
     const entity: Entity = {
       ...res[id],

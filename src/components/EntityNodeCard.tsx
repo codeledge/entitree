@@ -232,11 +232,13 @@ export default memo(({ node }: { node: EntityNode }) => {
       } else {
         //if(isLangCode(settings.secondLabelCode))
         //check if language is already in the main languages
-        getEntitiesLabel([node.id], settings.secondLabelCode as LangCode).then(
-          ([secondLabel]) => {
-            setSecondLabel(secondLabel);
-          },
-        );
+        getEntitiesLabel(
+          [node.id],
+          settings.secondLabelCode as LangCode,
+          settings.wikibase,
+        ).then(([secondLabel]) => {
+          setSecondLabel(secondLabel);
+        });
       }
     } else {
       setSecondLabel(undefined);

@@ -12,7 +12,7 @@ import addDescription from "./addDescription";
 import addEndDate from "./addEndDate";
 import addExternalLinks from "./addExternalLinks";
 import addEyeColor from "./addEyeColor";
-// import addFactgridUrl from "./addFactgridUrl";
+import addFactgridUrl from "./addFactgridUrl";
 import addFandom from "./addFandom";
 import addGender from "./addGender";
 import addGeniId from "./addGeniId";
@@ -33,12 +33,12 @@ import addStartEndSpan from "./addStartEndSpan";
 import addWebsite from "./addWebsite";
 import addWikidataUrl from "./addWikidataUrl";
 import addWikipediaUrl from "./addWikipediaUrl";
-import { baseDomain } from "./wikibaseInstance";
 import wbk from "wikibase-sdk";
 
 export default function formatEntity(
   wikidataEntity: WikiEntity,
   languageCode: LangCode,
+  wikibase: string,
 ) {
   const simpleClaims = wbk.simplify.claims(wikidataEntity.claims, {
     keepQualifiers: true,
@@ -51,11 +51,11 @@ export default function formatEntity(
 
   addLabel(entity, languageCode);
   addDescription(entity, languageCode);
-  // if (baseDomain === "database.factgrid.de") {
-  //   addFactgridUrl(entity);
-  // }
+  if (wikibase === "factgrid") {
+    addFactgridUrl(entity);
+  }
 
-  if (baseDomain === "www.wikidata.org") {
+  if (wikibase === "wikidata") {
     addBirthDate(entity, languageCode);
     addDeathDate(entity, languageCode);
     addIsInfantDeath(entity);

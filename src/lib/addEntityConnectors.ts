@@ -13,6 +13,7 @@ import getUpIds from "wikidata/getUpIds";
 import { sortClaimsByStartDate } from "claims/sortClaims";
 
 export type ConnectorOptions = {
+  wikibase: string;
   currentPropId?: string;
   addUpIds?: boolean;
   addDownIds?: boolean;
@@ -25,7 +26,11 @@ export default async function addEntityConnectors(
   options: ConnectorOptions,
 ) {
   if (options.addUpIds && options.currentPropId) {
-    entity.upIds = await getUpIds(entity.id, options.currentPropId);
+    entity.upIds = await getUpIds(
+      entity.id,
+      options.currentPropId,
+      options.wikibase,
+    );
   } else {
     delete entity.upIds;
   }

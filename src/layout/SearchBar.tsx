@@ -24,13 +24,9 @@ import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 
 export default function SearchBar() {
-  const {
-    currentEntity,
-    currentProp,
-    loadingEntity,
-    currentEntityProps,
-  } = useAppSelector(({ tree }) => tree);
-
+  const { currentEntity, currentProp, loadingEntity, currentEntityProps } =
+    useAppSelector(({ tree }) => tree);
+  const { wikibase } = useAppSelector(({ settings }) => settings);
   const currentLang = useCurrentLang();
   const router = useRouter();
   const dispatch = useDispatch();
@@ -46,7 +42,7 @@ export default function SearchBar() {
     if (debouncedSearchTerm && fromKeyboard && currentLang) {
       setShowSuggestions(true);
       setLoadingSuggestions(true);
-      wikidataSearchTerm(debouncedSearchTerm, currentLang.code)
+      wikidataSearchTerm(debouncedSearchTerm, currentLang.code, wikibase)
         .then((results) => {
           const filteredResults = results.filter(({ id, description }) => {
             // remove current entity from results
@@ -146,6 +142,7 @@ export default function SearchBar() {
                             currentLang.code,
                             prop.slug,
                             currentEntity,
+                            wikibase,
                           );
                           router.push(url);
                         }}

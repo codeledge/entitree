@@ -1,13 +1,5 @@
 import axios from "axios";
-import { baseURL } from "lib/wikibaseInstance";
 import serviceSuccessInterceptor from "./serviceSuccessInterceptor";
-
-const wikidataService = axios.create({
-  //baseURL: "https://www.wikidata.org",
-  baseURL,
-});
-
-wikidataService.interceptors.response.use(serviceSuccessInterceptor);
 
 export type SearchResult = {
   aliases?: string[]; // ["Queen Elizabeth II"]
@@ -39,7 +31,16 @@ type Response = {
   servedby: string;
 };
 
-export const searchTerm = async (term, languageCode) => {
+export const searchTerm = async (term, languageCode, wikibase: string) => {
+  const baseURL = {
+    wikidata: "https://www.wikidata.org",
+    factgrid: "https://database.factgrid.de",
+  }[wikibase];
+  const wikidataService = axios.create({
+    baseURL,
+  });
+
+  wikidataService.interceptors.response.use(serviceSuccessInterceptor);
   const { search, error } = await wikidataService.get<any, Response>(
     "/w/api.php",
     {
@@ -58,4 +59,4 @@ export const searchTerm = async (term, languageCode) => {
   return search;
 };
 
-export default wikidataService;
+// export default wikidataService;

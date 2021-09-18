@@ -28,8 +28,7 @@ export default function SearchSuggestions({
 
   const { currentProp } = useAppSelector(({ tree }) => tree);
 
-  const { languageCode } = useAppSelector(({ settings }) => settings);
-
+  const { languageCode, wikibase } = useAppSelector(({ settings }) => settings);
   return (
     <StyledSuggestions
       ref={wrapperRef}
@@ -54,11 +53,17 @@ export default function SearchSuggestions({
             const wikipediaSlug = await getEntityWikipediaSlug(
               searchResult.id,
               languageCode,
+              wikibase,
             );
-            const url = getEntityUrl(languageCode, currentProp?.slug || "", {
-              id: searchResult.id,
-              wikipediaSlug,
-            });
+            const url = getEntityUrl(
+              languageCode,
+              currentProp?.slug || "",
+              {
+                id: searchResult.id,
+                wikipediaSlug,
+              },
+              wikibase,
+            );
             router.push(url);
           }}
         >

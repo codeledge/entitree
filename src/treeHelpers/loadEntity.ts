@@ -13,10 +13,12 @@ import { getRootEntity } from "lib/getEntities";
 
 export const loadEntity = async ({
   itemId,
+  wikibase,
   langCode,
   propSlug,
 }: {
   itemId: string;
+  wikibase: string;
   langCode: LangCode;
   propSlug?: string;
 }): Promise<{
@@ -24,7 +26,7 @@ export const loadEntity = async ({
   currentProp?: EntityProp;
   itemProps?: EntityProp[];
 }> => {
-  let itemProps = await getItemProps(itemId, langCode);
+  let itemProps = await getItemProps(itemId, langCode, wikibase);
 
   let currentProp;
   if (propSlug && propSlug !== DEFAULT_PROPERTY_ALL) {
@@ -61,6 +63,7 @@ export const loadEntity = async ({
   }
 
   const currentEntity = await getRootEntity(itemId, langCode, {
+    wikibase,
     currentPropId: currentProp?.id,
     addUpIds: true,
     addDownIds: true,

@@ -2,11 +2,11 @@ import { WikiEntity } from "types/Entity";
 import axios from "axios";
 import { wikibaseInstance } from "lib/wikibaseInstance";
 
-const wdk = wikibaseInstance();
 type getWikidataEntitiesProps = {
   ids: string[]; // ['Q1', 'Q2', 'Q3', ..., 'Q123']
   languages?: string[]; // ['en', 'fr', 'de']
   props?: string[]; // ['info', 'claims']
+  wikibase?: string;
 };
 
 type Response = Record<WikiEntity["id"], WikiEntity>;
@@ -15,7 +15,10 @@ export default async function getWikidataEntities({
   ids,
   languages = ["en"],
   props = ["labels", "descriptions", "claims", "sitelinks/urls"],
+  wikibase = "wikidata",
 }: getWikidataEntitiesProps): Promise<Response> {
+  const wdk = wikibaseInstance(wikibase);
+
   if (ids.length === 0) {
     return {};
   }
