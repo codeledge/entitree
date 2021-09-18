@@ -287,6 +287,7 @@ export default memo(({ node }: { node: EntityNode }) => {
             })}
             style={thumbnailStyle}
             onClick={onThumbClick}
+            maskType={settings.imageOverflow}
           >
             {(!thumbnails || !thumbnails.length) && (
               <span className="defaultImgMessage">
@@ -718,7 +719,7 @@ const ThemedNodeInner = styled.div`
     theme.nodeFlexDirection === "column" && `width: ${theme.thumbWidth}px`};
 `;
 
-const ThemedThumbnail = styled.div`
+const ThemedThumbnail = styled.div<{ maskType?: string }>`
   overflow: hidden;
   position: relative;
   flex-shrink: 0;
@@ -751,8 +752,12 @@ const ThemedThumbnail = styled.div`
     font-size: 12px; //for alt text
   }
   .imgDatabase {
-    transform: translateY(-25px) scale(1.5);
-    //-webkit-mask-image: url(${IMAGE_SERVER_BASE_URL}/api/canvas.png?size=100&b22b);
+    transform: ${({ theme }) => theme.thumbTransform};
+    ${({ maskType, theme }) =>
+      (maskType === "both_sides" ||
+        maskType === "left_side" ||
+        maskType === "left_shoulder") &&
+      `-webkit-mask-image: url(${IMAGE_SERVER_BASE_URL}/api/canvas.png?size=${theme.thumbWidth}&cut=${maskType});`};
   }
   .thumbnailCounter {
     position: absolute;
