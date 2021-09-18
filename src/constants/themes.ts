@@ -39,6 +39,7 @@ declare module "styled-components" {
     thumbDisplay: boolean;
     thumbHeight: number;
     thumbWidth: number;
+    thumbTransform: string;
   }
 }
 
@@ -78,6 +79,7 @@ export const defaultTheme: DefaultTheme = {
   thumbDisplay: true,
   thumbHeight: 84,
   thumbWidth: 84,
+  thumbTransform: "translateY(-18px) scale(1.5)",
 };
 
 const bigTheme: DefaultTheme = {
@@ -206,6 +208,7 @@ font-style: italic;
   thumbCounterDisplay: "none",
   thumbHeight: 100,
   thumbWidth: 100,
+  thumbTransform: "translateY(-25px) scale(1.5)",
 };
 
 const onlyText: DefaultTheme = {

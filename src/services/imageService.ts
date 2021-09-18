@@ -15,6 +15,7 @@ export const IMAGE_SERVER_OVERFLOW: ImageOverflowType[] = [
   { code: "no", label: "no" },
   { code: "yes", label: "yes" },
   { code: "both_sides", label: "cut sides" },
+  { code: "left_side", label: "cut left side" },
   {
     code: "left_shoulder",
     label: "cut left shoulder",
