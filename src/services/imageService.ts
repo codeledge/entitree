@@ -3,8 +3,8 @@ import { ImageOverflowType, ImageType } from "types/Image";
 import axios from "axios";
 import serviceSuccessInterceptor from "./serviceSuccessInterceptor";
 
-// export const IMAGE_SERVER_BASE_URL = "https://images.entitree.com";
-export const IMAGE_SERVER_BASE_URL = "http://localhost:3010";
+export const IMAGE_SERVER_BASE_URL = "https://images.entitree.com";
+// export const IMAGE_SERVER_BASE_URL = "http://localhost:3010";
 
 export const IMAGE_SERVER_TYPES: ImageType[] = [
   { code: "transparent_face" },
