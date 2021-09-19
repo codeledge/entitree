@@ -110,8 +110,22 @@ export const getServerSideProps = wrapper.getServerSideProps(
       try {
         //TODO: cache this
         const {
-          data: { wikibase_item, thumbnail },
+          data: {
+            wikibase_item,
+            thumbnail,
+            titles: { canonical },
+          },
         } = await getWikipediaArticle(decodedItemSlug, langCode);
+
+        if (canonical !== itemSlug)
+          //the article has redirect
+          return {
+            redirect: {
+              destination: `/${langCode}/${propSlug}/${canonical}`,
+              permanent: false,
+            },
+          };
+
         if (wikibase_item) itemId = wikibase_item;
         if (thumbnail) itemThumbnail = thumbnail.source;
       } catch (error: any) {
@@ -153,12 +167,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
       if (itemProps) dispatch(setCurrentEntityProps(itemProps));
       if (currentProp) dispatch(setCurrentProp(currentProp));
 
-      // const featuredImageFile = path.join(
-      //   "/screenshot",
-      //   decodedPropSlug,
-      //   itemSlug + ".png",
-      // );
-
       const ogTitle = `${currentEntity.label}${
         currentProp
           ? ` - ${currentProp.overrideLabel || currentProp.label}`
@@ -193,17 +201,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
       let ogImage = "";
       let twitterCard = "";
 
-      // if (
-      //   fs.existsSync(
-      //     path.join(
-      //       getConfig().serverRuntimeConfig.PROJECT_ROOT,
-      //       `public`,
-      //       featuredImageFile,
-      //     ),
-      //   )
-      // ) {
-      //   ogImage = featuredImageFile;
-      // } else
       if (itemThumbnail) {
         ogImage = itemThumbnail;
       } else {
