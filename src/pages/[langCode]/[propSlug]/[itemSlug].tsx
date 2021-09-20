@@ -19,7 +19,7 @@ import { SITE_NAME } from "constants/meta";
 import SearchBar from "layout/SearchBar";
 import TreeLoader from "layout/TreeLoader";
 import VideoPopup from "../../../layout/VideoPopup";
-import getWikipediaArticle from "wikipedia/getWikipediaArticle";
+import getItemFromSlug from "wikidata/getItemFromSlug";
 import { isItemId } from "helpers/isItemId";
 import { loadEntity } from "treeHelpers/loadEntity";
 import pluralize from "pluralize";
@@ -109,11 +109,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     } else {
       try {
         //TODO: cache this
-        const {
-          data: { wikibase_item, thumbnail },
-        } = await getWikipediaArticle(decodedItemSlug, langCode);
-        if (wikibase_item) itemId = wikibase_item;
-        if (thumbnail) itemThumbnail = thumbnail.source;
+        itemId = await getItemFromSlug(decodedItemSlug, langCode);
       } catch (error: any) {
         console.error(error);
         return { props: { errorCode: error.response?.status || 500 } };
@@ -153,12 +149,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
       if (itemProps) dispatch(setCurrentEntityProps(itemProps));
       if (currentProp) dispatch(setCurrentProp(currentProp));
 
-      // const featuredImageFile = path.join(
-      //   "/screenshot",
-      //   decodedPropSlug,
-      //   itemSlug + ".png",
-      // );
-
       const ogTitle = `${currentEntity.label}${
         currentProp
           ? ` - ${currentProp.overrideLabel || currentProp.label}`
@@ -193,17 +183,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
       let ogImage = "";
       let twitterCard = "";
 
-      // if (
-      //   fs.existsSync(
-      //     path.join(
-      //       getConfig().serverRuntimeConfig.PROJECT_ROOT,
-      //       `public`,
-      //       featuredImageFile,
-      //     ),
-      //   )
-      // ) {
-      //   ogImage = featuredImageFile;
-      // } else
+      //NOT yet implemented by checking wikidata
       if (itemThumbnail) {
         ogImage = itemThumbnail;
       } else {
