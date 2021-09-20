@@ -70,6 +70,15 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
+        <ins
+          className="adsbygoogle"
+          style={{ display: "block" }}
+          data-ad-client="ca-pub-6287145012628815"
+          data-ad-slot="4149428847"
+          data-ad-format="auto"
+          data-full-width-responsive="true"
+        />
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
         {/* {video && (
           <>
             <a href={video.url}>Youtube Video</a>
