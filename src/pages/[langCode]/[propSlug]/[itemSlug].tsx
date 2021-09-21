@@ -19,6 +19,7 @@ import { SITE_NAME } from "constants/meta";
 import SearchBar from "layout/SearchBar";
 import TreeLoader from "layout/TreeLoader";
 import VideoPopup from "../../../layout/VideoPopup";
+import getItemFromSlug from "wikidata/getItemFromSlug";
 import getWikipediaArticle from "wikipedia/getWikipediaArticle";
 import { isItemId } from "helpers/isItemId";
 import { loadEntity } from "treeHelpers/loadEntity";
@@ -117,17 +118,15 @@ export const getServerSideProps = wrapper.getServerSideProps(
           },
         } = await getWikipediaArticle(decodedItemSlug, langCode);
 
-        if (canonical !== itemSlug)
-          //the article has redirect
-          return {
-            redirect: {
-              destination: `/${langCode}/${propSlug}/${canonical}`,
-              permanent: false,
-            },
-          };
-
-        if (wikibase_item) itemId = wikibase_item;
-        if (thumbnail) itemThumbnail = thumbnail.source;
+        //the wikipedia article redirects to another article
+        if (canonical !== itemSlug) {
+          //try to get the item from wikidata
+          itemId = await getItemFromSlug(decodedItemSlug, langCode);
+          // losing itemThumbnail feature for those isolated cases
+        } else {
+          if (wikibase_item) itemId = wikibase_item;
+          if (thumbnail) itemThumbnail = thumbnail.source;
+        }
       } catch (error: any) {
         console.error(error);
         return { props: { errorCode: error.response?.status || 500 } };
@@ -145,7 +144,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
       // TODO: Extract loadEntity here and put the redirects when needed to fetch less data
       if (!currentEntity) return { props: { errorCode: 404 } };
 
-      // redirect all => family_tree or
+      // redirect prop "all" to "family_tree"
       if (currentProp && currentProp?.slug !== propSlug) {
         return {
           redirect: {
@@ -154,7 +153,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         };
       }
 
-      //family_tree => all if not found
+      // redirect prop "family_tree" to "all" if not found
       if (propSlug !== DEFAULT_PROPERTY_ALL && !currentProp) {
         return {
           redirect: {

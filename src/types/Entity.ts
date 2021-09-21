@@ -17,7 +17,7 @@ export interface LanguageEntry {
 }
 
 export interface WikiEntity {
-  type: string;
+  type?: string;
   datatype?: string;
   id: string;
   pageid?: number;
