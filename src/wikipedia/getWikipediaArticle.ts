@@ -5,10 +5,10 @@ type Response = {
   type: string;
   title: string; //"Shit"
   displaytitle: string; //"<i>Shit</i>"
-  namespace: { id: number; text: string };
-  wikibase_item: string;
+  namespace: { id: number; text: string }; //No idea
+  wikibase_item: string; //'Q165709'
   titles: {
-    canonical: string;
+    canonical: string; //this is the slug e.g. Princess_Eugenie
     normalized: string;
     display: string;
   };

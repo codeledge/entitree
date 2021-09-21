@@ -28,6 +28,7 @@ export default async function getEntities(
 ): Promise<Entity[]> {
   const languages = DEFAULT_LANGS_CODES;
 
+  //avoid duplicate language, but it won't break anyway
   if (!languages.includes(languageCode)) languages.push(languageCode);
 
   if (
