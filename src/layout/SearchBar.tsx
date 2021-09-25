@@ -146,8 +146,6 @@ export default function SearchBar() {
                             currentEntity,
                             wikibaseAlias,
                           );
-                          console.log({ url });
-
                           router.push(url);
                         }}
                       >
