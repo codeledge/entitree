@@ -42,10 +42,10 @@ const TreePage = ({
   const { loadingEntity } = useAppSelector(({ tree }) => tree);
 
   const dispatch = useDispatch();
-  const wikibase = "wikidata";
+
   // force settings to be as url, otherwise you get a mix up
   useEffect(() => {
-    dispatch(setSetting({ languageCode: langCode, wikibase }));
+    dispatch(setSetting({ languageCode: langCode }));
   }, []);
 
   if (errorCode) {
@@ -75,7 +75,7 @@ const TreePage = ({
       </Head>
       <Page>
         <Header />
-        <SearchBar wikibase={wikibase} />
+        <SearchBar />
         {loadingEntity ? <TreeLoader /> : <DrawingArea />}
         <VideoPopup />
       </Page>
@@ -136,7 +136,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     try {
       const { currentEntity, currentProp, itemProps } = await loadEntity({
         itemId,
-        wikibase: "wikidata",
+        wikibaseAlias: "wikidata",
         langCode,
         propSlug: decodedPropSlug,
       });

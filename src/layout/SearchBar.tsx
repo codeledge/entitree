@@ -23,10 +23,11 @@ import useDebounce from "../hooks/useDebounce";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 
-export default function SearchBar({ wikibase }) {
+export default function SearchBar() {
   const { currentEntity, currentProp, loadingEntity, currentEntityProps } =
     useAppSelector(({ tree }) => tree);
-  // const { wikibase } = useAppSelector(({ settings }) => settings);
+
+  const { wikibaseAlias } = useAppSelector(({ settings }) => settings);
   // this is not working in production
   const currentLang = useCurrentLang();
   const router = useRouter();
@@ -43,7 +44,7 @@ export default function SearchBar({ wikibase }) {
     if (debouncedSearchTerm && fromKeyboard && currentLang) {
       setShowSuggestions(true);
       setLoadingSuggestions(true);
-      wikidataSearchTerm(debouncedSearchTerm, currentLang.code, wikibase)
+      wikidataSearchTerm(debouncedSearchTerm, currentLang.code, wikibaseAlias)
         .then((results) => {
           const filteredResults = results.filter(({ id, description }) => {
             // remove current entity from results
@@ -143,8 +144,10 @@ export default function SearchBar({ wikibase }) {
                             currentLang.code,
                             prop.slug,
                             currentEntity,
-                            wikibase,
+                            wikibaseAlias,
                           );
+                          console.log({ url });
+
                           router.push(url);
                         }}
                       >

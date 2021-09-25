@@ -4,6 +4,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { DEFAULT_LANG_CODE } from "constants/langs";
 import { DefaultTheme } from "styled-components";
 import { RIGHT_ENTITY_OPTIONS } from "constants/properties";
+import { WikibaseAlias } from "wikibase/getWikibaseInstance";
 import { defaultTheme } from "constants/themes";
 
 export type SettingsState = {
@@ -23,7 +24,7 @@ export type SettingsState = {
   showFace: boolean;
   showGenderColor: boolean;
   themeCode: string;
-  wikibase: "wikidata" | "factgrid";
+  wikibaseAlias: WikibaseAlias;
 };
 
 const initialState: SettingsState = {
@@ -40,7 +41,7 @@ const initialState: SettingsState = {
   showFace: true,
   showGenderColor: false,
   themeCode: defaultTheme.code,
-  wikibase: "wikidata",
+  wikibaseAlias: "wikidata",
 };
 
 export const SETTINGS_SLICE_NAME = "settings";

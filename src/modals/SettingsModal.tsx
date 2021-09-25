@@ -36,7 +36,7 @@ export default function SettingsModal({ show, onHideModal }) {
 
   const {
     languageCode,
-    wikibase,
+    wikibaseAlias,
     rightEntityOption,
     showGenderColor,
     showExtraInfo,
@@ -124,7 +124,7 @@ export default function SettingsModal({ show, onHideModal }) {
                     dispatch(
                       switchLanguage(
                         lang.code,
-                        wikibase,
+                        wikibaseAlias,
                         currentEntity.id,
                         currentProp?.id,
                       ),
@@ -260,7 +260,7 @@ export default function SettingsModal({ show, onHideModal }) {
             If this option is selected, it's not possible to navigate the tree
           </Form.Text>
         </Form.Group>
-        {wikibase === "wikidata" && (
+        {wikibaseAlias === "wikidata" && (
           <>
             <Form.Group controlId="genderColors">
               <Form.Check

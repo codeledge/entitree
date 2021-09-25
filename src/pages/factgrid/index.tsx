@@ -14,18 +14,17 @@ import { useDispatch } from "react-redux";
 
 export default function Home() {
   const dispatch = useDispatch();
-  const wikibase = "factgrid";
 
   // force settings to be as url, otherwise you get a mix up
   useEffect(() => {
-    dispatch(setSetting({ wikibase }));
+    dispatch(setSetting({ wikibaseAlias: "factgrid" }));
   }, []);
 
   const { loadingEntity } = useAppSelector(({ tree }) => tree);
   return (
     <Page>
       <Header />
-      <SearchBar wikibase={wikibase} />
+      <SearchBar />
       <Main>
         {loadingEntity ? (
           <TreeLoader />

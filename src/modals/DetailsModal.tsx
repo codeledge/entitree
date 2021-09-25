@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { FiExternalLink } from "react-icons/fi";
 import getEntitiesLabel from "treeHelpers/getEntitiesLabel";
 import { getEntityUrl } from "helpers/getEntityUrl";
-import getVideoByQid from "../helpers/getVideoByQid";
 import getWikipediaArticle from "wikipedia/getWikipediaArticle";
 import { missingImagesLink } from "services/imageService";
 import { setLoadingEntity } from "store/treeSlice";
@@ -14,7 +13,9 @@ import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 
 export default function DetailsModal({ node, onHideModal, nodeImages }) {
-  const { languageCode, wikibase } = useAppSelector(({ settings }) => settings);
+  const { languageCode, wikibaseAlias } = useAppSelector(
+    ({ settings }) => settings,
+  );
   const { currentEntity, currentProp } = useAppSelector(({ tree }) => tree);
   const router = useRouter();
 
@@ -38,22 +39,26 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
         },
       );
     }
-  }, [languageCode, wikibase, images.length, node.wikipediaSlug, node.label]);
+  }, [
+    languageCode,
+    wikibaseAlias,
+    images.length,
+    node.wikipediaSlug,
+    node.label,
+  ]);
 
   useEffect(() => {
     if (node.birthPlaceId || node.deathPlaceId) {
       getEntitiesLabel(
         [node.birthPlaceId, node.deathPlaceId],
         languageCode,
-        wikibase,
+        wikibaseAlias,
       ).then(([birthPlaceLabel, deathPlaceLabel]) => {
         setBirthPlace(birthPlaceLabel);
         setDeathPlace(deathPlaceLabel);
       });
     }
-  }, [languageCode, wikibase, node.birthPlaceId, node.deathPlaceId]);
-
-  const video = getVideoByQid(node.id);
+  }, [languageCode, wikibaseAlias, node.birthPlaceId, node.deathPlaceId]);
 
   return (
     <StyledModal show onHide={onHideModal}>
@@ -264,7 +269,7 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
                 languageCode,
                 currentProp?.slug || "",
                 node,
-                wikibase,
+                wikibaseAlias,
               );
               router.push(url);
               onHideModal();
