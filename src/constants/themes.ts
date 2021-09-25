@@ -160,6 +160,7 @@ const mattsTheme: DefaultTheme = {
   name: "Matt's theme",
   nodeBackgroundColor: "#f16f61",
   nodeBorder: "none",
+  nodeBoxShadow: "",
   nodeBorderRadius: 10,
   nodeFlexDirection: "column",
   nodeHeight: 190,
@@ -189,6 +190,7 @@ const mattsHorizontalTheme: DefaultTheme = {
   labelTextAlign: "center",
   name: "Matt's horizontal theme",
   nodeBorder: "none",
+  nodeBoxShadow: "",
   nodeCss: `.dates {
 color:white;
 font-style: italic;

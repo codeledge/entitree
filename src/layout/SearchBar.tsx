@@ -23,10 +23,11 @@ import useDebounce from "../hooks/useDebounce";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 
-export default function SearchBar() {
+export default function SearchBar({ wikibase }) {
   const { currentEntity, currentProp, loadingEntity, currentEntityProps } =
     useAppSelector(({ tree }) => tree);
-  const { wikibase } = useAppSelector(({ settings }) => settings);
+  // const { wikibase } = useAppSelector(({ settings }) => settings);
+  // this is not working in production
   const currentLang = useCurrentLang();
   const router = useRouter();
   const dispatch = useDispatch();
