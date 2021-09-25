@@ -15,14 +15,13 @@ import Head from "next/head";
 import Header from "layout/Header";
 import { LANGS } from "constants/langs";
 import { LangCode } from "types/Lang";
-import { SITE_NAME } from "constants/meta";
 import SearchBar from "layout/SearchBar";
 import TreeLoader from "layout/TreeLoader";
 import VideoPopup from "../../../layout/VideoPopup";
+import { createMetaTags } from "helpers/createMetaTags";
 import getWikipediaArticle from "wikipedia/getWikipediaArticle";
 import { isItemId } from "helpers/isItemId";
 import { loadEntity } from "treeHelpers/loadEntity";
-import pluralize from "pluralize";
 import { setSetting } from "store/settingsSlice";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
@@ -159,36 +158,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
       //   itemSlug + ".png",
       // );
 
-      const ogTitle = `${currentEntity.label}${
-        currentProp
-          ? ` - ${currentProp.overrideLabel || currentProp.label}`
-          : ""
-      } - ${SITE_NAME}`;
-
-      //Example: Discover the family tree of Elizabeth II: queen of the UK, Canada, Australia, and New Zealand, and head of the Commonwealth of Nations, 4 children, 1 sibling, 1 spouse
-      const ogDescription = `${
-        currentProp
-          ? `Discover the ${
-              currentProp?.overrideLabel || currentProp?.label
-            } of ${currentEntity.label}: `
-          : ""
-      }${currentEntity?.description}${
-        currentEntity.downIds?.length
-          ? `, ${pluralize("child", currentEntity.downIds.length, true)}`
-          : ""
-      }${
-        currentEntity.leftIds?.length
-          ? `, ${pluralize("sibling", currentEntity.leftIds.length, true)}`
-          : ""
-      }${
-        currentEntity.spousesIds?.length
-          ? `, ${pluralize("spouse", currentEntity.spousesIds.length, true)}`
-          : ""
-      }${
-        currentEntity.partnersIds?.length
-          ? `, ${pluralize("partner", currentEntity.partnersIds.length, true)}`
-          : ""
-      }`;
+      const { ogDescription, ogTitle } = createMetaTags(
+        langCode,
+        currentEntity,
+        currentProp,
+      );
 
       let ogImage = "";
       let twitterCard = "";
