@@ -39,10 +39,10 @@ const TreePage = ({
   const { loadingEntity } = useAppSelector(({ tree }) => tree);
 
   const dispatch = useDispatch();
-  const wikibase = "factgrid";
+
   // force settings to be as url, otherwise you get a mix up
   useEffect(() => {
-    dispatch(setSetting({ languageCode: langCode, wikibase }));
+    dispatch(setSetting({ languageCode: langCode, wikibaseAlias: "factgrid" }));
   }, []);
 
   if (errorCode) {
@@ -72,7 +72,7 @@ const TreePage = ({
       </Head>
       <Page>
         <Header />
-        <SearchBar wikibase={wikibase} />
+        <SearchBar />
         {loadingEntity ? <TreeLoader /> : <DrawingArea />}
       </Page>
       <Footer />
@@ -97,7 +97,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
       return { props: { errorCode: 404 } };
 
     const decodedPropSlug = decodeURIComponent(propSlug);
-    const decodedItemSlug = decodeURIComponent(itemSlug);
 
     let itemId;
     let itemThumbnail;
@@ -110,7 +109,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     try {
       const { currentEntity, currentProp, itemProps } = await loadEntity({
         itemId,
-        wikibase: "factgrid",
+        wikibaseAlias: "factgrid",
         langCode,
         propSlug: decodedPropSlug,
       });
@@ -139,12 +138,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
       dispatch(setCurrentEntity(currentEntity));
       if (itemProps) dispatch(setCurrentEntityProps(itemProps));
       if (currentProp) dispatch(setCurrentProp(currentProp));
-
-      // const featuredImageFile = path.join(
-      //   "/screenshot",
-      //   decodedPropSlug,
-      //   itemSlug + ".png",
-      // );
 
       const ogTitle = `${currentEntity.label}${
         currentProp
@@ -180,17 +173,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
       let ogImage = "";
       let twitterCard = "";
 
-      // if (
-      //   fs.existsSync(
-      //     path.join(
-      //       getConfig().serverRuntimeConfig.PROJECT_ROOT,
-      //       `public`,
-      //       featuredImageFile,
-      //     ),
-      //   )
-      // ) {
-      //   ogImage = featuredImageFile;
-      // } else
       if (itemThumbnail) {
         ogImage = itemThumbnail;
       } else {

@@ -40,7 +40,7 @@ export default async function getEntities(
   const wikiEntitiesMap = await getWikidataEntities({
     ids,
     languages,
-    wikibase: options.wikibase,
+    wikibaseAlias: options.wikibaseAlias,
   });
 
   const entities = await ids.reduce(async (acc: Promise<Entity[]>, id) => {
@@ -54,7 +54,7 @@ export default async function getEntities(
     const entity = formatEntity(
       wikiEntitiesMap[id],
       languageCode,
-      options?.wikibase,
+      options?.wikibaseAlias,
     );
 
     //filter out isInfantDeath by default

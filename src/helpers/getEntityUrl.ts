@@ -1,15 +1,16 @@
 import { DEFAULT_PROPERTY_ALL } from "constants/properties";
 import { Entity } from "types/Entity";
 import { LangCode } from "types/Lang";
+import { WikibaseAlias } from "wikibase/getWikibaseInstance";
 
 export const getEntityUrl = (
   langCode: LangCode,
   propSlug: string, //pass empty for "all"
   entity: Pick<Entity, "id" | "wikipediaSlug">,
-  wikibase: string,
+  wikibaseAlias: WikibaseAlias,
 ) => {
   let wikibasePrefix = "";
-  switch (wikibase) {
+  switch (wikibaseAlias) {
     case "wikidata":
       break;
     case "factgrid":

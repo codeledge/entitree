@@ -1,12 +1,12 @@
 import { LangCode } from "types/Lang";
 import axios from "axios";
-import { wikibaseInstance } from "lib/wikibaseInstance";
+import { getWikibaseInstance } from "wikibase/getWikibaseInstance";
 
 export default async function getItemFromSlug(
   slug: string,
   langCode: LangCode,
 ): Promise<string> {
-  const wdk = wikibaseInstance("wikidata");
+  const wikibase = getWikibaseInstance("wikidata");
 
   const url = await new Promise<string>((resolve, reject) => {
     try {
@@ -17,7 +17,7 @@ export default async function getItemFromSlug(
         schema:name "${slug.replace(/_/g, " ")}"@${langCode}.
       }`.trim();
 
-      const url = wdk.sparqlQuery(query);
+      const url = wikibase.sparqlQuery(query);
       resolve(url);
     } catch (error) {
       reject(error);
@@ -26,7 +26,7 @@ export default async function getItemFromSlug(
 
   return axios
     .get(url)
-    .then(({ data }) => wdk.simplify.sparqlResults(data))
+    .then(({ data }) => wikibase.simplify.sparqlResults(data))
     .then((results) => {
       const [{ item: itemId }] = results;
       return itemId;

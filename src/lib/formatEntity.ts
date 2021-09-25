@@ -38,7 +38,7 @@ import wbk from "wikibase-sdk";
 export default function formatEntity(
   wikidataEntity: WikiEntity,
   languageCode: LangCode,
-  wikibase: string,
+  wikibaseAlias: string,
 ) {
   const simpleClaims = wbk.simplify.claims(wikidataEntity.claims, {
     keepQualifiers: true,
@@ -51,11 +51,11 @@ export default function formatEntity(
 
   addLabel(entity, languageCode);
   addDescription(entity, languageCode);
-  if (wikibase === "factgrid") {
+  if (wikibaseAlias === "factgrid") {
     addFactgridUrl(entity);
   }
 
-  if (wikibase === "wikidata") {
+  if (wikibaseAlias === "wikidata") {
     addBirthDate(entity, languageCode);
     addDeathDate(entity, languageCode);
     addIsInfantDeath(entity);

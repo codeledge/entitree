@@ -15,14 +15,15 @@ import { useDispatch } from "react-redux";
 export default function Home() {
   const { loadingEntity } = useAppSelector(({ tree }) => tree);
   const dispatch = useDispatch();
-  const wikibase = "wikidata";
+
   useEffect(() => {
-    dispatch(setSetting({ wikibase }));
+    dispatch(setSetting({ wikibaseAlias: "wikidata" }));
   }, []);
+
   return (
     <Page>
       <Header />
-      <SearchBar wikibase={wikibase} />
+      <SearchBar />
       <Main>
         {loadingEntity ? (
           <TreeLoader />

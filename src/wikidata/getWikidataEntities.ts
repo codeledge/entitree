@@ -1,12 +1,16 @@
+import {
+  WikibaseAlias,
+  getWikibaseInstance,
+} from "wikibase/getWikibaseInstance";
+
 import { WikiEntity } from "types/Entity";
 import axios from "axios";
-import { wikibaseInstance } from "lib/wikibaseInstance";
 
 type getWikidataEntitiesProps = {
   ids: string[]; // ['Q1', 'Q2', 'Q3', ..., 'Q123']
   languages?: string[]; // ['en', 'fr', 'de']
   props?: string[]; // ['info', 'claims']
-  wikibase?: string;
+  wikibaseAlias?: WikibaseAlias;
 };
 
 type Response = Record<WikiEntity["id"], WikiEntity>;
@@ -15,9 +19,9 @@ export default async function getWikidataEntities({
   ids,
   languages = ["en"],
   props = ["labels", "descriptions", "claims", "sitelinks/urls"],
-  wikibase = "wikidata",
+  wikibaseAlias = "wikidata",
 }: getWikidataEntitiesProps): Promise<Response> {
-  const wdk = wikibaseInstance(wikibase);
+  const wikibaseInstance = getWikibaseInstance(wikibaseAlias);
 
   if (ids.length === 0) {
     return {};
@@ -28,7 +32,7 @@ export default async function getWikidataEntities({
   const urls: string[] = await new Promise((resolve, reject) => {
     try {
       resolve(
-        wdk.getManyEntities({
+        wikibaseInstance.getManyEntities({
           ids,
           languages,
           props,

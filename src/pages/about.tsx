@@ -101,7 +101,7 @@ export default function AboutPage() {
             className="btn btn-sm bg-light"
             target="_blank"
             rel="noopener noreferrer"
-            href="https://github.com/ogroppo/entitree/issues"
+            href="https://github.com/codeledge/entitree/issues"
           >
             <FaGithub /> report a bug!
           </a>
