@@ -10,16 +10,19 @@ export const getEntityUrl = (
   wikibaseAlias: WikibaseAlias,
 ) => {
   let wikibasePrefix = "";
+  let slug = "";
   switch (wikibaseAlias) {
     case "wikidata":
+      slug = entity.wikipediaSlug || entity.id;
       break;
     case "factgrid":
       wikibasePrefix += "/factgrid";
+      slug = entity.id; //factgrid not supporting slug at the moment
       break;
     default:
       break;
   }
   return `${wikibasePrefix}/${langCode}/${
     (propSlug && encodeURIComponent(propSlug)) || DEFAULT_PROPERTY_ALL
-  }/${entity.wikipediaSlug || entity.id}`;
+  }/${encodeURIComponent(slug)}`;
 };

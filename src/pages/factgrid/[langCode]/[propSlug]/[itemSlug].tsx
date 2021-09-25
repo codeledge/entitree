@@ -103,7 +103,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     if (isItemId(itemSlug)) {
       itemId = itemSlug;
     } else {
-      //error
+      return { props: { errorCode: 404, message: "Slug must be a QID" } };
     }
 
     try {
@@ -114,23 +114,13 @@ export const getServerSideProps = wrapper.getServerSideProps(
         propSlug: decodedPropSlug,
       });
 
-      // TODO: Extract loadEntity here and put the redirects when needed to fetch less data
       if (!currentEntity) return { props: { errorCode: 404 } };
 
-      // redirect all => family_tree or
-      if (currentProp && currentProp?.slug !== propSlug) {
-        return {
-          redirect: {
-            destination: `/${langCode}/${currentProp?.slug}/${itemSlug}`,
-          },
-        };
-      }
-
-      //family_tree => all if not found
+      //redirect to "all" if prop not found
       if (propSlug !== DEFAULT_PROPERTY_ALL && !currentProp) {
         return {
           redirect: {
-            destination: `/${langCode}/${DEFAULT_PROPERTY_ALL}/${itemSlug}`,
+            destination: `/factgrid/${langCode}/${DEFAULT_PROPERTY_ALL}/${itemSlug}`,
           },
         };
       }

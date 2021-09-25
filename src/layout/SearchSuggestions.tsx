@@ -31,6 +31,7 @@ export default function SearchSuggestions({
   const { languageCode, wikibaseAlias } = useAppSelector(
     ({ settings }) => settings,
   );
+
   return (
     <StyledSuggestions
       ref={wrapperRef}
