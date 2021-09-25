@@ -28,7 +28,7 @@ export default function SearchBar() {
     useAppSelector(({ tree }) => tree);
 
   const { wikibaseAlias } = useAppSelector(({ settings }) => settings);
-  // this is not working in production
+
   const currentLang = useCurrentLang();
   const router = useRouter();
   const dispatch = useDispatch();
