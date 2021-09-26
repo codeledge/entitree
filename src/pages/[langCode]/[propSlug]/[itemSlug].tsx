@@ -19,6 +19,7 @@ import SearchBar from "layout/SearchBar";
 import TreeLoader from "layout/TreeLoader";
 import VideoPopup from "../../../layout/VideoPopup";
 import { createMetaTags } from "helpers/createMetaTags";
+import getItemFromSlug from "wikidata/getItemFromSlug";
 import getWikipediaArticle from "wikipedia/getWikipediaArticle";
 import { isItemId } from "helpers/isItemId";
 import { loadEntity } from "treeHelpers/loadEntity";
@@ -40,10 +41,10 @@ const TreePage = ({
   const { loadingEntity } = useAppSelector(({ tree }) => tree);
 
   const dispatch = useDispatch();
-  const wikibase = "wikidata";
+
   // force settings to be as url, otherwise you get a mix up
   useEffect(() => {
-    dispatch(setSetting({ languageCode: langCode, wikibase }));
+    dispatch(setSetting({ languageCode: langCode, wikibaseAlias: "wikidata" }));
   }, []);
 
   if (errorCode) {
@@ -73,7 +74,7 @@ const TreePage = ({
       </Head>
       <Page>
         <Header />
-        <SearchBar wikibase={wikibase} />
+        <SearchBar />
         {loadingEntity ? <TreeLoader /> : <DrawingArea />}
         <VideoPopup />
       </Page>
@@ -109,10 +110,22 @@ export const getServerSideProps = wrapper.getServerSideProps(
       try {
         //TODO: cache this
         const {
-          data: { wikibase_item, thumbnail },
+          data: {
+            wikibase_item,
+            thumbnail,
+            titles: { canonical },
+          },
         } = await getWikipediaArticle(decodedItemSlug, langCode);
-        if (wikibase_item) itemId = wikibase_item;
-        if (thumbnail) itemThumbnail = thumbnail.source;
+
+        //the wikipedia article redirects to another article
+        if (canonical !== itemSlug) {
+          //try to get the item from wikidata
+          itemId = await getItemFromSlug(decodedItemSlug, langCode);
+          // losing itemThumbnail feature for those isolated cases
+        } else {
+          if (wikibase_item) itemId = wikibase_item;
+          if (thumbnail) itemThumbnail = thumbnail.source;
+        }
       } catch (error: any) {
         console.error(error);
         return { props: { errorCode: error.response?.status || 500 } };
@@ -122,7 +135,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     try {
       const { currentEntity, currentProp, itemProps } = await loadEntity({
         itemId,
-        wikibase: "wikidata",
+        wikibaseAlias: "wikidata",
         langCode,
         propSlug: decodedPropSlug,
       });
@@ -130,7 +143,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
       // TODO: Extract loadEntity here and put the redirects when needed to fetch less data
       if (!currentEntity) return { props: { errorCode: 404 } };
 
-      // redirect all => family_tree or
+      // redirect prop "all" to "family_tree"
       if (currentProp && currentProp?.slug !== propSlug) {
         return {
           redirect: {
@@ -139,7 +152,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         };
       }
 
-      //family_tree => all if not found
+      // redirect prop "family_tree" to "all" if not found
       if (propSlug !== DEFAULT_PROPERTY_ALL && !currentProp) {
         return {
           redirect: {
@@ -152,12 +165,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
       if (itemProps) dispatch(setCurrentEntityProps(itemProps));
       if (currentProp) dispatch(setCurrentProp(currentProp));
 
-      // const featuredImageFile = path.join(
-      //   "/screenshot",
-      //   decodedPropSlug,
-      //   itemSlug + ".png",
-      // );
-
       const { ogDescription, ogTitle } = createMetaTags(
         langCode,
         currentEntity,
@@ -167,17 +174,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
       let ogImage = "";
       let twitterCard = "";
 
-      // if (
-      //   fs.existsSync(
-      //     path.join(
-      //       getConfig().serverRuntimeConfig.PROJECT_ROOT,
-      //       `public`,
-      //       featuredImageFile,
-      //     ),
-      //   )
-      // ) {
-      //   ogImage = featuredImageFile;
-      // } else
       if (itemThumbnail) {
         ogImage = itemThumbnail;
       } else {

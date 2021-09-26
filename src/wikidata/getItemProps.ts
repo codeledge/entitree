@@ -1,17 +1,20 @@
 import { CHILD_ID, FAMILY_IDS_MAP } from "constants/properties";
 import { DEFAULT_LANG, FAMILY_TREE_TRANSLATIONS } from "constants/langs";
+import {
+  WikibaseAlias,
+  getWikibaseInstance,
+} from "wikibase/getWikibaseInstance";
 
 import { EntityProp } from "types/Entity";
 import { LangCode } from "types/Lang";
 import axios from "axios";
-import { wikibaseInstance } from "lib/wikibaseInstance";
 
 export default async function getItemProps(
   id: string,
   langCode: LangCode,
-  wikibase: string,
+  wikibaseAlias: WikibaseAlias,
 ) {
-  const wdk = wikibaseInstance(wikibase);
+  const wbk = getWikibaseInstance(wikibaseAlias);
 
   const url = await new Promise<string>((resolve, reject) => {
     try {
@@ -34,7 +37,7 @@ export default async function getItemProps(
       }". }
       }`.trim();
 
-      const url = wdk.sparqlQuery(query);
+      const url = wbk.sparqlQuery(query);
       resolve(url);
     } catch (error) {
       reject(error);
@@ -43,7 +46,7 @@ export default async function getItemProps(
 
   return axios
     .get(url)
-    .then(({ data }) => wdk.simplify.sparqlResults(data))
+    .then(({ data }) => wbk.simplify.sparqlResults(data))
     .then((results) => {
       const props: EntityProp[] = results.reduce(
         (filteredProps, { prop: { value: id, label } }) => {
