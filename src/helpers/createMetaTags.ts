@@ -6,7 +6,7 @@ import pluralize from "pluralize";
 export const createMetaTags = (
   langCode: string,
   currentEntity: Entity,
-  currentProp: EntityProp,
+  currentProp?: EntityProp,
 ) => {
   let ogDescription: string;
   let ogTitle: string;
