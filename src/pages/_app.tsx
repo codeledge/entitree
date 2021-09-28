@@ -31,6 +31,10 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
           crossOrigin="anonymous"
         />
         <script async src="https://platform.twitter.com/widgets.js" />
+        <meta
+          name="keywords"
+          content="Entitree, Family, Entity, Item, Tree, Taxonomy, Graph, Wiki, Wikipedia, Wikidata, Diagram, Chart, Reingold–Tilford, Hierarchy"
+        />
       </Head>
       <GlobalStyle />
       <PersistGate loading={null} persistor={persistor}>
