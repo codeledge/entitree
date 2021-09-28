@@ -25,7 +25,7 @@ const rootReducer = combineReducers({
 });
 
 const persistConfig = {
-  key: "root",
+  key: "entitree_v1",
   whitelist: [SETTINGS_SLICE_NAME],
   version: 5,
   storage,
