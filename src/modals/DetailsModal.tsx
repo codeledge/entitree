@@ -113,7 +113,6 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
                     <>
                       {image.sourceUrl && (
                         <a
-                          className="addImagesLink"
                           target="_blank"
                           rel="noopener noreferrer"
                           href={image.sourceUrl}
@@ -123,17 +122,20 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
                       )}{" "}
                       {image.sourceUrl && !image.imageDb && (
                         <a
-                          className="addImagesLink"
                           target="_blank"
                           rel="noopener noreferrer"
+                          style={{
+                            fontSize: "10px",
+                          }}
                           href={missingImagesLink({
                             wikidataEntity: node.id,
                             wikidataLabel: node.label,
                             sourceUrl: image.sourceUrl,
                             downloadUrl: image.downloadUrl,
                           })}
+                          title="Import image to our database for face detection & background removal"
                         >
-                          Add
+                          Import
                         </a>
                       )}
                     </>
