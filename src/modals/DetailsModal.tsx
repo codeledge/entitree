@@ -69,20 +69,15 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {/* {video && (
-          <>
-            <a href={video.url}>Youtube Video</a>
-          </>
-          <IFrameWrapper className="mb-2">
-            <iframe
-              src={video.embedLink}
-              title="YouTube video player"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          </IFrameWrapper>
-        )} */}
+        <ins
+          className="adsbygoogle"
+          style={{ display: "block" }}
+          data-ad-client="ca-pub-6287145012628815"
+          data-ad-slot="4149428847"
+          data-ad-format="auto"
+          data-full-width-responsive="true"
+        />
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
         {!!images.length && (
           <div className="allImages">
             {images &&
