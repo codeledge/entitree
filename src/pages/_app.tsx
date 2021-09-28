@@ -25,15 +25,10 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
     <>
       <Head>
         <link rel="icon" href="/favicon.png" />
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6287145012628815"
-          crossOrigin="anonymous"
-        />
         <script async src="https://platform.twitter.com/widgets.js" />
         <meta
           name="keywords"
-          content="Entitree, Family, Entity, Item, Tree, Taxonomy, Graph, Wiki, Wikipedia, Wikidata, Diagram, Chart, Reingold–Tilford, Hierarchy"
+          content="Family, Entity, Item, Tree, Taxonomy, Graph, Wikipedia, Wikidata, Diagram, Chart, D3, Hierarchy"
         />
       </Head>
       <GlobalStyle />
