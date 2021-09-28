@@ -1,4 +1,10 @@
-import Document, { DocumentContext } from "next/document";
+import Document, {
+  DocumentContext,
+  Head,
+  Html,
+  Main,
+  NextScript,
+} from "next/document";
 
 import React from "react";
 import { ServerStyleSheet } from "styled-components";
@@ -28,5 +34,29 @@ export default class MyDocument extends Document {
     } finally {
       sheet.seal();
     }
+  }
+
+  render() {
+    return (
+      <Html>
+        <Head>
+          <link rel="icon" href="/favicon.png" />
+          <script
+            async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6287145012628815"
+            crossOrigin="anonymous"
+          />
+          <script async src="https://platform.twitter.com/widgets.js" />
+          <meta
+            name="keywords"
+            content="Family, Entity, Item, Tree, Taxonomy, Graph, Wikipedia, Wikidata, Diagram, Chart, D3, Hierarchy"
+          />
+        </Head>
+        <body>
+          <Main />
+          <NextScript />
+        </body>
+      </Html>
+    );
   }
 }

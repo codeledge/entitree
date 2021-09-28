@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { FiExternalLink } from "react-icons/fi";
 import getEntitiesLabel from "treeHelpers/getEntitiesLabel";
 import { getEntityUrl } from "helpers/getEntityUrl";
-import getVideoByQid from "../helpers/getVideoByQid";
 import getWikipediaArticle from "wikipedia/getWikipediaArticle";
 import { missingImagesLink } from "services/imageService";
 import { setLoadingEntity } from "store/treeSlice";
@@ -51,8 +50,6 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
       });
     }
   }, [languageCode, node.birthPlaceId, node.deathPlaceId]);
-
-  const video = getVideoByQid(node.id);
 
   return (
     <StyledModal show onHide={onHideModal}>

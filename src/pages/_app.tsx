@@ -4,7 +4,6 @@ import store, { persistor, wrapper } from "../store";
 
 import { AppProps } from "next/app";
 import { GlobalStyle } from "layout/GlobalStyle";
-import Head from "next/head";
 import { PersistGate } from "redux-persist/integration/react";
 import { Provider } from "react-redux";
 import React from "react";
@@ -23,9 +22,6 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
 
   return (
     <>
-      <Head>
-        <link rel="icon" href="/favicon.png" />
-      </Head>
       <GlobalStyle />
       <PersistGate loading={null} persistor={persistor}>
         {() => (
