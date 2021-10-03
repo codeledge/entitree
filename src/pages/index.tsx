@@ -52,7 +52,7 @@ export default function Home() {
                       />
 
                       <Card.Body>
-                        Explore Living and past Royal family trees
+                        Explore the British royal family tree
                       </Card.Body>
                     </Card>
                   </a>
@@ -151,7 +151,7 @@ export default function Home() {
                 <Col>
                   <a
                     title="Go to Entitree's Medium page"
-                    href="https://wikidata.medium.com/"
+                    href="https://medium.com/family-trees"
                   >
                     <Card>
                       <ImgBox
