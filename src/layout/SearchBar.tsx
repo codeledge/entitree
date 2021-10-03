@@ -105,6 +105,9 @@ export default function SearchBar() {
               readOnly={!!loadingEntity}
               placeholder="Start typing to search..."
               autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="off"
+              spellCheck="false"
             />
             {currentEntity && (
               <InputGroup.Append>
