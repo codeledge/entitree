@@ -8,11 +8,13 @@ import {
 import getClaimIds, { checkIfClaimsHasSeriesOrdinal } from "./getClaimIds";
 
 import { Entity } from "types/Entity";
+import { WikibaseAlias } from "wikibase/getWikibaseInstance";
 import getSimpleClaimValue from "./getSimpleClaimValue";
 import getUpIds from "wikidata/getUpIds";
 import { sortClaimsByStartDate } from "claims/sortClaims";
 
 export type ConnectorOptions = {
+  wikibaseAlias: WikibaseAlias;
   currentPropId?: string;
   addUpIds?: boolean;
   addDownIds?: boolean;
@@ -25,7 +27,11 @@ export default async function addEntityConnectors(
   options: ConnectorOptions,
 ) {
   if (options.addUpIds && options.currentPropId) {
-    entity.upIds = await getUpIds(entity.id, options.currentPropId);
+    entity.upIds = await getUpIds(
+      entity.id,
+      options.currentPropId,
+      options.wikibaseAlias,
+    );
   } else {
     delete entity.upIds;
   }

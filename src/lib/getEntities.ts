@@ -24,10 +24,11 @@ type Options = ConnectorOptions & {
 export default async function getEntities(
   ids: string[],
   languageCode: LangCode,
-  options?: Options,
+  options: Options,
 ): Promise<Entity[]> {
   const languages = DEFAULT_LANGS_CODES;
 
+  //avoid duplicate language, but it won't break anyway
   if (!languages.includes(languageCode)) languages.push(languageCode);
 
   if (
@@ -39,6 +40,7 @@ export default async function getEntities(
   const wikiEntitiesMap = await getWikidataEntities({
     ids,
     languages,
+    wikibaseAlias: options.wikibaseAlias,
   });
 
   const entities = await ids.reduce(async (acc: Promise<Entity[]>, id) => {
@@ -49,7 +51,11 @@ export default async function getEntities(
       return accumulator;
 
     //add all custom fields
-    const entity = formatEntity(wikiEntitiesMap[id], languageCode);
+    const entity = formatEntity(
+      wikiEntitiesMap[id],
+      languageCode,
+      options?.wikibaseAlias,
+    );
 
     //filter out isInfantDeath by default
     if (entity.isHuman && entity.isInfantDeath) {
@@ -74,7 +80,7 @@ export default async function getEntities(
 export const getRootEntity = async (
   id: string,
   languageCode: LangCode,
-  options?: Options,
+  options: Options,
 ): Promise<Entity> => {
   const [root] = await getEntities([id], languageCode, options);
 
@@ -86,7 +92,7 @@ export const getRootEntity = async (
 export const getChildEntities = async (
   entityNode: EntityNode,
   languageCode: LangCode,
-  options?: Options,
+  options: Options,
 ): Promise<Entity[]> => {
   if (!entityNode.downIds) return [];
 
@@ -106,10 +112,9 @@ export const getChildEntities = async (
 export const getParentEntities = async (
   entityNode: EntityNode,
   languageCode: LangCode,
-  options?: Options,
+  options: Options,
 ): Promise<Entity[]> => {
   if (!entityNode.upIds) return [];
-
   const parents = await getEntities(entityNode.upIds, languageCode, options);
 
   //todo: move this in get Entities
@@ -127,7 +132,7 @@ export const getParentEntities = async (
 export const getSpouseEntities = async (
   entityNode: EntityNode,
   languageCode: LangCode,
-  options?: Options,
+  options: Options,
 ): Promise<Entity[]> => {
   if (!entityNode.rightIds) return [];
 
@@ -146,7 +151,7 @@ export const getSpouseEntities = async (
 export const getSiblingEntities = async (
   entityNode: EntityNode,
   languageCode: LangCode,
-  options?: Options,
+  options: Options,
 ): Promise<Entity[]> => {
   if (!entityNode.leftIds) return [];
 

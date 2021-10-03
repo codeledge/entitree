@@ -19,6 +19,10 @@ import {
   FiChevronUp,
 } from "react-icons/fi";
 import { GiBigDiamondRing, GiPerson } from "react-icons/gi";
+import {
+  IMAGE_SERVER_BASE_URL,
+  getDataprickImages,
+} from "services/imageService";
 import React, { memo, useEffect, useState } from "react";
 import { RiGroupLine, RiParentLine } from "react-icons/ri";
 import styled, { css, useTheme } from "styled-components";
@@ -38,7 +42,6 @@ import { MdChildCare } from "react-icons/md";
 import { SettingsState } from "store/settingsSlice";
 import addLifeSpan from "../lib/addLifeSpan";
 import clsx from "clsx";
-import { getDataprickImages } from "services/imageService";
 import getEntitiesLabel from "treeHelpers/getEntitiesLabel";
 import getFandomPageProps from "../services/fandomService";
 import getGeniProfile from "services/geniService";
@@ -62,14 +65,11 @@ export default memo(({ node }: { node: EntityNode }) => {
   const [showModal, setShowModal] = useState(false);
   const [lifeSpanInYears, setLifeSpanInYears] = useState(node.lifeSpanInYears);
   const [thumbnails, setThumbnails] = useState<Image[]>(node.thumbnails || []);
-  const [images, setImages] = useState<Image[]>(node.images || []);
-  const [faceImage, setFaceImage] = useState<Image>();
+  // let processedImageUrls = []; //Don't ask users to import images that have already been imported
   useEffect(() => {
     getDataprickImages(node.id.substr(1)).then((imageSet) => {
-      imageSet.forEach(({ faceImage, thumbnail }) => {
-        setFaceImage(faceImage);
+      imageSet.forEach((thumbnail) => {
         setThumbnails((thumbnails) => [thumbnail, ...thumbnails]);
-        setImages((images) => [thumbnail, ...images]);
       });
     });
     if (settings.showExternalImages) {
@@ -78,10 +78,11 @@ export default memo(({ node }: { node: EntityNode }) => {
           if (valid) {
             const ppImage = {
               url: node.peoplepillImageUrl,
+              sourceUrl: `https://peoplepill.com/people/${node.peoplepillSlug}`,
+              downloadUrl: node.peoplepillImageUrl,
               alt: `Image from peoplepill`,
             } as Image;
             setThumbnails((thumbnails) => [ppImage, ...thumbnails]);
-            setImages((images) => [ppImage, ...images]);
           }
         });
       }
@@ -93,11 +94,13 @@ export default memo(({ node }: { node: EntityNode }) => {
       getGeniProfile(node.geniId).then((geniProfile) => {
         if (geniProfile?.mugshot_urls?.thumb) {
           const geniImg = {
-            url: geniProfile.mugshot_urls.thumb,
+            url: geniProfile.mugshot_urls.medium,
             alt: `Geni.com image`,
+            sourceUrl: geniProfile.profile_url,
+            downloadUrl:
+              geniProfile.mugshot_urls.large ?? geniProfile.mugshot_urls.medium,
           } as Image;
           setThumbnails((thumbnails) => thumbnails.concat(geniImg));
-          setImages((images) => images.concat(geniImg));
         }
 
         //add Geni dates and country
@@ -175,7 +178,6 @@ export default memo(({ node }: { node: EntityNode }) => {
                   source: node.fandomUrl,
                 };
                 setThumbnails((thumbnails) => thumbnails.concat(fandomImage));
-                setImages((images) => images.concat(fandomImage));
               }
             }
           }
@@ -230,11 +232,13 @@ export default memo(({ node }: { node: EntityNode }) => {
       } else {
         //if(isLangCode(settings.secondLabelCode))
         //check if language is already in the main languages
-        getEntitiesLabel([node.id], settings.secondLabelCode as LangCode).then(
-          ([secondLabel]) => {
-            setSecondLabel(secondLabel);
-          },
-        );
+        getEntitiesLabel(
+          [node.id],
+          settings.secondLabelCode as LangCode,
+          settings.wikibaseAlias,
+        ).then(([secondLabel]) => {
+          setSecondLabel(secondLabel);
+        });
       }
     } else {
       setSecondLabel(undefined);
@@ -256,7 +260,16 @@ export default memo(({ node }: { node: EntityNode }) => {
 
     return false;
   });
-
+  let thumbnailStyle = {};
+  if (
+    currentThumbnail?.imageDb === true &&
+    settings.imageType === "transparent_head" &&
+    settings.imageOverflow !== "no"
+  ) {
+    thumbnailStyle = {
+      overflow: "visible",
+    };
+  }
   return (
     <ThemedNodeOuter
       style={{
@@ -272,7 +285,9 @@ export default memo(({ node }: { node: EntityNode }) => {
             className={clsx("imgWrapper", {
               hasThumbnails: thumbnails.length > 1,
             })}
+            style={thumbnailStyle}
             onClick={onThumbClick}
+            maskType={settings.imageOverflow}
           >
             {(!thumbnails || !thumbnails.length) && (
               <span className="defaultImgMessage">
@@ -287,30 +302,34 @@ export default memo(({ node }: { node: EntityNode }) => {
                 )}
               </span>
             )}
-            {settings.showFace && faceImage ? (
-              <img
-                alt={faceImage?.alt}
-                src={
-                  faceImage.url +
-                  (settings.imageType === "head" ? "?factor=1.5" : "")
-                }
-                title={faceImage.alt}
-              />
-            ) : (
+            {currentThumbnail && (
               <>
-                {currentThumbnail && (
-                  <>
-                    <img
-                      alt={currentThumbnail.alt}
-                      src={currentThumbnail.url}
-                      title={currentThumbnail.alt}
-                    />
-                    {thumbnails.length > 1 && (
-                      <span className="thumbnailCounter">
-                        {thumbnailIndex + 1}/{thumbnails.length}
-                      </span>
-                    )}
-                  </>
+                <img
+                  alt=""
+                  className={
+                    currentThumbnail?.imageDb === true &&
+                    settings.imageType === "transparent_head"
+                      ? "imgDatabase"
+                      : ""
+                  }
+                  style={
+                    {
+                      // maskImage: settings.imageOverflow.image_cut
+                      //   ? `url(${IMAGE_SERVER_BASE_URL}/api/canvas.png?size=100&cut=${settings.imageOverflow.image_cut});`
+                      //   : "", // doesn't work
+                    }
+                  }
+                  src={
+                    currentThumbnail?.imageDb
+                      ? currentThumbnail.urlByType?.[settings.imageType]
+                      : currentThumbnail.url
+                  }
+                  title={currentThumbnail.alt}
+                />
+                {thumbnails.length > 1 && (
+                  <span className="thumbnailCounter">
+                    {thumbnailIndex + 1}/{thumbnails.length}
+                  </span>
                 )}
               </>
             )}
@@ -555,7 +574,7 @@ export default memo(({ node }: { node: EntityNode }) => {
         <DetailsModal
           onHideModal={onHideModal}
           node={node}
-          nodeImages={images}
+          nodeImages={thumbnails}
         />
       )}
     </ThemedNodeOuter>
@@ -700,7 +719,7 @@ const ThemedNodeInner = styled.div`
     theme.nodeFlexDirection === "column" && `width: ${theme.thumbWidth}px`};
 `;
 
-const ThemedThumbnail = styled.div`
+const ThemedThumbnail = styled.div<{ maskType?: string }>`
   overflow: hidden;
   position: relative;
   flex-shrink: 0;
@@ -731,6 +750,14 @@ const ThemedThumbnail = styled.div`
     object-position: top;
     width: 100%;
     font-size: 12px; //for alt text
+  }
+  .imgDatabase {
+    transform: ${({ theme }) => theme.thumbTransform};
+    ${({ maskType, theme }) =>
+      (maskType === "both_sides" ||
+        maskType === "left_side" ||
+        maskType === "left_shoulder") &&
+      `-webkit-mask-image: url(${IMAGE_SERVER_BASE_URL}/api/canvas.png?size=${theme.thumbWidth}&cut=${maskType});`};
   }
   .thumbnailCounter {
     position: absolute;

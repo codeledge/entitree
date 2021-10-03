@@ -1,16 +1,24 @@
+import {
+  WikibaseAlias,
+  getWikibaseInstance,
+} from "wikibase/getWikibaseInstance";
+
 import axios from "axios";
-import wdk from "wikidata-sdk";
 
 export default async function getUpIds(
   entityId: string,
   propId: string,
+  wikibaseAlias: WikibaseAlias,
 ): Promise<string[]> {
-  const url = wdk.getReverseClaims(propId, entityId);
+  const wikibaseInstance = getWikibaseInstance(wikibaseAlias);
 
+  const url = wikibaseInstance.getReverseClaims(propId, entityId);
   const { data } = await axios.get(url);
 
   //TODO: get ids directly without simplify
-  const ids = wdk.simplify.sparqlResults(data).map(({ subject }) => subject);
+  const ids = wikibaseInstance.simplify
+    .sparqlResults(data)
+    .map(({ subject }) => subject);
 
   return ids;
 }

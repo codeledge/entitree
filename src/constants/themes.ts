@@ -39,6 +39,7 @@ declare module "styled-components" {
     thumbDisplay: boolean;
     thumbHeight: number;
     thumbWidth: number;
+    thumbTransform: string;
   }
 }
 
@@ -78,6 +79,7 @@ export const defaultTheme: DefaultTheme = {
   thumbDisplay: true,
   thumbHeight: 84,
   thumbWidth: 84,
+  thumbTransform: "translateY(-18px) scale(1.5)",
 };
 
 const bigTheme: DefaultTheme = {
@@ -158,6 +160,7 @@ const mattsTheme: DefaultTheme = {
   name: "Matt's theme",
   nodeBackgroundColor: "#f16f61",
   nodeBorder: "none",
+  nodeBoxShadow: "",
   nodeBorderRadius: 10,
   nodeFlexDirection: "column",
   nodeHeight: 190,
@@ -187,6 +190,7 @@ const mattsHorizontalTheme: DefaultTheme = {
   labelTextAlign: "center",
   name: "Matt's horizontal theme",
   nodeBorder: "none",
+  nodeBoxShadow: "",
   nodeCss: `.dates {
 color:white;
 font-style: italic;
@@ -206,6 +210,7 @@ font-style: italic;
   thumbCounterDisplay: "none",
   thumbHeight: 100,
   thumbWidth: 100,
+  thumbTransform: "translateY(-25px) scale(1.5)",
 };
 
 const onlyText: DefaultTheme = {

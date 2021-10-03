@@ -17,7 +17,7 @@ export interface LanguageEntry {
 }
 
 export interface WikiEntity {
-  type: string;
+  type?: string;
   datatype?: string;
   id: string;
   pageid?: number;
@@ -58,13 +58,13 @@ export interface Entity extends WikiEntity {
   endDate?: string;
   externalLinks?: ExternalLink[];
   eyeColor?: PropColor;
+  factgridUrl?: string;
   fandomHost?: string;
   fandomId?: string;
   fandomUrl?: string;
   gender?: string;
   geniId?: string;
   hairColor?: PropColor;
-  images?: Image[];
   inceptionAblishedSpan?: string;
   inceptionDate?: string;
   isHuman?: boolean;
@@ -104,7 +104,10 @@ export interface Entity extends WikiEntity {
 
 export type Image = {
   url: string;
-  alt: string;
+  alt?: string;
+  sourceUrl?: string;
+  imageDb?: boolean;
+  urlByType?: string[];
 };
 
 export type EntityProp = {

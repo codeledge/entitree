@@ -4,6 +4,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { DEFAULT_LANG_CODE } from "constants/langs";
 import { DefaultTheme } from "styled-components";
 import { RIGHT_ENTITY_OPTIONS } from "constants/properties";
+import { WikibaseAlias } from "wikibase/getWikibaseInstance";
 import { defaultTheme } from "constants/themes";
 
 export type SettingsState = {
@@ -11,7 +12,8 @@ export type SettingsState = {
   extraInfo?: string;
   followNavigation: boolean;
   hideToggleButton: boolean;
-  imageType: "face" | "head";
+  imageOverflow: string;
+  imageType: "transparent_face" | "transparent_head" | "face";
   languageCode: LangCode;
   rightEntityOption: typeof RIGHT_ENTITY_OPTIONS[1];
   secondLabelCode?: Lang["code"] | SecondLabel["code"];
@@ -22,38 +24,40 @@ export type SettingsState = {
   showFace: boolean;
   showGenderColor: boolean;
   themeCode: string;
+  wikibaseAlias: WikibaseAlias;
 };
 
 const initialState: SettingsState = {
   customThemes: {},
   followNavigation: true,
   hideToggleButton: false,
+  imageOverflow: "no",
   imageType: "face",
   languageCode: DEFAULT_LANG_CODE,
   rightEntityOption: RIGHT_ENTITY_OPTIONS[1],
   showBirthName: false,
   showExternalImages: false,
   showEyeHairColors: false,
-  showFace: false,
+  showFace: true,
   showGenderColor: false,
   themeCode: defaultTheme.code,
+  wikibaseAlias: "wikidata",
 };
 
+export const SETTINGS_SLICE_NAME = "settings";
 export const settingsSlice = createSlice({
-  name: "settings",
+  name: SETTINGS_SLICE_NAME,
   initialState,
   reducers: {
     setSetting: (
       state,
-      { payload: { key, val } }: PayloadAction<{ key: string; val: any }>,
-    ) => {
-      state[key] = val;
-    },
+      { payload: partialState }: PayloadAction<Partial<SettingsState>>,
+    ) => ({
+      ...state,
+      ...partialState,
+    }),
     setCustomTheme: (state, { payload }: PayloadAction<DefaultTheme>) => {
       state.customThemes[payload.code] = payload;
-    },
-    setLangCode: (state, { payload }: PayloadAction<LangCode>) => {
-      state.languageCode = payload;
     },
     setSecondLabelCode: (
       state,
@@ -69,7 +73,6 @@ export const settingsSlice = createSlice({
 
 export const {
   resetCurrentTheme,
-  setLangCode,
   setCustomTheme,
   setSecondLabelCode,
   setSetting,

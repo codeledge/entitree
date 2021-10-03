@@ -8,15 +8,18 @@ import { Entity, EntityProp } from "types/Entity";
 
 import { FAMILY_TREE_TRANSLATIONS } from "constants/langs";
 import { LangCode } from "types/Lang";
+import { WikibaseAlias } from "wikibase/getWikibaseInstance";
 import getItemProps from "wikidata/getItemProps";
 import { getRootEntity } from "lib/getEntities";
 
 export const loadEntity = async ({
   itemId,
+  wikibaseAlias,
   langCode,
   propSlug,
 }: {
   itemId: string;
+  wikibaseAlias: WikibaseAlias;
   langCode: LangCode;
   propSlug?: string;
 }): Promise<{
@@ -24,7 +27,7 @@ export const loadEntity = async ({
   currentProp?: EntityProp;
   itemProps?: EntityProp[];
 }> => {
-  let itemProps = await getItemProps(itemId, langCode);
+  let itemProps = await getItemProps(itemId, langCode, wikibaseAlias);
 
   let currentProp;
   if (propSlug && propSlug !== DEFAULT_PROPERTY_ALL) {
@@ -61,6 +64,7 @@ export const loadEntity = async ({
   }
 
   const currentEntity = await getRootEntity(itemId, langCode, {
+    wikibaseAlias,
     currentPropId: currentProp?.id,
     addUpIds: true,
     addDownIds: true,

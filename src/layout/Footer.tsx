@@ -29,7 +29,7 @@ export default function Footer() {
           </Nav.Link>
           <Nav.Link
             target="_blank"
-            href="https://github.com/codeledge/entitree-next"
+            href="https://github.com/codeledge/entitree"
           >
             <FaGithub />
           </Nav.Link>

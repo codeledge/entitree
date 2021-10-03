@@ -31,28 +31,21 @@ export default function Graph({
 
   useEffect(() => {
     if (currentEntity && entitiesMap) {
-      const {
-        map,
-        nodes,
-        rels,
-        maxRight,
-        maxLeft,
-        maxBottom,
-        maxTop,
-      } = layoutFromMap<Entity>(currentEntity.treeId!, entitiesMap, {
-        clone: true,
-        secondDegreeSpacing: theme.separationCousins,
-        firstDegreeSpacing: theme.separationSameGroup,
-        nextAfterAccessor: "openSpouseTreeIds",
-        nextAfterSpacing: theme.separationSiblingSpouse,
-        nextBeforeAccessor: "openSiblingTreeIds",
-        nextBeforeSpacing: theme.separationSiblingSpouse,
-        nodeHeight: theme.nodeHeight,
-        nodeWidth: theme.nodeWidth,
-        sourcesAccessor: "openParentTreeIds",
-        sourceTargetSpacing: theme.separationVertical,
-        targetsAccessor: "openChildTreeIds",
-      });
+      const { map, nodes, rels, maxRight, maxLeft, maxBottom, maxTop } =
+        layoutFromMap<Entity>(currentEntity.treeId!, entitiesMap, {
+          clone: true,
+          secondDegreeSpacing: theme.separationCousins,
+          firstDegreeSpacing: theme.separationSameGroup,
+          nextAfterAccessor: "openSpouseTreeIds",
+          nextAfterSpacing: theme.separationSiblingSpouse,
+          nextBeforeAccessor: "openSiblingTreeIds",
+          nextBeforeSpacing: theme.separationSiblingSpouse,
+          nodeHeight: theme.nodeHeight,
+          nodeWidth: theme.nodeWidth,
+          sourcesAccessor: "openParentTreeIds",
+          sourceTargetSpacing: theme.separationVertical,
+          targetsAccessor: "openChildTreeIds",
+        });
 
       //console.log({ nodes, rels, maxRight, maxLeft, maxBottom, maxTop });
 

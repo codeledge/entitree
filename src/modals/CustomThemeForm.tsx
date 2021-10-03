@@ -434,7 +434,21 @@ export default function CustomThemeForm() {
           </Form.Text>
         </Col>
       </Form.Group>
-
+      <Form.Group as={Row} controlId="thumbBorderRadius">
+        <Col sm={{ span: 9, offset: 3 }}>
+          <Form.Label>Thumbnail Image Database Transform</Form.Label>
+          <InputGroup>
+            <Form.Control
+              onChange={(e) => setCustomProp("thumbTransform", e.target.value)}
+              type="text"
+              value={currentCustomTheme.thumbTransform}
+            />
+          </InputGroup>
+          <Form.Text className="text-muted">
+            ie. make the transparent face bigger/smaller
+          </Form.Text>
+        </Col>
+      </Form.Group>
       <fieldset>
         <Form.Group as={Row}>
           <Form.Label as="legend" column sm={3} className="pt-0">

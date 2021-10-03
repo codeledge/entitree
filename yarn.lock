@@ -2385,10 +2385,10 @@ enquirer@^2.3.5:
   dependencies:
     ansi-colors "^4.1.1"
 
-entitree-flex@0.3.2:
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/entitree-flex/-/entitree-flex-0.3.2.tgz#68abb54d0d0eb8bdaa8c95ce363ee8f52b9d86e7"
-  integrity sha512-8sgaWtPV1xKC1TpMaWaNzVA4Wv+Yp3OnW851otci3xI1qdsSZNqoAm+U9Y9ZiRPblj4CAkH6EWzXfnuvn2acFQ==
+entitree-flex@0.3.4:
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/entitree-flex/-/entitree-flex-0.3.4.tgz#a782bc9eb04574a41fdd2a4dd3bf57bdc23e3e28"
+  integrity sha512-B5+CFdqUtzQAWiiipJpqk9HDRMdga4RYv9lQO1+0ynRLlYKGW57pQ6ESnsUTHw3MxtbqHIgtsb8KXhFDsV/iaw==
 
 error-ex@^1.3.1:
   version "1.3.2"
@@ -6039,7 +6039,7 @@ which@^2.0.1:
   dependencies:
     isexe "^2.0.0"
 
-wikibase-sdk@^7.13.0:
+wikibase-sdk@7.13.0, wikibase-sdk@^7.13.0:
   version "7.13.0"
   resolved "https://registry.npmjs.org/wikibase-sdk/-/wikibase-sdk-7.13.0.tgz"
   integrity sha512-XVnmSmE4sYXmMQBTLzfKyxz1SvdVL2YiCfbvwObh23WBG2Dcer/HZsg6LN3l/KhUHo8g2Fse+b3PgZqJRSfRAg==

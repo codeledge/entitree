@@ -10,15 +10,11 @@ import {
   persistStore,
 } from "redux-persist";
 import { MakeStore, createWrapper } from "next-redux-wrapper";
-import {
-  ThunkAction,
-  configureStore,
-  getDefaultMiddleware,
-} from "@reduxjs/toolkit";
+import { ThunkAction, configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import settingsReducer, { SETTINGS_SLICE_NAME } from "./settingsSlice";
 
 import alertReducer from "./alertSlice";
-import settingsReducer from "./settingsSlice";
 import storage from "redux-persist/lib/storage";
 import treeReducer from "./treeSlice";
 
@@ -29,8 +25,8 @@ const rootReducer = combineReducers({
 });
 
 const persistConfig = {
-  key: "root",
-  whitelist: ["settings"],
+  key: "entitree_v1",
+  whitelist: [SETTINGS_SLICE_NAME],
   version: 5,
   storage,
   debug: process.env.NODE_ENV === "development",
@@ -40,11 +36,12 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
   reducer: persistedReducer,
-  middleware: getDefaultMiddleware({
-    serializableCheck: {
-      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-    },
-  }),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
 });
 
 const makeStore: MakeStore = () => store;

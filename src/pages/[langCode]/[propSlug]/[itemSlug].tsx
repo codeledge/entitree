@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import {
   setCurrentEntity,
   setCurrentEntityProps,
@@ -14,17 +15,17 @@ import Head from "next/head";
 import Header from "layout/Header";
 import { LANGS } from "constants/langs";
 import { LangCode } from "types/Lang";
-import React from "react";
-import { SITE_NAME } from "constants/meta";
 import SearchBar from "layout/SearchBar";
 import TreeLoader from "layout/TreeLoader";
 import VideoPopup from "../../../layout/VideoPopup";
+import { createMetaTags } from "helpers/createMetaTags";
+import getItemFromSlug from "wikidata/getItemFromSlug";
 import getWikipediaArticle from "wikipedia/getWikipediaArticle";
 import { isItemId } from "helpers/isItemId";
 import { loadEntity } from "treeHelpers/loadEntity";
-import pluralize from "pluralize";
-import { setLangCode } from "store/settingsSlice";
+import { setSetting } from "store/settingsSlice";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
 
 const TreePage = ({
   errorCode,
@@ -35,8 +36,16 @@ const TreePage = ({
   twitterDescription,
   twitterImage,
   twitterTitle,
+  langCode,
 }) => {
   const { loadingEntity } = useAppSelector(({ tree }) => tree);
+
+  const dispatch = useDispatch();
+
+  // force settings to be as url, otherwise you get a mix up
+  useEffect(() => {
+    dispatch(setSetting({ languageCode: langCode, wikibaseAlias: "wikidata" }));
+  }, []);
 
   if (errorCode) {
     return <Error statusCode={errorCode} />;
@@ -101,10 +110,22 @@ export const getServerSideProps = wrapper.getServerSideProps(
       try {
         //TODO: cache this
         const {
-          data: { wikibase_item, thumbnail },
+          data: {
+            wikibase_item,
+            thumbnail,
+            titles: { canonical },
+          },
         } = await getWikipediaArticle(decodedItemSlug, langCode);
-        if (wikibase_item) itemId = wikibase_item;
-        if (thumbnail) itemThumbnail = thumbnail.source;
+
+        //the wikipedia article redirects to another article
+        if (canonical !== itemSlug) {
+          //try to get the item from wikidata
+          itemId = await getItemFromSlug(decodedItemSlug, langCode);
+          // losing itemThumbnail feature for those isolated cases
+        } else {
+          if (wikibase_item) itemId = wikibase_item;
+          if (thumbnail) itemThumbnail = thumbnail.source;
+        }
       } catch (error: any) {
         console.error(error);
         return { props: { errorCode: error.response?.status || 500 } };
@@ -114,6 +135,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     try {
       const { currentEntity, currentProp, itemProps } = await loadEntity({
         itemId,
+        wikibaseAlias: "wikidata",
         langCode,
         propSlug: decodedPropSlug,
       });
@@ -121,7 +143,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
       // TODO: Extract loadEntity here and put the redirects when needed to fetch less data
       if (!currentEntity) return { props: { errorCode: 404 } };
 
-      // redirect all => family_tree or
+      // redirect prop "all" to "family_tree"
       if (currentProp && currentProp?.slug !== propSlug) {
         return {
           redirect: {
@@ -130,7 +152,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         };
       }
 
-      //family_tree => all if not found
+      // redirect prop "family_tree" to "all" if not found
       if (propSlug !== DEFAULT_PROPERTY_ALL && !currentProp) {
         return {
           redirect: {
@@ -139,65 +161,19 @@ export const getServerSideProps = wrapper.getServerSideProps(
         };
       }
 
-      // force settings to be as url, otherwise you get a mix up
-      // TODO: THIS IS NOT WORKING, check redux dev tools it's not setting the lang
-      // eve tho it comes after the persistence
-      dispatch(setLangCode(langCode));
       dispatch(setCurrentEntity(currentEntity));
       if (itemProps) dispatch(setCurrentEntityProps(itemProps));
       if (currentProp) dispatch(setCurrentProp(currentProp));
 
-      // const featuredImageFile = path.join(
-      //   "/screenshot",
-      //   decodedPropSlug,
-      //   itemSlug + ".png",
-      // );
-
-      const ogTitle = `${currentEntity.label}${
-        currentProp
-          ? ` - ${currentProp.overrideLabel || currentProp.label}`
-          : ""
-      } - ${SITE_NAME}`;
-
-      //Example: Discover the family tree of Elizabeth II: queen of the UK, Canada, Australia, and New Zealand, and head of the Commonwealth of Nations, 4 children, 1 sibling, 1 spouse
-      const ogDescription = `${
-        currentProp
-          ? `Discover the ${
-              currentProp?.overrideLabel || currentProp?.label
-            } of ${currentEntity.label}: `
-          : ""
-      }${currentEntity?.description}${
-        currentEntity.downIds?.length
-          ? `, ${pluralize("child", currentEntity.downIds.length, true)}`
-          : ""
-      }${
-        currentEntity.leftIds?.length
-          ? `, ${pluralize("sibling", currentEntity.leftIds.length, true)}`
-          : ""
-      }${
-        currentEntity.spousesIds?.length
-          ? `, ${pluralize("spouse", currentEntity.spousesIds.length, true)}`
-          : ""
-      }${
-        currentEntity.partnersIds?.length
-          ? `, ${pluralize("partner", currentEntity.partnersIds.length, true)}`
-          : ""
-      }`;
+      const { ogDescription, ogTitle } = createMetaTags(
+        langCode,
+        currentEntity,
+        currentProp,
+      );
 
       let ogImage = "";
       let twitterCard = "";
 
-      // if (
-      //   fs.existsSync(
-      //     path.join(
-      //       getConfig().serverRuntimeConfig.PROJECT_ROOT,
-      //       `public`,
-      //       featuredImageFile,
-      //     ),
-      //   )
-      // ) {
-      //   ogImage = featuredImageFile;
-      // } else
       if (itemThumbnail) {
         ogImage = itemThumbnail;
       } else {
@@ -205,7 +181,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
         twitterCard = "summary";
       }
 
-      return { props: { ogTitle, ogImage, twitterCard, ogDescription } };
+      return {
+        props: { ogTitle, ogImage, twitterCard, ogDescription, langCode },
+      };
     } catch (error: any) {
       console.error(error);
 

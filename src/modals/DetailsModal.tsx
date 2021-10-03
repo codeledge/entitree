@@ -1,4 +1,4 @@
-import { Button, Modal } from "react-bootstrap";
+import { Button, Figure, Modal } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 
 import { FiExternalLink } from "react-icons/fi";
@@ -13,7 +13,9 @@ import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 
 export default function DetailsModal({ node, onHideModal, nodeImages }) {
-  const { languageCode } = useAppSelector(({ settings }) => settings);
+  const { languageCode, wikibaseAlias } = useAppSelector(
+    ({ settings }) => settings,
+  );
   const { currentEntity, currentProp } = useAppSelector(({ tree }) => tree);
   const router = useRouter();
 
@@ -37,19 +39,26 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
         },
       );
     }
-  }, [languageCode, images.length, node.wikipediaSlug, node.label]);
+  }, [
+    languageCode,
+    wikibaseAlias,
+    images.length,
+    node.wikipediaSlug,
+    node.label,
+  ]);
 
   useEffect(() => {
     if (node.birthPlaceId || node.deathPlaceId) {
       getEntitiesLabel(
         [node.birthPlaceId, node.deathPlaceId],
         languageCode,
+        wikibaseAlias,
       ).then(([birthPlaceLabel, deathPlaceLabel]) => {
         setBirthPlace(birthPlaceLabel);
         setDeathPlace(deathPlaceLabel);
       });
     }
-  }, [languageCode, node.birthPlaceId, node.deathPlaceId]);
+  }, [languageCode, wikibaseAlias, node.birthPlaceId, node.deathPlaceId]);
 
   return (
     <StyledModal show onHide={onHideModal}>
@@ -75,16 +84,63 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
           data-full-width-responsive="true"
         />
         <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        {/* {video && (
+          <>
+            <a href={video.url}>Youtube Video</a>
+          </>
+          <IFrameWrapper className="mb-2">
+            <iframe
+              src={video.embedLink}
+              title="YouTube video player"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </IFrameWrapper>
+        )} */}
         {!!images.length && (
           <div className="allImages">
             {images &&
               images.map((image) => (
-                <img
-                  key={image.url}
-                  alt={image.alt}
-                  src={image.url}
-                  title={image.alt}
-                />
+                <Figure>
+                  <Figure.Image
+                    key={image.url}
+                    alt={image.alt}
+                    src={image.url}
+                    title={image.alt}
+                  />
+                  <Figure.Caption>
+                    <>
+                      {image.sourceUrl && (
+                        <a
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          href={image.sourceUrl}
+                        >
+                          Source
+                        </a>
+                      )}{" "}
+                      {image.sourceUrl && !image.imageDb && (
+                        <a
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            fontSize: "10px",
+                          }}
+                          href={missingImagesLink({
+                            wikidataEntity: node.id,
+                            wikidataLabel: node.label,
+                            sourceUrl: image.sourceUrl,
+                            downloadUrl: image.downloadUrl,
+                          })}
+                          title="Import image to our database for face detection & background removal"
+                        >
+                          Import
+                        </a>
+                      )}
+                    </>
+                  </Figure.Caption>
+                </Figure>
               ))}
           </div>
         )}
@@ -112,7 +168,10 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
           className="addImagesLink"
           target="_blank"
           rel="noopener noreferrer"
-          href={missingImagesLink(node.id, node.label)}
+          href={missingImagesLink({
+            wikidataEntity: node.id,
+            wikidataLabel: node.label,
+          })}
         >
           Add missing image <FiExternalLink />
         </a>
@@ -133,6 +192,20 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
               href={node.wikidataUrl}
             >
               <img src="/icons/wikidata.png" alt="Wikidata" />
+            </a>
+          )}
+          {node.factgridUrl && (
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Open FactGrid item in a new tab"
+              href={node.factgridUrl}
+            >
+              <img
+                src="/icons/factgrid.png"
+                style={{ width: "100px" }}
+                alt="FactGrid Link"
+              />
             </a>
           )}
           {node.wikipediaUrl && (
@@ -198,6 +271,7 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
                 languageCode,
                 currentProp?.slug || "",
                 node,
+                wikibaseAlias,
               );
               router.push(url);
               onHideModal();
