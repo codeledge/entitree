@@ -40,7 +40,7 @@ export default function Home() {
                 with a direct link to Wikipedia Articles.
               </p>
               <StyledRow>
-                <Col>
+                <StyledCol xs={12} md={6}>
                   <a
                     title="Go to Queen Elizabeth II family tree"
                     href="/en/family_tree/Elizabeth_II"
@@ -52,12 +52,12 @@ export default function Home() {
                       />
 
                       <Card.Body>
-                        Explore the British royal family tree
+                        Explore the British royal family tree 👸🏻🤴
                       </Card.Body>
                     </Card>
                   </a>
-                </Col>
-                <Col>
+                </StyledCol>
+                <StyledCol xs={12} md={6}>
                   <a
                     title="Go to Freddie mercury's family tree"
                     href="/en/family_tree/Freddie_Mercury"
@@ -68,14 +68,14 @@ export default function Home() {
                         src="/examples/freddie.png"
                       />
                       <Card.Body>
-                        Search for anyone in the world, literally, anyone
+                        Search for anyone in the world, literally, anyone 🌎
                       </Card.Body>
                     </Card>
                   </a>
-                </Col>
+                </StyledCol>
               </StyledRow>
               <StyledRow>
-                <Col>
+                <StyledCol xs={12} md={6}>
                   <a
                     title="The Simpson's family tree"
                     href="/en/family_tree/Homer_Simpson?0u0=u"
@@ -92,8 +92,8 @@ export default function Home() {
                       </Card.Body>
                     </Card>
                   </a>
-                </Col>
-                <Col>
+                </StyledCol>
+                <StyledCol xs={12} md={6}>
                   <a
                     title="Go to Joe Biden's family tree"
                     href="/en/family_tree/Joe_Biden"
@@ -109,10 +109,10 @@ export default function Home() {
                       </Card.Body>
                     </Card>
                   </a>
-                </Col>
+                </StyledCol>
               </StyledRow>
               <StyledRow>
-                <Col>
+                <StyledCol xs={12} md={6}>
                   <a
                     title="Go to Spongebob's family tree"
                     href="/en/family_tree/SpongeBob_SquarePants_(character)?0u1=u"
@@ -128,8 +128,8 @@ export default function Home() {
                       </Card.Body>
                     </Card>
                   </a>
-                </Col>
-                <Col>
+                </StyledCol>
+                <StyledCol xs={12} md={6}>
                   <Card>
                     <iframe
                       style={{ maxWidth: "100%" }}
@@ -145,10 +145,10 @@ export default function Home() {
                       navigation
                     </Card.Body>
                   </Card>
-                </Col>
+                </StyledCol>
               </StyledRow>
               <StyledRow>
-                <Col>
+                <StyledCol xs={12} md={6}>
                   <a
                     title="Go to Entitree's Medium page"
                     href="https://medium.com/family-trees"
@@ -160,17 +160,17 @@ export default function Home() {
                       />
                       <Card.Body>
                         Read more Medium articles, there are more than 600 trees
-                        created
+                        created 📝
                       </Card.Body>
                     </Card>
                   </a>
-                </Col>
-                <Col>
-                  <a
-                    title="Go to Kim Jong-il's page"
-                    href="/en/family_tree/Kim_Jong-il"
-                  >
-                    <Card>
+                </StyledCol>
+                <StyledCol xs={12} md={6}>
+                  <Card>
+                    <a
+                      title="Go to Kim Jong-il's page"
+                      href="/en/family_tree/Kim_Jong-il"
+                    >
                       <ImgBox
                         alt="Medium article"
                         src="/examples/settings.png"
@@ -178,13 +178,13 @@ export default function Home() {
                       <Card.Body>
                         Entitree is Multi-Label, and Multi-Language 👌
                       </Card.Body>
-                    </Card>
-                  </a>
-                </Col>
+                    </a>
+                  </Card>
+                </StyledCol>
               </StyledRow>
               <SubTitle>What they say about us:</SubTitle>
               <StyledRow>
-                <Col>
+                <StyledCol xs={12} md={6}>
                   <Card>
                     <Card.Body>
                       <blockquote className="blockquote mb-0">
@@ -194,13 +194,21 @@ export default function Home() {
                           regular basis.
                         </p>
                         <footer className="blockquote-footer">
-                          <cite title="Source Title">UsefulCharts</cite>
+                          <cite>
+                            <a
+                              target="_blank"
+                              href="https://usefulcharts.com/"
+                              rel="noreferrer"
+                            >
+                              UsefulCharts
+                            </a>
+                          </cite>
                         </footer>
                       </blockquote>
                     </Card.Body>
                   </Card>
-                </Col>
-                <Col>
+                </StyledCol>
+                <StyledCol xs={12} md={6}>
                   <Card>
                     <Card.Body>
                       <blockquote className="blockquote mb-0">
@@ -209,15 +217,23 @@ export default function Home() {
                           to see it!
                         </p>
                         <footer className="blockquote-footer">
-                          <cite title="Source Title">Wikidocumentaries</cite>
+                          <cite>
+                            <a
+                              target="_blank"
+                              href="https://wikidocumentaries-demo.wmflabs.org/"
+                              rel="noreferrer"
+                            >
+                              Wikidocumentaries
+                            </a>
+                          </cite>
                         </footer>
                       </blockquote>
                     </Card.Body>
                   </Card>
-                </Col>
+                </StyledCol>
               </StyledRow>
               <StyledRow>
-                <Col>
+                <StyledCol xs={12} md={6}>
                   <Card>
                     <Card.Body>
                       <blockquote className="blockquote mb-0">
@@ -226,24 +242,40 @@ export default function Home() {
                           much fun to surf through connected data with that.
                         </p>
                         <footer className="blockquote-footer">
-                          <cite title="Source Title">Garetien</cite>
+                          <cite>
+                            <a
+                              target="_blank"
+                              href="https://www.garetien.de/index.php?title=Hauptseite"
+                              rel="noreferrer"
+                            >
+                              Garetien
+                            </a>
+                          </cite>
                         </footer>
                       </blockquote>
                     </Card.Body>
                   </Card>
-                </Col>
-                <Col>
+                </StyledCol>
+                <StyledCol xs={12} md={6}>
                   <Card>
                     <Card.Body>
                       <blockquote className="blockquote mb-0">
                         <p>Love it!</p>
                         <footer className="blockquote-footer">
-                          <cite title="Source Title">royaltrees.co.uk</cite>
+                          <cite>
+                            <a
+                              target="_blank"
+                              href="http://royaltrees.co.uk/"
+                              rel="noreferrer"
+                            >
+                              royaltrees.co.uk
+                            </a>
+                          </cite>
                         </footer>
                       </blockquote>
                     </Card.Body>
                   </Card>
-                </Col>
+                </StyledCol>
               </StyledRow>
             </Content>
           </Container>
@@ -288,6 +320,8 @@ const ImgBoxWrapper = styled.div`
   }
 `;
 
-const StyledRow = styled(Row)`
+const StyledRow = styled(Row)``;
+
+const StyledCol = styled(Col)`
   margin-bottom: 16px;
 `;
