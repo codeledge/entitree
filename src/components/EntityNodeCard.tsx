@@ -175,7 +175,8 @@ export default memo(({ node }: { node: EntityNode }) => {
                 const fandomImage = {
                   url: image.url.split("/revision/")[0],
                   alt: `Fandom image, ${image.name}`,
-                  source: node.fandomUrl,
+                  downloadUrl: image.url.split("/revision/")[0],
+                  sourceUrl: node.fandomUrl,
                 };
                 setThumbnails((thumbnails) => thumbnails.concat(fandomImage));
               }
