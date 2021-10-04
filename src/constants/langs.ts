@@ -17,6 +17,7 @@ const DISAMBIGUATION_PAGE_DESC = {
   pt: "página de desambiguação de um projeto da Wikimedia",
   ru: "страница значений в проекте Викимедиа",
   zh: "維基媒體消歧義頁",
+  ne: "------",
 };
 
 export const LANG_MAP = {
