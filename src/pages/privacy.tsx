@@ -18,7 +18,7 @@ export default function PrivacyPolicyPage() {
         <p>
           We are very delighted that you have shown interest in our enterprise.
           Data protection is of a particularly high priority for the management
-          of the Herr. The use of the Internet pages of the Herr is possible
+          of Entitree. The use of the Internet pages of Entitree is possible
           without any indication of personal data; however, if a data subject
           wants to use special enterprise services via our website, processing
           of personal data could become necessary. If the processing of personal
@@ -31,7 +31,7 @@ export default function PrivacyPolicyPage() {
           address, or telephone number of a data subject shall always be in line
           with the General Data Protection Regulation (GDPR), and in accordance
           with the country-specific data protection regulations applicable to
-          the Herr. By means of this data protection declaration, our enterprise
+          Entitree. By means of this data protection declaration, our enterprise
           would like to inform the general public of the nature, scope, and
           purpose of the personal data we collect, use and process. Furthermore,
           data subjects are informed, by means of this data protection
@@ -39,7 +39,7 @@ export default function PrivacyPolicyPage() {
         </p>
 
         <p>
-          As the controller, the Herr has implemented numerous technical and
+          As the controller, Entitree has implemented numerous technical and
           organizational measures to ensure the most complete protection of
           personal data processed through this website. However, Internet-based
           data transmissions may in principle have security gaps, so absolute
@@ -50,7 +50,7 @@ export default function PrivacyPolicyPage() {
 
         <h4>1. Definitions</h4>
         <p>
-          The data protection declaration of the Herr is based on the terms used
+          The data protection declaration of Entitree is based on the terms used
           by the European legislator for the adoption of the General Data
           Protection Regulation (GDPR). Our data protection declaration should
           be legible and understandable for the general public, as well as our
@@ -195,7 +195,7 @@ export default function PrivacyPolicyPage() {
 
         <h4>3. Cookies</h4>
         <p>
-          The Internet pages of the Herr use cookies. Cookies are text files
+          The Internet pages of Entitree use cookies. Cookies are text files
           that are stored in a computer system via an Internet browser.
         </p>
 
@@ -211,7 +211,7 @@ export default function PrivacyPolicyPage() {
         </p>
 
         <p>
-          Through the use of cookies, the Herr can provide the users of this
+          Through the use of cookies, Entitree can provide the users of this
           website with more user-friendly services that would not be possible
           without the cookie setting.
         </p>
@@ -242,7 +242,7 @@ export default function PrivacyPolicyPage() {
 
         <h4>4. Collection of general data and information</h4>
         <p>
-          The website of the Herr collects a series of general data and
+          The website of Entitree collects a series of general data and
           information when a data subject or automated system calls up the
           website. This general data and information are stored in the server
           log files. Collected may be (1) the browser types and versions used,
@@ -256,14 +256,14 @@ export default function PrivacyPolicyPage() {
         </p>
 
         <p>
-          When using these general data and information, the Herr does not draw
+          When using these general data and information, Entitree does not draw
           any conclusions about the data subject. Rather, this information is
           needed to (1) deliver the content of our website correctly, (2)
           optimize the content of our website as well as its advertisement, (3)
           ensure the long-term viability of our information technology systems
           and website technology, and (4) provide law enforcement authorities
           with the information necessary for criminal prosecution in case of a
-          cyber-attack. Therefore, the Herr analyzes anonymously collected data
+          cyber-attack. Therefore, Entitree analyzes anonymously collected data
           and information statistically, with the aim of increasing the data
           protection and data security of our enterprise, and to ensure an
           optimal level of protection for the personal data we process. The
@@ -419,7 +419,7 @@ export default function PrivacyPolicyPage() {
             </ul>
             <p>
               If one of the aforementioned reasons applies, and a data subject
-              wishes to request the erasure of personal data stored by the Herr,
+              wishes to request the erasure of personal data stored by Entitree,
               he or she may, at any time, contact any employee of the
               controller. An employee of Herr shall promptly ensure that the
               erasure request is complied with immediately.
@@ -433,7 +433,7 @@ export default function PrivacyPolicyPage() {
               measures, to inform other controllers processing the personal data
               that the data subject has requested erasure by such controllers of
               any links to, or copy or replication of, those personal data, as
-              far as processing is not required. An employees of the Herr will
+              far as processing is not required. An employees of Entitree will
               arrange the necessary measures in individual cases.
             </p>
           </li>
@@ -472,8 +472,8 @@ export default function PrivacyPolicyPage() {
             <p>
               If one of the aforementioned conditions is met, and a data subject
               wishes to request the restriction of the processing of personal
-              data stored by the Herr, he or she may at any time contact any
-              employee of the controller. The employee of the Herr will arrange
+              data stored by Entitree, he or she may at any time contact any
+              employee of the controller. The employee of Entitree will arrange
               the restriction of the processing.{" "}
             </p>
           </li>
@@ -505,7 +505,7 @@ export default function PrivacyPolicyPage() {
 
             <p>
               In order to assert the right to data portability, the data subject
-              may at any time contact any employee of the Herr.
+              may at any time contact any employee of Entitree.
             </p>
           </li>
           <li>
@@ -520,7 +520,7 @@ export default function PrivacyPolicyPage() {
             </p>
 
             <p>
-              The Herr shall no longer process the personal data in the event of
+              Entitree shall no longer process the personal data in the event of
               the objection, unless we can demonstrate compelling legitimate
               grounds for the processing which override the interests, rights
               and freedoms of the data subject, or for the establishment,
@@ -528,19 +528,19 @@ export default function PrivacyPolicyPage() {
             </p>
 
             <p>
-              If the Herr processes personal data for direct marketing purposes,
+              If Entitree processes personal data for direct marketing purposes,
               the data subject shall have the right to object at any time to
               processing of personal data concerning him or her for such
               marketing. This applies to profiling to the extent that it is
               related to such direct marketing. If the data subject objects to
-              the Herr to the processing for direct marketing purposes, the Herr
+              Entitree to the processing for direct marketing purposes, Entitree
               will no longer process the personal data for these purposes.
             </p>
 
             <p>
               In addition, the data subject has the right, on grounds relating
               to his or her particular situation, to object to processing of
-              personal data concerning him or her by the Herr for scientific or
+              personal data concerning him or her by Entitree for scientific or
               historical research purposes, or for statistical purposes pursuant
               to Article 89(1) of the GDPR, unless the processing is necessary
               for the performance of a task carried out for reasons of public
@@ -549,7 +549,7 @@ export default function PrivacyPolicyPage() {
 
             <p>
               In order to exercise the right to object, the data subject may
-              contact any employee of the Herr. In addition, the data subject is
+              contact any employee of Entitree. In addition, the data subject is
               free in the context of the use of information society services,
               and notwithstanding Directive 2002/58/EC, to use his or her right
               to object by automated means using technical specifications.
@@ -577,7 +577,7 @@ export default function PrivacyPolicyPage() {
               If the decision (1) is necessary for entering into, or the
               performance of, a contract between the data subject and a data
               controller, or (2) it is based on the data subject's explicit
-              consent, the Herr shall implement suitable measures to safeguard
+              consent, Entitree shall implement suitable measures to safeguard
               the data subject's rights and freedoms and legitimate interests,
               at least the right to obtain human intervention on the part of the
               controller, to express his or her point of view and contest the
@@ -587,7 +587,7 @@ export default function PrivacyPolicyPage() {
             <p>
               If the data subject wishes to exercise the rights concerning
               automated individual decision-making, he or she may, at any time,
-              contact any employee of the Herr.
+              contact any employee of Entitree.
             </p>
           </li>
           <li>
