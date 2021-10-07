@@ -260,27 +260,27 @@ export default function SettingsModal({ show, onHideModal }) {
             If this option is selected, it's not possible to navigate the tree
           </Form.Text>
         </Form.Group>
+        <Form.Group controlId="genderColors">
+          <Form.Check
+            custom
+            checked={showGenderColor}
+            onChange={(e) =>
+              dispatch(
+                setSetting({
+                  showGenderColor: e.target.checked,
+                }),
+              )
+            }
+            type="checkbox"
+            label="Use colors based on gender"
+          />
+          <Form.Text className="text-muted pl-4">
+            If browsing family trees, the nodes will have a background color
+            (blue for men, red for women)
+          </Form.Text>
+        </Form.Group>
         {wikibaseAlias === "wikidata" && (
           <>
-            <Form.Group controlId="genderColors">
-              <Form.Check
-                custom
-                checked={showGenderColor}
-                onChange={(e) =>
-                  dispatch(
-                    setSetting({
-                      showGenderColor: e.target.checked,
-                    }),
-                  )
-                }
-                type="checkbox"
-                label="Use colors based on gender"
-              />
-              <Form.Text className="text-muted pl-4">
-                If browsing family trees, the nodes will have a background color
-                (blue for men, red for women)
-              </Form.Text>
-            </Form.Group>
             <Form.Group controlId="extraInfo">
               <Form.Check
                 custom

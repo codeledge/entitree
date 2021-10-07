@@ -1,4 +1,3 @@
-import { CHILD_ID, FAMILY_IDS_MAP } from "constants/properties";
 import { DEFAULT_LANG, FAMILY_TREE_TRANSLATIONS } from "constants/langs";
 import {
   WikibaseAlias,
@@ -15,6 +14,11 @@ export default async function getItemProps(
   wikibaseAlias: WikibaseAlias,
 ) {
   const wbk = getWikibaseInstance(wikibaseAlias);
+  const { CHILD_ID, FAMILY_IDS_MAP } = await import(
+    "constants/" +
+      (wikibaseAlias === "factgrid" ? "factgrid/" : "") +
+      "properties"
+  );
 
   const url = await new Promise<string>((resolve, reject) => {
     try {
