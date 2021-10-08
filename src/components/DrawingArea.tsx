@@ -11,7 +11,7 @@ export default function DrawingArea() {
   return (
     <TransformWrapper
       velocityAnimation={{
-        disabled: false,
+        disabled: true,
       }}
       doubleClick={{
         disabled: true,
@@ -37,12 +37,11 @@ const GraphWrapper = memo(
   ({ zoomIn, zoomOut, resetTransform, setTransform }: any) => {
     const wrapperRef = useRef(null);
 
-    const { width: drawingWidth, height: drawingHeight } = useElementSize(
-      wrapperRef,
-    );
+    const { width: drawingWidth, height: drawingHeight } =
+      useElementSize(wrapperRef);
 
     return (
-      <DrawingAreaWrapper ref={wrapperRef}>
+      <StyledGraphWrapper ref={wrapperRef}>
         <Graph
           setTransform={setTransform}
           drawingWidth={drawingWidth}
@@ -56,13 +55,13 @@ const GraphWrapper = memo(
           drawingWidth={drawingWidth}
           drawingHeight={drawingHeight}
         />
-      </DrawingAreaWrapper>
+      </StyledGraphWrapper>
     );
   },
   () => true, //do not update, ever, the props are always the same functions
 );
 
-const DrawingAreaWrapper = styled.div`
+const StyledGraphWrapper = styled.div`
   position: relative;
   flex: 1;
   .react-transform-wrapper,

@@ -16,6 +16,7 @@ export default function TreeLoader() {
 const StyledTreeLoader = styled.div`
   position: relative;
   height: 100%;
+  flex: 1;
   .center {
     text-align: center;
     top: 50%;
