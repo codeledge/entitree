@@ -110,35 +110,33 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
                     title={image.alt}
                   />
                   <Figure.Caption>
-                    <>
-                      {image.sourceUrl && (
-                        <a
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          href={image.sourceUrl}
-                        >
-                          Source
-                        </a>
-                      )}{" "}
-                      {image.sourceUrl && !image.imageDb && (
-                        <a
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{
-                            fontSize: "10px",
-                          }}
-                          href={missingImagesLink({
-                            wikidataEntity: node.id,
-                            wikidataLabel: node.label,
-                            sourceUrl: image.sourceUrl,
-                            downloadUrl: image.downloadUrl,
-                          })}
-                          title="Import image to our database for face detection & background removal"
-                        >
-                          Import
-                        </a>
-                      )}
-                    </>
+                    {image.sourceUrl && (
+                      <Button
+                        variant="light"
+                        target="_blank"
+                        className="mb-3"
+                        size="sm"
+                        href={image.sourceUrl}
+                      >
+                        Source
+                      </Button>
+                    )}
+                    {image.sourceUrl && !image.imageDb && (
+                      <Button
+                        variant="light"
+                        target="_blank"
+                        size="sm"
+                        href={missingImagesLink({
+                          wikidataEntity: node.id,
+                          wikidataLabel: node.label,
+                          sourceUrl: image.sourceUrl,
+                          downloadUrl: image.downloadUrl,
+                        })}
+                        title="Import image to our database for face detection & background removal"
+                      >
+                        Import
+                      </Button>
+                    )}
                   </Figure.Caption>
                 </Figure>
               ))}
@@ -303,14 +301,37 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
 
 const StyledModal = styled(Modal)`
   .allImages {
-    margin-bottom: 3px;
+    margin-bottom: 8px;
     overflow: hidden;
     min-height: 172px; // to avoid jumps when the image loads
     img {
       max-height: 168px; //remember multi line here
       max-width: 100%;
-      margin-right: 4px;
-      margin-bottom: 4px;
+      vertical-align: middle;
+      margin-bottom: 0;
+    }
+  }
+
+  .figure {
+    margin-right: 4px;
+    margin-bottom: 4px;
+    position: relative;
+    figcaption {
+      background-color: rgba(0, 0, 0, 0.25);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: none;
+    }
+    :hover {
+      figcaption {
+        display: flex;
+      }
     }
   }
 
