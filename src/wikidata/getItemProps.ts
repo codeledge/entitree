@@ -7,6 +7,7 @@ import {
 import { EntityProp } from "types/Entity";
 import { LangCode } from "types/Lang";
 import axios from "axios";
+import { errorHandler } from "handlers/clientErrorHandler";
 
 export default async function getItemProps(
   id: string,
@@ -82,5 +83,6 @@ export default async function getItemProps(
         [],
       );
       return props;
-    });
+    })
+    .catch(errorHandler);
 }

@@ -14,6 +14,7 @@ import {
 
 import { FaSearch } from "react-icons/fa";
 import SearchSuggestions from "./SearchSuggestions";
+import { errorHandler } from "handlers/clientErrorHandler";
 import { getEntityUrl } from "helpers/getEntityUrl";
 import { setLoadingEntity } from "store/treeSlice";
 import styled from "styled-components";
@@ -60,9 +61,7 @@ export default function SearchBar() {
 
           setSearchResults(filteredResults);
         })
-        .catch((err) => {
-          console.error(err);
-        })
+        .catch(errorHandler)
         .finally(() => {
           setLoadingSuggestions(false);
         });
