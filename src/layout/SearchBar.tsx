@@ -120,20 +120,23 @@ export default function SearchBar() {
                       Select a property to show a tree
                     </Tooltip>
                   </Overlay>
-                  <Dropdown.Toggle
-                    variant="none"
-                    ref={propToggleRef}
-                    id="dropdown-props"
-                    className={
-                      !!currentEntity && !currentProp
-                        ? "shouldSelectProp btn-warning"
-                        : undefined
-                    }
-                  >
-                    {currentProp
-                      ? currentProp.overrideLabel || currentProp.label
-                      : "Choose a property "}
-                  </Dropdown.Toggle>
+                  {/* in the edge case there are no props, hide the dropdown */}
+                  {!!currentEntityProps?.length && (
+                    <Dropdown.Toggle
+                      variant="none"
+                      ref={propToggleRef}
+                      id="dropdown-props"
+                      className={
+                        !!currentEntity && !currentProp
+                          ? "shouldSelectProp btn-warning"
+                          : undefined
+                      }
+                    >
+                      {currentProp
+                        ? currentProp.overrideLabel || currentProp.label
+                        : "Choose a property "}
+                    </Dropdown.Toggle>
+                  )}
 
                   <Dropdown.Menu alignRight>
                     {currentEntityProps?.map((prop) => (

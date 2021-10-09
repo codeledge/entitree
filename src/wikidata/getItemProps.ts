@@ -84,5 +84,8 @@ export default async function getItemProps(
       );
       return props;
     })
-    .catch(errorHandler);
+    .catch((err) => {
+      errorHandler(err);
+      return [];
+    });
 }
