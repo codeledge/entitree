@@ -10,7 +10,7 @@ export const EXAMPLES = [
   },
   {
     name: "Dhirendra of Nepal's ancestors",
-    href: `/en/family_tree/Dhirendra_of_Nepal`,
+    href: `/en/family_tree/Prince_Dhirendra_of_Nepal`,
   },
   {
     name: "Jesus Christ's pedigree",
