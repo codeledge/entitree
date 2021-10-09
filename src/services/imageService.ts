@@ -1,6 +1,7 @@
 import { ImageOverflowType, ImageType } from "types/Image";
 
 import axios from "axios";
+import { errorHandler } from "handlers/clientErrorHandler";
 import serviceSuccessInterceptor from "./serviceSuccessInterceptor";
 
 export const IMAGE_SERVER_BASE_URL = "https://images.entitree.com";
@@ -72,5 +73,5 @@ export const getDataprickImages = (numericId: string) => {
         };
       });
     })
-    .catch();
+    .catch(errorHandler);
 };
