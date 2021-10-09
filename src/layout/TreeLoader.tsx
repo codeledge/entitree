@@ -1,12 +1,12 @@
+import Logo from "./Logo";
 import React from "react";
-import { Spinner } from "react-bootstrap";
 import styled from "styled-components";
 
 export default function TreeLoader() {
   return (
     <StyledTreeLoader>
       <div className="center">
-        <Spinner animation="grow" />
+        <Logo height=".5em" />
         <div>Loading tree</div>
       </div>
     </StyledTreeLoader>
@@ -17,6 +17,16 @@ const StyledTreeLoader = styled.div`
   position: relative;
   height: 100%;
   flex: 1;
+  font-size: 18px;
+  svg {
+    stroke-dasharray: 170 110;
+    animation: dash 8s linear infinite alternate;
+  }
+  @keyframes dash {
+    to {
+      stroke-dashoffset: 1000;
+    }
+  }
   .center {
     text-align: center;
     top: 50%;
