@@ -2,6 +2,7 @@ import { Button, Figure, Modal } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 
 import { FiExternalLink } from "react-icons/fi";
+import { errorHandler } from "handlers/clientErrorHandler";
 import getEntitiesLabel from "treeHelpers/getEntitiesLabel";
 import { getEntityUrl } from "helpers/getEntityUrl";
 import getWikipediaArticle from "wikipedia/getWikipediaArticle";
@@ -27,8 +28,8 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
 
   useEffect(() => {
     if (node.wikipediaSlug) {
-      getWikipediaArticle(node.wikipediaSlug, languageCode).then(
-        ({ data: { extract, thumbnail } }) => {
+      getWikipediaArticle(node.wikipediaSlug, languageCode)
+        .then(({ data: { extract, thumbnail } }) => {
           if (extract) setWikipediaExtract(extract);
           if (thumbnail && !images.length) {
             setImages({
@@ -36,8 +37,8 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
               alt: `${node.label}'s Wikipedia image`,
             });
           }
-        },
-      );
+        })
+        .catch(errorHandler);
     }
   }, [
     languageCode,
@@ -53,10 +54,12 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
         [node.birthPlaceId, node.deathPlaceId],
         languageCode,
         wikibaseAlias,
-      ).then(([birthPlaceLabel, deathPlaceLabel]) => {
-        setBirthPlace(birthPlaceLabel);
-        setDeathPlace(deathPlaceLabel);
-      });
+      )
+        .then(([birthPlaceLabel, deathPlaceLabel]) => {
+          setBirthPlace(birthPlaceLabel);
+          setDeathPlace(deathPlaceLabel);
+        })
+        .catch(errorHandler);
     }
   }, [languageCode, wikibaseAlias, node.birthPlaceId, node.deathPlaceId]);
 
