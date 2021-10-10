@@ -7,7 +7,7 @@ export default function filterSpouses(spouses: Entity[]) {
   //   potentialSpouses[id] = 1;
   // });
   // originNode.children?.forEach((child) => {
-  //   child.rightIds = child.rightIds?.filter(
+  //   child.nextAfterIds = child.nextAfterIds?.filter(
   //     (spouseId) => !potentialSpouses[spouseId],
   //   );
   // });

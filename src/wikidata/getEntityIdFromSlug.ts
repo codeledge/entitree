@@ -3,7 +3,7 @@ import axios from "axios";
 import { errorHandler } from "handlers/errorHandler";
 import { getWikibaseInstance } from "wikibase/getWikibaseInstance";
 
-export default async function getItemIdFromSlug(
+export default async function getEntityIdFromSlug(
   slug: string,
   langCode: LangCode,
 ): Promise<string> {

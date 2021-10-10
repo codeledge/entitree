@@ -18,11 +18,11 @@ import { LangCode } from "types/Lang";
 import SearchBar from "layout/SearchBar";
 import TreeLoader from "layout/TreeLoader";
 import { createMetaTags } from "seo/createMetaTags";
-import getItemIdFromSlug from "wikidata/getItemIdFromSlug";
+import { getCurrentEntity } from "treeHelpers/getCurrentEntity";
+import getEntityIdFromSlug from "wikidata/getEntityIdFromSlug";
 import getWikipediaArticle from "wikipedia/getWikipediaArticle";
 import isInIframe from "lib/isInIframe";
 import { isItemId } from "helpers/isItemId";
-import { loadEntity } from "treeHelpers/loadEntity";
 import { setSetting } from "store/settingsSlice";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
@@ -91,10 +91,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
     const decodedPropSlug = decodeURIComponent(propSlug);
     const decodedItemSlug = decodeURIComponent(itemSlug);
 
-    let itemId = "";
-    let itemThumbnail = "";
+    let entityId = "";
+    let entityThumbnail = "";
     if (isItemId(itemSlug)) {
-      itemId = itemSlug;
+      entityId = itemSlug;
     } else {
       try {
         //TODO: cache this
@@ -109,8 +109,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
         //the wikipedia article redirects to another article
         if (canonical !== itemSlug) {
           //try to get the item from wikidata and avoid the redirects
-          itemId = await getItemIdFromSlug(decodedItemSlug, langCode);
-          if (!itemId) {
+          entityId = await getEntityIdFromSlug(decodedItemSlug, langCode);
+          if (!entityId) {
             // ok, not found, redirect to page then
             return {
               redirect: {
@@ -118,10 +118,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
               },
             };
           }
-          // losing itemThumbnail feature for those isolated cases
+          // losing entityThumbnail feature for those isolated cases
         } else {
-          if (wikibase_item) itemId = wikibase_item;
-          if (thumbnail) itemThumbnail = thumbnail.source;
+          if (wikibase_item) entityId = wikibase_item;
+          if (thumbnail) entityThumbnail = thumbnail.source;
         }
       } catch (error: any) {
         console.error(error);
@@ -129,18 +129,19 @@ export const getServerSideProps = wrapper.getServerSideProps(
       }
     }
 
-    //itemId might STILL not be found
-    if (!itemId) return { props: { errorCode: 404 } };
+    //entityId might STILL not be found
+    if (!entityId) return { props: { errorCode: 404 } };
 
     try {
-      const { currentEntity, currentProp, itemProps } = await loadEntity({
-        itemId,
-        wikibaseAlias: "wikidata",
-        langCode,
-        propSlug: decodedPropSlug,
-      });
+      const { currentEntity, currentProp, currentEntityProps } =
+        await getCurrentEntity({
+          entityId,
+          wikibaseAlias: "wikidata",
+          langCode,
+          propSlug: decodedPropSlug,
+        });
 
-      // TODO: Extract loadEntity here and put the redirects when needed to fetch less data
+      // TODO: Extract getCurrentEntity here and put the redirects when needed to fetch less data
       if (!currentEntity) return { props: { errorCode: 404 } };
 
       // redirect prop "all" to "family_tree"
@@ -162,7 +163,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
       }
 
       dispatch(setCurrentEntity(currentEntity));
-      if (itemProps) dispatch(setCurrentEntityProps(itemProps));
+      if (currentEntityProps)
+        dispatch(setCurrentEntityProps(currentEntityProps));
       if (currentProp) dispatch(setCurrentProp(currentProp));
 
       const { ogDescription, ogTitle } = createMetaTags(
@@ -174,8 +176,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
       let ogImage = "";
       let twitterCard = "";
 
-      if (itemThumbnail) {
-        ogImage = itemThumbnail;
+      if (entityThumbnail) {
+        ogImage = entityThumbnail;
       } else {
         ogImage = "icons/entitree_square.png";
         twitterCard = "summary";

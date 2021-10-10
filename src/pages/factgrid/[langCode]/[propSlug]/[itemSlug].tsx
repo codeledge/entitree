@@ -19,8 +19,8 @@ import SearchBar from "layout/SearchBar";
 import TreeLoader from "layout/TreeLoader";
 import { createMetaTags } from "seo/createMetaTags";
 import { errorHandler } from "handlers/errorHandler";
+import { getCurrentEntity } from "treeHelpers/getCurrentEntity";
 import { isItemId } from "helpers/isItemId";
-import { loadEntity } from "treeHelpers/loadEntity";
 import { setSetting } from "store/settingsSlice";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
@@ -88,20 +88,21 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     const decodedPropSlug = decodeURIComponent(propSlug);
 
-    let itemId;
+    let entityId;
     if (isItemId(itemSlug)) {
-      itemId = itemSlug;
+      entityId = itemSlug;
     } else {
       return { props: { errorCode: 404, message: "Slug must be a QID" } };
     }
 
     try {
-      const { currentEntity, currentProp, itemProps } = await loadEntity({
-        itemId,
-        wikibaseAlias: "factgrid",
-        langCode,
-        propSlug: decodedPropSlug,
-      });
+      const { currentEntity, currentProp, currentEntityProps } =
+        await getCurrentEntity({
+          entityId,
+          wikibaseAlias: "factgrid",
+          langCode,
+          propSlug: decodedPropSlug,
+        });
 
       if (!currentEntity) return { props: { errorCode: 404 } };
 
@@ -115,7 +116,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
       }
 
       dispatch(setCurrentEntity(currentEntity));
-      if (itemProps) dispatch(setCurrentEntityProps(itemProps));
+      if (currentEntityProps)
+        dispatch(setCurrentEntityProps(currentEntityProps));
       if (currentProp) dispatch(setCurrentProp(currentProp));
 
       const { ogDescription, ogTitle } = createMetaTags(
