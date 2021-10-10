@@ -16,8 +16,9 @@ export interface LanguageEntry {
   value: string;
 }
 
-export interface WikiEntity {
+export interface WikibaseEntity {
   type?: string;
+  missing?: string;
   datatype?: string;
   id: string;
   pageid?: number;
@@ -36,7 +37,7 @@ export interface WikiEntity {
   sitelinks?: Record<string, Sitelink>;
 }
 
-export interface Entity extends WikiEntity {
+export interface Entity extends WikibaseEntity {
   abolishedDate?: string;
   birthDate?: string;
   birthISO?: string;

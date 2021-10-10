@@ -14,7 +14,7 @@ import { EntityNode } from "types/EntityNode";
 import { LangCode } from "types/Lang";
 import filterSpouses from "./filterSpouses";
 import formatEntity from "./formatEntity";
-import getWikidataEntities from "wikidata/getWikidataEntities";
+import getWikibaseEntities from "wikibase/getWikibaseEntities";
 
 type Options = ConnectorOptions & {
   secondLanguageCode?: LangCode;
@@ -37,7 +37,7 @@ export default async function getEntities(
   )
     languages.push(options.secondLanguageCode);
 
-  const wikiEntitiesMap = await getWikidataEntities({
+  const wikibaseEntitiesMap = await getWikibaseEntities({
     ids,
     languages,
     wikibaseAlias: options.wikibaseAlias,
@@ -47,12 +47,15 @@ export default async function getEntities(
     const accumulator = await Promise.resolve(acc);
 
     //get rid of unwanted records
-    if (!wikiEntitiesMap[id] || wikiEntitiesMap[id]["missing"] !== undefined)
+    if (
+      !wikibaseEntitiesMap[id] ||
+      wikibaseEntitiesMap[id]["missing"] !== undefined
+    )
       return accumulator;
 
     //add all custom fields
     const entity = formatEntity(
-      wikiEntitiesMap[id],
+      wikibaseEntitiesMap[id],
       languageCode,
       options?.wikibaseAlias,
     );

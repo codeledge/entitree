@@ -7,7 +7,8 @@ import {
 import { EntityProp } from "types/Entity";
 import { LangCode } from "types/Lang";
 import axios from "axios";
-import { errorHandler } from "handlers/clientErrorHandler";
+import { errorHandler } from "handlers/errorHandler";
+import getWikibaseConstants from "./getWikibaseConstants";
 
 export default async function getItemProps(
   id: string,
@@ -15,11 +16,6 @@ export default async function getItemProps(
   wikibaseAlias: WikibaseAlias,
 ) {
   const wbk = getWikibaseInstance(wikibaseAlias);
-  const { CHILD_ID, FAMILY_IDS_MAP } = await import(
-    "constants/" +
-      (wikibaseAlias === "factgrid" ? "factgrid/" : "") +
-      "properties"
-  );
 
   const url = await new Promise<string>((resolve, reject) => {
     try {
@@ -48,6 +44,8 @@ export default async function getItemProps(
       reject(error);
     }
   });
+
+  const { FAMILY_IDS_MAP, CHILD_ID } = getWikibaseConstants(wikibaseAlias);
 
   return axios
     .get(url)

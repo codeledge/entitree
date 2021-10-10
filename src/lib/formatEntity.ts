@@ -1,4 +1,4 @@
-import { Entity, WikiEntity } from "types/Entity";
+import { Entity, WikibaseEntity } from "types/Entity";
 
 import { LangCode } from "types/Lang";
 import addAbolishedDate from "./addAbolishedDate";
@@ -39,16 +39,16 @@ import addWikipediaUrl from "./addWikipediaUrl";
 import wbk from "wikibase-sdk";
 
 export default function formatEntity(
-  wikidataEntity: WikiEntity,
+  wikibaseEntity: WikibaseEntity,
   languageCode: LangCode,
   wikibaseAlias: string,
 ) {
-  const simpleClaims = wbk.simplify.claims(wikidataEntity.claims, {
+  const simpleClaims = wbk.simplify.claims(wikibaseEntity.claims, {
     keepQualifiers: true,
   });
 
   const entity: Entity = {
-    ...wikidataEntity,
+    ...wikibaseEntity,
     simpleClaims,
   };
 

@@ -3,24 +3,24 @@ import {
   getWikibaseInstance,
 } from "wikibase/getWikibaseInstance";
 
-import { WikiEntity } from "types/Entity";
+import { WikibaseEntity } from "types/Entity";
 import axios from "axios";
 
-type getWikidataEntitiesProps = {
+type GetWikibaseEntitiesProps = {
   ids: string[]; // ['Q1', 'Q2', 'Q3', ..., 'Q123']
   languages?: string[]; // ['en', 'fr', 'de']
   props?: string[]; // ['info', 'claims']
-  wikibaseAlias?: WikibaseAlias;
+  wikibaseAlias: WikibaseAlias;
 };
 
-type Response = Record<WikiEntity["id"], WikiEntity>;
+type WikibaseEntityMap = Record<WikibaseEntity["id"], WikibaseEntity>;
 
-export default async function getWikidataEntities({
+export default async function getWikibaseEntities({
   ids,
   languages = ["en"],
   props = ["labels", "descriptions", "claims", "sitelinks/urls"],
-  wikibaseAlias = "wikidata",
-}: getWikidataEntitiesProps): Promise<Response> {
+  wikibaseAlias,
+}: GetWikibaseEntitiesProps): Promise<WikibaseEntityMap> {
   const wikibaseInstance = getWikibaseInstance(wikibaseAlias);
 
   if (ids.length === 0) {
@@ -45,11 +45,13 @@ export default async function getWikidataEntities({
 
   // responses will be based on the number of urls generated
   const responses = await axios.all(
-    urls.map((url) => axios.get<any, { data: { entities: Response } }>(url)),
+    urls.map((url) =>
+      axios.get<any, { data: { entities: WikibaseEntityMap } }>(url),
+    ),
   );
 
   // merge all responses in one object
-  let allentities: Response = {};
+  let allentities: WikibaseEntityMap = {};
   responses.forEach(({ data: { entities } }) => {
     allentities = {
       ...allentities,
