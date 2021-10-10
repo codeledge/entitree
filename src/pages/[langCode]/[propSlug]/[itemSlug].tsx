@@ -21,6 +21,7 @@ import VideoPopup from "../../../layout/VideoPopup";
 import { createMetaTags } from "helpers/createMetaTags";
 import getItemFromSlug from "wikidata/getItemFromSlug";
 import getWikipediaArticle from "wikipedia/getWikipediaArticle";
+import isInIframe from "lib/isInIframe";
 import { isItemId } from "helpers/isItemId";
 import { loadEntity } from "treeHelpers/loadEntity";
 import { setSetting } from "store/settingsSlice";
@@ -73,8 +74,8 @@ const TreePage = ({
         {ogDescription && <meta name="description" content={ogDescription} />}
       </Head>
       <Page>
-        <Header />
-        <SearchBar />
+        {!isInIframe() && <Header />}
+        {!isInIframe() && <SearchBar />}
         {loadingEntity ? <TreeLoader /> : <DrawingArea />}
         <VideoPopup />
       </Page>
