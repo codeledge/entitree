@@ -1,10 +1,12 @@
 import { Entity, EntityProp } from "types/Entity";
 
+import { DEFAULT_PROPERTY_ALL } from "constants/properties";
 import { FAMILY_TREE_TRANSLATIONS } from "constants/langs";
 import { LangCode } from "types/Lang";
 import { WikibaseAlias } from "wikibase/getWikibaseInstance";
-import getItemProps from "wikidata/getItemProps";
+import getItemProps from "wikibase/getItemProps";
 import { getRootEntity } from "lib/getEntities";
+import getWikibaseConstants from "wikibase/getWikibaseConstants";
 
 export const loadEntity = async ({
   itemId,
@@ -21,12 +23,8 @@ export const loadEntity = async ({
   currentProp?: EntityProp;
   itemProps?: EntityProp[];
 }> => {
-  const { CHILD_ID, DEFAULT_PROPERTY_ALL, FAMILY_IDS_MAP, FAMILY_TREE_PROP } =
-    await import(
-      "constants/" +
-        (wikibaseAlias === "factgrid" ? "factgrid/" : "") +
-        "properties"
-    );
+  const { CHILD_ID, FAMILY_IDS_MAP, FAMILY_TREE_PROP } =
+    getWikibaseConstants(wikibaseAlias);
 
   let itemProps = await getItemProps(itemId, langCode, wikibaseAlias);
 

@@ -1,12 +1,12 @@
 import { Entity } from "types/Entity";
 import { INSTANCE_OF_ID } from "constants/properties";
 import addPeoplePillImage from "./addPeoplePillImage";
-import getWikidataEntities from "../wikidata/getWikidataEntities";
+import getWikibaseEntities from "wikibase/getWikibaseEntities";
 
 describe("addPeoplePillImage", () => {
   test("it should give the correct name", async () => {
     const id = "Q47122";
-    const res = await getWikidataEntities({
+    const res = await getWikibaseEntities({
       ids: [id],
       wikibaseAlias: "wikidata",
     });

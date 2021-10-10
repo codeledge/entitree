@@ -11,14 +11,13 @@ import Div100vh from "react-div-100vh";
 import DrawingArea from "components/DrawingArea";
 import Error from "next/error";
 import Footer from "layout/Footer";
-import Head from "next/head";
+import { HeadMeta } from "layout/HeadMeta";
 import Header from "layout/Header";
 import { LANGS } from "constants/langs";
 import { LangCode } from "types/Lang";
 import SearchBar from "layout/SearchBar";
 import TreeLoader from "layout/TreeLoader";
-import VideoPopup from "../../../layout/VideoPopup";
-import { createMetaTags } from "helpers/createMetaTags";
+import { createMetaTags } from "seo/createMetaTags";
 import getItemIdFromSlug from "wikidata/getItemIdFromSlug";
 import getWikipediaArticle from "wikipedia/getWikipediaArticle";
 import isInIframe from "lib/isInIframe";
@@ -54,30 +53,19 @@ const TreePage = ({
 
   return (
     <>
-      <Head>
-        <title>{ogTitle}</title>
-        {ogTitle && <meta property="og:title" content={ogTitle} />}
-        {ogImage && <meta property="og:image" content={ogImage} />}
-        {ogDescription && (
-          <meta property="og:description" content={ogDescription} />
-        )}
-        {twitterDescription && (
-          <meta property="twitter:description" content={twitterDescription} />
-        )}
-        {twitterCard && <meta property="twitter:card" content={twitterCard} />}
-        {twitterTitle && (
-          <meta property="twitter:title" content={twitterTitle} />
-        )}
-        {twitterImage && (
-          <meta property="twitter:image" content={twitterImage} />
-        )}
-        {ogDescription && <meta name="description" content={ogDescription} />}
-      </Head>
+      <HeadMeta
+        ogDescription={ogDescription}
+        ogImage={ogImage}
+        ogTitle={ogTitle}
+        twitterCard={twitterCard}
+        twitterDescription={twitterDescription}
+        twitterImage={twitterImage}
+        twitterTitle={twitterTitle}
+      />
       <Page>
         {!isInIframe() && <Header />}
         {!isInIframe() && <SearchBar />}
         {loadingEntity ? <TreeLoader /> : <DrawingArea />}
-        <VideoPopup />
       </Page>
       <Footer />
     </>

@@ -2,7 +2,7 @@ import { Button, Figure, Modal } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 
 import { FiExternalLink } from "react-icons/fi";
-import { errorHandler } from "handlers/clientErrorHandler";
+import { errorHandler } from "handlers/errorHandler";
 import getEntitiesLabel from "treeHelpers/getEntitiesLabel";
 import { getEntityUrl } from "helpers/getEntityUrl";
 import getWikipediaArticle from "wikipedia/getWikipediaArticle";
