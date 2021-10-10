@@ -72,7 +72,7 @@ export const toggleChildren =
           currentPropId: currentProp?.id,
           addTargetIds: true,
           addNextAfterIds: currentProp?.id === CHILD_ID,
-          downIdsAlreadySorted: entityNode.downIdsAlreadySorted,
+          areTargetIdsSorted: entityNode.areTargetIdsSorted,
         });
 
         dispatch(expandChildren({ entityNode, children, options }));
@@ -102,7 +102,7 @@ export const preloadChildren =
       currentPropId: currentProp?.id,
       addTargetIds: true,
       addNextAfterIds: currentProp?.id === CHILD_ID,
-      downIdsAlreadySorted: entityNode.downIdsAlreadySorted,
+      areTargetIdsSorted: entityNode.areTargetIdsSorted,
     });
 
     dispatch(setPreloadedChildren({ entityNode, children }));

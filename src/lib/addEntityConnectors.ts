@@ -38,7 +38,7 @@ export default async function addEntityConnectors(
 
   if (options.addTargetIds && options.currentPropId) {
     entity.targetIds = getClaimIds(entity, options.currentPropId);
-    entity.downIdsAlreadySorted = checkIfClaimsHasSeriesOrdinal(
+    entity.areTargetIdsSorted = checkIfClaimsHasSeriesOrdinal(
       entity,
       options.currentPropId,
     );

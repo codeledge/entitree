@@ -55,7 +55,7 @@ export interface Entity extends WikibaseEntity {
   deathYear?: string;
   description?: string;
   targetIds?: string[];
-  downIdsAlreadySorted?: boolean;
+  areTargetIdsSorted?: boolean;
   endDate?: string;
   externalLinks?: ExternalLink[];
   eyeColor?: PropColor;

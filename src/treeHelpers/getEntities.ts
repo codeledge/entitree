@@ -20,7 +20,7 @@ import getWikibaseEntities from "wikibase/getWikibaseEntities";
 
 type Options = ConnectorOptions & {
   secondLanguageCode?: LangCode;
-  downIdsAlreadySorted?: boolean;
+  areTargetIdsSorted?: boolean;
 };
 
 export default async function getEntities(
@@ -111,7 +111,7 @@ export const getChildEntities = async (
     node.treeId = `${entityNode.treeId}${CHILD_BOOKMARK_SYMBOL}${index}`;
   });
 
-  if (options?.currentPropId === CHILD_ID && !options?.downIdsAlreadySorted) {
+  if (options?.currentPropId === CHILD_ID && !options?.areTargetIdsSorted) {
     sortByBirthDate(children);
   }
 
