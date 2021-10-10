@@ -11,16 +11,16 @@ import Div100vh from "react-div-100vh";
 import DrawingArea from "components/DrawingArea";
 import Error from "next/error";
 import Footer from "layout/Footer";
-import Head from "next/head";
+import { HeadMeta } from "layout/HeadMeta";
 import Header from "layout/Header";
 import { LANGS } from "constants/langs";
 import { LangCode } from "types/Lang";
-import { SITE_NAME } from "constants/meta";
 import SearchBar from "layout/SearchBar";
 import TreeLoader from "layout/TreeLoader";
+import { createMetaTags } from "seo/createMetaTags";
+import { errorHandler } from "handlers/errorHandler";
 import { isItemId } from "helpers/isItemId";
 import { loadEntity } from "treeHelpers/loadEntity";
-import pluralize from "pluralize";
 import { setSetting } from "store/settingsSlice";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
@@ -51,25 +51,15 @@ const TreePage = ({
 
   return (
     <>
-      <Head>
-        <title>{ogTitle}</title>
-        {ogTitle && <meta property="og:title" content={ogTitle} />}
-        {ogImage && <meta property="og:image" content={ogImage} />}
-        {ogDescription && (
-          <meta property="og:description" content={ogDescription} />
-        )}
-        {twitterDescription && (
-          <meta property="twitter:description" content={twitterDescription} />
-        )}
-        {twitterCard && <meta property="twitter:card" content={twitterCard} />}
-        {twitterTitle && (
-          <meta property="twitter:title" content={twitterTitle} />
-        )}
-        {twitterImage && (
-          <meta property="twitter:image" content={twitterImage} />
-        )}
-        {ogDescription && <meta name="description" content={ogDescription} />}
-      </Head>
+      <HeadMeta
+        ogDescription={ogDescription}
+        ogImage={ogImage}
+        ogTitle={ogTitle}
+        twitterCard={twitterCard}
+        twitterDescription={twitterDescription}
+        twitterImage={twitterImage}
+        twitterTitle={twitterTitle}
+      />
       <Page>
         <Header />
         <SearchBar />
@@ -99,7 +89,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
     const decodedPropSlug = decodeURIComponent(propSlug);
 
     let itemId;
-    let itemThumbnail;
     if (isItemId(itemSlug)) {
       itemId = itemSlug;
     } else {
@@ -129,52 +118,20 @@ export const getServerSideProps = wrapper.getServerSideProps(
       if (itemProps) dispatch(setCurrentEntityProps(itemProps));
       if (currentProp) dispatch(setCurrentProp(currentProp));
 
-      const ogTitle = `${currentEntity.label}${
-        currentProp
-          ? ` - ${currentProp.overrideLabel || currentProp.label}`
-          : ""
-      } - ${SITE_NAME}`;
+      const { ogDescription, ogTitle } = createMetaTags(
+        langCode,
+        currentEntity,
+        currentProp,
+      );
 
-      //Example: Discover the family tree of Elizabeth II: queen of the UK, Canada, Australia, and New Zealand, and head of the Commonwealth of Nations, 4 children, 1 sibling, 1 spouse
-      const ogDescription = `${
-        currentProp
-          ? `Discover the ${
-              currentProp?.overrideLabel || currentProp?.label
-            } of ${currentEntity.label}: `
-          : ""
-      }${currentEntity?.description}${
-        currentEntity.downIds?.length
-          ? `, ${pluralize("child", currentEntity.downIds.length, true)}`
-          : ""
-      }${
-        currentEntity.leftIds?.length
-          ? `, ${pluralize("sibling", currentEntity.leftIds.length, true)}`
-          : ""
-      }${
-        currentEntity.spousesIds?.length
-          ? `, ${pluralize("spouse", currentEntity.spousesIds.length, true)}`
-          : ""
-      }${
-        currentEntity.partnersIds?.length
-          ? `, ${pluralize("partner", currentEntity.partnersIds.length, true)}`
-          : ""
-      }`;
-
-      let ogImage = "";
-      let twitterCard = "";
-
-      if (itemThumbnail) {
-        ogImage = itemThumbnail;
-      } else {
-        ogImage = "icons/entitree_square.png";
-        twitterCard = "summary";
-      }
+      const ogImage = "icons/entitree_square.png";
+      const twitterCard = "summary";
 
       return {
         props: { ogTitle, ogImage, twitterCard, ogDescription, langCode },
       };
     } catch (error: any) {
-      console.error(error);
+      errorHandler(error);
 
       return { props: { errorCode: error.response?.status || 500 } };
     }

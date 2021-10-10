@@ -41,7 +41,7 @@ import { MdChildCare } from "react-icons/md";
 import { SettingsState } from "store/settingsSlice";
 import addLifeSpan from "../lib/addLifeSpan";
 import clsx from "clsx";
-import { errorHandler } from "handlers/clientErrorHandler";
+import { errorHandler } from "handlers/errorHandler";
 import getEntitiesLabel from "treeHelpers/getEntitiesLabel";
 import getFandomPageProps from "../services/fandomService";
 import getGeniProfile from "services/geniService";

@@ -14,7 +14,7 @@ import {
 
 import { FaSearch } from "react-icons/fa";
 import SearchSuggestions from "./SearchSuggestions";
-import { errorHandler } from "handlers/clientErrorHandler";
+import { errorHandler } from "handlers/errorHandler";
 import { getEntityUrl } from "helpers/getEntityUrl";
 import { setLoadingEntity } from "store/treeSlice";
 import styled from "styled-components";
