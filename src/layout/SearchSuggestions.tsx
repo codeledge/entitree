@@ -3,7 +3,7 @@ import React, { useRef } from "react";
 
 import { SearchResult } from "services/wikidataService";
 import { getEntityUrl } from "helpers/getEntityUrl";
-import getEntityWikipediaSlug from "treeHelpers/getEntityWikipediaSlug";
+import getEntityWikipediaSlug from "wikipedia/getEntityWikipediaSlug";
 import { reset } from "store/treeSlice";
 import styled from "styled-components";
 import { useAppSelector } from "store";
