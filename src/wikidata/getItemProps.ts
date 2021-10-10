@@ -1,4 +1,3 @@
-import { CHILD_ID, FAMILY_IDS_MAP } from "constants/properties";
 import { DEFAULT_LANG, FAMILY_TREE_TRANSLATIONS } from "constants/langs";
 import {
   WikibaseAlias,
@@ -8,6 +7,7 @@ import {
 import { EntityProp } from "types/Entity";
 import { LangCode } from "types/Lang";
 import axios from "axios";
+import { errorHandler } from "handlers/clientErrorHandler";
 
 export default async function getItemProps(
   id: string,
@@ -15,6 +15,11 @@ export default async function getItemProps(
   wikibaseAlias: WikibaseAlias,
 ) {
   const wbk = getWikibaseInstance(wikibaseAlias);
+  const { CHILD_ID, FAMILY_IDS_MAP } = await import(
+    "constants/" +
+      (wikibaseAlias === "factgrid" ? "factgrid/" : "") +
+      "properties"
+  );
 
   const url = await new Promise<string>((resolve, reject) => {
     try {
@@ -78,5 +83,9 @@ export default async function getItemProps(
         [],
       );
       return props;
+    })
+    .catch((err) => {
+      errorHandler(err);
+      return [];
     });
 }

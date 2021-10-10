@@ -1,9 +1,3 @@
-import {
-  CHILD_ID,
-  DEFAULT_PROPERTY_ALL,
-  FAMILY_IDS_MAP,
-  FAMILY_TREE_PROP,
-} from "constants/properties";
 import { Entity, EntityProp } from "types/Entity";
 
 import { FAMILY_TREE_TRANSLATIONS } from "constants/langs";
@@ -27,6 +21,13 @@ export const loadEntity = async ({
   currentProp?: EntityProp;
   itemProps?: EntityProp[];
 }> => {
+  const { CHILD_ID, DEFAULT_PROPERTY_ALL, FAMILY_IDS_MAP, FAMILY_TREE_PROP } =
+    await import(
+      "constants/" +
+        (wikibaseAlias === "factgrid" ? "factgrid/" : "") +
+        "properties"
+    );
+
   let itemProps = await getItemProps(itemId, langCode, wikibaseAlias);
 
   let currentProp;

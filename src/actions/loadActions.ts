@@ -33,7 +33,7 @@ export const switchLanguage =
         wikibaseAlias,
       );
 
-      const translatedProp = translatedProps.find(({ id }) => id === propId);
+      const translatedProp = translatedProps?.find(({ id }) => id === propId);
 
       if (translatedProp) propSlug = translatedProp.slug;
     }

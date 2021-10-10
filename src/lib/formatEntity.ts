@@ -12,6 +12,9 @@ import addDescription from "./addDescription";
 import addEndDate from "./addEndDate";
 import addExternalLinks from "./addExternalLinks";
 import addEyeColor from "./addEyeColor";
+import addFactgridGender from "./factgrid/addGender";
+import addFactgridImages from "./factgrid/addImages";
+import addFactgridIsHuman from "./factgrid/addIsHuman";
 import addFactgridUrl from "./addFactgridUrl";
 import addFandom from "./addFandom";
 import addGender from "./addGender";
@@ -53,6 +56,9 @@ export default function formatEntity(
   addDescription(entity, languageCode);
   if (wikibaseAlias === "factgrid") {
     addFactgridUrl(entity);
+    addFactgridIsHuman(entity);
+    addFactgridGender(entity);
+    addFactgridImages(entity);
   }
 
   if (wikibaseAlias === "wikidata") {
