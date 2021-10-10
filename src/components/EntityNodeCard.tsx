@@ -552,7 +552,7 @@ export default memo(({ node }: { node: EntityNode }) => {
               disabled={node.loadingChildren}
               onClick={() => dispatch(toggleChildren(node))}
             >
-              <span className="value mr-1">{node.childrenCount}</span>
+              <span className="value mr-1">{node.targetsCount}</span>
               <span className="chevron">
                 {node.openChildTreeIds ? <FiChevronUp /> : <FiChevronDown />}
               </span>
@@ -565,15 +565,15 @@ export default memo(({ node }: { node: EntityNode }) => {
           )}
           {node.targetIds &&
             !node.targetIds.length &&
-            !!node.childrenCount &&
-            node.childrenCount > 0 &&
+            !!node.targetsCount &&
+            node.targetsCount > 0 &&
             currentProp?.id === CHILD_ID && (
               <Button
                 className="childrenToggle relativeToggle"
                 variant="link"
                 title="Children not available, please add them on wikidata.org"
               >
-                <span className="value mr-1">{node.childrenCount}</span>
+                <span className="value mr-1">{node.targetsCount}</span>
                 <span className="icon">
                   <MdChildCare />
                 </span>

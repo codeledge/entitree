@@ -44,7 +44,7 @@ export interface Entity extends WikibaseEntity {
   birthName?: string;
   birthPlaceId?: string;
   birthYear?: string;
-  childrenCount?: number;
+  targetsCount?: number;
   closedChildTreeIds?: string[];
   closedParentTreeIds?: string[];
   closedSiblingTreeIds?: string[];

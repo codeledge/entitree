@@ -10,8 +10,8 @@ import getClaimIds, { checkIfClaimsHasSeriesOrdinal } from "./getClaimIds";
 import { Entity } from "types/Entity";
 import { WikibaseAlias } from "wikibase/getWikibaseInstance";
 import getSimpleClaimValue from "./getSimpleClaimValue";
-import getUpIds from "wikidata/getUpIds";
-import { sortClaimsByStartDate } from "claims/sortClaims";
+import getWikibaseSourceIds from "wikibase/getWikibaseSourceIds";
+import { sortClaimsByStartDate } from "claims/sortClaimsByStartDate";
 
 export type ConnectorOptions = {
   wikibaseAlias: WikibaseAlias;
@@ -27,7 +27,7 @@ export default async function addEntityConnectors(
   options: ConnectorOptions,
 ) {
   if (options.addSourceIds && options.currentPropId) {
-    entity.sourceIds = await getUpIds(
+    entity.sourceIds = await getWikibaseSourceIds(
       entity.id,
       options.currentPropId,
       options.wikibaseAlias,
@@ -46,12 +46,12 @@ export default async function addEntityConnectors(
     //use number of children property, use count of children if not available
     if (options.currentPropId === CHILD_ID) {
       //only for family trees
-      entity.childrenCount =
+      entity.targetsCount =
         Number(
           getSimpleClaimValue(entity.simpleClaims, NUMBER_OF_CHILDREN_ID),
         ) || entity.targetIds.length;
     } else {
-      entity.childrenCount = entity.targetIds.length;
+      entity.targetsCount = entity.targetIds.length;
     }
   } else {
     delete entity.targetIds;
