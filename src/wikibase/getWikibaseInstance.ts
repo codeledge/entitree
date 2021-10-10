@@ -1,7 +1,7 @@
 import wbk from "wikibase-sdk";
 import wdk from "wikidata-sdk";
 
-export type WikibaseAlias = "wikidata" | "factgrid";
+export type WikibaseAlias = "wikidata" | "factgrid" | "geni";
 
 export function getWikibaseInstance(alias: WikibaseAlias) {
   let wikibaseInstance: any;

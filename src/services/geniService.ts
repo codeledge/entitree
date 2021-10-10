@@ -1,3 +1,5 @@
+import { GeniEntity } from "types/Entity";
+import axios from "axios";
 import jsonp from "jsonp-promise";
 
 type GeniLocation = {
@@ -18,6 +20,23 @@ type GeniEvent = {
     circa: boolean;
   };
   location: GeniLocation;
+};
+type GeniNodes = {
+  [key: string]: {
+    id: string;
+    first_name: string;
+    last_name: string;
+    public: boolean;
+    edges: {
+      [key: string]: {
+        rel: string;
+      };
+    };
+  };
+};
+export type GeniImmediateFamily = {
+  focus: GeniProfile;
+  nodes: GeniNodes;
 };
 
 export type GeniProfile = {
@@ -98,16 +117,43 @@ export type GeniProfile = {
   deahtYear: string;
 };
 
-export default async function getGeniProfile(
+export async function getGeniProfile(
   geniId: string,
 ): Promise<GeniProfile | undefined> {
-  try {
-    const data = await jsonp(`https://www.geni.com/api/profile-g${geniId}`, {
-      param: "callback",
-      timeout: 1000,
-    }).promise;
-    return data;
-  } catch (e) {
-    //TODO: go through server and use axios
-  }
+  // try {
+  console.log(`https://www.geni.com/api/profile-g${geniId}`);
+  const data = await jsonp(`https://www.geni.com/api/profile-g${geniId}`, {
+    param: "callback",
+    timeout: 2000,
+  }).promise;
+  return data;
+  // } catch (e) {
+  //   //TODO: go through server and use axios
+  // }
+}
+
+export async function getGeniProfileAxios(
+  geniId: string,
+): Promise<GeniProfile | undefined> {
+  // try {
+  const { data } = await axios.get(
+    `https://www.geni.com/api/profile-${geniId}?access_token=G6vd9cVFuYvBdNkNJgLeKpZy9GXgmtfeyXCden3c`,
+  );
+  return data;
+  // } catch (e) {
+  //   //TODO: go through server and use axios
+  // }
+}
+
+export async function getGeniProfileFamily(
+  geniId: string,
+): Promise<GeniImmediateFamily | undefined> {
+  // try {
+  const { data } = await axios.get(
+    `https://www.geni.com/api/profile-${geniId}/immediate-family?access_token=G6vd9cVFuYvBdNkNJgLeKpZy9GXgmtfeyXCden3c`,
+  );
+  return data;
+  // } catch (e) {
+  //   //TODO: go through server and use axios
+  // }
 }

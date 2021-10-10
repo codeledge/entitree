@@ -1,3 +1,5 @@
+import { GeniImmediateFamily, GeniProfile } from "services/geniService";
+
 import { Claim } from "./Claim";
 import { Country } from "constants/countries";
 import { LangCode } from "types/Lang";
@@ -35,8 +37,10 @@ export interface WikiEntity {
   labels?: Record<string, LanguageEntry>;
   sitelinks?: Record<string, Sitelink>;
 }
+export type Entity = WikiEntity & NodeProperties;
+export type GeniEntity = GeniImmediateFamily & NodeProperties;
 
-export interface Entity extends WikiEntity {
+export interface NodeProperties {
   abolishedDate?: string;
   birthDate?: string;
   birthISO?: string;
