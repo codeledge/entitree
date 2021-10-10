@@ -28,6 +28,9 @@ export default async function getItemFromSlug(
     .get(url)
     .then(({ data }) => wikibaseInstance.simplify.sparqlResults(data))
     .then((results) => {
+      if (results.length < 1) {
+        return "";
+      }
       const [{ item: itemId }] = results;
       return itemId;
     });

@@ -120,7 +120,18 @@ export const getServerSideProps = wrapper.getServerSideProps(
         //the wikipedia article redirects to another article
         if (canonical !== itemSlug) {
           //try to get the item from wikidata
-          itemId = await getItemFromSlug(decodedItemSlug, langCode);
+          const itemFromSlug = await getItemFromSlug(decodedItemSlug, langCode);
+          if (itemFromSlug) {
+            // fix normal redirect to same item
+            itemId = itemFromSlug;
+          } else {
+            // redirect page
+            return {
+              redirect: {
+                destination: `/${langCode}/${propSlug}/${canonical}`,
+              },
+            };
+          }
           // losing itemThumbnail feature for those isolated cases
         } else {
           if (wikibase_item) itemId = wikibase_item;
