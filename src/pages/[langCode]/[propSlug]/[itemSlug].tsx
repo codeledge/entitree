@@ -19,7 +19,7 @@ import SearchBar from "layout/SearchBar";
 import TreeLoader from "layout/TreeLoader";
 import VideoPopup from "../../../layout/VideoPopup";
 import { createMetaTags } from "helpers/createMetaTags";
-import getItemFromSlug from "wikidata/getItemFromSlug";
+import getItemIdFromSlug from "wikidata/getItemIdFromSlug";
 import getWikipediaArticle from "wikipedia/getWikipediaArticle";
 import isInIframe from "lib/isInIframe";
 import { isItemId } from "helpers/isItemId";
@@ -103,8 +103,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
     const decodedPropSlug = decodeURIComponent(propSlug);
     const decodedItemSlug = decodeURIComponent(itemSlug);
 
-    let itemId;
-    let itemThumbnail;
+    let itemId = "";
+    let itemThumbnail = "";
     if (isItemId(itemSlug)) {
       itemId = itemSlug;
     } else {
@@ -120,13 +120,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
         //the wikipedia article redirects to another article
         if (canonical !== itemSlug) {
-          //try to get the item from wikidata
-          const itemFromSlug = await getItemFromSlug(decodedItemSlug, langCode);
-          if (itemFromSlug) {
-            // fix normal redirect to same item
-            itemId = itemFromSlug;
-          } else {
-            // redirect page
+          //try to get the item from wikidata and avoid the redirects
+          itemId = await getItemIdFromSlug(decodedItemSlug, langCode);
+          if (!itemId) {
+            // ok, not found, redirect to page then
             return {
               redirect: {
                 destination: `/${langCode}/${propSlug}/${canonical}`,
@@ -143,6 +140,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
         return { props: { errorCode: error.response?.status || 500 } };
       }
     }
+
+    //itemId might STILL not be found
+    if (!itemId) return { props: { errorCode: 404 } };
 
     try {
       const { currentEntity, currentProp, itemProps } = await loadEntity({

@@ -2,12 +2,13 @@ import { LangCode } from "types/Lang";
 import axios from "axios";
 import { getWikibaseInstance } from "wikibase/getWikibaseInstance";
 
-export default async function getItemFromSlug(
+export default async function getItemIdFromSlug(
   slug: string,
   langCode: LangCode,
 ): Promise<string> {
   const wikibaseInstance = getWikibaseInstance("wikidata");
 
+  //TODO: why is this a promise?
   const url = await new Promise<string>((resolve, reject) => {
     try {
       const query = `
@@ -28,10 +29,6 @@ export default async function getItemFromSlug(
     .get(url)
     .then(({ data }) => wikibaseInstance.simplify.sparqlResults(data))
     .then((results) => {
-      if (results.length < 1) {
-        return "";
-      }
-      const [{ item: itemId }] = results;
-      return itemId;
+      return results?.[0]?.item;
     });
 }
