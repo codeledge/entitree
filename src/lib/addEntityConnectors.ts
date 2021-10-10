@@ -17,9 +17,9 @@ export type ConnectorOptions = {
   wikibaseAlias: WikibaseAlias;
   currentPropId?: string;
   addSourceIds?: boolean;
-  addDownIds?: boolean;
-  addRightIds?: boolean;
-  addLeftIds?: boolean;
+  addTargetIds?: boolean;
+  addNextAfterIds?: boolean;
+  addNextBeforeIds?: boolean;
 };
 
 export default async function addEntityConnectors(
@@ -36,7 +36,7 @@ export default async function addEntityConnectors(
     delete entity.sourceIds;
   }
 
-  if (options.addDownIds && options.currentPropId) {
+  if (options.addTargetIds && options.currentPropId) {
     entity.targetIds = getClaimIds(entity, options.currentPropId);
     entity.downIdsAlreadySorted = checkIfClaimsHasSeriesOrdinal(
       entity,
@@ -57,14 +57,14 @@ export default async function addEntityConnectors(
     delete entity.targetIds;
   }
 
-  if (options.addRightIds) addRightIds(entity);
+  if (options.addNextAfterIds) addNextAfterIds(entity);
 
-  if (options.addLeftIds)
+  if (options.addNextBeforeIds)
     entity.nextBeforeIds = getClaimIds(entity, SIBLINGS_ID);
   else delete entity.nextBeforeIds;
 }
 
-function addRightIds(entity: Entity) {
+function addNextAfterIds(entity: Entity) {
   //cannot use simpleclaims here as only preferred will show up
   //load everything here then you filter on the client
 

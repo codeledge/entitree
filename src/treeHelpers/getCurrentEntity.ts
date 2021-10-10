@@ -73,9 +73,9 @@ export const getCurrentEntity = async ({
     wikibaseAlias,
     currentPropId: currentProp?.id,
     addSourceIds: true,
-    addDownIds: true,
-    addLeftIds: currentProp?.id === CHILD_ID,
-    addRightIds: currentProp?.id === CHILD_ID,
+    addTargetIds: true,
+    addNextBeforeIds: currentProp?.id === CHILD_ID,
+    addNextAfterIds: currentProp?.id === CHILD_ID,
   });
 
   return { currentEntity, currentProp, currentEntityProps };

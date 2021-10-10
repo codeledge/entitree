@@ -70,8 +70,8 @@ export const toggleChildren =
         const children = await getChildEntities(entityNode, languageCode, {
           wikibaseAlias,
           currentPropId: currentProp?.id,
-          addDownIds: true,
-          addRightIds: currentProp?.id === CHILD_ID,
+          addTargetIds: true,
+          addNextAfterIds: currentProp?.id === CHILD_ID,
           downIdsAlreadySorted: entityNode.downIdsAlreadySorted,
         });
 
@@ -100,8 +100,8 @@ export const preloadChildren =
     const children = await getChildEntities(entityNode, languageCode, {
       wikibaseAlias,
       currentPropId: currentProp?.id,
-      addDownIds: true,
-      addRightIds: currentProp?.id === CHILD_ID,
+      addTargetIds: true,
+      addNextAfterIds: currentProp?.id === CHILD_ID,
       downIdsAlreadySorted: entityNode.downIdsAlreadySorted,
     });
 
@@ -142,7 +142,7 @@ export const toggleParents =
           wikibaseAlias,
           currentPropId: currentProp?.id,
           addSourceIds: true,
-          addLeftIds: currentProp?.id === CHILD_ID,
+          addNextBeforeIds: currentProp?.id === CHILD_ID,
         });
 
         dispatch(expandParents({ entityNode, parents, options }));
@@ -171,7 +171,7 @@ export const preloadParents =
       wikibaseAlias,
       currentPropId: currentProp?.id,
       addSourceIds: true,
-      addLeftIds: currentProp?.id === CHILD_ID,
+      addNextBeforeIds: currentProp?.id === CHILD_ID,
     });
 
     dispatch(setPreloadedParents({ entityNode, parents }));
