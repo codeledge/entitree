@@ -1,5 +1,6 @@
 import { LangCode } from "types/Lang";
 import axios from "axios";
+import { errorHandler } from "handlers/clientErrorHandler";
 import { getWikibaseInstance } from "wikibase/getWikibaseInstance";
 
 export default async function getItemIdFromSlug(
@@ -30,5 +31,6 @@ export default async function getItemIdFromSlug(
     .then(({ data }) => wikibaseInstance.simplify.sparqlResults(data))
     .then((results) => {
       return results?.[0]?.item;
-    });
+    })
+    .catch(errorHandler);
 }

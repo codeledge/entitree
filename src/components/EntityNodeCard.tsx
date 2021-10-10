@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-to-interactive-role */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable prefer-arrow-callback */
 
 import {
   BIRTH_NAME_ID,
@@ -42,6 +41,7 @@ import { MdChildCare } from "react-icons/md";
 import { SettingsState } from "store/settingsSlice";
 import addLifeSpan from "../lib/addLifeSpan";
 import clsx from "clsx";
+import { errorHandler } from "handlers/clientErrorHandler";
 import getEntitiesLabel from "treeHelpers/getEntitiesLabel";
 import getFandomPageProps from "../services/fandomService";
 import getGeniProfile from "services/geniService";
@@ -67,123 +67,132 @@ export default memo(({ node }: { node: EntityNode }) => {
   const [thumbnails, setThumbnails] = useState<Image[]>(node.thumbnails || []);
   // let processedImageUrls = []; //Don't ask users to import images that have already been imported
   useEffect(() => {
-    getDataprickImages(node.id.substr(1)).then((imageSet) => {
-      imageSet.forEach((thumbnail) => {
-        setThumbnails((thumbnails) => [thumbnail, ...thumbnails]);
-      });
-    });
+    getDataprickImages(node.id.substr(1))
+      .then((imageSet) => {
+        imageSet?.forEach((thumbnail) => {
+          setThumbnails((thumbnails) => [thumbnail, ...thumbnails]);
+        });
+      })
+      .catch(errorHandler);
     if (settings.showExternalImages) {
       if (node.peoplepillImageUrl) {
-        isValidImage(node.peoplepillImageUrl).then((valid) => {
-          if (valid) {
-            const ppImage = {
-              url: node.peoplepillImageUrl,
-              sourceUrl: `https://peoplepill.com/people/${node.peoplepillSlug}`,
-              downloadUrl: node.peoplepillImageUrl,
-              alt: `Image from peoplepill`,
-            } as Image;
-            setThumbnails((thumbnails) => [ppImage, ...thumbnails]);
-          }
-        });
+        isValidImage(node.peoplepillImageUrl)
+          .then((valid) => {
+            if (valid) {
+              const ppImage = {
+                url: node.peoplepillImageUrl,
+                sourceUrl: `https://peoplepill.com/people/${node.peoplepillSlug}`,
+                downloadUrl: node.peoplepillImageUrl,
+                alt: `Image from peoplepill`,
+              } as Image;
+              setThumbnails((thumbnails) => [ppImage, ...thumbnails]);
+            }
+          })
+          .catch(errorHandler);
       }
     }
   }, []);
 
   useEffect(() => {
     if (node.geniId && settings.showExternalImages) {
-      getGeniProfile(node.geniId).then((geniProfile) => {
-        if (geniProfile?.mugshot_urls?.thumb) {
-          const geniImg = {
-            url: geniProfile.mugshot_urls.medium,
-            alt: `Geni.com image`,
-            sourceUrl: geniProfile.profile_url,
-            downloadUrl:
-              geniProfile.mugshot_urls.large ?? geniProfile.mugshot_urls.medium,
-          } as Image;
-          setThumbnails((thumbnails) => thumbnails.concat(geniImg));
-        }
+      getGeniProfile(node.geniId)
+        .then((geniProfile) => {
+          if (geniProfile?.mugshot_urls?.thumb) {
+            const geniImg = {
+              url: geniProfile.mugshot_urls.medium,
+              alt: `Geni.com image`,
+              sourceUrl: geniProfile.profile_url,
+              downloadUrl:
+                geniProfile.mugshot_urls.large ??
+                geniProfile.mugshot_urls.medium,
+            } as Image;
+            setThumbnails((thumbnails) => thumbnails.concat(geniImg));
+          }
 
-        //add Geni dates and country
-        if (
-          geniProfile &&
-          (geniProfile.birth || geniProfile.death) &&
-          node.lifeSpanInYears === undefined
-        ) {
-          if (geniProfile.birth && geniProfile.birth.date) {
-            node.birthYear = "" + geniProfile.birth.date.year; //convert to string
-            if (
-              geniProfile.birth.date.circa &&
-              geniProfile.birth.date.circa === true
-            ) {
-              node.birthYear = "~" + node.birthYear;
+          //add Geni dates and country
+          if (
+            geniProfile &&
+            (geniProfile.birth || geniProfile.death) &&
+            node.lifeSpanInYears === undefined
+          ) {
+            if (geniProfile.birth && geniProfile.birth.date) {
+              node.birthYear = "" + geniProfile.birth.date.year; //convert to string
+              if (
+                geniProfile.birth.date.circa &&
+                geniProfile.birth.date.circa === true
+              ) {
+                node.birthYear = "~" + node.birthYear;
+              }
             }
-          }
-          if (geniProfile.death && geniProfile.death.date) {
-            node.deathYear = "" + geniProfile.death.date.year;
-            if (
-              geniProfile.death.date.circa &&
-              geniProfile.death.date.circa === true
-            ) {
-              node.deathYear = "~" + node.deathYear;
+            if (geniProfile.death && geniProfile.death.date) {
+              node.deathYear = "" + geniProfile.death.date.year;
+              if (
+                geniProfile.death.date.circa &&
+                geniProfile.death.date.circa === true
+              ) {
+                node.deathYear = "~" + node.deathYear;
+              }
             }
+            addLifeSpan(node);
+            setLifeSpanInYears(node.lifeSpanInYears);
           }
-          addLifeSpan(node);
-          setLifeSpanInYears(node.lifeSpanInYears);
-        }
-        if (
-          geniProfile &&
-          geniProfile.birth &&
-          geniProfile.birth.location &&
-          geniProfile.birth.location.country_code &&
-          !birthCountry
-        ) {
-          setBirthCountry({
-            code: geniProfile.birth.location.country_code,
-            name: geniProfile.birth.location.country,
-            text: "Born in " + geniProfile.birth.location.country + " (geni)",
-          });
-        } else if (
-          geniProfile &&
-          geniProfile.location &&
-          geniProfile.location.country_code &&
-          !birthCountry
-        ) {
-          setBirthCountry({
-            code: geniProfile.location.country_code,
-            name: geniProfile.location.country,
-            text: "Lived in " + geniProfile.location.country + " (geni)",
-          });
-        }
-      });
+          if (
+            geniProfile &&
+            geniProfile.birth &&
+            geniProfile.birth.location &&
+            geniProfile.birth.location.country_code &&
+            !birthCountry
+          ) {
+            setBirthCountry({
+              code: geniProfile.birth.location.country_code,
+              name: geniProfile.birth.location.country,
+              text: "Born in " + geniProfile.birth.location.country + " (geni)",
+            });
+          } else if (
+            geniProfile &&
+            geniProfile.location &&
+            geniProfile.location.country_code &&
+            !birthCountry
+          ) {
+            setBirthCountry({
+              code: geniProfile.location.country_code,
+              name: geniProfile.location.country,
+              text: "Lived in " + geniProfile.location.country + " (geni)",
+            });
+          }
+        })
+        .catch(errorHandler);
     }
   }, []);
 
   useEffect(() => {
     if (node.fandomHost && node.fandomId) {
-      getFandomPageProps(node.fandomHost, node.fandomId).then((fandomData) => {
-        if (fandomData?.query?.pages) {
-          const page: any = Object.values(fandomData.query.pages)[0];
+      getFandomPageProps(node.fandomHost, node.fandomId)
+        .then((fandomData) => {
+          if (fandomData?.query?.pages) {
+            const page: any = Object.values(fandomData.query.pages)[0];
 
-          if (page.pageprops) {
-            const pageprops = JSON.parse(page.pageprops.infoboxes);
-            if (pageprops[0] && pageprops[0].data) {
-              const image = pageprops[0].data.find(
-                (entry) => entry.type === "image",
-              ).data[0];
+            if (page.pageprops) {
+              const pageprops = JSON.parse(page.pageprops.infoboxes);
+              if (pageprops[0] && pageprops[0].data) {
+                const image = pageprops[0].data.find(
+                  (entry) => entry.type === "image",
+                ).data[0];
 
-              if (image) {
-                const fandomImage = {
-                  url: image.url.split("/revision/")[0],
-                  alt: `Fandom image, ${image.name}`,
-                  downloadUrl: image.url.split("/revision/")[0],
-                  sourceUrl: node.fandomUrl,
-                };
-                setThumbnails((thumbnails) => thumbnails.concat(fandomImage));
+                if (image) {
+                  const fandomImage = {
+                    url: image.url.split("/revision/")[0],
+                    alt: `Fandom image, ${image.name}`,
+                    downloadUrl: image.url.split("/revision/")[0],
+                    sourceUrl: node.fandomUrl,
+                  };
+                  setThumbnails((thumbnails) => thumbnails.concat(fandomImage));
+                }
               }
             }
           }
-        }
-      });
+        })
+        .catch(errorHandler);
     }
   }, []);
 
@@ -237,9 +246,11 @@ export default memo(({ node }: { node: EntityNode }) => {
           [node.id],
           settings.secondLabelCode as LangCode,
           settings.wikibaseAlias,
-        ).then(([secondLabel]) => {
-          setSecondLabel(secondLabel);
-        });
+        )
+          .then(([secondLabel]) => {
+            setSecondLabel(secondLabel);
+          })
+          .catch(errorHandler);
       }
     } else {
       setSecondLabel(undefined);

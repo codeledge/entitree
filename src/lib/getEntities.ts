@@ -84,7 +84,7 @@ export const getRootEntity = async (
 ): Promise<Entity> => {
   const [root] = await getEntities([id], languageCode, options);
 
-  root.treeId = "0";
+  if (root) root.treeId = "0";
 
   return root;
 };
