@@ -31,12 +31,16 @@ export const createMetaTags = (
     if (currentProp?.id === CHILD_ID) {
       ogDescription += `
       ${
-        currentEntity.downIds?.length
-          ? `, ${pluralize("child", currentEntity.downIds.length, true)}`
+        currentEntity.targetIds?.length
+          ? `, ${pluralize("child", currentEntity.targetIds.length, true)}`
           : ""
       }${
-        currentEntity.leftIds?.length
-          ? `, ${pluralize("sibling", currentEntity.leftIds.length, true)}`
+        currentEntity.nextBeforeIds?.length
+          ? `, ${pluralize(
+              "sibling",
+              currentEntity.nextBeforeIds.length,
+              true,
+            )}`
           : ""
       }${
         currentEntity.spousesIds?.length

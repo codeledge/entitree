@@ -10,7 +10,7 @@ import axios from "axios";
 import { errorHandler } from "handlers/errorHandler";
 import getWikibaseConstants from "./getWikibaseConstants";
 
-export default async function getItemProps(
+export default async function getWikibaseEntityProps(
   id: string,
   langCode: LangCode,
   wikibaseAlias: WikibaseAlias,

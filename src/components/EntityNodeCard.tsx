@@ -42,9 +42,9 @@ import { SettingsState } from "store/settingsSlice";
 import addLifeSpan from "../lib/addLifeSpan";
 import clsx from "clsx";
 import { errorHandler } from "handlers/errorHandler";
-import getEntitiesLabel from "treeHelpers/getEntitiesLabel";
 import getFandomPageProps from "../services/fandomService";
 import getGeniProfile from "services/geniService";
+import getWikibaseEntitiesLabel from "wikibase/getWikibaseEntitiesLabel";
 import { isProperyId } from "helpers/isPropertyId";
 import { isValidImage } from "helpers/isValidImage";
 import { useAppSelector } from "store";
@@ -242,7 +242,7 @@ export default memo(({ node }: { node: EntityNode }) => {
       } else {
         //if(isLangCode(settings.secondLabelCode))
         //check if language is already in the main languages
-        getEntitiesLabel(
+        getWikibaseEntitiesLabel(
           [node.id],
           settings.secondLabelCode as LangCode,
           settings.wikibaseAlias,
@@ -257,8 +257,8 @@ export default memo(({ node }: { node: EntityNode }) => {
     }
   }, [settings.secondLabelCode]);
 
-  //this is needed to make it work with root being server side rightIds added!
-  const filteredRightIds = node.rightIds?.filter((rightId) => {
+  //this is needed to make it work with root being server side nextAfterIds added!
+  const filteredNextAfterIds = node.nextAfterIds?.filter((rightId) => {
     if (
       settings.rightEntityOption.propIds.indexOf(SPOUSE_ID) > -1 &&
       node.spousesIds?.includes(rightId)
@@ -480,7 +480,7 @@ export default memo(({ node }: { node: EntityNode }) => {
 
       {!settings.hideToggleButton && (
         <>
-          {node.leftIds && !!node.leftIds.length && (
+          {node.nextBeforeIds && !!node.nextBeforeIds.length && (
             <Button
               className="siblingToggle relativeToggle"
               variant="link"
@@ -490,7 +490,7 @@ export default memo(({ node }: { node: EntityNode }) => {
                 (node.openSiblingTreeIds ? "Collapse" : "Expand") + " siblings"
               }
             >
-              <div className="value">{node.leftIds.length}</div>
+              <div className="value">{node.nextBeforeIds.length}</div>
               <div className="chevron mt-1 mb-1">
                 {node.openSiblingTreeIds ? (
                   <FiChevronRight />
@@ -503,7 +503,7 @@ export default memo(({ node }: { node: EntityNode }) => {
               </div>
             </Button>
           )}
-          {!!filteredRightIds?.length && (
+          {!!filteredNextAfterIds?.length && (
             <Button
               className="spouseToggle relativeToggle"
               variant="link"
@@ -514,7 +514,7 @@ export default memo(({ node }: { node: EntityNode }) => {
                 " spouses/partners"
               }
             >
-              <div className="value">{filteredRightIds.length}</div>
+              <div className="value">{filteredNextAfterIds.length}</div>
               <div className="chevron mt-1 mb-1">
                 {node.openSpouseTreeIds ? (
                   <FiChevronLeft />
@@ -527,14 +527,14 @@ export default memo(({ node }: { node: EntityNode }) => {
               </div>
             </Button>
           )}
-          {!!node.upIds?.length && (
+          {!!node.sourceIds?.length && (
             <Button
               className="parentToggle relativeToggle"
               variant="link"
               disabled={node.loadingParents}
               onClick={() => dispatch(toggleParents(node))}
             >
-              <span className="value mr-1">{node.upIds.length}</span>
+              <span className="value mr-1">{node.sourceIds.length}</span>
               <span className="chevron">
                 {node.openParentTreeIds ? <FiChevronDown /> : <FiChevronUp />}
               </span>
@@ -545,14 +545,14 @@ export default memo(({ node }: { node: EntityNode }) => {
               )}
             </Button>
           )}
-          {!!node.downIds?.length && (
+          {!!node.targetIds?.length && (
             <Button
               className="childrenToggle relativeToggle"
               variant="link"
               disabled={node.loadingChildren}
               onClick={() => dispatch(toggleChildren(node))}
             >
-              <span className="value mr-1">{node.childrenCount}</span>
+              <span className="value mr-1">{node.targetsCount}</span>
               <span className="chevron">
                 {node.openChildTreeIds ? <FiChevronUp /> : <FiChevronDown />}
               </span>
@@ -563,17 +563,17 @@ export default memo(({ node }: { node: EntityNode }) => {
               )}
             </Button>
           )}
-          {node.downIds &&
-            !node.downIds.length &&
-            !!node.childrenCount &&
-            node.childrenCount > 0 &&
+          {node.targetIds &&
+            !node.targetIds.length &&
+            !!node.targetsCount &&
+            node.targetsCount > 0 &&
             currentProp?.id === CHILD_ID && (
               <Button
                 className="childrenToggle relativeToggle"
                 variant="link"
                 title="Children not available, please add them on wikidata.org"
               >
-                <span className="value mr-1">{node.childrenCount}</span>
+                <span className="value mr-1">{node.targetsCount}</span>
                 <span className="icon">
                   <MdChildCare />
                 </span>

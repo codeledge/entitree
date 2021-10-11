@@ -44,7 +44,7 @@ export interface Entity extends WikibaseEntity {
   birthName?: string;
   birthPlaceId?: string;
   birthYear?: string;
-  childrenCount?: number;
+  targetsCount?: number;
   closedChildTreeIds?: string[];
   closedParentTreeIds?: string[];
   closedSiblingTreeIds?: string[];
@@ -54,8 +54,8 @@ export interface Entity extends WikibaseEntity {
   deathPlaceId?: string;
   deathYear?: string;
   description?: string;
-  downIds?: string[];
-  downIdsAlreadySorted?: boolean;
+  targetIds?: string[];
+  areTargetIdsSorted?: boolean;
   endDate?: string;
   externalLinks?: ExternalLink[];
   eyeColor?: PropColor;
@@ -71,7 +71,7 @@ export interface Entity extends WikibaseEntity {
   isHuman?: boolean;
   isInfantDeath?: boolean;
   label?: string;
-  leftIds?: string[];
+  nextBeforeIds?: string[];
   lifeSpan?: string;
   lifeSpanInYears?: string;
   loadingChildren?: boolean;
@@ -89,14 +89,14 @@ export interface Entity extends WikibaseEntity {
   peoplepillImageUrl?: string;
   peoplepillSlug?: string;
   religion?: SparqlEmoji;
-  rightIds?: string[];
+  nextAfterIds?: string[];
   simpleClaims?: SimpleClaims; //TODO not available on client
   spousesIds?: string[];
   startDate?: string;
   startEndSpan?: string;
   thumbnails?: Image[];
   treeId?: string;
-  upIds?: string[];
+  sourceIds?: string[];
   website?: string;
   wikidataUrl?: string;
   wikipediaSlug?: string;
