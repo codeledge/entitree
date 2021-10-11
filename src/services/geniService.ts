@@ -148,7 +148,7 @@ export async function getGeniProfileAxios(
 }
 const access_token = "T7NzscraNxFfvUuoumH40S4SPmiuGAE0um9UCeTX";
 function createGeniUrl(ids) {
-  return `https://www.geni.com/api/profile/immediate-family?ids=${ids}&fields=id,maiden_name,name,first_name,last_name,birth,death,gender,mugshot_urls&access_token=${access_token}`;
+  return `https://www.geni.com/api/profile/immediate-family?ids=${ids}&fields=id,maiden_name,name,first_name,last_name,birth,death,gender,mugshot_urls,profile_url&access_token=${access_token}`;
 }
 export async function getGeniProfileFamily(
   geniIds: string[],

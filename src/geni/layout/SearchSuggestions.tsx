@@ -56,22 +56,19 @@ export default function SearchSuggestions({
             setShowSuggestions(false);
             dispatch(reset());
             const url = getEntityUrl(
-              languageCode,
-              currentProp?.slug || "",
+              "en",
+              "family_tree",
               {
-                id: searchResult.id,
+                id: searchResult.id.substr(8),
               },
-              wikibaseAlias,
+              "geni",
             );
+            console.log(url);
             router.push(url);
           }}
         >
           <b>{searchResult.name}</b>
-          {searchResult.guid && (
-            <i>
-              {searchResult.guid} {url}
-            </i>
-          )}
+          {searchResult.guid && <i>{searchResult.guid}</i>}
         </Button>
       ))}
     </StyledSuggestions>
