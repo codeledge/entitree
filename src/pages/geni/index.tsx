@@ -4,7 +4,7 @@ import { Container } from "react-bootstrap";
 import Div100vh from "react-div-100vh";
 import Footer from "layout/Footer";
 import Header from "../../layout/Header";
-import SearchBar from "layout/SearchBar";
+import SearchBar from "geni/layout/SearchBar";
 import { Title } from "layout/Title";
 import TreeLoader from "layout/TreeLoader";
 import { setSetting } from "store/settingsSlice";

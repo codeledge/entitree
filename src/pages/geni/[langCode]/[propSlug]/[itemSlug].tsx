@@ -8,7 +8,7 @@ import { useAppSelector, wrapper } from "store";
 
 import { DEFAULT_PROPERTY_ALL } from "constants/properties";
 import Div100vh from "react-div-100vh";
-import DrawingArea from "components/DrawingArea";
+import DrawingArea from "geni/components/DrawingArea";
 import Error from "next/error";
 import Footer from "layout/Footer";
 import Head from "next/head";
@@ -16,7 +16,7 @@ import Header from "layout/Header";
 import { LANGS } from "constants/langs";
 import { LangCode } from "types/Lang";
 import { SITE_NAME } from "constants/meta";
-import SearchBar from "layout/SearchBar";
+import SearchBar from "geni/layout/SearchBar";
 import TreeLoader from "layout/TreeLoader";
 import { isItemId } from "helpers/isItemId";
 import { loadEntity } from "geni/treeHelpers/loadEntity";

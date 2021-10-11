@@ -37,7 +37,7 @@ export interface WikiEntity {
   labels?: Record<string, LanguageEntry>;
   sitelinks?: Record<string, Sitelink>;
 }
-export type Entity = WikiEntity & NodeProperties;
+export type Entity = WikiEntity & NodeProperties & GeniImmediateFamily;
 export type GeniEntity = GeniImmediateFamily & NodeProperties;
 
 export interface NodeProperties {

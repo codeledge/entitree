@@ -9,6 +9,7 @@ import {
   GeniProfile,
   getGeniProfileAxios,
   getGeniProfileFamily,
+  getGeniProfileFamilyAxios,
 } from "services/geniService";
 
 import { CHILD_ID } from "constants/properties";
@@ -25,6 +26,7 @@ import formatGeniProfile from "./formatEntity";
 type Options = ConnectorOptions & {
   secondLanguageCode?: LangCode;
   downIdsAlreadySorted?: boolean;
+  serverside?: boolean;
 };
 
 export default async function getEntities(
@@ -32,16 +34,21 @@ export default async function getEntities(
   languageCode: LangCode,
   options: Options,
 ): Promise<GeniEntity[]> {
-  const geniProfile = await getGeniProfileFamily(ids[0]);
-  // const accumulator = await Promise.resolve(geniProfile);
+  const geniProfiles = options.serverside
+    ? await getGeniProfileFamilyAxios(ids)
+    : await getGeniProfileFamily(ids);
+  const entities: GeniEntity[] = [];
+  console.log(geniProfiles);
+  geniProfiles.results.forEach((geniProfile) => {
+    //add all custom fields
+    const entity = formatGeniProfile(geniProfile);
 
-  //add all custom fields
-  const entity = formatGeniProfile(geniProfile);
+    addEntityConnectors(entity, options);
+    console.log(entity);
+    entities.push(entity);
+  });
 
-  addEntityConnectors(entity, options);
-  console.log(entity);
-
-  return [entity];
+  return entities;
 }
 
 export const getRootEntity = async (
@@ -50,7 +57,7 @@ export const getRootEntity = async (
   options: Options,
 ): Promise<GeniEntity | undefined> => {
   const [root] = await getEntities([id], languageCode, options);
-
+  console.log(root);
   if (root) root.treeId = "0";
 
   return root;

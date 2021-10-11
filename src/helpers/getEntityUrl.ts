@@ -19,6 +19,10 @@ export const getEntityUrl = (
       wikibasePrefix += "/factgrid";
       slug = entity.id; //factgrid not supporting slug at the moment
       break;
+    case "geni":
+      wikibasePrefix += "/geni";
+      slug = entity.id; //factgrid not supporting slug at the moment
+      break;
     default:
       break;
   }

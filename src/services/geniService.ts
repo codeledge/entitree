@@ -21,22 +21,11 @@ type GeniEvent = {
   };
   location: GeniLocation;
 };
-type GeniNodes = {
+export type GeniRelType = "child" | "partner";
+type GeniEdge = {
   [key: string]: {
-    id: string;
-    first_name: string;
-    last_name: string;
-    public: boolean;
-    edges: {
-      [key: string]: {
-        rel: string;
-      };
-    };
+    rel: GeniRelType;
   };
-};
-export type GeniImmediateFamily = {
-  focus: GeniProfile;
-  nodes: GeniNodes;
 };
 
 export type GeniProfile = {
@@ -116,7 +105,20 @@ export type GeniProfile = {
   birthYear: string;
   deahtYear: string;
 };
+type GeniNodes = {
+  [key: string]: GeniProfile & {
+    edges: GeniEdge[];
+  };
+};
 
+export type GeniResults = {
+  results: GeniImmediateFamily[];
+};
+
+export type GeniImmediateFamily = {
+  focus?: GeniProfile;
+  nodes: GeniNodes[];
+};
 export async function getGeniProfile(
   geniId: string,
 ): Promise<GeniProfile | undefined> {
@@ -144,16 +146,64 @@ export async function getGeniProfileAxios(
   //   //TODO: go through server and use axios
   // }
 }
-
+const access_token = "T7NzscraNxFfvUuoumH40S4SPmiuGAE0um9UCeTX";
+function createGeniUrl(ids) {
+  return `https://www.geni.com/api/profile/immediate-family?ids=${ids}&fields=id,maiden_name,name,first_name,last_name,birth,death,gender,mugshot_urls&access_token=${access_token}`;
+}
 export async function getGeniProfileFamily(
-  geniId: string,
-): Promise<GeniImmediateFamily | undefined> {
+  geniIds: string[],
+): Promise<GeniResults> {
   // try {
-  const { data } = await axios.get(
-    `https://www.geni.com/api/profile-${geniId}/immediate-family?access_token=G6vd9cVFuYvBdNkNJgLeKpZy9GXgmtfeyXCden3c`,
-  );
+  const ids = geniIds.join(",");
+  const data = await jsonp(createGeniUrl(ids), {
+    param: "callback",
+    timeout: 2000,
+  }).promise;
+  if (!data.results) {
+    return { results: [data] };
+  }
   return data;
   // } catch (e) {
   //   //TODO: go through server and use axios
   // }
 }
+
+export async function getGeniProfileFamilyAxios(
+  geniIds: string[],
+): Promise<GeniResults> {
+  const ids = geniIds.join(",");
+  // try {
+  const { data } = await axios.get(createGeniUrl(ids));
+  if (!data.results) {
+    return { results: [data] };
+  }
+  return data;
+  // } catch (e) {
+  //   //TODO: go through server and use axios
+  // }
+}
+
+export const geniSearch = async (term, languageCode) => {
+  const geniService = axios.create({
+    baseURL: "https://www.geni.com",
+  });
+  // geniService.interceptors.response.use(serviceSuccessInterceptor);
+  // const { data } = await geniService.get<any>("/api/profile/search", {
+  //   p,
+  // });
+  const params = {
+    access_token,
+    names: term,
+  };
+  const data = await jsonp(
+    "https://www.geni.com/api/profile/search?" + new URLSearchParams(params),
+    {
+      param: "callback",
+      timeout: 2000,
+    },
+  ).promise;
+  if (data.results) {
+    return data.results;
+  }
+  return [data];
+};

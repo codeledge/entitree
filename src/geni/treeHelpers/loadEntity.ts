@@ -20,6 +20,7 @@ export const loadEntity = async ({
     addDownIds: true,
     addLeftIds: false,
     addRightIds: false,
+    serverside: true,
   });
 
   return { currentEntity };
