@@ -1,4 +1,4 @@
-import { Entity, EntityProp } from "types/Entity";
+import { Entity, EntityProp, GeniEntity } from "types/Entity";
 import { PayloadAction, createAction, createSlice } from "@reduxjs/toolkit";
 
 import { AppState } from "store";
@@ -225,7 +225,7 @@ export const treeSlice = createSlice({
         payload: { entityNode, parents },
       }: PayloadAction<{
         entityNode: EntityNode;
-        parents: Entity[];
+        parents: Entity[] | GeniEntity[];
       }>,
     ) => {
       const mapNode = state.entitiesMap?.[entityNode.treeId!];

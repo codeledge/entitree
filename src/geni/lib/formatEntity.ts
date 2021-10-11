@@ -10,10 +10,16 @@ export default function formatGeniProfile(geniResult: GeniImmediateFamily) {
   const entity: GeniEntity = {
     ...geniResult,
   };
-  entity.id = "Q10000";
+  entity.id = geniProfile?.id.substr(8);
+  entity.gender = geniProfile?.gender;
+  entity.isHuman = true;
   entity.label = geniProfile.name; //geniProfile?.first_name + " " + geniProfile?.last_name;
   entity.description = geniProfile?.id || "";
-  entity.birthDate = geniProfile?.birth?.date?.formatted_date;
+  entity.birthDate = geniProfile?.birth?.date?.formatted_date || null;
+  entity.deathDate = geniProfile?.death?.date?.formatted_date || null;
+  entity.birthYear = geniProfile?.birth?.date?.year || null;
+  entity.deathYear = geniProfile?.death?.date?.year || null;
+
   if (geniProfile?.mugshot_urls?.thumb) {
     const geniImg = {
       url: geniProfile.mugshot_urls.medium,

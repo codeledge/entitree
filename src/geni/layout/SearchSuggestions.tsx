@@ -68,7 +68,9 @@ export default function SearchSuggestions({
           }}
         >
           <b>{searchResult.name}</b>
-          {searchResult.guid && <i>{searchResult.guid}</i>}
+          {searchResult.birth?.date?.year && (
+            <i>*{searchResult.birth?.date?.year}</i>
+          )}
         </Button>
       ))}
     </StyledSuggestions>

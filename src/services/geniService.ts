@@ -157,7 +157,7 @@ export async function getGeniProfileFamily(
   const ids = geniIds.join(",");
   const data = await jsonp(createGeniUrl(ids), {
     param: "callback",
-    timeout: 2000,
+    timeout: 5000,
   }).promise;
   if (!data.results) {
     return { results: [data] };
