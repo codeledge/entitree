@@ -185,6 +185,16 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
           </p>
         )}
         <div className="externalLinks">
+          {node.geniProfileUrl && (
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Open Geni in a new tab"
+              href={node.geniProfileUrl}
+            >
+              <img src="/icons/geni.png" alt="Geni link" />
+            </a>
+          )}
           {node.wikidataUrl && (
             <a
               target="_blank"

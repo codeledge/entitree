@@ -42,9 +42,10 @@ import { SettingsState } from "store/settingsSlice";
 import addLifeSpan from "../lib/addLifeSpan";
 import clsx from "clsx";
 import { errorHandler } from "handlers/clientErrorHandler";
+import formatGeniProfile from "geni/lib/formatEntity";
 import getEntitiesLabel from "treeHelpers/getEntitiesLabel";
 import getFandomPageProps from "../services/fandomService";
-import getGeniProfile from "services/geniService";
+import { getGeniProfile } from "services/geniService";
 import { isProperyId } from "helpers/isPropertyId";
 import { isValidImage } from "helpers/isValidImage";
 import { useAppSelector } from "store";
@@ -92,73 +93,24 @@ export default memo(({ node }: { node: EntityNode }) => {
       }
     }
   }, []);
-
+  console.log("querygeni");
   useEffect(() => {
     if (node.geniId && settings.showExternalImages) {
       getGeniProfile(node.geniId)
         .then((geniProfile) => {
-          if (geniProfile?.mugshot_urls?.thumb) {
-            const geniImg = {
-              url: geniProfile.mugshot_urls.medium,
-              alt: `Geni.com image`,
-              sourceUrl: geniProfile.profile_url,
-              downloadUrl:
-                geniProfile.mugshot_urls.large ??
-                geniProfile.mugshot_urls.medium,
-            } as Image;
-            setThumbnails((thumbnails) => thumbnails.concat(geniImg));
+          console.log(geniProfile);
+          const geniEntity = formatGeniProfile({ focus: geniProfile });
+          console.log(geniEntity);
+          if (geniEntity?.thumbnails?.[0]) {
+            setThumbnails((thumbnails) =>
+              thumbnails.concat(geniEntity.thumbnails[0]),
+            );
           }
-
-          //add Geni dates and country
-          if (
-            geniProfile &&
-            (geniProfile.birth || geniProfile.death) &&
-            node.lifeSpanInYears === undefined
-          ) {
-            if (geniProfile.birth && geniProfile.birth.date) {
-              node.birthYear = "" + geniProfile.birth.date.year; //convert to string
-              if (
-                geniProfile.birth.date.circa &&
-                geniProfile.birth.date.circa === true
-              ) {
-                node.birthYear = "~" + node.birthYear;
-              }
-            }
-            if (geniProfile.death && geniProfile.death.date) {
-              node.deathYear = "" + geniProfile.death.date.year;
-              if (
-                geniProfile.death.date.circa &&
-                geniProfile.death.date.circa === true
-              ) {
-                node.deathYear = "~" + node.deathYear;
-              }
-            }
-            addLifeSpan(node);
-            setLifeSpanInYears(node.lifeSpanInYears);
+          if (!node.lifeSpanInYears && geniEntity.lifeSpanInYears) {
+            setLifeSpanInYears(geniEntity.lifeSpanInYears);
           }
-          if (
-            geniProfile &&
-            geniProfile.birth &&
-            geniProfile.birth.location &&
-            geniProfile.birth.location.country_code &&
-            !birthCountry
-          ) {
-            setBirthCountry({
-              code: geniProfile.birth.location.country_code,
-              name: geniProfile.birth.location.country,
-              text: "Born in " + geniProfile.birth.location.country + " (geni)",
-            });
-          } else if (
-            geniProfile &&
-            geniProfile.location &&
-            geniProfile.location.country_code &&
-            !birthCountry
-          ) {
-            setBirthCountry({
-              code: geniProfile.location.country_code,
-              name: geniProfile.location.country,
-              text: "Lived in " + geniProfile.location.country + " (geni)",
-            });
+          if (!birthCountry) {
+            setBirthCountry(geniEntity.countryOfCitizenship);
           }
         })
         .catch(errorHandler);

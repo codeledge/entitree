@@ -117,11 +117,9 @@ export type GeniResults = {
 
 export type GeniImmediateFamily = {
   focus?: GeniProfile;
-  nodes: GeniNodes[];
+  nodes?: GeniNodes[];
 };
-export async function getGeniProfile(
-  geniId: string,
-): Promise<GeniProfile | undefined> {
+export async function getGeniProfile(geniId: string): Promise<GeniProfile> {
   // try {
   console.log(`https://www.geni.com/api/profile-g${geniId}`);
   const data = await jsonp(`https://www.geni.com/api/profile-g${geniId}`, {

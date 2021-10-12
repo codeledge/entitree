@@ -1,5 +1,6 @@
+import { Entity, GeniEntity } from "types/Entity";
+
 import { DateTime } from "luxon";
-import { Entity } from "types/Entity";
 
 /*
   Sort entities by birth date, youngest child will be on the left, 
@@ -19,7 +20,7 @@ export function sortByBirthDate(entities: Entity[]) {
   });
 }
 
-export function sortByGender(entities: Entity[]) {
+export function sortByGender(entities: Entity[] | GeniEntity[]) {
   entities.sort((a, b) => {
     try {
       return a.gender === "male" ? -1 : 1;

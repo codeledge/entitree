@@ -61,140 +61,11 @@ export default memo(({ node }: { node: EntityNode }) => {
   // useRootExpanded(node);
   useBookmarks(node);
   // useVideoOverlay(node);
-
+  const hasSecondLabel = false;
   const [showModal, setShowModal] = useState(false);
   const [lifeSpanInYears, setLifeSpanInYears] = useState(node.lifeSpanInYears);
   const [thumbnails, setThumbnails] = useState<Image[]>(node.thumbnails || []);
   // let processedImageUrls = []; //Don't ask users to import images that have already been imported
-  useEffect(() => {
-    getDataprickImages(node.id.substr(1))
-      .then((imageSet) => {
-        imageSet?.forEach((thumbnail) => {
-          setThumbnails((thumbnails) => [thumbnail, ...thumbnails]);
-        });
-      })
-      .catch(errorHandler);
-    if (settings.showExternalImages) {
-      if (node.peoplepillImageUrl) {
-        isValidImage(node.peoplepillImageUrl)
-          .then((valid) => {
-            if (valid) {
-              const ppImage = {
-                url: node.peoplepillImageUrl,
-                sourceUrl: `https://peoplepill.com/people/${node.peoplepillSlug}`,
-                downloadUrl: node.peoplepillImageUrl,
-                alt: `Image from peoplepill`,
-              } as Image;
-              setThumbnails((thumbnails) => [ppImage, ...thumbnails]);
-            }
-          })
-          .catch(errorHandler);
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    if (node.geniId && settings.showExternalImages) {
-      getGeniProfile(node.geniId)
-        .then((geniProfile) => {
-          if (geniProfile?.mugshot_urls?.thumb) {
-            const geniImg = {
-              url: geniProfile.mugshot_urls.medium,
-              alt: `Geni.com image`,
-              sourceUrl: geniProfile.profile_url,
-              downloadUrl:
-                geniProfile.mugshot_urls.large ??
-                geniProfile.mugshot_urls.medium,
-            } as Image;
-            setThumbnails((thumbnails) => thumbnails.concat(geniImg));
-          }
-
-          //add Geni dates and country
-          if (
-            geniProfile &&
-            (geniProfile.birth || geniProfile.death) &&
-            node.lifeSpanInYears === undefined
-          ) {
-            if (geniProfile.birth && geniProfile.birth.date) {
-              node.birthYear = "" + geniProfile.birth.date.year; //convert to string
-              if (
-                geniProfile.birth.date.circa &&
-                geniProfile.birth.date.circa === true
-              ) {
-                node.birthYear = "~" + node.birthYear;
-              }
-            }
-            if (geniProfile.death && geniProfile.death.date) {
-              node.deathYear = "" + geniProfile.death.date.year;
-              if (
-                geniProfile.death.date.circa &&
-                geniProfile.death.date.circa === true
-              ) {
-                node.deathYear = "~" + node.deathYear;
-              }
-            }
-            addLifeSpan(node);
-            setLifeSpanInYears(node.lifeSpanInYears);
-          }
-          if (
-            geniProfile &&
-            geniProfile.birth &&
-            geniProfile.birth.location &&
-            geniProfile.birth.location.country_code &&
-            !birthCountry
-          ) {
-            setBirthCountry({
-              code: geniProfile.birth.location.country_code,
-              name: geniProfile.birth.location.country,
-              text: "Born in " + geniProfile.birth.location.country + " (geni)",
-            });
-          } else if (
-            geniProfile &&
-            geniProfile.location &&
-            geniProfile.location.country_code &&
-            !birthCountry
-          ) {
-            setBirthCountry({
-              code: geniProfile.location.country_code,
-              name: geniProfile.location.country,
-              text: "Lived in " + geniProfile.location.country + " (geni)",
-            });
-          }
-        })
-        .catch(errorHandler);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (node.fandomHost && node.fandomId) {
-      getFandomPageProps(node.fandomHost, node.fandomId)
-        .then((fandomData) => {
-          if (fandomData?.query?.pages) {
-            const page: any = Object.values(fandomData.query.pages)[0];
-
-            if (page.pageprops) {
-              const pageprops = JSON.parse(page.pageprops.infoboxes);
-              if (pageprops[0] && pageprops[0].data) {
-                const image = pageprops[0].data.find(
-                  (entry) => entry.type === "image",
-                ).data[0];
-
-                if (image) {
-                  const fandomImage = {
-                    url: image.url.split("/revision/")[0],
-                    alt: `Fandom image, ${image.name}`,
-                    downloadUrl: image.url.split("/revision/")[0],
-                    sourceUrl: node.fandomUrl,
-                  };
-                  setThumbnails((thumbnails) => thumbnails.concat(fandomImage));
-                }
-              }
-            }
-          }
-        })
-        .catch(errorHandler);
-    }
-  }, []);
 
   const [thumbnailIndex, setThumbnailIndex] = useState(0);
   const theme = useTheme();
@@ -209,7 +80,7 @@ export default memo(({ node }: { node: EntityNode }) => {
   };
 
   const currentThumbnail = thumbnails[thumbnailIndex];
-
+  const filteredRightIds = [];
   const onThumbClick =
     thumbnails.length > 1
       ? () =>
@@ -221,57 +92,6 @@ export default memo(({ node }: { node: EntityNode }) => {
   const hasLabelOnly =
     theme.descriptionDisplay === "none" && !settings.secondLabelCode;
 
-  const [secondLabel, setSecondLabel] = useState<string>();
-  const hasSecondLabel = Boolean(secondLabel);
-  useEffect(() => {
-    if (settings.secondLabelCode) {
-      if (isProperyId(settings.secondLabelCode)) {
-        switch (settings.secondLabelCode) {
-          case BIRTH_NAME_ID:
-            setSecondLabel(node.birthName);
-            break;
-          case NICKNAME_ID:
-            setSecondLabel(node.nickName);
-            break;
-          case NAME_IN_KANA_ID:
-            setSecondLabel(node.nameInKana);
-            break;
-          default:
-            break;
-        }
-      } else {
-        //if(isLangCode(settings.secondLabelCode))
-        //check if language is already in the main languages
-        getEntitiesLabel(
-          [node.id],
-          settings.secondLabelCode as LangCode,
-          settings.wikibaseAlias,
-        )
-          .then(([secondLabel]) => {
-            setSecondLabel(secondLabel);
-          })
-          .catch(errorHandler);
-      }
-    } else {
-      setSecondLabel(undefined);
-    }
-  }, [settings.secondLabelCode]);
-
-  //this is needed to make it work with root being server side rightIds added!
-  const filteredRightIds = node.rightIds?.filter((rightId) => {
-    if (
-      settings.rightEntityOption.propIds.indexOf(SPOUSE_ID) > -1 &&
-      node.spousesIds?.includes(rightId)
-    )
-      return true;
-    if (
-      settings.rightEntityOption.propIds.indexOf(PARTNER_ID) > -1 &&
-      node.partnersIds?.includes(rightId)
-    )
-      return true;
-
-    return false;
-  });
   let thumbnailStyle = {};
   if (
     currentThumbnail?.imageDb === true &&
@@ -392,12 +212,12 @@ export default memo(({ node }: { node: EntityNode }) => {
                 )}
               </span>
             )}
-            {hasSecondLabel && (
+            {/* {hasSecondLabel && (
               <>
                 <br />
                 <span className="label labelsecondLabel">{secondLabel}</span>
               </>
-            )}
+            )} */}
             {node.description && theme.descriptionDisplay !== "none" && (
               <>
                 <br />

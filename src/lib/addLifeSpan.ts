@@ -1,6 +1,6 @@
-import { Entity } from "types/Entity";
+import { Entity, GeniEntity } from "types/Entity";
 
-export default function addLifeSpan(entity: Entity) {
+export default function addLifeSpan(entity: Entity | GeniEntity) {
   let lifeSpan = "";
   if (entity.birthDate) lifeSpan += entity.birthDate;
   if (entity.birthDate && entity.deathDate) lifeSpan += " - ";

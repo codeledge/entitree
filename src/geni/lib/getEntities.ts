@@ -20,6 +20,7 @@ import { LangCode } from "types/Lang";
 import addEntityConnectors from "./addEntityConnectors";
 // import filterSpouses from "./filterSpouses";
 import formatGeniProfile from "./formatEntity";
+import { sortByGender } from "lib/sortEntities";
 
 // import { sortByBirthDate, sortByGender } from "./sortEntities";
 
@@ -97,7 +98,7 @@ export const getParentEntities = async (
   });
 
   // if (options?.currentPropId === CHILD_ID) {
-  //   sortByGender(parents);
+  sortByGender(parents);
   // }
 
   return parents;
