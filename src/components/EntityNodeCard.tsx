@@ -93,7 +93,6 @@ export default memo(({ node }: { node: EntityNode }) => {
       }
     }
   }, []);
-  console.log("querygeni");
   useEffect(() => {
     if (node.geniId && settings.showExternalImages) {
       getGeniProfile(node.geniId)
