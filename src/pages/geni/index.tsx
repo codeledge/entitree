@@ -17,8 +17,10 @@ export default function Home() {
 
   // force settings to be as url, otherwise you get a mix up
   useEffect(() => {
-    dispatch(setSetting({ wikibaseAlias: "factgrid" }));
+    dispatch(setSetting({ wikibaseAlias: "geni" }));
   }, []);
+
+  const { geni } = useAppSelector(({ settings }) => settings);
 
   const { loadingEntity } = useAppSelector(({ tree }) => tree);
   return (
@@ -33,9 +35,21 @@ export default function Home() {
             <Content>
               <Title>EntiTree for Geni</Title>
               <p>
-                Visualize connected FactGrid items on a dynamic, navigable tree
-                diagram. Discover properties of People, Organizations and Events
-                with a direct link to Wikipedia Aticles.
+                Visualize connected Geni people items on a dynamic, navigable
+                tree diagram. Discover properties of People, Organizations and
+                Events with a direct link to Wikipedia Aticles. <br />
+                <br />
+                {geni && (
+                  <h1>You are logged in, your token is {geni.access_token}</h1>
+                )}
+                Please login first.
+                <br />
+                <a href="https://www.geni.com/platform/oauth/authorize?client_id=562&response_type=token">
+                  <img
+                    alt="Login with Geni"
+                    src="https://www.geni.com/images/connect/login-large.png"
+                  />
+                </a>
               </p>
             </Content>
           </Container>

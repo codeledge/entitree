@@ -11,6 +11,10 @@ export type SettingsState = {
   customThemes: Record<DefaultTheme["name"], DefaultTheme>;
   extraInfo?: string;
   followNavigation: boolean;
+  geni?: {
+    access_token: string;
+    expires_in?: number;
+  };
   hideToggleButton: boolean;
   imageOverflow: string;
   imageType: "transparent_face" | "transparent_head" | "face";
