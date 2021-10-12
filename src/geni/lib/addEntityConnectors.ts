@@ -56,10 +56,12 @@ export default async function addEntityConnectors(
 }
 
 function getIdsByUnionAndType(relations, unions, type: GeniRelType) {
-  const matchedRelations = relations.filter((obj) =>
-    Object.entries(obj.edges).some(
-      (edg) => unions.includes(edg[0]) && edg[1].rel === type,
-    ),
+  const matchedRelations = relations.filter(
+    (obj) =>
+      obj.gender && //check if profile is not private
+      Object.entries(obj.edges).some(
+        (edg) => unions.includes(edg[0]) && edg[1].rel === type,
+      ),
   );
   const matchedIds = matchedRelations.map((obj) => obj.id.substr(8));
   return matchedIds;
