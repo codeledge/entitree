@@ -17,7 +17,7 @@ export default function formatGeniProfile(geniResult: GeniImmediateFamily) {
   entity.geniId = geniProfile?.profile_url.split("/").pop();
   entity.geniProfileUrl = geniProfile?.profile_url;
   const firstNames = geniProfile?.first_name + " " + geniProfile?.middle_name;
-  entity.birthName = geniProfile;
+  entity.birthName = firstNames;
   //add Geni dates and country
   if (geniProfile?.birth || geniProfile?.death) {
     if (geniProfile.birth && geniProfile.birth.date) {
