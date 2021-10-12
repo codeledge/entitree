@@ -26,26 +26,39 @@ export default async function addEntityConnectors(
   // console.log("edges", edgesArray);
   const nodesArray = Object.entries(focusEdges);
   const relations = Object.values(entity.nodes);
-
+  relations.shift(); //remove first element which is the root
   //get parents
-  const parentsRels = edgesArray.filter((obj) => obj[1].rel === "child");
-  const parentsUnion = parentsRels?.[0]?.[0]; //can be multiple, change later
+  const parentUnions = edgesArray
+    .filter((obj) => obj[1].rel === "child")
+    .map((obj) => obj[0]);
 
-  const parentsIds = getIdsByUnionAndType(relations, parentsUnion, "partner");
+  const parentsIds = getIdsByUnionAndType(relations, parentUnions, "partner");
 
   //get children
-  const childrenRels = edgesArray.filter((obj) => obj[1].rel === "partner");
-  const childrenUnion = childrenRels?.[0]?.[0]; //can be multiple, change later
-  const childrenIds = getIdsByUnionAndType(relations, childrenUnion, "child");
+  const childUnions = edgesArray
+    .filter((obj) => obj[1].rel === "partner")
+    .map((obj) => obj[0]);
+  const childrenIds = getIdsByUnionAndType(relations, childUnions, "child");
+
+  const spouseIds = getIdsByUnionAndType(relations, childUnions, "partner");
+  const siblingIds = getIdsByUnionAndType(relations, parentUnions, "child");
+
+  // //get children
+  // const childrenRels = edgesArray.filter((obj) => obj[1].rel === "partner");
+  // const childrenUnion = childrenRels?.[0]?.[0]; //can be multiple, change later
+  // const childrenIds = getIdsByUnionAndType(relations, childrenUnion, "child");
 
   entity.upIds = parentsIds;
   entity.downIds = childrenIds;
+  entity.leftIds = siblingIds;
+  entity.rightIds = spouseIds;
+  console.log(entity);
 }
 
-function getIdsByUnionAndType(relations, union, type: GeniRelType) {
+function getIdsByUnionAndType(relations, unions, type: GeniRelType) {
   const matchedRelations = relations.filter((obj) =>
     Object.entries(obj.edges).some(
-      (edg) => edg[0] === union && edg[1].rel === type,
+      (edg) => unions.includes(edg[0]) && edg[1].rel === type,
     ),
   );
   const matchedIds = matchedRelations.map((obj) => obj.id.substr(8));

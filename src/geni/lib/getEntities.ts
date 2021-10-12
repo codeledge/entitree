@@ -28,6 +28,7 @@ type Options = ConnectorOptions & {
   secondLanguageCode?: LangCode;
   downIdsAlreadySorted?: boolean;
   serverside?: boolean;
+  geniAccessToken: string;
 };
 
 export default async function getEntities(
@@ -36,8 +37,8 @@ export default async function getEntities(
   options: Options,
 ): Promise<GeniEntity[]> {
   const geniProfiles = options.serverside
-    ? await getGeniProfileFamilyAxios(ids)
-    : await getGeniProfileFamily(ids);
+    ? await getGeniProfileFamilyAxios(ids, options.geniAccessToken)
+    : await getGeniProfileFamily(ids, options.geniAccessToken);
   const entities: GeniEntity[] = [];
   console.log(geniProfiles);
   geniProfiles.results.forEach((geniProfile) => {

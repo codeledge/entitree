@@ -1,6 +1,7 @@
 import { GeniEntity } from "types/Entity";
 import axios from "axios";
 import jsonp from "jsonp-promise";
+import { useAppSelector } from "store";
 
 type GeniLocation = {
   city: string;
@@ -144,18 +145,27 @@ export async function getGeniProfileAxios(
   //   //TODO: go through server and use axios
   // }
 }
-const access_token = "T7NzscraNxFfvUuoumH40S4SPmiuGAE0um9UCeTX";
-function createGeniUrl(ids) {
-  return `https://www.geni.com/api/profile/immediate-family?ids=${ids}&fields=id,maiden_name,name,first_name,last_name,birth,death,gender,mugshot_urls,profile_url&access_token=${access_token}`;
+function createGeniUrl(ids, access_token) {
+  const params = {
+    ids,
+    fields:
+      "id,maiden_name,name,first_name,last_name,birth,death,gender,mugshot_urls,profile_url",
+    access_token,
+  };
+  return (
+    "https://www.geni.com/api/profile/immediate-family?" +
+    new URLSearchParams(params)
+  );
 }
 export async function getGeniProfileFamily(
   geniIds: string[],
+  geniAccessToken,
 ): Promise<GeniResults> {
   // try {
   const ids = geniIds.join(",");
-  const data = await jsonp(createGeniUrl(ids), {
+  const data = await jsonp(createGeniUrl(ids, geniAccessToken), {
     param: "callback",
-    timeout: 5000,
+    timeout: 8000,
   }).promise;
   if (!data.results) {
     return { results: [data] };
@@ -168,10 +178,11 @@ export async function getGeniProfileFamily(
 
 export async function getGeniProfileFamilyAxios(
   geniIds: string[],
+  geniAccessToken,
 ): Promise<GeniResults> {
   const ids = geniIds.join(",");
   // try {
-  const { data } = await axios.get(createGeniUrl(ids));
+  const { data } = await axios.get(createGeniUrl(ids, geniAccessToken));
   if (!data.results) {
     return { results: [data] };
   }
@@ -181,7 +192,7 @@ export async function getGeniProfileFamilyAxios(
   // }
 }
 
-export const geniSearch = async (term, languageCode) => {
+export const geniSearch = async (term, geniAccessToken) => {
   const geniService = axios.create({
     baseURL: "https://www.geni.com",
   });
@@ -190,14 +201,14 @@ export const geniSearch = async (term, languageCode) => {
   //   p,
   // });
   const params = {
-    access_token,
+    access_token: geniAccessToken,
     names: term,
   };
   const data = await jsonp(
     "https://www.geni.com/api/profile/search?" + new URLSearchParams(params),
     {
       param: "callback",
-      timeout: 2000,
+      timeout: 5000,
     },
   ).promise;
   if (data.results) {

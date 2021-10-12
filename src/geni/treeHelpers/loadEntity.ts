@@ -7,10 +7,12 @@ import { getRootEntity } from "geni/lib/getEntities";
 export const loadEntity = async ({
   itemId,
   langCode,
+  geniAccessToken,
 }: {
   itemId: string;
   wikibaseAlias: WikibaseAlias;
   langCode: LangCode;
+  geniAccessToken: string;
 }): Promise<{
   currentEntity: GeniEntity;
 }> => {
@@ -21,6 +23,7 @@ export const loadEntity = async ({
     addLeftIds: false,
     addRightIds: false,
     serverside: true,
+    geniAccessToken,
   });
 
   return { currentEntity };

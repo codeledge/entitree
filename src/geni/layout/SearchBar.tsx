@@ -29,7 +29,7 @@ export default function SearchBar() {
   const { currentEntity, currentProp, loadingEntity, currentEntityProps } =
     useAppSelector(({ tree }) => tree);
 
-  const { wikibaseAlias } = useAppSelector(({ settings }) => settings);
+  const { wikibaseAlias, geni } = useAppSelector(({ settings }) => settings);
 
   const currentLang = useCurrentLang();
   const router = useRouter();
@@ -46,7 +46,7 @@ export default function SearchBar() {
     if (debouncedSearchTerm && fromKeyboard && currentLang) {
       setShowSuggestions(true);
       setLoadingSuggestions(false);
-      geniSearch(debouncedSearchTerm, currentLang.code)
+      geniSearch(debouncedSearchTerm, geni?.access_token)
         .then((results) => {
           setSearchResults(results);
         })

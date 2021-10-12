@@ -113,6 +113,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
       itemId,
       wikibaseAlias: "geni",
       langCode,
+      geniAccessToken: "WTzstOoxcArBd7hYrt7YFbJ1WGfRft247omA1lfM",
       // propSlug: decodedPropSlug,
     });
 

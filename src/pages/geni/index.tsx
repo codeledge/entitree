@@ -1,12 +1,13 @@
+import { Button, Container } from "react-bootstrap";
 import React, { useEffect } from "react";
 
-import { Container } from "react-bootstrap";
 import Div100vh from "react-div-100vh";
 import Footer from "layout/Footer";
 import Header from "../../layout/Header";
 import SearchBar from "geni/layout/SearchBar";
 import { Title } from "layout/Title";
 import TreeLoader from "layout/TreeLoader";
+import router from "next/router";
 import { setSetting } from "store/settingsSlice";
 import styled from "styled-components";
 import { useAppSelector } from "store";
@@ -18,6 +19,19 @@ export default function Home() {
   // force settings to be as url, otherwise you get a mix up
   useEffect(() => {
     dispatch(setSetting({ wikibaseAlias: "geni" }));
+
+    console.log(router.query);
+    if (router.query?.access_token && router.query?.expires_in) {
+      const access_token = router.query?.access_token as string;
+      const expires_in = +(router.query?.expires_in as string);
+      console.log("setsettings");
+      dispatch(
+        setSetting({ geni: { access_token, expires_in, loggedIn: true } }),
+      );
+      router.push({}, undefined, {
+        shallow: true,
+      });
+    }
   }, []);
 
   const { geni } = useAppSelector(({ settings }) => settings);
@@ -39,17 +53,35 @@ export default function Home() {
                 tree diagram. Discover properties of People, Organizations and
                 Events with a direct link to Wikipedia Aticles. <br />
                 <br />
-                {geni && (
-                  <h1>You are logged in, your token is {geni.access_token}</h1>
+                {geni && geni.loggedIn ? (
+                  <>
+                    <span>
+                      You are logged in, your token is {geni.access_token}
+                    </span>
+                    <br />
+                    <Button
+                      onClick={() =>
+                        dispatch(setSetting({ geni: { loggedIn: false } }))
+                      }
+                      title=""
+                    >
+                      Logout
+                    </Button>
+
+                    <br />
+                  </>
+                ) : (
+                  <div>
+                    Please login first.
+                    <br />
+                    <a href="https://www.geni.com/platform/oauth/authorize?client_id=562&response_type=token">
+                      <img
+                        alt="Login with Geni"
+                        src="https://www.geni.com/images/connect/login-large.png"
+                      />
+                    </a>
+                  </div>
                 )}
-                Please login first.
-                <br />
-                <a href="https://www.geni.com/platform/oauth/authorize?client_id=562&response_type=token">
-                  <img
-                    alt="Login with Geni"
-                    src="https://www.geni.com/images/connect/login-large.png"
-                  />
-                </a>
               </p>
             </Content>
           </Container>

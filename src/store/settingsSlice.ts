@@ -12,7 +12,8 @@ export type SettingsState = {
   extraInfo?: string;
   followNavigation: boolean;
   geni?: {
-    access_token: string;
+    loggedIn?: boolean;
+    access_token?: string;
     expires_in?: number;
   };
   hideToggleButton: boolean;
