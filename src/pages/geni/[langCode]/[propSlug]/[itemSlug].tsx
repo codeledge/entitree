@@ -38,6 +38,7 @@ const TreePage = ({
   langCode,
 }) => {
   const { loadingEntity } = useAppSelector(({ tree }) => tree);
+  const { geni } = useAppSelector(({ settings }) => settings);
 
   const dispatch = useDispatch();
   // force settings to be as url, otherwise you get a mix up
@@ -49,7 +50,6 @@ const TreePage = ({
     };
     const itemId = itemSlug;
     dispatch(setSetting({ languageCode: langCode, wikibaseAlias: "geni" }));
-    const { geni } = useAppSelector(({ settings }) => settings);
 
     if (!geni?.access_token) {
       router.push("/geni");

@@ -1,6 +1,5 @@
 import { Button, Container } from "react-bootstrap";
 import React, { useEffect } from "react";
-import router, { useRouter } from "next/router";
 
 import Div100vh from "react-div-100vh";
 import Footer from "layout/Footer";
@@ -12,18 +11,17 @@ import { setSetting } from "store/settingsSlice";
 import styled from "styled-components";
 import { useAppSelector } from "store";
 import { useDispatch } from "react-redux";
+import { useRouter } from "next/router";
 
 export default function Home() {
   const dispatch = useDispatch();
-  const { query } = useRouter();
-
+  const router = useRouter();
   // force settings to be as url, otherwise you get a mix up
   useEffect(() => {
     dispatch(setSetting({ wikibaseAlias: "geni" }));
-    console.log(query);
-    if (query?.access_token && query?.expires_in) {
-      const access_token = query?.access_token as string;
-      const expires_in = +(query?.expires_in as string);
+    if (router.query?.access_token && router.query?.expires_in) {
+      const access_token = router.query?.access_token as string;
+      const expires_in = +(router.query?.expires_in as string);
       console.log("setsettings");
       dispatch(
         setSetting({ geni: { access_token, expires_in, loggedIn: true } }),
@@ -32,7 +30,7 @@ export default function Home() {
         shallow: true,
       });
     }
-  }, []);
+  }, [router.query]);
 
   const { geni } = useAppSelector(({ settings }) => settings);
 
@@ -74,7 +72,7 @@ export default function Home() {
                   <div>
                     Please login first.
                     <br />
-                    <a href="https://www.geni.com/platform/oauth/authorize?client_id=562&response_type=token">
+                    <a href="https://www.geni.com/platform/oauth/authorize?client_id=563&response_type=token">
                       <img
                         alt="Login with Geni"
                         src="https://www.geni.com/images/connect/login-large.png"
