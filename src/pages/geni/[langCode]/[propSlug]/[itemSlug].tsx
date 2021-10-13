@@ -21,6 +21,7 @@ import TreeLoader from "layout/TreeLoader";
 import { isItemId } from "helpers/isItemId";
 import { loadEntity } from "geni/treeHelpers/loadEntity";
 import pluralize from "pluralize";
+import router from "next/router";
 import { setSetting } from "store/settingsSlice";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
@@ -41,7 +42,25 @@ const TreePage = ({
   const dispatch = useDispatch();
   // force settings to be as url, otherwise you get a mix up
   useEffect(() => {
+    const { langCode, propSlug, itemSlug } = router.query as {
+      langCode: LangCode;
+      propSlug: string;
+      itemSlug: string;
+    };
+    const itemId = itemSlug;
     dispatch(setSetting({ languageCode: langCode, wikibaseAlias: "geni" }));
+    const { geni } = useAppSelector(({ settings }) => settings);
+
+    if (!geni?.access_token) {
+      router.push("/geni");
+    }
+    loadEntity({
+      itemId,
+      wikibaseAlias: "geni",
+      langCode,
+      geniAccessToken: geni?.access_token?.toString(),
+      // propSlug: decodedPropSlug,
+    }).then((currentEntity) => dispatch(setCurrentEntity(currentEntity)));
   }, []);
 
   if (errorCode) {
@@ -84,69 +103,69 @@ const Page = styled(Div100vh)`
   flex-direction: column;
 `;
 
-export const getServerSideProps = wrapper.getServerSideProps(
-  async ({ store: { dispatch }, query }) => {
-    const { langCode, propSlug, itemSlug } = query as {
-      langCode: LangCode;
-      propSlug: string;
-      itemSlug: string;
-    };
+// export const getServerSideProps = wrapper.getServerSideProps(
+//   async ({ store: { dispatch }, query }) => {
+//     const { langCode, propSlug, itemSlug } = query as {
+//       langCode: LangCode;
+//       propSlug: string;
+//       itemSlug: string;
+//     };
 
-    if (!LANGS.find(({ code }) => code === langCode))
-      return { props: { errorCode: 404 } };
-    console.log("lang found");
-    const decodedPropSlug = decodeURIComponent(propSlug);
-    const currentProp = "family_tree";
+//     if (!LANGS.find(({ code }) => code === langCode))
+//       return { props: { errorCode: 404 } };
+//     console.log("lang found");
+//     const decodedPropSlug = decodeURIComponent(propSlug);
+//     const currentProp = "family_tree";
 
-    let itemId;
-    let itemThumbnail;
-    if (true) {
-      //check if id is correct
-      itemId = itemSlug;
-    } else {
-      return { props: { errorCode: 404, message: "Slug must be a QID" } };
-    }
-    console.log("slug found");
+//     let itemId;
+//     let itemThumbnail;
+//     if (true) {
+//       //check if id is correct
+//       itemId = itemSlug;
+//     } else {
+//       return { props: { errorCode: 404, message: "Slug must be a QID" } };
+//     }
+//     console.log("slug found");
 
-    // try {
-    const { currentEntity } = await loadEntity({
-      itemId,
-      wikibaseAlias: "geni",
-      langCode,
-      geniAccessToken: "WTzstOoxcArBd7hYrt7YFbJ1WGfRft247omA1lfM",
-      // propSlug: decodedPropSlug,
-    });
+//     // try {
+//     const { currentEntity } = await loadEntity({
+//       itemId,
+//       wikibaseAlias: "geni",
+//       langCode,
+//       geniAccessToken: "WTzstOoxcArBd7hYrt7YFbJ1WGfRft247omA1lfM",
+//       // propSlug: decodedPropSlug,
+//     });
 
-    if (!currentEntity) return { props: { errorCode: 405 } };
+//     if (!currentEntity) return { props: { errorCode: 405 } };
 
-    dispatch(setCurrentEntity(currentEntity));
-    // if (itemProps) dispatch(setCurrentEntityProps(itemProps));
-    // if (currentProp) dispatch(setCurrentProp(currentProp));
+//     dispatch(setCurrentEntity(currentEntity));
+//     // if (itemProps) dispatch(setCurrentEntityProps(itemProps));
+//     // if (currentProp) dispatch(setCurrentProp(currentProp));
 
-    const ogTitle = `${currentEntity.label} - ${SITE_NAME}`;
+//     const ogTitle = `${currentEntity.label} - ${SITE_NAME}`;
 
-    //Example: Discover the family tree of Elizabeth II: queen of the UK, Canada, Australia, and New Zealand, and head of the Commonwealth of Nations, 4 children, 1 sibling, 1 spouse
-    const ogDescription = "bla";
+//     //Example: Discover the family tree of Elizabeth II: queen of the UK, Canada, Australia, and New Zealand, and head of the Commonwealth of Nations, 4 children, 1 sibling, 1 spouse
+//     const ogDescription = "bla";
 
-    let ogImage = "";
-    let twitterCard = "";
+//     let ogImage = "";
+//     let twitterCard = "";
 
-    if (itemThumbnail) {
-      ogImage = itemThumbnail;
-    } else {
-      ogImage = "icons/entitree_square.png";
-      twitterCard = "summary";
-    }
+//     if (itemThumbnail) {
+//       ogImage = itemThumbnail;
+//     } else {
+//       ogImage = "icons/entitree_square.png";
+//       twitterCard = "summary";
+//     }
 
-    return {
-      props: { ogTitle, ogImage, twitterCard, ogDescription, langCode },
-    };
-    // } catch (error: any) {
-    //   console.error(error);
+//     return {
+//       props: { ogTitle, ogImage, twitterCard, ogDescription, langCode },
+//     };
+//     // } catch (error: any) {
+//     //   console.error(error);
 
-    //   return { props: { errorCode: error.response?.status || 500 } };
-    // }
-  },
-);
+//     //   return { props: { errorCode: error.response?.status || 500 } };
+//     // }
+//   },
+// );
 
 export default TreePage;
