@@ -21,10 +21,10 @@ import TreeLoader from "layout/TreeLoader";
 import { isItemId } from "helpers/isItemId";
 import { loadEntity } from "geni/treeHelpers/loadEntity";
 import pluralize from "pluralize";
-import router from "next/router";
 import { setSetting } from "store/settingsSlice";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
+import { useRouter } from "next/router";
 
 const TreePage = ({
   errorCode,
@@ -39,6 +39,7 @@ const TreePage = ({
 }) => {
   const { loadingEntity } = useAppSelector(({ tree }) => tree);
   const { geni } = useAppSelector(({ settings }) => settings);
+  const router = useRouter();
 
   const dispatch = useDispatch();
   // force settings to be as url, otherwise you get a mix up
@@ -48,6 +49,7 @@ const TreePage = ({
       propSlug: string;
       itemSlug: string;
     };
+    console.log(itemSlug, router.query);
     const itemId = itemSlug;
     dispatch(setSetting({ languageCode: langCode, wikibaseAlias: "geni" }));
 
@@ -60,8 +62,10 @@ const TreePage = ({
       langCode,
       geniAccessToken: geni?.access_token?.toString(),
       // propSlug: decodedPropSlug,
-    }).then((currentEntity) => dispatch(setCurrentEntity(currentEntity)));
-  }, []);
+    }).then((currentEntity) => {
+      dispatch(setCurrentEntity(currentEntity));
+    });
+  }, [router.query]);
 
   if (errorCode) {
     return <Error statusCode={errorCode} />;

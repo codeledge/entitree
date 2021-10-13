@@ -59,7 +59,7 @@ export default memo(({ node }: { node: EntityNode }) => {
   console.log("open node");
   // usePreload(node);
   // useRootExpanded(node);
-  useBookmarks(node);
+  // useBookmarks(node);
   // useVideoOverlay(node);
   const hasSecondLabel = false;
   const [showModal, setShowModal] = useState(false);

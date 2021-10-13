@@ -36,9 +36,7 @@ export default async function getEntities(
   languageCode: LangCode,
   options: Options,
 ): Promise<GeniEntity[]> {
-  const geniProfiles = options.serverside
-    ? await getGeniProfileFamilyAxios(ids, options.geniAccessToken)
-    : await getGeniProfileFamily(ids, options.geniAccessToken);
+  const geniProfiles = await getGeniProfileFamily(ids, options.geniAccessToken);
   const entities: GeniEntity[] = [];
   console.log(geniProfiles);
   geniProfiles.results.forEach((geniProfile) => {
