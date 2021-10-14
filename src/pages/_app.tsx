@@ -28,9 +28,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         {() => (
           <ThemeProvider theme={currentTheme}>
             <Provider store={store}>
-              <CookiesProvider>
-                <Component {...pageProps} />
-              </CookiesProvider>
+              <Component {...pageProps} />
             </Provider>
           </ThemeProvider>
         )}
