@@ -7,30 +7,40 @@ import Header from "../../layout/Header";
 import SearchBar from "geni/layout/SearchBar";
 import { Title } from "layout/Title";
 import TreeLoader from "layout/TreeLoader";
+import { parseCookies } from "helpers/cookie";
 import { setSetting } from "store/settingsSlice";
 import styled from "styled-components";
 import { useAppSelector } from "store";
+import { useCookies } from "react-cookie";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 
 export default function Home() {
   const dispatch = useDispatch();
   const router = useRouter();
+  const [cookie, setCookie] = useCookies(["geni"]);
+
   // force settings to be as url, otherwise you get a mix up
+
   useEffect(() => {
     dispatch(setSetting({ wikibaseAlias: "geni" }));
     if (router.query?.access_token && router.query?.expires_in) {
       const access_token = router.query?.access_token as string;
       const expires_in = +(router.query?.expires_in as string);
-      console.log("setsettings");
-      dispatch(
-        setSetting({ geni: { access_token, expires_in, loggedIn: true } }),
-      );
+      console.log("set cookie");
+      const geniCookie = { access_token, expires_in, loggedIn: true };
+      setCookie("geni", JSON.stringify(geniCookie), {
+        path: "/",
+        maxAge: expires_in, // Expires after 1hr
+        sameSite: true,
+      });
       router.push({}, undefined, {
         shallow: true,
       });
     }
   }, [router.query]);
+  // const geniCookie = parseCookies(router.req);
+  // console.log(geniCookie);
 
   const { geni } = useAppSelector(({ settings }) => settings);
 
@@ -51,18 +61,14 @@ export default function Home() {
                 tree diagram. Discover properties of People, Organizations and
                 Events with a direct link to Wikipedia Aticles. <br />
                 <br />
-                {geni && geni.loggedIn ? (
+                {cookie.geni?.loggedIn ? (
                   <>
                     <span>
-                      You are logged in, your token is {geni.access_token}
+                      You are logged in, your token is{" "}
+                      {cookie.geni.access_token}
                     </span>
                     <br />
-                    <Button
-                      onClick={() =>
-                        dispatch(setSetting({ geni: { loggedIn: false } }))
-                      }
-                      title=""
-                    >
+                    <Button onClick={() => setCookie("geni", "")} title="">
                       Logout
                     </Button>
 

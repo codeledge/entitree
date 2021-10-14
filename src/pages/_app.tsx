@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import store, { persistor, wrapper } from "../store";
 
 import { AppProps } from "next/app";
+import { CookiesProvider } from "react-cookie";
 import { GlobalStyle } from "layout/GlobalStyle";
 import { PersistGate } from "redux-persist/integration/react";
 import { Provider } from "react-redux";
@@ -27,7 +28,9 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         {() => (
           <ThemeProvider theme={currentTheme}>
             <Provider store={store}>
-              <Component {...pageProps} />
+              <CookiesProvider>
+                <Component {...pageProps} />
+              </CookiesProvider>
             </Provider>
           </ThemeProvider>
         )}
