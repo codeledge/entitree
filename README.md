@@ -46,6 +46,13 @@ yarn dev
 
 Open [localhost:3009](http://localhost:3009/)
 
+## ENV
+
+set: NEXT_PUBLIC_ANALYTICS_ID
+562: https://www.entitree.com/geni
+563: http://localhost:3009/geni
+564: https://entitree-test.herokuapp.com/geni
+
 ## Authors
 
 - **Orlando Groppo** - [ogroppo](https://github.com/ogroppo)

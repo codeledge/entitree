@@ -39,16 +39,7 @@ export default function Home() {
       });
     }
   }, [router.query]);
-  // const geniCookie = parseCookies(router.req);
-  // console.log(geniCookie);
-  const { geni } = useAppSelector(({ settings }) => settings);
-  const geniAppId = "564";
-  console.log(router.basePath);
-  // if (router.basePath === "entitree-test.herokuapp.com") {
-  // geniAppId = "564";
-  // } else {
-  //   geniAppId = "563";
-  // }
+  const geniAppId = process.env.NEXT_PUBLIC_GENI_APP_ID;
   const { loadingEntity } = useAppSelector(({ tree }) => tree);
   return (
     <Page>
