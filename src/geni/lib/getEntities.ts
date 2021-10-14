@@ -4,25 +4,23 @@ import {
   SIBLING_BOOKMARK_SYMBOL,
   SPOUSE_BOOKMARK_SYMBOL,
 } from "constants/bookmarks";
-import { Entity, GeniEntity } from "types/Entity";
 import {
   GeniProfile,
   getGeniProfileAxios,
   getGeniProfileFamily,
   getGeniProfileFamilyAxios,
 } from "services/geniService";
+import { sortByBirthDate, sortByGender } from "../../lib/sortEntities";
 
 import { CHILD_ID } from "constants/properties";
 import { ConnectorOptions } from "../../lib/addEntityConnectors";
+import { Entity } from "types/Entity";
 // import { DEFAULT_LANGS_CODES } from "../constants/langs";
 import { EntityNode } from "types/EntityNode";
 import { LangCode } from "types/Lang";
 import addEntityConnectors from "./addEntityConnectors";
 // import filterSpouses from "./filterSpouses";
 import formatGeniProfile from "./formatEntity";
-import { sortByGender } from "lib/sortEntities";
-
-// import { sortByBirthDate, sortByGender } from "./sortEntities";
 
 type Options = ConnectorOptions & {
   secondLanguageCode?: LangCode;
@@ -35,11 +33,11 @@ export default async function getEntities(
   ids: string[],
   languageCode: LangCode,
   options: Options,
-): Promise<GeniEntity[]> {
+): Promise<Entity[]> {
   const geniProfiles = options.serverside
     ? await getGeniProfileFamilyAxios(ids, options.geniAccessToken)
     : await getGeniProfileFamily(ids, options.geniAccessToken);
-  const entities: GeniEntity[] = [];
+  const entities: Entity[] = [];
   console.log(geniProfiles);
   geniProfiles.results.forEach((geniProfile) => {
     //add all custom fields
@@ -57,7 +55,7 @@ export const getRootEntity = async (
   id: string,
   languageCode: LangCode,
   options: Options,
-): Promise<GeniEntity | undefined> => {
+): Promise<Entity> => {
   const [root] = await getEntities([id], languageCode, options);
   console.log(root);
   if (root) root.treeId = "0";
@@ -79,7 +77,7 @@ export const getChildEntities = async (
   });
 
   // if (options?.currentPropId === CHILD_ID && !options?.downIdsAlreadySorted) {
-  //   sortByBirthDate(children);
+  sortByBirthDate(children);
   // }
 
   return children;

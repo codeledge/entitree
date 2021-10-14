@@ -1,6 +1,14 @@
-import { Entity, GeniEntity } from "types/Entity";
-import { GeniImmediateFamily, GeniRelType } from "services/geniService";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+import {
+  GeniEdge,
+  GeniImmediateFamily,
+  GeniNodes,
+  GeniProfile,
+  GeniRelType,
+} from "services/geniService";
 
+import { Entity } from "types/Entity";
 import { WikibaseAlias } from "wikibase/getWikibaseInstance";
 import { sortClaimsByStartDate } from "claims/sortClaims";
 
@@ -12,9 +20,15 @@ export type ConnectorOptions = {
   addRightIds?: boolean;
   addLeftIds?: boolean;
 };
-
+type unionArray = [string, { rel: GeniRelType }];
+// type relationArray = [
+//   string,
+//   GeniProfile & {
+//     edges: GeniEdge[];
+//   },
+// ];
 export default async function addEntityConnectors(
-  entity: GeniEntity,
+  entity: Entity,
   options: ConnectorOptions,
 ) {
   const focusProfile = entity.focus?.id;
@@ -22,9 +36,12 @@ export default async function addEntityConnectors(
     return;
   }
   const focusEdges = entity.nodes?.[focusProfile].edges;
-  const edgesArray = Object.entries(focusEdges);
+  const edgesArray: unionArray[] = Object.entries(focusEdges);
   // console.log("edges", edgesArray);
-  const nodesArray = Object.entries(focusEdges);
+  // const nodesArray = Object.entries(focusEdges);
+  if (!entity.nodes) {
+    return;
+  }
   const relations = Object.values(entity.nodes);
   relations.shift(); //remove first element which is the root
   //get parents

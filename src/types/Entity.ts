@@ -85,6 +85,7 @@ export interface NodeProperties {
   loadingSpouses?: boolean;
   nameInKana?: string;
   nickName?: string;
+  occupation?: string;
   occupations?: SparqlEmoji[];
   openChildTreeIds?: string[];
   openParentTreeIds?: string[];

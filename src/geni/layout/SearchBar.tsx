@@ -6,6 +6,7 @@ import {
   Overlay,
   Tooltip,
 } from "react-bootstrap";
+import { GeniProfile, geniSearch } from "services/geniService";
 import React, { useEffect, useRef, useState } from "react";
 import {
   SearchResult,
@@ -15,7 +16,6 @@ import {
 import { FaSearch } from "react-icons/fa";
 import SearchSuggestions from "./SearchSuggestions";
 import { errorHandler } from "handlers/clientErrorHandler";
-import { geniSearch } from "services/geniService";
 import { getEntityUrl } from "helpers/getEntityUrl";
 import { setLoadingEntity } from "store/treeSlice";
 import styled from "styled-components";
@@ -37,7 +37,7 @@ export default function SearchBar() {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [loadingSuggestions, setLoadingSuggestions] = useState(false);
-  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+  const [searchResults, setSearchResults] = useState<GeniProfile[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [fromKeyboard, setFromKeyboard] = useState(true);
 

@@ -1,7 +1,5 @@
-import { GeniEntity } from "types/Entity";
 import axios from "axios";
 import jsonp from "jsonp-promise";
-import { useAppSelector } from "store";
 
 type GeniLocation = {
   city: string;
@@ -23,7 +21,7 @@ type GeniEvent = {
   location: GeniLocation;
 };
 export type GeniRelType = "child" | "partner";
-type GeniEdge = {
+export type GeniEdge = {
   [key: string]: {
     rel: GeniRelType;
   };
@@ -42,6 +40,7 @@ export type GeniProfile = {
   name: string;
   is_alive: boolean;
   gender: string;
+  occupation?: string;
   // current_residence: {
   // city: "Houston",
   // state: "Texas",
@@ -106,7 +105,7 @@ export type GeniProfile = {
   birthYear: string;
   deahtYear: string;
 };
-type GeniNodes = {
+export type GeniNodes = {
   [key: string]: GeniProfile & {
     edges: GeniEdge[];
   };
@@ -149,7 +148,7 @@ function createGeniUrl(ids, access_token) {
   const params = {
     ids,
     fields:
-      "id,maiden_name,name,first_name,last_name,birth,death,gender,mugshot_urls,profile_url",
+      "id,maiden_name,name,first_name,last_name,birth,death,gender,mugshot_urls,profile_url,occupation",
     access_token,
   };
   return (
