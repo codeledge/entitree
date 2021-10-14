@@ -218,11 +218,11 @@ export default memo(({ node }: { node: EntityNode }) => {
                 <span className="label labelsecondLabel">{secondLabel}</span>
               </>
             )} */}
-            {node.description && theme.descriptionDisplay !== "none" && (
+            {node.occupation && theme.descriptionDisplay !== "none" && (
               <>
                 <br />
-                <span className="description" title={node.description}>
-                  {node.description}
+                <span className="description" title={node.occupation}>
+                  {node.occupation}
                 </span>
               </>
             )}
