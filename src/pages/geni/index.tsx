@@ -29,6 +29,13 @@ export default function Home() {
       const expires_in = +(router.query?.expires_in as string);
       console.log("set cookie");
       const geniCookie = { access_token, expires_in, loggedIn: true };
+      //set local storage
+      dispatch(
+        setSetting({
+          geni: { access_token, expires_in, loggedIn: true },
+        }),
+      );
+      //set cookie too, merge later!!
       setCookie("geni", JSON.stringify(geniCookie), {
         path: "/",
         maxAge: expires_in, // Expires after 1hr
