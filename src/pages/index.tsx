@@ -286,26 +286,6 @@ export default function Home() {
   );
 }
 
-export async function getServerSideProps({ req }) {
-  const schema = (req.headers["x-forwarded-proto"] || "").toLowerCase();
-  const www = req.headers.host.replace(/www\./gi, "");
-  const notLocalHost = !www.includes("localhost");
-
-  if (notLocalHost) {
-    if (schema !== "https") {
-      return {
-        redirect: {
-          destination: "https://" + req.hostname + req.originalUrl,
-        },
-      };
-    }
-  }
-
-  return {
-    props: {}, // will be passed to the page component as props
-  };
-}
-
 const Page = styled(Div100vh)`
   display: flex;
   flex-direction: column;
