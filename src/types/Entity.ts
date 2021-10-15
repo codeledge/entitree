@@ -68,6 +68,7 @@ export interface NodeProperties {
   fandomUrl?: string;
   gender?: string;
   geniId?: string;
+  geniProfileId?: string;
   geniProfileUrl?: string;
   hairColor?: PropColor;
   id?: string;

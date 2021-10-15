@@ -136,31 +136,39 @@ export async function getGeniProfile(geniId: string): Promise<GeniProfile> {
   // }
 }
 
-export async function getGeniProfileAxios(
-  geniId: string,
-): Promise<GeniProfile | undefined> {
-  // try {
-  const { data } = await axios.get(
-    `https://www.geni.com/api/profile-${geniId}?access_token=G6vd9cVFuYvBdNkNJgLeKpZy9GXgmtfeyXCden3c`,
-  );
-  return data;
-  // } catch (e) {
-  //   //TODO: go through server and use axios
-  // }
-}
+// export async function getGeniProfileAxios(
+//   geniId: string,
+// ): Promise<GeniProfile | undefined> {
+//   // try {
+//   const { data } = await axios.get(
+//     `https://www.geni.com/api/profile-${geniId}?access_token=G6vd9cVFuYvBdNkNJgLeKpZy9GXgmtfeyXCden3c`,
+//   );
+//   return data;
+//   // } catch (e) {
+//   //   //TODO: go through server and use axios
+//   // }
+// }
 
 export type GeniApiRouteType = "profile" | "profile/immediate-family";
+export type GeniApiParams = {
+  ids?: string;
+  guids?: string;
+  fields?: string;
+  access_token?: string;
+};
 function createGeniUrl(
-  ids,
-  access_token,
-  apiRoute: GeniApiRouteType = "profile",
-  fields = "",
+  apiRoute: GeniApiRouteType,
+  params: GeniApiParams,
+  // ids,
+  // access_token,
+  // apiRoute: GeniApiRouteType = "profile",
+  // fields = "",
 ) {
   //"id,maiden_name,name,first_name,last_name,birth,death,gender,mugshot_urls,profile_url,occupation"
-  const params = {
-    ids,
-    access_token,
-  };
+  // const params = {
+  //   ids,
+  //   access_token,
+  // };
   // if (fields) {
   //   params.fields = fields;
   // }
@@ -169,13 +177,11 @@ function createGeniUrl(
   );
 }
 export async function geniApi(
-  geniIds: string[],
-  geniAccessToken,
   apiRoute: GeniApiRouteType = "profile",
-  fields = "",
+  params: GeniApiParams,
 ): Promise<GeniProfileResults> {
-  const ids = geniIds.join(",");
-  const url = createGeniUrl(ids, geniAccessToken, apiRoute, fields);
+  // const ids = geniIds.join(",");
+  const url = createGeniUrl(apiRoute, params);
   // console.log(url);
   try {
     const data = await jsonp(url, {

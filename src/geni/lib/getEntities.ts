@@ -13,7 +13,7 @@ import { Entity } from "types/Entity";
 // import { DEFAULT_LANGS_CODES } from "../constants/langs";
 import { EntityNode } from "types/EntityNode";
 import { LangCode } from "types/Lang";
-import addEntityConnectors from "./addEntityConnectors";
+import addGeniEntityConnectors from "./addEntityConnectors";
 // import filterSpouses from "./filterSpouses";
 import formatGeniProfile from "./formatEntity";
 
@@ -30,7 +30,10 @@ export default async function getEntities(
   options: Options,
 ): Promise<Entity[]> {
   //either use profile or immediate family to query all at once
-  const geniProfiles = await geniApi(ids, options.geniAccessToken, "profile");
+  const geniProfiles = await geniApi("profile", {
+    ids,
+    access_token: options.geniAccessToken,
+  });
   // const entities: Entity[] = [];
   // console.log(geniProfiles);
 
@@ -49,10 +52,11 @@ export default async function getEntities(
       // if (entity.isHuman && entity.isInfantDeath) {
       //   return accumulator;
       // }
+      console.log("options", options);
 
       // siblings and spouses don't need connectors, so no currentPropId is passed
       if (options?.currentPropId) {
-        await addEntityConnectors(entity, options);
+        await addGeniEntityConnectors(entity, options);
       }
 
       return Promise.resolve([...accumulator, entity]);
@@ -68,7 +72,7 @@ export default async function getEntities(
   //   console.log(entity);
   //   entities.push(entity);
   // });
-  console.log("entities", entities);
+  // console.log("entities", entities);
 
   return entities;
 }

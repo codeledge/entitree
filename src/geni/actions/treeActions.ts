@@ -65,7 +65,8 @@ export const toggleChildren =
     } else {
       try {
         const { languageCode, wikibaseAlias, geni } = getState().settings;
-        const { currentProp } = getState().tree;
+        // const { currentProp } = getState().tree;
+        const currentProp = { id: CHILD_ID };
 
         const children = await getChildEntities(entityNode, languageCode, {
           wikibaseAlias,
@@ -96,7 +97,8 @@ export const preloadChildren =
       return;
 
     const { languageCode, wikibaseAlias, geni } = getState().settings;
-    const { currentProp } = getState().tree;
+    // const { currentProp } = getState().tree;
+    const currentProp = { id: CHILD_ID };
 
     const children = await getChildEntities(entityNode, languageCode, {
       wikibaseAlias,
@@ -138,8 +140,8 @@ export const toggleParents =
     } else {
       try {
         const { languageCode, wikibaseAlias, geni } = getState().settings;
-        const { currentProp } = getState().tree;
-        console.log("get parnets");
+        // const { currentProp } = getState().tree;
+        const currentProp = { id: CHILD_ID };
         const parents = await getParentEntities(entityNode, languageCode, {
           wikibaseAlias,
           currentPropId: currentProp?.id,
@@ -168,7 +170,8 @@ export const preloadParents =
     )
       return;
     const { languageCode, wikibaseAlias, geni } = getState().settings;
-    const { currentProp } = getState().tree;
+    // const { currentProp } = getState().tree;
+    const currentProp = { id: CHILD_ID };
 
     const parents = await getParentEntities(entityNode, languageCode, {
       wikibaseAlias,

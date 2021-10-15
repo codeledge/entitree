@@ -12,6 +12,7 @@ import { DEFAULT_LANGS_CODES } from "../constants/langs";
 import { Entity } from "types/Entity";
 import { EntityNode } from "types/EntityNode";
 import { LangCode } from "types/Lang";
+import addGeniEntityConnectors from "geni/lib/addEntityConnectors";
 import filterSpouses from "./filterSpouses";
 import formatEntity from "./formatEntity";
 import getWikidataEntities from "wikidata/getWikidataEntities";
@@ -61,10 +62,15 @@ export default async function getEntities(
     if (entity.isHuman && entity.isInfantDeath) {
       return accumulator;
     }
-
     // siblings and spouses don't need connectors, so no currentPropId is passed
     if (options?.currentPropId) {
       await addEntityConnectors(entity, options);
+
+      //BETA just add Geni nodes
+      // if (!entity?.upIds?.length && entity.geniId) {
+      //   console.log("CONSIDER USING GENI");
+      //   await addGeniEntityConnectors(entity, options);
+      // }
     }
 
     //delete as non-serializeable and save on memory

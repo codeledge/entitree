@@ -69,9 +69,9 @@ export const toggleChildren =
 
         const children = await getChildEntities(entityNode, languageCode, {
           wikibaseAlias,
-          currentPropId: "family_tree",
+          currentPropId: currentProp?.id,
           addDownIds: true,
-          addRightIds: true,
+          addRightIds: currentProp?.id === CHILD_ID,
           downIdsAlreadySorted: entityNode.downIdsAlreadySorted,
         });
 
@@ -99,9 +99,9 @@ export const preloadChildren =
 
     const children = await getChildEntities(entityNode, languageCode, {
       wikibaseAlias,
-      currentPropId: "family_tree",
+      currentPropId: currentProp?.id,
       addDownIds: true,
-      addRightIds: true,
+      addRightIds: currentProp?.id === CHILD_ID,
       downIdsAlreadySorted: entityNode.downIdsAlreadySorted,
     });
 
@@ -140,9 +140,9 @@ export const toggleParents =
 
         const parents = await getParentEntities(entityNode, languageCode, {
           wikibaseAlias,
-          currentPropId: "family_tree",
+          currentPropId: currentProp?.id,
           addUpIds: true,
-          addLeftIds: true,
+          addLeftIds: currentProp?.id === CHILD_ID,
         });
 
         dispatch(expandParents({ entityNode, parents, options }));
@@ -169,9 +169,9 @@ export const preloadParents =
 
     const parents = await getParentEntities(entityNode, languageCode, {
       wikibaseAlias,
-      currentPropId: "family_tree",
+      currentPropId: currentProp?.id,
       addUpIds: true,
-      addLeftIds: true,
+      addLeftIds: currentProp?.id === CHILD_ID,
     });
 
     dispatch(setPreloadedParents({ entityNode, parents }));

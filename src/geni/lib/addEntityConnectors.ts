@@ -28,15 +28,23 @@ type unionArray = [string, { rel: GeniRelType }];
 //     edges: GeniEdge[];
 //   },
 // ];
-export default async function addEntityConnectors(
+export default async function addGeniEntityConnectors(
   entity: Entity,
   options: ConnectorOptions,
 ) {
-  const apiCall = await geniApi(
-    [entity.id],
-    options.geniAccessToken,
-    "profile/immediate-family",
-  );
+  // const apiCallId = entity.geniProfileId
+  //   ? entity.geniProfileId
+  //   : "g" + entity.geniId;
+
+  const apiCall = entity.geniProfileId
+    ? await geniApi("profile/immediate-family", {
+        ids: entity.geniProfileId,
+        access_token: options.geniAccessToken,
+      })
+    : await geniApi("profile/immediate-family", {
+        guids: entity.geniId,
+        access_token: options.geniAccessToken,
+      });
   const entityCalled = apiCall.results[0];
   entity.nodes = entityCalled.nodes;
   const focusProfile = entity.focus?.id;
@@ -78,7 +86,7 @@ export default async function addEntityConnectors(
   entity.downIds = childrenIds;
   entity.leftIds = siblingIds;
   entity.rightIds = spouseIds;
-  console.log(entity);
+  // console.log(entity);
   // console.log(entity);
 }
 
