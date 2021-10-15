@@ -286,6 +286,44 @@ export default function Home() {
   );
 }
 
+export async function getServerSideProps({ req }) {
+  const local = req.url;
+  const schema = (req.headers["x-forwarded-proto"] || "").toLowerCase();
+  const www = req.headers.host.replace(/www\./gi, "");
+  const fullUrl = `https://${www}${local}`;
+  const removeSlash = (site) => site.replace(/\/$/, "");
+
+  const notLocalHost = !www.includes("localhost");
+
+  if (notLocalHost) {
+    if (schema !== "https") {
+      return {
+        redirect: {
+          destination: removeSlash(fullUrl),
+        },
+      };
+    }
+    if (/^www\./i.test(req.headers.host) && schema === "https") {
+      return {
+        redirect: {
+          destination: removeSlash(fullUrl),
+        },
+      };
+    }
+    if (/\/$/.test(fullUrl) && fullUrl !== `https://${www}/`) {
+      return {
+        redirect: {
+          destination: removeSlash(fullUrl),
+        },
+      };
+    }
+  }
+
+  return {
+    props: {}, // will be passed to the page component as props
+  };
+}
+
 const Page = styled(Div100vh)`
   display: flex;
   flex-direction: column;
