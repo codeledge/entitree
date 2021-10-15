@@ -125,7 +125,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         },
       };
     }
-    console.log(geniCookie);
+    console.log("cookie", geniCookie);
     if (!LANGS.find(({ code }) => code === langCode))
       return { props: { errorCode: 404 } };
     console.log("lang found");

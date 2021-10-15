@@ -80,7 +80,7 @@ export default memo(({ node }: { node: EntityNode }) => {
   };
 
   const currentThumbnail = thumbnails[thumbnailIndex];
-  const filteredRightIds = [];
+  const filteredRightIds = node.rightIds;
   const onThumbClick =
     thumbnails.length > 1
       ? () =>

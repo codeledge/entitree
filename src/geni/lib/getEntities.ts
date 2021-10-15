@@ -4,12 +4,7 @@ import {
   SIBLING_BOOKMARK_SYMBOL,
   SPOUSE_BOOKMARK_SYMBOL,
 } from "constants/bookmarks";
-import {
-  GeniProfile,
-  getGeniProfileAxios,
-  getGeniProfileFamily,
-  getGeniProfileFamilyAxios,
-} from "services/geniService";
+import { GeniProfile, geniApi } from "services/geniService";
 import { sortByBirthDate, sortByGender } from "../../lib/sortEntities";
 
 import { CHILD_ID } from "constants/properties";
@@ -34,19 +29,46 @@ export default async function getEntities(
   languageCode: LangCode,
   options: Options,
 ): Promise<Entity[]> {
-  const geniProfiles = options.serverside
-    ? await getGeniProfileFamilyAxios(ids, options.geniAccessToken)
-    : await getGeniProfileFamily(ids, options.geniAccessToken);
-  const entities: Entity[] = [];
-  console.log(geniProfiles);
-  geniProfiles.results.forEach((geniProfile) => {
-    //add all custom fields
-    const entity = formatGeniProfile(geniProfile);
+  //either use profile or immediate family to query all at once
+  const geniProfiles = await geniApi(ids, options.geniAccessToken, "profile");
+  // const entities: Entity[] = [];
+  // console.log(geniProfiles);
 
-    addEntityConnectors(entity, options);
-    console.log(entity);
-    entities.push(entity);
-  });
+  const entities = await geniProfiles.results.reduce(
+    async (acc: Promise<Entity[]>, geniProfile) => {
+      const accumulator = await Promise.resolve(acc);
+
+      //get rid of unwanted records
+      // if (!wikiEntitiesMap[id] || wikiEntitiesMap[id]["missing"] !== undefined)
+      //   return accumulator;
+
+      //add all custom fields
+      const entity = formatGeniProfile(geniProfile);
+
+      //filter out isInfantDeath by default
+      // if (entity.isHuman && entity.isInfantDeath) {
+      //   return accumulator;
+      // }
+
+      // siblings and spouses don't need connectors, so no currentPropId is passed
+      if (options?.currentPropId) {
+        await addEntityConnectors(entity, options);
+      }
+
+      return Promise.resolve([...accumulator, entity]);
+    },
+    Promise.resolve([]),
+  );
+
+  // geniProfiles.results.forEach(async (geniProfile) => {
+  //   //add all custom fields
+  //   const entity = formatGeniProfile(geniProfile);
+
+  //   addEntityConnectors(entity?.id, options);
+  //   console.log(entity);
+  //   entities.push(entity);
+  // });
+  console.log("entities", entities);
 
   return entities;
 }
@@ -57,7 +79,7 @@ export const getRootEntity = async (
   options: Options,
 ): Promise<Entity> => {
   const [root] = await getEntities([id], languageCode, options);
-  console.log(root);
+  // console.log("root", root);
   if (root) root.treeId = "0";
 
   return root;
@@ -111,7 +133,7 @@ export const getSpouseEntities = async (
   if (!entityNode.rightIds) return [];
 
   const spouses = await getEntities(entityNode.rightIds, languageCode, options);
-
+  console.log(spouses);
   spouses.forEach((node, index) => {
     node.treeId = `${entityNode.treeId}${SPOUSE_BOOKMARK_SYMBOL}${index}`;
   });

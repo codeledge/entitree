@@ -23,6 +23,7 @@ export const loadEntity = async ({
     addRightIds: false,
     serverside: true,
     geniAccessToken,
+    currentPropId: "family_tree",
   });
 
   return { currentEntity };

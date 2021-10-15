@@ -6,6 +6,7 @@ import {
   GeniNodes,
   GeniProfile,
   GeniRelType,
+  geniApi,
 } from "services/geniService";
 
 import { Entity } from "types/Entity";
@@ -31,10 +32,18 @@ export default async function addEntityConnectors(
   entity: Entity,
   options: ConnectorOptions,
 ) {
+  const apiCall = await geniApi(
+    [entity.id],
+    options.geniAccessToken,
+    "profile/immediate-family",
+  );
+  const entityCalled = apiCall.results[0];
+  entity.nodes = entityCalled.nodes;
   const focusProfile = entity.focus?.id;
   if (!focusProfile) {
     return;
   }
+
   const focusEdges = entity.nodes?.[focusProfile].edges;
   const edgesArray: unionArray[] = Object.entries(focusEdges);
   // console.log("edges", edgesArray);
@@ -70,6 +79,7 @@ export default async function addEntityConnectors(
   entity.leftIds = siblingIds;
   entity.rightIds = spouseIds;
   console.log(entity);
+  // console.log(entity);
 }
 
 function getIdsByUnionAndType(relations, unions, type: GeniRelType) {

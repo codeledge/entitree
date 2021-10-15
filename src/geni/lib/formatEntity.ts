@@ -1,13 +1,14 @@
+import { GeniImmediateFamily, GeniProfile } from "services/geniService";
+
 import { Entity } from "types/Entity";
-import { GeniImmediateFamily } from "services/geniService";
 import addGeniDates from "./addDates";
 import addLifeSpan from "lib/addLifeSpan";
 
-export default function formatGeniProfile(geniResult: GeniImmediateFamily) {
-  const geniProfile = geniResult.focus;
+export default function formatGeniProfile(geniProfile: GeniProfile) {
+  // const geniProfile = geniResult; //.focus;
   const entity: Entity = {
     id: geniProfile?.id.substr(8) || "",
-    ...geniResult,
+    focus: geniProfile,
   };
   if (!geniProfile) {
     return entity; //FIX
@@ -33,6 +34,6 @@ export default function formatGeniProfile(geniResult: GeniImmediateFamily) {
     };
     entity.thumbnails = [geniImg];
   }
-  console.log(entity);
+  // console.log(entity);
   return entity;
 }
