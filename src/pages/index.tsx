@@ -287,7 +287,14 @@ export default function Home() {
 }
 
 export async function getServerSideProps({ req }) {
-  console.log(req.headers);
+  if (process.env.NODE_ENV === "production") {
+    if (req.headers["x-forwarded-proto"] !== "https")
+      return {
+        redirect: {
+          destination: `https://${req.headers.host}${req.url}`,
+        },
+      };
+  }
 
   return { props: {} };
 }
