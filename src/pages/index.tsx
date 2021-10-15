@@ -286,6 +286,12 @@ export default function Home() {
   );
 }
 
+export async function getServerSideProps({ req }) {
+  console.log(req.headers);
+
+  return { props: {} };
+}
+
 const Page = styled(Div100vh)`
   display: flex;
   flex-direction: column;
