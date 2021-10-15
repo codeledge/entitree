@@ -31,7 +31,7 @@ export default async function getEntities(
 ): Promise<Entity[]> {
   //either use profile or immediate family to query all at once
   const geniProfiles = await geniApi("profile", {
-    ids,
+    ids: ids.join(","),
     access_token: options.geniAccessToken,
   });
   // const entities: Entity[] = [];
