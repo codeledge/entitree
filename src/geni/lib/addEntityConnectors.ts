@@ -46,6 +46,7 @@ export default async function addGeniEntityConnectors(
         access_token: options.geniAccessToken,
       });
   const entityCalled = apiCall.results[0];
+  entity.focus = entityCalled.focus;
   entity.nodes = entityCalled.nodes;
   const focusProfile = entity.focus?.id;
   if (!focusProfile) {
@@ -86,8 +87,9 @@ export default async function addGeniEntityConnectors(
   entity.downIds = childrenIds;
   entity.leftIds = siblingIds;
   entity.rightIds = spouseIds;
+  console.log("added ids", entity);
   // console.log(entity);
-  // console.log(entity);
+  return entity;
 }
 
 function getIdsByUnionAndType(relations, unions, type: GeniRelType) {

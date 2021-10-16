@@ -20,6 +20,7 @@ import getWikidataEntities from "wikidata/getWikidataEntities";
 type Options = ConnectorOptions & {
   secondLanguageCode?: LangCode;
   downIdsAlreadySorted?: boolean;
+  geniAccessToken: string;
 };
 
 export default async function getEntities(
@@ -67,10 +68,11 @@ export default async function getEntities(
       await addEntityConnectors(entity, options);
 
       //BETA just add Geni nodes
-      // if (!entity?.upIds?.length && entity.geniId) {
-      //   console.log("CONSIDER USING GENI");
-      //   await addGeniEntityConnectors(entity, options);
-      // }
+      if (!entity?.upIds?.length && entity.geniId) {
+        console.log("CONSIDER USING GENI");
+        await addGeniEntityConnectors(entity, options);
+        console.log(entity);
+      }
     }
 
     //delete as non-serializeable and save on memory

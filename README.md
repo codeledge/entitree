@@ -48,7 +48,7 @@ Open [localhost:3009](http://localhost:3009/)
 
 ## ENV
 
-set: NEXT_PUBLIC_ANALYTICS_ID
+set: NEXT_PUBLIC_GENI_APP_ID
 562: https://www.entitree.com/geni
 563: http://localhost:3009/geni
 564: https://entitree-test.herokuapp.com/geni
