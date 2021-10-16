@@ -28,7 +28,7 @@ import {
   getParentEntities,
   getSiblingEntities,
   getSpouseEntities,
-} from "lib/getEntities";
+} from "treeHelpers/getEntities";
 
 import { AppThunk } from "store";
 import { Entity } from "types/Entity";
@@ -70,9 +70,9 @@ export const toggleChildren =
         const children = await getChildEntities(entityNode, languageCode, {
           wikibaseAlias,
           currentPropId: currentProp?.id,
-          addDownIds: true,
-          addRightIds: currentProp?.id === CHILD_ID,
-          downIdsAlreadySorted: entityNode.downIdsAlreadySorted,
+          addTargetIds: true,
+          addNextAfterIds: currentProp?.id === CHILD_ID,
+          areTargetIdsSorted: entityNode.areTargetIdsSorted,
         });
 
         dispatch(expandChildren({ entityNode, children, options }));
@@ -90,7 +90,7 @@ export const preloadChildren =
     if (
       entityNode.closedChildTreeIds ||
       entityNode.openChildTreeIds ||
-      !entityNode.downIds
+      !entityNode.targetIds
     )
       return;
 
@@ -100,9 +100,9 @@ export const preloadChildren =
     const children = await getChildEntities(entityNode, languageCode, {
       wikibaseAlias,
       currentPropId: currentProp?.id,
-      addDownIds: true,
-      addRightIds: currentProp?.id === CHILD_ID,
-      downIdsAlreadySorted: entityNode.downIdsAlreadySorted,
+      addTargetIds: true,
+      addNextAfterIds: currentProp?.id === CHILD_ID,
+      areTargetIdsSorted: entityNode.areTargetIdsSorted,
     });
 
     dispatch(setPreloadedChildren({ entityNode, children }));
@@ -141,8 +141,8 @@ export const toggleParents =
         const parents = await getParentEntities(entityNode, languageCode, {
           wikibaseAlias,
           currentPropId: currentProp?.id,
-          addUpIds: true,
-          addLeftIds: currentProp?.id === CHILD_ID,
+          addSourceIds: true,
+          addNextBeforeIds: currentProp?.id === CHILD_ID,
         });
 
         dispatch(expandParents({ entityNode, parents, options }));
@@ -161,7 +161,7 @@ export const preloadParents =
     if (
       entityNode.closedParentTreeIds ||
       entityNode.openParentTreeIds ||
-      !entityNode.upIds
+      !entityNode.sourceIds
     )
       return;
     const { languageCode, wikibaseAlias } = getState().settings;
@@ -170,8 +170,8 @@ export const preloadParents =
     const parents = await getParentEntities(entityNode, languageCode, {
       wikibaseAlias,
       currentPropId: currentProp?.id,
-      addUpIds: true,
-      addLeftIds: currentProp?.id === CHILD_ID,
+      addSourceIds: true,
+      addNextBeforeIds: currentProp?.id === CHILD_ID,
     });
 
     dispatch(setPreloadedParents({ entityNode, parents }));
@@ -223,7 +223,7 @@ export const preloadSiblings =
     if (
       entityNode.closedSiblingTreeIds ||
       entityNode.openSiblingTreeIds ||
-      !entityNode.leftIds
+      !entityNode.nextBeforeIds
     )
       return;
 
@@ -298,7 +298,7 @@ export const preloadSpouses =
     if (
       entityNode.closedSpouseTreeIds ||
       entityNode.openSpouseTreeIds ||
-      !entityNode.rightIds
+      !entityNode.nextAfterIds
     )
       return;
 

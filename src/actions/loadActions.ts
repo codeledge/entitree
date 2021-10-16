@@ -4,8 +4,8 @@ import { AppThunk } from "store";
 import { LangCode } from "types/Lang";
 import { WikibaseAlias } from "wikibase/getWikibaseInstance";
 import { getEntityUrl } from "helpers/getEntityUrl";
-import getEntityWikipediaSlug from "treeHelpers/getEntityWikipediaSlug";
-import getItemProps from "wikidata/getItemProps";
+import getEntityWikipediaSlug from "wikipedia/getEntityWikipediaSlug";
+import getWikibaseEntityProps from "wikibase/getWikibaseEntityProps";
 import { reset } from "store/treeSlice";
 import router from "next/router";
 
@@ -27,7 +27,7 @@ export const switchLanguage =
 
     let propSlug = "";
     if (propId) {
-      const translatedProps = await getItemProps(
+      const translatedProps = await getWikibaseEntityProps(
         entityId,
         langCode,
         wikibaseAlias,

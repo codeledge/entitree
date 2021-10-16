@@ -2,9 +2,9 @@ import { Button, Figure, Modal } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 
 import { FiExternalLink } from "react-icons/fi";
-import { errorHandler } from "handlers/clientErrorHandler";
-import getEntitiesLabel from "treeHelpers/getEntitiesLabel";
+import { errorHandler } from "handlers/errorHandler";
 import { getEntityUrl } from "helpers/getEntityUrl";
+import getWikibaseEntitiesLabel from "wikibase/getWikibaseEntitiesLabel";
 import getWikipediaArticle from "wikipedia/getWikipediaArticle";
 import { missingImagesLink } from "services/imageService";
 import { setLoadingEntity } from "store/treeSlice";
@@ -50,7 +50,7 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
 
   useEffect(() => {
     if (node.birthPlaceId || node.deathPlaceId) {
-      getEntitiesLabel(
+      getWikibaseEntitiesLabel(
         [node.birthPlaceId, node.deathPlaceId],
         languageCode,
         wikibaseAlias,

@@ -1,7 +1,7 @@
 import { ImageOverflowType, ImageType } from "types/Image";
 
 import axios from "axios";
-import { errorHandler } from "handlers/clientErrorHandler";
+import { errorHandler } from "handlers/errorHandler";
 import serviceSuccessInterceptor from "./serviceSuccessInterceptor";
 
 export const IMAGE_SERVER_BASE_URL = "https://images.entitree.com";

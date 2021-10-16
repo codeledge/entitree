@@ -4,21 +4,23 @@ import {
   SIBLING_BOOKMARK_SYMBOL,
   SPOUSE_BOOKMARK_SYMBOL,
 } from "constants/bookmarks";
-import addEntityConnectors, { ConnectorOptions } from "./addEntityConnectors";
-import { sortByBirthDate, sortByGender } from "./sortEntities";
+import addEntityConnectors, {
+  ConnectorOptions,
+} from "../lib/addEntityConnectors";
+import { sortByBirthDate, sortByGender } from "../lib/sortEntities";
 
 import { CHILD_ID } from "constants/properties";
 import { DEFAULT_LANGS_CODES } from "../constants/langs";
 import { Entity } from "types/Entity";
 import { EntityNode } from "types/EntityNode";
 import { LangCode } from "types/Lang";
-import filterSpouses from "./filterSpouses";
-import formatEntity from "./formatEntity";
-import getWikidataEntities from "wikidata/getWikidataEntities";
+import filterSpouses from "../lib/filterSpouses";
+import formatEntity from "../lib/formatEntity";
+import getWikibaseEntities from "wikibase/getWikibaseEntities";
 
 type Options = ConnectorOptions & {
   secondLanguageCode?: LangCode;
-  downIdsAlreadySorted?: boolean;
+  areTargetIdsSorted?: boolean;
 };
 
 export default async function getEntities(
@@ -37,7 +39,7 @@ export default async function getEntities(
   )
     languages.push(options.secondLanguageCode);
 
-  const wikiEntitiesMap = await getWikidataEntities({
+  const wikibaseEntitiesMap = await getWikibaseEntities({
     ids,
     languages,
     wikibaseAlias: options.wikibaseAlias,
@@ -47,12 +49,15 @@ export default async function getEntities(
     const accumulator = await Promise.resolve(acc);
 
     //get rid of unwanted records
-    if (!wikiEntitiesMap[id] || wikiEntitiesMap[id]["missing"] !== undefined)
+    if (
+      !wikibaseEntitiesMap[id] ||
+      wikibaseEntitiesMap[id]["missing"] !== undefined
+    )
       return accumulator;
 
     //add all custom fields
     const entity = formatEntity(
-      wikiEntitiesMap[id],
+      wikibaseEntitiesMap[id],
       languageCode,
       options?.wikibaseAlias,
     );
@@ -94,15 +99,19 @@ export const getChildEntities = async (
   languageCode: LangCode,
   options: Options,
 ): Promise<Entity[]> => {
-  if (!entityNode.downIds) return [];
+  if (!entityNode.targetIds) return [];
 
-  const children = await getEntities(entityNode.downIds, languageCode, options);
+  const children = await getEntities(
+    entityNode.targetIds,
+    languageCode,
+    options,
+  );
 
   children.forEach((node, index) => {
     node.treeId = `${entityNode.treeId}${CHILD_BOOKMARK_SYMBOL}${index}`;
   });
 
-  if (options?.currentPropId === CHILD_ID && !options?.downIdsAlreadySorted) {
+  if (options?.currentPropId === CHILD_ID && !options?.areTargetIdsSorted) {
     sortByBirthDate(children);
   }
 
@@ -114,8 +123,12 @@ export const getParentEntities = async (
   languageCode: LangCode,
   options: Options,
 ): Promise<Entity[]> => {
-  if (!entityNode.upIds) return [];
-  const parents = await getEntities(entityNode.upIds, languageCode, options);
+  if (!entityNode.sourceIds) return [];
+  const parents = await getEntities(
+    entityNode.sourceIds,
+    languageCode,
+    options,
+  );
 
   //todo: move this in get Entities
   parents.forEach((node, index) => {
@@ -134,9 +147,13 @@ export const getSpouseEntities = async (
   languageCode: LangCode,
   options: Options,
 ): Promise<Entity[]> => {
-  if (!entityNode.rightIds) return [];
+  if (!entityNode.nextAfterIds) return [];
 
-  const spouses = await getEntities(entityNode.rightIds, languageCode, options);
+  const spouses = await getEntities(
+    entityNode.nextAfterIds,
+    languageCode,
+    options,
+  );
 
   spouses.forEach((node, index) => {
     node.treeId = `${entityNode.treeId}${SPOUSE_BOOKMARK_SYMBOL}${index}`;
@@ -153,9 +170,13 @@ export const getSiblingEntities = async (
   languageCode: LangCode,
   options: Options,
 ): Promise<Entity[]> => {
-  if (!entityNode.leftIds) return [];
+  if (!entityNode.nextBeforeIds) return [];
 
-  const siblings = await getEntities(entityNode.leftIds, languageCode, options);
+  const siblings = await getEntities(
+    entityNode.nextBeforeIds,
+    languageCode,
+    options,
+  );
 
   siblings.forEach((node, index) => {
     node.treeId = `${entityNode.treeId}${SIBLING_BOOKMARK_SYMBOL}${index}`;

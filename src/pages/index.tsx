@@ -286,6 +286,19 @@ export default function Home() {
   );
 }
 
+export async function getServerSideProps({ req }) {
+  if (process.env.NODE_ENV === "production") {
+    if (req.headers["x-forwarded-proto"] !== "https")
+      return {
+        redirect: {
+          destination: `https://${req.headers.host}${req.url}`,
+        },
+      };
+  }
+
+  return { props: {} };
+}
+
 const Page = styled(Div100vh)`
   display: flex;
   flex-direction: column;

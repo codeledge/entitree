@@ -10,35 +10,35 @@ import getClaimIds, { checkIfClaimsHasSeriesOrdinal } from "./getClaimIds";
 import { Entity } from "types/Entity";
 import { WikibaseAlias } from "wikibase/getWikibaseInstance";
 import getSimpleClaimValue from "./getSimpleClaimValue";
-import getUpIds from "wikidata/getUpIds";
-import { sortClaimsByStartDate } from "claims/sortClaims";
+import getWikibaseSourceIds from "wikibase/getWikibaseSourceIds";
+import { sortClaimsByStartDate } from "claims/sortClaimsByStartDate";
 
 export type ConnectorOptions = {
   wikibaseAlias: WikibaseAlias;
   currentPropId?: string;
-  addUpIds?: boolean;
-  addDownIds?: boolean;
-  addRightIds?: boolean;
-  addLeftIds?: boolean;
+  addSourceIds?: boolean;
+  addTargetIds?: boolean;
+  addNextAfterIds?: boolean;
+  addNextBeforeIds?: boolean;
 };
 
 export default async function addEntityConnectors(
   entity: Entity,
   options: ConnectorOptions,
 ) {
-  if (options.addUpIds && options.currentPropId) {
-    entity.upIds = await getUpIds(
+  if (options.addSourceIds && options.currentPropId) {
+    entity.sourceIds = await getWikibaseSourceIds(
       entity.id,
       options.currentPropId,
       options.wikibaseAlias,
     );
   } else {
-    delete entity.upIds;
+    delete entity.sourceIds;
   }
 
-  if (options.addDownIds && options.currentPropId) {
-    entity.downIds = getClaimIds(entity, options.currentPropId);
-    entity.downIdsAlreadySorted = checkIfClaimsHasSeriesOrdinal(
+  if (options.addTargetIds && options.currentPropId) {
+    entity.targetIds = getClaimIds(entity, options.currentPropId);
+    entity.areTargetIdsSorted = checkIfClaimsHasSeriesOrdinal(
       entity,
       options.currentPropId,
     );
@@ -46,24 +46,25 @@ export default async function addEntityConnectors(
     //use number of children property, use count of children if not available
     if (options.currentPropId === CHILD_ID) {
       //only for family trees
-      entity.childrenCount =
+      entity.targetsCount =
         Number(
           getSimpleClaimValue(entity.simpleClaims, NUMBER_OF_CHILDREN_ID),
-        ) || entity.downIds.length;
+        ) || entity.targetIds.length;
     } else {
-      entity.childrenCount = entity.downIds.length;
+      entity.targetsCount = entity.targetIds.length;
     }
   } else {
-    delete entity.downIds;
+    delete entity.targetIds;
   }
 
-  if (options.addRightIds) addRightIds(entity);
+  if (options.addNextAfterIds) addNextAfterIds(entity);
 
-  if (options.addLeftIds) entity.leftIds = getClaimIds(entity, SIBLINGS_ID);
-  else delete entity.leftIds;
+  if (options.addNextBeforeIds)
+    entity.nextBeforeIds = getClaimIds(entity, SIBLINGS_ID);
+  else delete entity.nextBeforeIds;
 }
 
-function addRightIds(entity: Entity) {
+function addNextAfterIds(entity: Entity) {
   //cannot use simpleclaims here as only preferred will show up
   //load everything here then you filter on the client
 
@@ -78,6 +79,6 @@ function addRightIds(entity: Entity) {
     entity.partnersIds = sortClaimsByStartDate(partnersClaim);
   }
   if (combinedClaim) {
-    entity.rightIds = sortClaimsByStartDate(combinedClaim);
+    entity.nextAfterIds = sortClaimsByStartDate(combinedClaim);
   }
 }

@@ -1,3 +1,4 @@
+import { EntityProp } from "types/Entity";
 import { SecondLabel } from "types/Lang";
 
 export const INSTANCE_OF_ID = "P31";
@@ -48,36 +49,13 @@ export const FAMILY_IDS_MAP = {
   [MOTHER_ID]: true,
 };
 
-export const FAMILY_TREE_PROP = {
+export const FAMILY_TREE_PROP: EntityProp = {
   id: CHILD_ID,
   slug: "family_tree",
   label: "child",
   overrideLabel: "family tree",
   isFav: true,
 };
-
-export const BUSINESS_PROPS = [
-  {
-    id: "P355",
-    label: "Subsidiaries",
-    isFav: true,
-  },
-  {
-    id: "P749",
-    label: "Parent orgs",
-    isFav: true,
-  },
-  {
-    id: "P1830",
-    label: "Ownership",
-    isFav: true,
-  },
-  {
-    id: "P127",
-    label: "Ownership reversed?",
-    isFav: true,
-  },
-];
 
 export const SOCIAL_PROPS_IDS = {
   P6634: {
