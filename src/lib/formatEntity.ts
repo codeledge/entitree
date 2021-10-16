@@ -51,6 +51,7 @@ export default function formatEntity(
     ...wikidataEntity,
     simpleClaims,
   };
+  entity.wikidataId = entity.id;
 
   addLabel(entity, languageCode);
   addDescription(entity, languageCode);

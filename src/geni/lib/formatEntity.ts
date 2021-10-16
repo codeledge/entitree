@@ -7,7 +7,7 @@ import addLifeSpan from "lib/addLifeSpan";
 export default function formatGeniProfile(geniProfile: GeniProfile) {
   // const geniProfile = geniResult; //.focus;
   const entity: Entity = {
-    id: geniProfile?.id.substr(8) || "",
+    id: "G" + geniProfile?.guid || "",
     focus: geniProfile,
   };
   if (!geniProfile) {
@@ -18,7 +18,7 @@ export default function formatGeniProfile(geniProfile: GeniProfile) {
   entity.label = geniProfile?.name; //geniProfile?.first_name + " " + geniProfile?.last_name;
   entity.description = geniProfile?.id || "";
   entity.geniProfileId = entity.id;
-  entity.geniId = geniProfile?.profile_url.split("/").pop();
+  entity.geniId = geniProfile?.guid; //geniProfile?.profile_url.split("/").pop();
   entity.geniProfileUrl = geniProfile?.profile_url;
   entity.occupation = geniProfile?.occupation || "";
   const firstNames = geniProfile?.first_name + " " + geniProfile?.middle_name;

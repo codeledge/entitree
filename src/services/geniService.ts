@@ -179,27 +179,34 @@ function createGeniUrl(
 export async function geniApi(
   apiRoute: GeniApiRouteType = "profile",
   params: GeniApiParams,
-): Promise<GeniProfileResults> {
+  serverside: boolean,
+): Promise<GeniProfileResults | null> {
   // const ids = geniIds.join(",");
   const url = createGeniUrl(apiRoute, params);
   // console.log(url);
-  try {
+  // try {
+  if (!serverside) {
     const data = await jsonp(url, {
       param: "callback",
       timeout: 8000,
     }).promise;
-    if (!data.results) {
-      return { results: [data] };
+    if (data[0] && data[0].error) {
+      //RATE LIMIT
+      return null;
+      // throw new Error("GeniError" + data[0].error.message);
     }
-    return data;
-  } catch (e) {
-    //  go through server and use axios
-    const { data } = await axios.get(url);
     if (!data.results) {
       return { results: [data] };
     }
     return data;
   }
+  // console.log("error", JSON.stringify(e));
+  //  go through server and use axios
+  const { data } = await axios.get(url);
+  if (!data.results) {
+    return { results: [data] };
+  }
+  return data;
 }
 
 export const geniSearch = async (term, geniAccessToken) => {

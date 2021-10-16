@@ -24,18 +24,26 @@ type Options = ConnectorOptions & {
   geniAccessToken?: string;
 };
 
-export default async function getEntities(
+export default async function getGeniEntities(
   ids: string[],
   languageCode: LangCode,
   options: Options,
 ): Promise<Entity[]> {
   //either use profile or immediate family to query all at once
-  const geniProfiles = await geniApi("profile", {
-    ids: ids.join(","),
-    access_token: options.geniAccessToken,
-  });
+  const geniProfiles = await geniApi(
+    "profile",
+    {
+      guids: ids.map((id) => id.substr(1)).join(","),
+      access_token: options.geniAccessToken,
+    },
+    options.serverside,
+  );
+  if (!geniProfiles) {
+    //TODO try again
+    return [];
+  }
   // const entities: Entity[] = [];
-  // console.log(geniProfiles);
+  console.log("Profiles", geniProfiles);
 
   const entities = await geniProfiles.results.reduce(
     async (acc: Promise<Entity[]>, geniProfile) => {
@@ -52,7 +60,7 @@ export default async function getEntities(
       // if (entity.isHuman && entity.isInfantDeath) {
       //   return accumulator;
       // }
-      console.log("options", options);
+      console.log("options ent", entity);
 
       // siblings and spouses don't need connectors, so no currentPropId is passed
       if (options?.currentPropId) {
@@ -82,7 +90,7 @@ export const getRootEntity = async (
   languageCode: LangCode,
   options: Options,
 ): Promise<Entity> => {
-  const [root] = await getEntities([id], languageCode, options);
+  const [root] = await getGeniEntities([id], languageCode, options);
   // console.log("root", root);
   if (root) root.treeId = "0";
 
@@ -96,7 +104,11 @@ export const getChildEntities = async (
 ): Promise<Entity[]> => {
   if (!entityNode.downIds) return [];
 
-  const children = await getEntities(entityNode.downIds, languageCode, options);
+  const children = await getGeniEntities(
+    entityNode.downIds,
+    languageCode,
+    options,
+  );
 
   children.forEach((node, index) => {
     node.treeId = `${entityNode.treeId}${CHILD_BOOKMARK_SYMBOL}${index}`;
@@ -115,7 +127,11 @@ export const getParentEntities = async (
   options: Options,
 ): Promise<Entity[]> => {
   if (!entityNode.upIds) return [];
-  const parents = await getEntities(entityNode.upIds, languageCode, options);
+  const parents = await getGeniEntities(
+    entityNode.upIds,
+    languageCode,
+    options,
+  );
 
   //todo: move this in get Entities
   parents.forEach((node, index) => {
@@ -136,7 +152,11 @@ export const getSpouseEntities = async (
 ): Promise<Entity[]> => {
   if (!entityNode.rightIds) return [];
 
-  const spouses = await getEntities(entityNode.rightIds, languageCode, options);
+  const spouses = await getGeniEntities(
+    entityNode.rightIds,
+    languageCode,
+    options,
+  );
   console.log(spouses);
   spouses.forEach((node, index) => {
     node.treeId = `${entityNode.treeId}${SPOUSE_BOOKMARK_SYMBOL}${index}`;
@@ -155,7 +175,11 @@ export const getSiblingEntities = async (
 ): Promise<Entity[]> => {
   if (!entityNode.leftIds) return [];
 
-  const siblings = await getEntities(entityNode.leftIds, languageCode, options);
+  const siblings = await getGeniEntities(
+    entityNode.leftIds,
+    languageCode,
+    options,
+  );
 
   siblings.forEach((node, index) => {
     node.treeId = `${entityNode.treeId}${SIBLING_BOOKMARK_SYMBOL}${index}`;

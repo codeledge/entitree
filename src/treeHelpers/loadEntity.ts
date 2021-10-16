@@ -11,11 +11,13 @@ export const loadEntity = async ({
   wikibaseAlias,
   langCode,
   propSlug,
+  geniAccessToken,
 }: {
   itemId: string;
   wikibaseAlias: WikibaseAlias;
   langCode: LangCode;
   propSlug?: string;
+  geniAccessToken: string;
 }): Promise<{
   currentEntity: Entity;
   currentProp?: EntityProp;
@@ -71,6 +73,7 @@ export const loadEntity = async ({
     addDownIds: true,
     addLeftIds: currentProp?.id === CHILD_ID,
     addRightIds: currentProp?.id === CHILD_ID,
+    geniAccessToken,
   });
 
   return { currentEntity, currentProp, itemProps };

@@ -19,6 +19,7 @@ import SearchBar from "layout/SearchBar";
 import TreeLoader from "layout/TreeLoader";
 import VideoPopup from "../../../layout/VideoPopup";
 import { createMetaTags } from "helpers/createMetaTags";
+import { getGeniCookies } from "helpers/cookie";
 import getItemIdFromSlug from "wikidata/getItemIdFromSlug";
 import getWikipediaArticle from "wikipedia/getWikipediaArticle";
 import isInIframe from "lib/isInIframe";
@@ -90,12 +91,14 @@ const Page = styled(Div100vh)`
 `;
 
 export const getServerSideProps = wrapper.getServerSideProps(
-  async ({ store: { dispatch }, query }) => {
+  async ({ store: { dispatch }, query, req }) => {
     const { langCode, propSlug, itemSlug } = query as {
       langCode: LangCode;
       propSlug: string;
       itemSlug: string;
     };
+
+    const geniCookie = getGeniCookies(req);
 
     if (!LANGS.find(({ code }) => code === langCode))
       return { props: { errorCode: 404 } };
@@ -150,6 +153,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         wikibaseAlias: "wikidata",
         langCode,
         propSlug: decodedPropSlug,
+        geniAccessToken: geniCookie?.access_token,
       });
 
       // TODO: Extract loadEntity here and put the redirects when needed to fetch less data

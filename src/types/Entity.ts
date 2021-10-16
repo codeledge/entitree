@@ -105,6 +105,7 @@ export interface NodeProperties {
   treeId?: string;
   upIds?: string[];
   website?: string;
+  wikidataId?: string;
   wikidataUrl?: string;
   wikipediaSlug?: string;
   wikipediaUrl?: string;

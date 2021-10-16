@@ -59,7 +59,7 @@ export default function SearchSuggestions({
               "en",
               "family_tree",
               {
-                id: searchResult.id.substr(8),
+                id: "G" + searchResult.guid,
               },
               "geni",
             );

@@ -15,6 +15,7 @@ import { LangCode } from "types/Lang";
 import addGeniEntityConnectors from "geni/lib/addEntityConnectors";
 import filterSpouses from "./filterSpouses";
 import formatEntity from "./formatEntity";
+import getGeniEntities from "../geni/lib/getEntities";
 import getWikidataEntities from "wikidata/getWikidataEntities";
 
 type Options = ConnectorOptions & {
@@ -30,8 +31,12 @@ export default async function getEntities(
 ): Promise<Entity[]> {
   const languages = DEFAULT_LANGS_CODES;
 
-  //avoid duplicate language, but it won't break anyway
-  if (!languages.includes(languageCode)) languages.push(languageCode);
+  if (ids?.[0]?.substr(0, 1) === "G") {
+    return getGeniEntities(ids, languageCode, options);
+  }
+  if (!languages.includes(languageCode))
+    //avoid duplicate language, but it won't break anyway
+    languages.push(languageCode);
 
   if (
     options?.secondLanguageCode &&
@@ -65,8 +70,10 @@ export default async function getEntities(
     }
     // siblings and spouses don't need connectors, so no currentPropId is passed
     if (options?.currentPropId) {
-      await addEntityConnectors(entity, options);
-
+      if (entity.wikidataId) {
+        await addEntityConnectors(entity, options);
+      }
+      console.log(entity);
       //BETA just add Geni nodes
       if (!entity?.upIds?.length && entity.geniId) {
         console.log("CONSIDER USING GENI");
