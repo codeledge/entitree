@@ -21,7 +21,7 @@ import getWikidataEntities from "wikidata/getWikidataEntities";
 type Options = ConnectorOptions & {
   secondLanguageCode?: LangCode;
   downIdsAlreadySorted?: boolean;
-  geniAccessToken: string;
+  geniAccessToken?: string;
   serverside?: boolean;
 };
 

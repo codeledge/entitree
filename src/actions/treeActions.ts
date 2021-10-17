@@ -73,7 +73,7 @@ export const toggleChildren =
           addDownIds: true,
           addRightIds: currentProp?.id === CHILD_ID,
           downIdsAlreadySorted: entityNode.downIdsAlreadySorted,
-          geniAccessToken: geni.access_token,
+          geniAccessToken: geni?.access_token,
         });
 
         dispatch(expandChildren({ entityNode, children, options }));
@@ -104,7 +104,7 @@ export const preloadChildren =
       addDownIds: true,
       addRightIds: currentProp?.id === CHILD_ID,
       downIdsAlreadySorted: entityNode.downIdsAlreadySorted,
-      geniAccessToken: geni.access_token,
+      geniAccessToken: geni?.access_token,
     });
 
     dispatch(setPreloadedChildren({ entityNode, children }));
@@ -146,7 +146,7 @@ export const toggleParents =
           currentPropId: currentProp?.id,
           addUpIds: true,
           addLeftIds: currentProp?.id === CHILD_ID,
-          geniAccessToken: geni.access_token,
+          geniAccessToken: geni?.access_token,
         });
         // } catch (err) {
         //   // dispatch(collapseParents({ entityNode }));
@@ -180,7 +180,7 @@ export const preloadParents =
       currentPropId: currentProp?.id,
       addUpIds: true,
       addLeftIds: currentProp?.id === CHILD_ID,
-      geniAccessToken: geni.access_token,
+      geniAccessToken: geni?.access_token,
     });
 
     dispatch(setPreloadedParents({ entityNode, parents }));
@@ -208,7 +208,7 @@ export const toggleSiblings =
 
         const siblings = await getSiblingEntities(entityNode, languageCode, {
           wikibaseAlias,
-          geniAccessToken: geni.access_token,
+          geniAccessToken: geni?.access_token,
         });
 
         dispatch(
@@ -240,7 +240,7 @@ export const preloadSiblings =
     const { languageCode, wikibaseAlias, geni } = getState().settings;
     const siblings = await getSiblingEntities(entityNode, languageCode, {
       wikibaseAlias,
-      geniAccessToken: geni.access_token,
+      geniAccessToken: geni?.access_token,
     });
 
     dispatch(setPreloadedSiblings({ entityNode, siblings }));
@@ -270,7 +270,7 @@ export const toggleSpouses =
 
         const spouses = await getSpouseEntities(entityNode, languageCode, {
           wikibaseAlias,
-          geniAccessToken: geni.access_token,
+          geniAccessToken: geni?.access_token,
         });
 
         const filteredRightEntities = spouses?.filter((spouse) => {
@@ -317,7 +317,7 @@ export const preloadSpouses =
     const { languageCode, wikibaseAlias, geni } = getState().settings;
     const spouses = await getSpouseEntities(entityNode, languageCode, {
       wikibaseAlias,
-      geniAccessToken: geni.access_token,
+      geniAccessToken: geni?.access_token,
     });
 
     dispatch(setPreloadedSpouses({ entityNode, spouses }));

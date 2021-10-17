@@ -17,7 +17,7 @@ export const loadEntity = async ({
   wikibaseAlias: WikibaseAlias;
   langCode: LangCode;
   propSlug?: string;
-  geniAccessToken: string;
+  geniAccessToken?: string;
 }): Promise<{
   currentEntity: Entity;
   currentProp?: EntityProp;

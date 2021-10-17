@@ -103,7 +103,7 @@ export default memo(({ node }: { node: EntityNode }) => {
       getGeniProfile(node.geniId)
         .then((geniProfile) => {
           console.log(geniProfile);
-          const geniEntity = formatGeniProfile({ focus: geniProfile });
+          const geniEntity = formatGeniProfile(geniProfile);
           console.log(geniEntity);
           if (geniEntity?.thumbnails?.[0]) {
             // setThumbnails((thumbnails) =>
