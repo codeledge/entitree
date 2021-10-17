@@ -63,24 +63,14 @@ export default async function getGeniEntities(
       console.log("options ent", entity);
 
       // siblings and spouses don't need connectors, so no currentPropId is passed
-      if (options?.currentPropId) {
-        await addGeniEntityConnectors(entity, options);
-      }
+      // if (options?.currentPropId) {
+      await addGeniEntityConnectors(entity, options);
+      // }
 
       return Promise.resolve([...accumulator, entity]);
     },
     Promise.resolve([]),
   );
-
-  // geniProfiles.results.forEach(async (geniProfile) => {
-  //   //add all custom fields
-  //   const entity = formatGeniProfile(geniProfile);
-
-  //   addEntityConnectors(entity?.id, options);
-  //   console.log(entity);
-  //   entities.push(entity);
-  // });
-  // console.log("entities", entities);
 
   return entities;
 }

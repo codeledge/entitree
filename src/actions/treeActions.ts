@@ -140,6 +140,7 @@ export const toggleParents =
         const { languageCode, wikibaseAlias, geni } = getState().settings;
         const { currentProp } = getState().tree;
 
+        // try {
         const parents = await getParentEntities(entityNode, languageCode, {
           wikibaseAlias,
           currentPropId: currentProp?.id,
@@ -147,6 +148,10 @@ export const toggleParents =
           addLeftIds: currentProp?.id === CHILD_ID,
           geniAccessToken: geni.access_token,
         });
+        // } catch (err) {
+        //   // dispatch(collapseParents({ entityNode }));
+        //   return;
+        // }
 
         dispatch(expandParents({ entityNode, parents, options }));
 

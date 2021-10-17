@@ -1,3 +1,4 @@
+import { CHILD_ID, DEFAULT_PROPERTY_ALL } from "constants/properties";
 import React, { useEffect } from "react";
 import {
   setCurrentEntity,
@@ -6,9 +7,9 @@ import {
 } from "store/treeSlice";
 import { useAppSelector, wrapper } from "store";
 
-import { DEFAULT_PROPERTY_ALL } from "constants/properties";
 import Div100vh from "react-div-100vh";
-import DrawingArea from "geni/components/DrawingArea";
+import DrawingArea from "components/DrawingArea";
+import { EntityProp } from "types/Entity";
 import Error from "next/error";
 import Footer from "layout/Footer";
 import Head from "next/head";
@@ -130,8 +131,12 @@ export const getServerSideProps = wrapper.getServerSideProps(
       return { props: { errorCode: 404 } };
     console.log("lang found");
     const decodedPropSlug = decodeURIComponent(propSlug);
-    const currentProp = "family_tree";
-
+    // const currentProp = "family_tree";
+    const currentProp: EntityProp = {
+      id: CHILD_ID,
+      label: "family_tree",
+      slug: "family_tree",
+    };
     let itemId;
     let itemThumbnail;
     if (itemSlug) {
@@ -155,7 +160,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     dispatch(setCurrentEntity(currentEntity));
     // if (itemProps) dispatch(setCurrentEntityProps(itemProps));
-    // if (currentProp) dispatch(setCurrentProp(currentProp));
+    if (currentProp) dispatch(setCurrentProp(currentProp));
 
     const ogTitle = `${currentEntity.label} - ${SITE_NAME}`;
 

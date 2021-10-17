@@ -58,8 +58,10 @@ import useVideoOverlay from "hooks/useVideoOverlay";
 export default memo(({ node }: { node: EntityNode }) => {
   const dispatch = useDispatch();
 
-  usePreload(node);
-  useRootExpanded(node);
+  if (node.wikidataId) {
+    usePreload(node);
+    useRootExpanded(node);
+  }
   useBookmarks(node);
   useVideoOverlay(node);
 
@@ -68,33 +70,36 @@ export default memo(({ node }: { node: EntityNode }) => {
   const [thumbnails, setThumbnails] = useState<Image[]>(node.thumbnails || []);
   // let processedImageUrls = []; //Don't ask users to import images that have already been imported
   useEffect(() => {
-    getDataprickImages(node.id.substr(1))
-      .then((imageSet) => {
-        imageSet?.forEach((thumbnail) => {
-          setThumbnails((thumbnails) => [thumbnail, ...thumbnails]);
-        });
-      })
-      .catch(errorHandler);
-    if (settings.showExternalImages) {
-      if (node.peoplepillImageUrl) {
-        isValidImage(node.peoplepillImageUrl)
-          .then((valid) => {
-            if (valid) {
-              const ppImage = {
-                url: node.peoplepillImageUrl,
-                sourceUrl: `https://peoplepill.com/people/${node.peoplepillSlug}`,
-                downloadUrl: node.peoplepillImageUrl,
-                alt: `Image from peoplepill`,
-              } as Image;
-              setThumbnails((thumbnails) => [ppImage, ...thumbnails]);
-            }
-          })
-          .catch(errorHandler);
+    //Only query geni if coming from wikidata
+    if (node.wikidataId) {
+      getDataprickImages(node.id.substr(1))
+        .then((imageSet) => {
+          imageSet?.forEach((thumbnail) => {
+            setThumbnails((thumbnails) => [thumbnail, ...thumbnails]);
+          });
+        })
+        .catch(errorHandler);
+      if (settings.showExternalImages) {
+        if (node.peoplepillImageUrl) {
+          isValidImage(node.peoplepillImageUrl)
+            .then((valid) => {
+              if (valid) {
+                const ppImage = {
+                  url: node.peoplepillImageUrl,
+                  sourceUrl: `https://peoplepill.com/people/${node.peoplepillSlug}`,
+                  downloadUrl: node.peoplepillImageUrl,
+                  alt: `Image from peoplepill`,
+                } as Image;
+                setThumbnails((thumbnails) => [ppImage, ...thumbnails]);
+              }
+            })
+            .catch(errorHandler);
+        }
       }
     }
   }, []);
   useEffect(() => {
-    if (node.geniId && settings.showExternalImages) {
+    if (node.wikidataId && node.geniId && settings.showExternalImages) {
       getGeniProfile(node.geniId)
         .then((geniProfile) => {
           console.log(geniProfile);

@@ -41,18 +41,16 @@ export default function Home() {
               </p>
               <StyledRow>
                 <StyledCol xs={12} md={6}>
-                  <a
-                    title="Go to Queen Elizabeth II family tree"
-                    href="/en/family_tree/Elizabeth_II"
-                  >
+                  <a title="" href="/geni">
                     <Card>
                       <ImgBox
                         alt="Queen Elizabeth II family tree"
-                        src="/examples/queen.png"
+                        src="https://upload.wikimedia.org/wikipedia/commons/f/fe/Geni_Logo.png"
                       />
 
                       <Card.Body>
-                        Explore the British royal family tree 👸🏻🤴
+                        Start exploring &amp; visualizing your own family tree
+                        using if you have an account on Geni.com
                       </Card.Body>
                     </Card>
                   </a>
@@ -77,6 +75,23 @@ export default function Home() {
               <StyledRow>
                 <StyledCol xs={12} md={6}>
                   <a
+                    title="Go to Queen Elizabeth II family tree"
+                    href="/en/family_tree/Elizabeth_II"
+                  >
+                    <Card>
+                      <ImgBox
+                        alt="Queen Elizabeth II family tree"
+                        src="/examples/queen.png"
+                      />
+
+                      <Card.Body>
+                        Explore the British royal family tree 👸🏻🤴
+                      </Card.Body>
+                    </Card>
+                  </a>
+                </StyledCol>
+                {/* <StyledCol xs={12} md={6}>
+                  <a
                     title="The Simpson's family tree"
                     href="/en/family_tree/Homer_Simpson?0u0=u"
                   >
@@ -92,7 +107,7 @@ export default function Home() {
                       </Card.Body>
                     </Card>
                   </a>
-                </StyledCol>
+                </StyledCol> */}
                 <StyledCol xs={12} md={6}>
                   <a
                     title="Go to Joe Biden's family tree"

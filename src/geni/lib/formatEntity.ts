@@ -16,11 +16,11 @@ export default function formatGeniProfile(geniProfile: GeniProfile) {
   entity.gender = geniProfile?.gender || "";
   entity.isHuman = true;
   entity.label = geniProfile?.name; //geniProfile?.first_name + " " + geniProfile?.last_name;
-  entity.description = geniProfile?.id || "";
+  entity.description = geniProfile?.occupation || "";
   entity.geniProfileId = entity.id;
   entity.geniId = geniProfile?.guid; //geniProfile?.profile_url.split("/").pop();
   entity.geniProfileUrl = geniProfile?.profile_url;
-  entity.occupation = geniProfile?.occupation || "";
+  // entity.occupation = geniProfile?.occupation || "";
   const firstNames = geniProfile?.first_name + " " + geniProfile?.middle_name;
   entity.birthName = firstNames;
   //add Geni dates and country

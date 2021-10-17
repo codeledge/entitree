@@ -179,7 +179,7 @@ function createGeniUrl(
 export async function geniApi(
   apiRoute: GeniApiRouteType = "profile",
   params: GeniApiParams,
-  serverside: boolean,
+  serverside: boolean | undefined,
 ): Promise<GeniProfileResults | null> {
   // const ids = geniIds.join(",");
   const url = createGeniUrl(apiRoute, params);
