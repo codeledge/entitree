@@ -74,6 +74,7 @@ export const loadEntity = async ({
     addLeftIds: currentProp?.id === CHILD_ID,
     addRightIds: currentProp?.id === CHILD_ID,
     geniAccessToken,
+    serverside: true,
   });
 
   return { currentEntity, currentProp, itemProps };

@@ -22,6 +22,7 @@ type Options = ConnectorOptions & {
   secondLanguageCode?: LangCode;
   downIdsAlreadySorted?: boolean;
   geniAccessToken: string;
+  serverside: boolean;
 };
 
 export default async function getEntities(

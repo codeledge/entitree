@@ -11,6 +11,10 @@ export const getEntityUrl = (
 ) => {
   let wikibasePrefix = "";
   let slug = "";
+  if (entity.id.substr(0, 3) === "G60") {
+    wikibaseAlias = "geni";
+    propSlug = "family_tree";
+  }
   switch (wikibaseAlias) {
     case "wikidata":
       slug = entity.wikipediaSlug || entity.id;

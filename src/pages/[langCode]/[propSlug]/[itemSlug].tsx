@@ -110,6 +110,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
     let itemThumbnail = "";
     if (isItemId(itemSlug)) {
       itemId = itemSlug;
+    } else if (itemSlug.substr(0, 3) === "G60") {
+      itemId = itemSlug;
     } else {
       try {
         //TODO: cache this
