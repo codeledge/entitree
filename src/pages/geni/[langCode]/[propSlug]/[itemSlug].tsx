@@ -139,7 +139,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
     };
     let itemId;
     let itemThumbnail;
-    if (itemSlug) {
+    if (itemSlug === "me") {
+      itemId = "";
+    } else if (itemSlug) {
       //check if id is correct
       itemId = itemSlug;
     } else {

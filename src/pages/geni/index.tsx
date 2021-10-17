@@ -66,12 +66,23 @@ export default function Home() {
                 <br />
                 {cookie.geni?.loggedIn ? (
                   <>
-                    <span>
-                      You are logged in, your token is{" "}
-                      {cookie.geni.access_token}
-                    </span>
+                    <a href="/geni/en/family_tree/me">
+                      <Button title="">Show my tree</Button>
+                    </a>
                     <br />
-                    <Button onClick={() => setCookie("geni", "")} title="">
+                    <div>
+                      ✅ You are logged in
+                      <span hidden>
+                        your token is {cookie.geni.access_token}
+                      </span>
+                    </div>
+                    <br />
+                    <hr />
+                    <Button
+                      color="#ff5c5c"
+                      onClick={() => setCookie("geni", "")}
+                      title=""
+                    >
                       Logout
                     </Button>
 

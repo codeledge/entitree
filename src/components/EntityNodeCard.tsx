@@ -61,9 +61,9 @@ export default memo(({ node }: { node: EntityNode }) => {
   if (node.wikidataId) {
     usePreload(node);
     useRootExpanded(node);
+    useBookmarks(node);
+    useVideoOverlay(node);
   }
-  useBookmarks(node);
-  useVideoOverlay(node);
 
   const [showModal, setShowModal] = useState(false);
   const [lifeSpanInYears, setLifeSpanInYears] = useState(node.lifeSpanInYears);
