@@ -106,9 +106,9 @@ export default memo(({ node }: { node: EntityNode }) => {
           const geniEntity = formatGeniProfile(geniProfile);
           console.log(geniEntity);
           if (geniEntity?.thumbnails?.[0]) {
-            // setThumbnails((thumbnails) =>
-            // thumbnails.concat(geniEntity.thumbnails[0]), FIX IMPORTANT
-            // );
+            setThumbnails(
+              (thumbnails) => thumbnails.concat(geniEntity.thumbnails[0]), //FIX IMPORTANT
+            );
           }
           if (!node.lifeSpanInYears && geniEntity.lifeSpanInYears) {
             setLifeSpanInYears(geniEntity.lifeSpanInYears);

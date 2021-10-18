@@ -20,6 +20,7 @@ import { IoMdExpand } from "react-icons/io";
 import ReactGA from "react-ga";
 import { RiFocus3Line } from "react-icons/ri";
 import { SITE_NAME } from "constants/meta";
+import { download } from "helpers/screenshot";
 import fitEdges from "treeHelpers/fitEdges";
 import { useAppSelector } from "store";
 
@@ -33,6 +34,7 @@ export const Navigation = ({
 }: any) => {
   return (
     <StyledNavigation>
+      <ScreenshotButton />
       <ZoomInButton zoomIn={zoomIn} />
       <ZoomOutButton zoomOut={zoomOut} />
       <CenterTreeButton resetTransform={resetTransform} />
@@ -105,6 +107,31 @@ const ZoomOutButton = memo(({ zoomOut }: any) => {
     >
       <Button variant="light" onClick={zoomOutWrapper}>
         <FiMinus />
+      </Button>
+    </OverlayTrigger>
+  );
+});
+
+const ScreenshotButton = memo(() => {
+  const screenshotWrapper = () => {
+    ReactGA.event({
+      category: "Navigation",
+      action: "screenshot",
+    });
+    const node = document.getElementsByClassName(
+      "Graph__NodesContainer-sc-1bzxejf-3",
+    )[0];
+
+    download(node, `screenshot`);
+  };
+
+  return (
+    <OverlayTrigger
+      placement="right"
+      overlay={<Tooltip id="screenshot">Download the current tree</Tooltip>}
+    >
+      <Button variant="light" onClick={screenshotWrapper}>
+        <FiPrinter />
       </Button>
     </OverlayTrigger>
   );
