@@ -21,7 +21,9 @@ export default function Graph({
   const { currentEntity, entitiesMap, width, height, fit } = useAppSelector(
     ({ tree }) => tree,
   );
-  const { followNavigation } = useAppSelector(({ settings }) => settings);
+  const { followNavigation, orientation } = useAppSelector(
+    ({ settings }) => settings,
+  );
 
   const theme = useTheme();
   const dispatch = useDispatch();
@@ -30,9 +32,9 @@ export default function Graph({
   const [rels, setRels] = useState<EntityRel[]>([]);
 
   useEffect(() => {
-    if (currentEntity && entitiesMap) {
+    if (currentEntity?.treeId && entitiesMap) {
       const { map, nodes, rels, maxRight, maxLeft, maxBottom, maxTop } =
-        layoutFromMap<Entity>(currentEntity.treeId!, entitiesMap, {
+        layoutFromMap<Entity>(currentEntity.treeId, entitiesMap, {
           clone: true,
           secondDegreeSpacing: theme.separationCousins,
           firstDegreeSpacing: theme.separationSameGroup,
@@ -45,6 +47,7 @@ export default function Graph({
           sourcesAccessor: "openParentTreeIds",
           sourceTargetSpacing: theme.separationVertical,
           targetsAccessor: "openChildTreeIds",
+          orientation,
         });
 
       //console.log({ nodes, rels, maxRight, maxLeft, maxBottom, maxTop });
@@ -88,7 +91,7 @@ export default function Graph({
         });
       }
     }
-  }, [currentEntity, entitiesMap, theme]);
+  }, [currentEntity, entitiesMap, theme, orientation]);
 
   const containerStyle = useMemo(() => ({ width, height }), [width, height]);
   const cssCenterTransformStyle = useMemo(

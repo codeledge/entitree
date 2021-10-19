@@ -48,6 +48,7 @@ export default function SettingsModal({ show, onHideModal }) {
     imageType,
     imageOverflow,
     followNavigation,
+    orientation,
   } = useAppSelector(({ settings }) => settings);
   const { currentProp, currentEntity } = useAppSelector(({ tree }) => tree);
 
@@ -108,6 +109,34 @@ export default function SettingsModal({ show, onHideModal }) {
           </div>
         </Collapse>
         <hr />
+        <Dropdown>
+          <Dropdown.Toggle as={CustomToggle}>
+            <span className="label">Orientation</span> {orientation}
+          </Dropdown.Toggle>
+          <Dropdown.Menu>
+            <Dropdown.Item
+              eventKey={1}
+              active={orientation === "vertical"}
+              onClick={() => {
+                dispatch(setSetting({ orientation: "vertical" }));
+              }}
+            >
+              Vertical
+            </Dropdown.Item>
+            <Dropdown.Item
+              eventKey={2}
+              active={orientation === "horizontal"}
+              onClick={() => {
+                dispatch(setSetting({ orientation: "horizontal" }));
+              }}
+            >
+              Horizontal
+            </Dropdown.Item>
+          </Dropdown.Menu>
+          <Form.Text className="text-muted mt-0">
+            Choose which way your tree will grow
+          </Form.Text>
+        </Dropdown>
         <Dropdown className="langDropdown">
           <Dropdown.Toggle as={CustomToggle}>
             <span className="label">Language</span> {currentLang?.name}

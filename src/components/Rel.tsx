@@ -3,11 +3,13 @@ import styled, { useTheme } from "styled-components";
 
 import { EntityRel } from "types/EntityRel";
 import getPathD from "lib/getPathD";
+import useSettings from "hooks/useSettings";
 
 const Rel = ({ rel: { source, target } }: { rel: EntityRel }) => {
   const theme = useTheme();
+  const { orientation } = useSettings();
 
-  return <ThemedRel d={getPathD(source, target, theme)} />;
+  return <ThemedRel d={getPathD(source, target, theme, orientation)} />;
 };
 
 export default memo(Rel);

@@ -25,6 +25,7 @@ export type SettingsState = {
   showGenderColor: boolean;
   themeCode: string;
   wikibaseAlias: WikibaseAlias;
+  orientation: "horizontal" | "vertical";
 };
 
 const initialState: SettingsState = {
@@ -42,6 +43,7 @@ const initialState: SettingsState = {
   showGenderColor: false,
   themeCode: defaultTheme.code,
   wikibaseAlias: "wikidata",
+  orientation: "horizontal",
 };
 
 export const SETTINGS_SLICE_NAME = "settings";
