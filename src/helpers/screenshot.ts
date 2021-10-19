@@ -6,7 +6,7 @@ export const download = (
   name: string,
   options?: Options,
 ) => {
-  toPng(ref, { cacheBust: true, pixelRatio: 1, ...options })
+  toPng(ref, { cacheBust: true, pixelRatio: 1, quality: 1, ...options })
     .then((dataUrl) => {
       const link = document.createElement("a");
       link.download = `${name}.png`;

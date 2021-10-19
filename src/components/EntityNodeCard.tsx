@@ -215,6 +215,9 @@ export default memo(({ node }: { node: EntityNode }) => {
 
   //this is needed to make it work with root being server side rightIds added!
   const filteredRightIds = node.rightIds?.filter((rightId) => {
+    if (!node.wikidataId) {
+      return true;
+    }
     if (
       settings.rightEntityOption.propIds.indexOf(SPOUSE_ID) > -1 &&
       node.spousesIds?.includes(rightId)
@@ -228,6 +231,7 @@ export default memo(({ node }: { node: EntityNode }) => {
 
     return false;
   });
+  console.log(filteredRightIds);
   let thumbnailStyle = {};
   if (
     currentThumbnail?.imageDb === true &&

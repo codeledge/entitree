@@ -146,6 +146,7 @@ export const toggleParents =
           currentPropId: currentProp?.id,
           addUpIds: true,
           addLeftIds: currentProp?.id === CHILD_ID,
+          // addRightIds: currentProp?.id === CHILD_ID,//FIX Show second spouse of parents.
           geniAccessToken: geni?.access_token,
         });
         // } catch (err) {
@@ -274,6 +275,9 @@ export const toggleSpouses =
         });
 
         const filteredRightEntities = spouses?.filter((spouse) => {
+          if (!entityNode.wikidataId) {
+            return true;
+          }
           if (
             rightEntityOption.propIds.indexOf(SPOUSE_ID) > -1 &&
             entityNode.spousesIds?.includes(spouse.id)

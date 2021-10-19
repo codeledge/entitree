@@ -100,10 +100,13 @@ export default async function addGeniEntityConnectors(
   // const childrenUnion = childrenRels?.[0]?.[0]; //can be multiple, change later
   // const childrenIds = getIdsByUnionAndType(relations, childrenUnion, "child");
 
-  if (!entity.upIds?.length) entity.upIds = parentsIds;
-  if (!entity.downIds?.length) entity.downIds = childrenIds;
-  if (!entity.leftIds?.length) entity.leftIds = siblingIds;
-  if (!entity.rightIds?.length) entity.rightIds = spouseIds;
+  if (options.addUpIds && !entity.upIds?.length) entity.upIds = parentsIds;
+  if (options.addDownIds && !entity.downIds?.length)
+    entity.downIds = childrenIds;
+  if (options.addLeftIds && !entity.leftIds?.length)
+    entity.leftIds = siblingIds;
+  if (options.addRightIds && !entity.rightIds?.length)
+    entity.rightIds = spouseIds;
   console.log("added ids", entity);
   // console.log(entity);
   // return entity;
