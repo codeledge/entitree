@@ -136,19 +136,6 @@ export async function getGeniProfile(geniId: string): Promise<GeniProfile> {
   // }
 }
 
-// export async function getGeniProfileAxios(
-//   geniId: string,
-// ): Promise<GeniProfile | undefined> {
-//   // try {
-//   const { data } = await axios.get(
-//     `https://www.geni.com/api/profile-${geniId}?access_token=G6vd9cVFuYvBdNkNJgLeKpZy9GXgmtfeyXCden3c`,
-//   );
-//   return data;
-//   // } catch (e) {
-//   //   //TODO: go through server and use axios
-//   // }
-// }
-
 export type GeniApiRouteType = "profile" | "profile/immediate-family";
 export type GeniApiParams = {
   ids?: string;

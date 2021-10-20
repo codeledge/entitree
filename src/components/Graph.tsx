@@ -117,7 +117,7 @@ export default function Graph({
                 ))}
               </g>
             </RelsContainer>
-            <NodesContainer style={containerStyle}>
+            <NodesContainer id="nodesContainer" style={containerStyle}>
               <div
                 style={{
                   position: "absolute",

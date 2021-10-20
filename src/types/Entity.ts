@@ -38,7 +38,6 @@ export interface WikiEntity {
   sitelinks?: Record<string, Sitelink>;
 }
 export type Entity = WikiEntity & NodeProperties & GeniImmediateFamily;
-export type GeniEntity = GeniImmediateFamily & NodeProperties;
 
 export interface NodeProperties {
   abolishedDate?: string;

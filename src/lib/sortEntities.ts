@@ -1,6 +1,5 @@
-import { Entity, GeniEntity } from "types/Entity";
-
 import { DateTime } from "luxon";
+import { Entity } from "types/Entity";
 
 /*
   Sort entities by birth date, youngest child will be on the left, 
