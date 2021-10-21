@@ -245,7 +245,7 @@ export default memo(({ node }: { node: EntityNode }) => {
         getWikibaseEntitiesLabel(
           [node.id],
           settings.secondLabelCode as LangCode,
-          settings.wikibaseAlias,
+          settings.dataSource,
         )
           .then(([secondLabel]) => {
             setSecondLabel(secondLabel);

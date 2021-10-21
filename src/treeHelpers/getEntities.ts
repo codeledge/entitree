@@ -42,7 +42,7 @@ export default async function getEntities(
   const wikibaseEntitiesMap = await getWikibaseEntities({
     ids,
     languages,
-    wikibaseAlias: options.wikibaseAlias,
+    dataSource: options.dataSource,
   });
 
   const entities = await ids.reduce(async (acc: Promise<Entity[]>, id) => {
@@ -59,7 +59,7 @@ export default async function getEntities(
     const entity = formatEntity(
       wikibaseEntitiesMap[id],
       languageCode,
-      options?.wikibaseAlias,
+      options?.dataSource,
     );
 
     //filter out isInfantDeath by default

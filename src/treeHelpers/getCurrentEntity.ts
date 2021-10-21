@@ -1,21 +1,21 @@
 import { Entity, EntityProp } from "types/Entity";
 
 import { DEFAULT_PROPERTY_ALL } from "constants/properties";
+import { DataSource } from "wikibase/getWikibaseInstance";
 import { FAMILY_TREE_TRANSLATIONS } from "constants/langs";
 import { LangCode } from "types/Lang";
-import { WikibaseAlias } from "wikibase/getWikibaseInstance";
 import { getRootEntity } from "treeHelpers/getEntities";
 import getWikibaseConstants from "wikibase/getWikibaseConstants";
 import getWikibaseEntityProps from "wikibase/getWikibaseEntityProps";
 
 export const getCurrentEntity = async ({
   entityId,
-  wikibaseAlias,
+  dataSource,
   langCode,
   propSlug,
 }: {
   entityId: string;
-  wikibaseAlias: WikibaseAlias;
+  dataSource: DataSource;
   langCode: LangCode;
   propSlug?: string;
 }): Promise<{
@@ -24,12 +24,12 @@ export const getCurrentEntity = async ({
   currentEntityProps?: EntityProp[];
 }> => {
   const { CHILD_ID, FAMILY_IDS_MAP, FAMILY_TREE_PROP } =
-    getWikibaseConstants(wikibaseAlias);
+    getWikibaseConstants(dataSource);
 
   let currentEntityProps = await getWikibaseEntityProps(
     entityId,
     langCode,
-    wikibaseAlias,
+    dataSource,
   );
 
   let currentProp;
@@ -70,7 +70,7 @@ export const getCurrentEntity = async ({
   }
 
   const currentEntity = await getRootEntity(entityId, langCode, {
-    wikibaseAlias,
+    dataSource,
     currentPropId: currentProp?.id,
     addSourceIds: true,
     addTargetIds: true,

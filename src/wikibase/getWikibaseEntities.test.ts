@@ -6,7 +6,7 @@ describe("getWikibaseEntities", () => {
       const id = "Q1";
       const res = await getWikibaseEntities({
         ids: [id],
-        wikibaseAlias: "factgrid",
+        dataSource: "factgrid",
       });
       expect(res[id].missing).toBe(""); //They don't have Q1
       expect(Object.keys(res).length).toBe(1);
@@ -15,7 +15,7 @@ describe("getWikibaseEntities", () => {
       const id = "Q2";
       const res = await getWikibaseEntities({
         ids: [id],
-        wikibaseAlias: "factgrid",
+        dataSource: "factgrid",
       });
       expect(res[id].id).toBe(id);
       expect(Object.keys(res).length).toBe(1);
@@ -27,7 +27,7 @@ describe("getWikibaseEntities", () => {
       const id = "Q1";
       const res = await getWikibaseEntities({
         ids: [id],
-        wikibaseAlias: "wikidata",
+        dataSource: "wikidata",
       });
       expect(res[id].id).toBe(id);
       expect(res["123"]).toBeUndefined();
@@ -38,7 +38,7 @@ describe("getWikibaseEntities", () => {
       const res = await getWikibaseEntities({
         ids: [id],
         languages: ["fr", "de"],
-        wikibaseAlias: "wikidata",
+        dataSource: "wikidata",
       });
       expect(res[id].labels?.fr).not.toBeUndefined();
       expect(res[id].labels?.de).not.toBeUndefined();
@@ -50,7 +50,7 @@ describe("getWikibaseEntities", () => {
       const res = await getWikibaseEntities({
         ids: [id],
         props: ["labels"],
-        wikibaseAlias: "wikidata",
+        dataSource: "wikidata",
       });
       expect(res[id].labels).not.toBeUndefined();
       expect(res[id].descriptions).toBeUndefined();
@@ -64,7 +64,7 @@ describe("getWikibaseEntities", () => {
       const entitties = await getWikibaseEntities({
         ids,
         props: [],
-        wikibaseAlias: "wikidata",
+        dataSource: "wikidata",
       });
       expect(entitties[ids[0]].labels?.en.value).toBe("universe");
       expect(entitties.Q47["missing"]).toBe("");

@@ -64,11 +64,11 @@ export const toggleChildren =
         addUrlBookmark(entityNode.treeId!, CHILD_BOOKMARK_SYMBOL);
     } else {
       try {
-        const { languageCode, wikibaseAlias } = getState().settings;
+        const { languageCode, dataSource } = getState().settings;
         const { currentProp } = getState().tree;
 
         const children = await getChildEntities(entityNode, languageCode, {
-          wikibaseAlias,
+          dataSource,
           currentPropId: currentProp?.id,
           addTargetIds: true,
           addNextAfterIds: currentProp?.id === CHILD_ID,
@@ -94,11 +94,11 @@ export const preloadChildren =
     )
       return;
 
-    const { languageCode, wikibaseAlias } = getState().settings;
+    const { languageCode, dataSource } = getState().settings;
     const { currentProp } = getState().tree;
 
     const children = await getChildEntities(entityNode, languageCode, {
-      wikibaseAlias,
+      dataSource,
       currentPropId: currentProp?.id,
       addTargetIds: true,
       addNextAfterIds: currentProp?.id === CHILD_ID,
@@ -135,11 +135,11 @@ export const toggleParents =
         addUrlBookmark(entityNode.treeId!, PARENT_BOOKMARK_SYMBOL);
     } else {
       try {
-        const { languageCode, wikibaseAlias } = getState().settings;
+        const { languageCode, dataSource } = getState().settings;
         const { currentProp } = getState().tree;
 
         const parents = await getParentEntities(entityNode, languageCode, {
-          wikibaseAlias,
+          dataSource,
           currentPropId: currentProp?.id,
           addSourceIds: true,
           addNextBeforeIds: currentProp?.id === CHILD_ID,
@@ -164,11 +164,11 @@ export const preloadParents =
       !entityNode.sourceIds
     )
       return;
-    const { languageCode, wikibaseAlias } = getState().settings;
+    const { languageCode, dataSource } = getState().settings;
     const { currentProp } = getState().tree;
 
     const parents = await getParentEntities(entityNode, languageCode, {
-      wikibaseAlias,
+      dataSource,
       currentPropId: currentProp?.id,
       addSourceIds: true,
       addNextBeforeIds: currentProp?.id === CHILD_ID,
@@ -195,10 +195,10 @@ export const toggleSiblings =
         addUrlBookmark(entityNode.treeId!, SIBLING_BOOKMARK_SYMBOL);
     } else {
       try {
-        const { languageCode, wikibaseAlias } = getState().settings;
+        const { languageCode, dataSource } = getState().settings;
 
         const siblings = await getSiblingEntities(entityNode, languageCode, {
-          wikibaseAlias,
+          dataSource,
         });
 
         dispatch(
@@ -227,9 +227,9 @@ export const preloadSiblings =
     )
       return;
 
-    const { languageCode, wikibaseAlias } = getState().settings;
+    const { languageCode, dataSource } = getState().settings;
     const siblings = await getSiblingEntities(entityNode, languageCode, {
-      wikibaseAlias,
+      dataSource,
     });
 
     dispatch(setPreloadedSiblings({ entityNode, siblings }));
@@ -254,11 +254,11 @@ export const toggleSpouses =
         addUrlBookmark(entityNode.treeId!, SPOUSE_BOOKMARK_SYMBOL);
     } else {
       try {
-        const { languageCode, rightEntityOption, wikibaseAlias } =
+        const { languageCode, rightEntityOption, dataSource } =
           getState().settings;
 
         const spouses = await getSpouseEntities(entityNode, languageCode, {
-          wikibaseAlias,
+          dataSource,
         });
 
         const filteredRightEntities = spouses?.filter((spouse) => {
@@ -302,9 +302,9 @@ export const preloadSpouses =
     )
       return;
 
-    const { languageCode, wikibaseAlias } = getState().settings;
+    const { languageCode, dataSource } = getState().settings;
     const spouses = await getSpouseEntities(entityNode, languageCode, {
-      wikibaseAlias,
+      dataSource,
     });
 
     dispatch(setPreloadedSpouses({ entityNode, spouses }));

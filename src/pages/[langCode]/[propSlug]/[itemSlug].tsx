@@ -7,7 +7,6 @@ import {
 import { useAppSelector, wrapper } from "store";
 
 import { DEFAULT_PROPERTY_ALL } from "constants/properties";
-import Div100vh from "react-div-100vh";
 import DrawingArea from "components/DrawingArea";
 import Error from "next/error";
 import Footer from "layout/Footer";
@@ -15,6 +14,7 @@ import { HeadMeta } from "layout/HeadMeta";
 import Header from "layout/Header";
 import { LANGS } from "constants/langs";
 import { LangCode } from "types/Lang";
+import { Page } from "layout/Page";
 import SearchBar from "layout/SearchBar";
 import TreeLoader from "layout/TreeLoader";
 import { createMetaTags } from "seo/createMetaTags";
@@ -24,7 +24,6 @@ import getWikipediaArticle from "wikipedia/getWikipediaArticle";
 import isInIframe from "lib/isInIframe";
 import { isItemId } from "helpers/isItemId";
 import { setSetting } from "store/settingsSlice";
-import styled from "styled-components";
 import { useDispatch } from "react-redux";
 
 const TreePage = ({
@@ -44,7 +43,7 @@ const TreePage = ({
 
   // force settings to be as url, otherwise you get a mix up
   useEffect(() => {
-    dispatch(setSetting({ languageCode: langCode, wikibaseAlias: "wikidata" }));
+    dispatch(setSetting({ languageCode: langCode, dataSource: "wikidata" }));
   }, []);
 
   if (errorCode) {
@@ -71,11 +70,6 @@ const TreePage = ({
     </>
   );
 };
-
-const Page = styled(Div100vh)`
-  display: flex;
-  flex-direction: column;
-`;
 
 export const getServerSideProps = wrapper.getServerSideProps(
   async ({ store: { dispatch }, query }) => {
@@ -136,7 +130,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
       const { currentEntity, currentProp, currentEntityProps } =
         await getCurrentEntity({
           entityId,
-          wikibaseAlias: "wikidata",
+          dataSource: "wikidata",
           langCode,
           propSlug: decodedPropSlug,
         });

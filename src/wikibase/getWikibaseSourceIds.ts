@@ -1,16 +1,13 @@
-import {
-  WikibaseAlias,
-  getWikibaseInstance,
-} from "wikibase/getWikibaseInstance";
+import { DataSource, getWikibaseInstance } from "wikibase/getWikibaseInstance";
 
 import axios from "axios";
 
 export default async function getUpIds(
   entityId: string,
   propId: string,
-  wikibaseAlias: WikibaseAlias,
+  dataSource: DataSource,
 ): Promise<string[]> {
-  const wikibaseInstance = getWikibaseInstance(wikibaseAlias);
+  const wikibaseInstance = getWikibaseInstance(dataSource);
 
   const url = wikibaseInstance.getReverseClaims(propId, entityId);
   const { data } = await axios.get(url);

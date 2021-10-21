@@ -1,7 +1,7 @@
 import { Card, Col, Container, Row } from "react-bootstrap";
+import { Content, Main, Page } from "layout/Page";
 import React, { useEffect } from "react";
 
-import Div100vh from "react-div-100vh";
 import Footer from "layout/Footer";
 import Header from "../layout/Header";
 import SearchBar from "layout/SearchBar";
@@ -20,7 +20,7 @@ export default function Home() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(setSetting({ wikibaseAlias: "wikidata" }));
+    dispatch(setSetting({ dataSource: "wikidata" }));
   }, []);
 
   return (
@@ -298,21 +298,6 @@ export async function getServerSideProps({ req }) {
 
   return { props: {} };
 }
-
-const Page = styled(Div100vh)`
-  display: flex;
-  flex-direction: column;
-`;
-
-const Main = styled.main`
-  flex-grow: 1;
-  position: relative;
-`;
-
-const Content = styled.main`
-  max-width: 680px;
-  margin: 0 auto;
-`;
 
 const ImgBox = ({ alt, src }) => {
   return (

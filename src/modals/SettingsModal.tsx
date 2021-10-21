@@ -36,7 +36,7 @@ export default function SettingsModal({ show, onHideModal }) {
 
   const {
     languageCode,
-    wikibaseAlias,
+    dataSource,
     rightEntityOption,
     showGenderColor,
     showExtraInfo,
@@ -124,7 +124,7 @@ export default function SettingsModal({ show, onHideModal }) {
                     dispatch(
                       switchLanguage(
                         lang.code,
-                        wikibaseAlias,
+                        dataSource,
                         currentEntity.id,
                         currentProp?.id,
                       ),
@@ -279,7 +279,7 @@ export default function SettingsModal({ show, onHideModal }) {
             (blue for men, red for women)
           </Form.Text>
         </Form.Group>
-        {wikibaseAlias === "wikidata" && (
+        {dataSource === "wikidata" && (
           <>
             <Form.Group controlId="extraInfo">
               <Form.Check
