@@ -1,17 +1,17 @@
 import { DEFAULT_PROPERTY_ALL } from "constants/properties";
+import { DataSource } from "wikibase/getWikibaseInstance";
 import { Entity } from "types/Entity";
 import { LangCode } from "types/Lang";
-import { WikibaseAlias } from "wikibase/getWikibaseInstance";
 
 export const getEntityUrl = (
   langCode: LangCode,
   propSlug: string, //pass empty for "all"
   entity: Pick<Entity, "id" | "wikipediaSlug">,
-  wikibaseAlias: WikibaseAlias,
+  dataSource: DataSource,
 ) => {
   let wikibasePrefix = "";
   let slug = "";
-  switch (wikibaseAlias) {
+  switch (dataSource) {
     case "wikidata":
       slug = entity.wikipediaSlug || entity.id;
       break;

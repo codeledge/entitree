@@ -28,7 +28,7 @@ export default function SearchBar() {
   const { currentEntity, currentProp, loadingEntity, currentEntityProps } =
     useAppSelector(({ tree }) => tree);
 
-  const { wikibaseAlias } = useAppSelector(({ settings }) => settings);
+  const { dataSource } = useAppSelector(({ settings }) => settings);
 
   const currentLang = useCurrentLang();
   const router = useRouter();
@@ -45,7 +45,7 @@ export default function SearchBar() {
     if (debouncedSearchTerm && fromKeyboard && currentLang) {
       setShowSuggestions(true);
       setLoadingSuggestions(true);
-      wikidataSearchTerm(debouncedSearchTerm, currentLang.code, wikibaseAlias)
+      wikidataSearchTerm(debouncedSearchTerm, currentLang.code, dataSource)
         .then((results) => {
           const filteredResults = results.filter(({ id, description }) => {
             // remove current entity from results
@@ -149,7 +149,7 @@ export default function SearchBar() {
                             currentLang.code,
                             prop.slug,
                             currentEntity,
-                            wikibaseAlias,
+                            dataSource,
                           );
                           router.push(url);
                         }}

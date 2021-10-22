@@ -1,10 +1,10 @@
 import * as FACTGRID_PROPERTIES from "constants/factgrid/properties";
 import * as WIKIDATA_PROPERTIES from "constants/properties";
 
-import { WikibaseAlias } from "./getWikibaseInstance";
+import { DataSource } from "./getWikibaseInstance";
 
-export default function getWikibaseConstants(wikibaseAlias: WikibaseAlias) {
-  switch (wikibaseAlias) {
+export default function getWikibaseConstants(dataSource: DataSource) {
+  switch (dataSource) {
     case "factgrid":
       return FACTGRID_PROPERTIES;
 

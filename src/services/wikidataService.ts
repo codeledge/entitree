@@ -1,4 +1,4 @@
-import { WikibaseAlias } from "wikibase/getWikibaseInstance";
+import { DataSource } from "wikibase/getWikibaseInstance";
 import axios from "axios";
 import serviceSuccessInterceptor from "./serviceSuccessInterceptor";
 
@@ -35,12 +35,12 @@ type Response = {
 export const searchTerm = async (
   term,
   languageCode,
-  wikibaseAlias: WikibaseAlias,
+  dataSource: DataSource,
 ) => {
   const baseURL = {
     wikidata: "https://www.wikidata.org",
     factgrid: "https://database.factgrid.de",
-  }[wikibaseAlias];
+  }[dataSource];
 
   const wikibaseService = axios.create({
     baseURL,

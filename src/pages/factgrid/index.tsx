@@ -1,14 +1,13 @@
+import { Content, Main, Page } from "layout/Page";
 import React, { useEffect } from "react";
 
 import { Container } from "react-bootstrap";
-import Div100vh from "react-div-100vh";
 import Footer from "layout/Footer";
 import Header from "../../layout/Header";
 import SearchBar from "layout/SearchBar";
 import { Title } from "layout/Title";
 import TreeLoader from "layout/TreeLoader";
 import { setSetting } from "store/settingsSlice";
-import styled from "styled-components";
 import { useAppSelector } from "store";
 import { useDispatch } from "react-redux";
 
@@ -17,7 +16,7 @@ export default function Home() {
 
   // force settings to be as url, otherwise you get a mix up
   useEffect(() => {
-    dispatch(setSetting({ wikibaseAlias: "factgrid" }));
+    dispatch(setSetting({ dataSource: "factgrid" }));
   }, []);
 
   const { loadingEntity } = useAppSelector(({ tree }) => tree);
@@ -45,18 +44,3 @@ export default function Home() {
     </Page>
   );
 }
-
-const Page = styled(Div100vh)`
-  display: flex;
-  flex-direction: column;
-`;
-
-const Main = styled.main`
-  flex-grow: 1;
-  position: relative;
-`;
-
-const Content = styled.main`
-  max-width: 560px;
-  margin: 0 auto;
-`;

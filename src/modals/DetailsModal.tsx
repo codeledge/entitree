@@ -14,7 +14,7 @@ import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 
 export default function DetailsModal({ node, onHideModal, nodeImages }) {
-  const { languageCode, wikibaseAlias } = useAppSelector(
+  const { languageCode, dataSource } = useAppSelector(
     ({ settings }) => settings,
   );
   const { currentEntity, currentProp } = useAppSelector(({ tree }) => tree);
@@ -40,20 +40,14 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
         })
         .catch(errorHandler);
     }
-  }, [
-    languageCode,
-    wikibaseAlias,
-    images.length,
-    node.wikipediaSlug,
-    node.label,
-  ]);
+  }, [languageCode, dataSource, images.length, node.wikipediaSlug, node.label]);
 
   useEffect(() => {
     if (node.birthPlaceId || node.deathPlaceId) {
       getWikibaseEntitiesLabel(
         [node.birthPlaceId, node.deathPlaceId],
         languageCode,
-        wikibaseAlias,
+        dataSource,
       )
         .then(([birthPlaceLabel, deathPlaceLabel]) => {
           setBirthPlace(birthPlaceLabel);
@@ -61,7 +55,7 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
         })
         .catch(errorHandler);
     }
-  }, [languageCode, wikibaseAlias, node.birthPlaceId, node.deathPlaceId]);
+  }, [languageCode, dataSource, node.birthPlaceId, node.deathPlaceId]);
 
   return (
     <StyledModal show onHide={onHideModal}>
@@ -272,7 +266,7 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
                 languageCode,
                 currentProp?.slug || "",
                 node,
-                wikibaseAlias,
+                dataSource,
               );
               router.push(url);
               onHideModal();

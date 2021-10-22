@@ -1,8 +1,8 @@
 import { Entity, EntityProp } from "types/Entity";
 
 import { AppThunk } from "store";
+import { DataSource } from "wikibase/getWikibaseInstance";
 import { LangCode } from "types/Lang";
-import { WikibaseAlias } from "wikibase/getWikibaseInstance";
 import { getEntityUrl } from "helpers/getEntityUrl";
 import getEntityWikipediaSlug from "wikipedia/getEntityWikipediaSlug";
 import getWikibaseEntityProps from "wikibase/getWikibaseEntityProps";
@@ -12,7 +12,7 @@ import router from "next/router";
 export const switchLanguage =
   (
     langCode: LangCode,
-    wikibaseAlias: WikibaseAlias,
+    dataSource: DataSource,
     entityId: Entity["id"],
     propId?: EntityProp["id"],
   ): AppThunk =>
@@ -22,7 +22,7 @@ export const switchLanguage =
     const wikipediaSlug = await getEntityWikipediaSlug(
       entityId,
       langCode,
-      wikibaseAlias,
+      dataSource,
     );
 
     let propSlug = "";
@@ -30,7 +30,7 @@ export const switchLanguage =
       const translatedProps = await getWikibaseEntityProps(
         entityId,
         langCode,
-        wikibaseAlias,
+        dataSource,
       );
 
       const translatedProp = translatedProps?.find(({ id }) => id === propId);
@@ -45,7 +45,7 @@ export const switchLanguage =
         id: entityId,
         wikipediaSlug,
       },
-      wikibaseAlias,
+      dataSource,
     );
     router.push(url);
   };
