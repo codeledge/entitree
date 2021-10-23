@@ -85,7 +85,7 @@ export default function SearchBar() {
             setSearchResults(
               profiles.map((geniProfile) => {
                 return {
-                  id: geniProfile.id,
+                  id: "G" + geniProfile.guid,
                   title: geniProfile.name,
                   subtitle: geniProfile.birth?.date?.formatted_date,
                 };
@@ -181,7 +181,7 @@ export default function SearchBar() {
                           const url = getEntityUrl(
                             currentLang.code,
                             prop.slug,
-                            currentEntity,
+                            currentEntity.wikipediaSlug || currentEntity.id,
                             dataSource,
                           );
                           router.push(url);

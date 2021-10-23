@@ -104,10 +104,11 @@ export interface Entity extends WikibaseEntity {
 }
 
 export type Image = {
-  url: string;
   alt?: string;
-  sourceUrl?: string;
+  downloadUrl?: string;
   imageDb?: boolean;
+  sourceUrl?: string;
+  url: string;
   urlByType?: string[];
 };
 

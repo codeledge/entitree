@@ -32,6 +32,32 @@ export default function SearchSuggestions({
     ({ settings }) => settings,
   );
 
+  const onSuggestionClick = async (searchResult: SearchResult) => {
+    setShowSuggestions(false);
+    dispatch(reset());
+
+    let targetUrl = "";
+    if (dataSource === "wikidata") {
+      const wikipediaSlug = await getEntityWikipediaSlug(
+        searchResult.id,
+        languageCode,
+        dataSource,
+      );
+
+      targetUrl = getEntityUrl(
+        languageCode,
+        currentProp?.slug || "",
+        wikipediaSlug || searchResult.id,
+        "wikidata",
+      );
+    }
+    if (dataSource === "geni") {
+      targetUrl = getEntityUrl("en", "family_tree", searchResult.id, "geni");
+    }
+
+    if (targetUrl) router.push(targetUrl);
+  };
+
   return (
     <StyledSuggestions
       ref={wrapperRef}
@@ -50,25 +76,7 @@ export default function SearchSuggestions({
           key={searchResult.id}
           className="searchResultBtn"
           variant="light"
-          onClick={async () => {
-            setShowSuggestions(false);
-            dispatch(reset());
-            const wikipediaSlug = await getEntityWikipediaSlug(
-              searchResult.id,
-              languageCode,
-              dataSource,
-            );
-            const url = getEntityUrl(
-              languageCode,
-              currentProp?.slug || "",
-              {
-                id: searchResult.id,
-                wikipediaSlug,
-              },
-              dataSource,
-            );
-            router.push(url);
-          }}
+          onClick={() => onSuggestionClick(searchResult)}
         >
           <b>{searchResult.title}</b>
           {searchResult.subtitle && <i>{searchResult.subtitle}</i>}
