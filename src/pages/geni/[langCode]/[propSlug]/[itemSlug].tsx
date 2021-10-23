@@ -35,9 +35,9 @@ const GeniTreePage = ({
   twitterTitle,
   langCode,
 }) => {
-  const { loadingEntity } = useAppSelector(({ tree }) => tree);
-
   const dispatch = useDispatch();
+
+  const { loadingEntity } = useAppSelector(({ tree }) => tree);
 
   // force settings to be as url, otherwise you get a mix up
   useEffect(() => {

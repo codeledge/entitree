@@ -46,11 +46,11 @@ export default function SearchBar() {
 
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
   useEffect(() => {
-    if (debouncedSearchTerm && fromKeyboard && currentLang) {
-      setShowSuggestions(true);
-      setLoadingSuggestions(true);
-      try {
-        (async () => {
+    (async () => {
+      if (debouncedSearchTerm && fromKeyboard && currentLang) {
+        setShowSuggestions(true);
+        setLoadingSuggestions(true);
+        try {
           if (dataSource === "wikidata") {
             const results = await wikidataSearchTerm(
               debouncedSearchTerm,
@@ -92,16 +92,16 @@ export default function SearchBar() {
               }),
             );
           }
-        })();
-      } catch (error) {
-        errorHandler(error);
-      } finally {
+        } catch (error) {
+          errorHandler(error);
+        } finally {
+          setLoadingSuggestions(false);
+        }
+      } else {
         setLoadingSuggestions(false);
+        setShowSuggestions(false);
       }
-    } else {
-      setLoadingSuggestions(false);
-      setShowSuggestions(false);
-    }
+    })();
   }, [debouncedSearchTerm]);
 
   useEffect(() => {
