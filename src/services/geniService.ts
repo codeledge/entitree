@@ -1,102 +1,8 @@
+import { GeniProfile, GeniProfileResults } from "types/Geni";
+
+import axios from "axios";
 import jsonp from "jsonp-promise";
-
-type GeniLocation = {
-  city: string;
-  state: string;
-  country: string;
-  country_code: string;
-  latitude: number;
-  longitude: number;
-  formatted_location: string;
-};
-type GeniEvent = {
-  date: {
-    day: number;
-    month: number;
-    year: number;
-    formatted_date: string;
-    circa: boolean;
-  };
-  location: GeniLocation;
-};
-
-export type GeniProfile = {
-  id: string;
-  url: string;
-  profile_url: string;
-  public: boolean;
-  guid: string;
-  first_name: string;
-  middle_name: string;
-  maiden_name: string;
-  last_name: string;
-  name: string;
-  is_alive: boolean;
-  gender: string;
-  // current_residence: {
-  // city: "Houston",
-  // state: "Texas",
-  // country: "United States",
-  // country_code: "US",
-  // latitude: 29.76047,
-  // longitude: -95.36982,
-  // formatted_location: "Houston, Texas, United States"
-  // },
-  // created_by: "https://www.geni.com/api/profile-101",
-  // big_tree: true,
-  // claimed: false,
-  mugshot_urls: {
-    large?: string;
-    medium: string;
-    small: string;
-    thumb: string;
-    print: string;
-    thumb2: string;
-    url: string;
-  };
-  // unions: [
-  // "https://www.geni.com/api/union-322",
-  // "https://www.geni.com/api/union-200"
-  // ],
-  // marriage_orders: {
-  // 4025682641820010303: 1
-  // },
-  // birth_order: 2,
-  // living: false,
-  // creator: "https://www.geni.com/api/user-1",
-  birth: GeniEvent;
-  death: GeniEvent;
-  // death: {
-  // date: {
-  // day: 31,
-  // month: 7,
-  // year: 1996,
-  // formatted_date: "July 31, 1996"
-  // },
-  location: GeniLocation;
-  // location: {
-  // city: "Houston",
-  // state: "Texas",
-  // latitude: 29.76047,
-  // longitude: -95.36982,
-  // formatted_location: "Houston, Texas"
-  // }
-  // },
-  // photo_urls: {
-  // medium: "https://photos.geni.com/p10/1092/4345/53444837f974770e/yip94wig_medium.jpg",
-  // small: "https://photos.geni.com/p10/1092/4345/53444837f974770e/yip94wig_small.jpg",
-  // thumb: "https://photos.geni.com/p10/1092/4345/53444837f974770e/yip94wig_t.jpg",
-  // print: "https://photos.geni.com/p10/1092/4345/53444837f974770e/yip94wig_print.jpg",
-  // thumb2: "https://photos.geni.com/p10/1092/4345/53444837f974770e/yip94wig_t2.jpg",
-  // url: "https://www.geni.com/api/photo_crop-6000000008809903886"
-  // },
-  // created_at: "1166895284",
-  // updated_at: "1573975321",
-  // deleted: false
-  //add custom fields
-  birthYear: string;
-  deahtYear: string;
-};
+import serviceSuccessInterceptor from "./serviceSuccessInterceptor";
 
 export default async function getGeniProfile(
   geniId: string,
@@ -111,3 +17,26 @@ export default async function getGeniProfile(
     //TODO: go through server and use axios
   }
 }
+
+const geniService = axios.create({
+  baseURL: "https://www.geni.com/api",
+});
+
+geniService.interceptors.response.use(serviceSuccessInterceptor);
+
+export const searchGeni = async (
+  names: string,
+  access_token?: string,
+): Promise<GeniProfile[]> => {
+  const { results } = await geniService.get<any, GeniProfileResults>(
+    "/profile/search",
+    {
+      params: {
+        names,
+        access_token,
+      },
+      timeout: 8000,
+    },
+  );
+  return results;
+};

@@ -19,9 +19,7 @@ import SearchBar from "layout/SearchBar";
 import TreeLoader from "layout/TreeLoader";
 import { createMetaTags } from "seo/createMetaTags";
 import { getCurrentEntity } from "treeHelpers/getCurrentEntity";
-import getEntityIdFromSlug from "wikidata/getEntityIdFromSlug";
 import { getGeniCookies } from "helpers/cookies";
-import getWikipediaArticle from "wikipedia/getWikipediaArticle";
 import isInIframe from "lib/isInIframe";
 import { setSetting } from "store/settingsSlice";
 import { useDispatch } from "react-redux";
@@ -80,7 +78,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     };
 
     const geniCookie = getGeniCookies(req);
-    console.log(geniCookie);
+
     if (!geniCookie?.access_token) {
       return {
         redirect: {
@@ -93,17 +91,14 @@ export const getServerSideProps = wrapper.getServerSideProps(
     if (!LANGS.find(({ code }) => code === langCode))
       return { props: { errorCode: 404 } };
 
-    const decodedPropSlug = decodeURIComponent(propSlug);
-
     const currentProp = FAMILY_TREE_PROP;
 
-    let itemId;
-    let itemThumbnail;
+    let entityId;
     if (itemSlug === "me") {
-      itemId = "";
+      entityId = "";
     } else if (itemSlug) {
       //check if id is correct
-      itemId = itemSlug;
+      entityId = itemSlug;
     } else {
       return { props: { errorCode: 404, message: "ID not found" } };
     }
@@ -125,7 +120,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     twitterCard = "summary";
 
     return {
-      props: {}, //{ ogTitle, ogImage, twitterCard, ogDescription, langCode },
+      props: { ogImage, twitterCard }, //{ ogTitle, ogImage, twitterCard, ogDescription, langCode },
     };
   },
 );

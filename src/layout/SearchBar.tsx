@@ -7,15 +7,12 @@ import {
   Tooltip,
 } from "react-bootstrap";
 import React, { useEffect, useRef, useState } from "react";
-import {
-  SearchResult,
-  searchTerm as wikidataSearchTerm,
-} from "services/wikidataService";
 
 import { FaSearch } from "react-icons/fa";
 import SearchSuggestions from "./SearchSuggestions";
 import { errorHandler } from "handlers/errorHandler";
 import { getEntityUrl } from "helpers/getEntityUrl";
+import { searchGeniCall } from "services/apiService";
 import { setLoadingEntity } from "store/treeSlice";
 import styled from "styled-components";
 import { useAppSelector } from "store";
@@ -23,6 +20,13 @@ import { useCurrentLang } from "hooks/useCurrentLang";
 import useDebounce from "../hooks/useDebounce";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
+import { searchTerm as wikidataSearchTerm } from "services/wikidataService";
+
+export type SearchResult = {
+  id: string;
+  title: string;
+  subtitle?: string;
+};
 
 export default function SearchBar() {
   const { currentEntity, currentProp, loadingEntity, currentEntityProps } =
@@ -45,26 +49,55 @@ export default function SearchBar() {
     if (debouncedSearchTerm && fromKeyboard && currentLang) {
       setShowSuggestions(true);
       setLoadingSuggestions(true);
-      wikidataSearchTerm(debouncedSearchTerm, currentLang.code, dataSource)
-        .then((results) => {
-          const filteredResults = results.filter(({ id, description }) => {
-            // remove current entity from results
-            if (currentEntity?.id === id) {
-              return false;
-            }
+      try {
+        (async () => {
+          if (dataSource === "wikidata") {
+            const results = await wikidataSearchTerm(
+              debouncedSearchTerm,
+              currentLang.code,
+              dataSource,
+            );
+            const filteredResults = results.filter(({ id, description }) => {
+              // remove current entity from results
+              if (currentEntity?.id === id) {
+                return false;
+              }
 
-            // remove wikimedia disam pages
-            if (currentLang?.disambPageDesc === description) return false;
+              // remove wikimedia disam pages
+              if (currentLang?.disambPageDesc === description) return false;
 
-            return true;
-          });
+              return true;
+            });
 
-          setSearchResults(filteredResults);
-        })
-        .catch(errorHandler)
-        .finally(() => {
-          setLoadingSuggestions(false);
-        });
+            setSearchResults(filteredResults);
+            setSearchResults(
+              filteredResults.map((result) => {
+                return {
+                  id: result.id,
+                  title: result.label,
+                  subtitle: result.description,
+                };
+              }),
+            );
+          }
+          if (dataSource === "geni") {
+            const profiles = await searchGeniCall(debouncedSearchTerm);
+            setSearchResults(
+              profiles.map((geniProfile) => {
+                return {
+                  id: geniProfile.id,
+                  title: geniProfile.name,
+                  subtitle: geniProfile.birth?.date?.formatted_date,
+                };
+              }),
+            );
+          }
+        })();
+      } catch (error) {
+        errorHandler(error);
+      } finally {
+        setLoadingSuggestions(false);
+      }
     } else {
       setLoadingSuggestions(false);
       setShowSuggestions(false);

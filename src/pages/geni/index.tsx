@@ -6,7 +6,6 @@ import Footer from "layout/Footer";
 import Header from "layout/Header";
 import SearchBar from "layout/SearchBar";
 import { Title } from "layout/Title";
-//import { parseCookies } from "helpers/cookies";
 import { useCookies } from "react-cookie";
 import { useRouter } from "next/router";
 

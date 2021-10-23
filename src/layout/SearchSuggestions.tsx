@@ -1,7 +1,7 @@
 import { Button, Spinner } from "react-bootstrap";
 import React, { useRef } from "react";
 
-import { SearchResult } from "services/wikidataService";
+import { SearchResult } from "./SearchBar";
 import { getEntityUrl } from "helpers/getEntityUrl";
 import getEntityWikipediaSlug from "wikipedia/getEntityWikipediaSlug";
 import { reset } from "store/treeSlice";
@@ -70,8 +70,8 @@ export default function SearchSuggestions({
             router.push(url);
           }}
         >
-          <b>{searchResult.label}</b>
-          {searchResult.description && <i>{searchResult.description}</i>}
+          <b>{searchResult.title}</b>
+          {searchResult.subtitle && <i>{searchResult.subtitle}</i>}
         </Button>
       ))}
     </StyledSuggestions>
