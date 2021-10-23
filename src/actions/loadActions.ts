@@ -41,11 +41,9 @@ export const switchLanguage =
     const url = getEntityUrl(
       langCode,
       propSlug,
-      {
-        id: entityId,
-        wikipediaSlug,
-      },
+      wikipediaSlug || entityId,
       dataSource,
     );
+
     router.push(url);
   };

@@ -6,15 +6,20 @@ import Footer from "layout/Footer";
 import Header from "layout/Header";
 import SearchBar from "layout/SearchBar";
 import { Title } from "layout/Title";
-//import { parseCookies } from "helpers/cookies";
+import { setSetting } from "store/settingsSlice";
 import { useCookies } from "react-cookie";
+import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 
 export default function GeniHome() {
   const router = useRouter();
   const [cookie, setCookie, removeCookie] = useCookies(["geni"]);
+  const dispatch = useDispatch();
 
   // force settings to be as url, otherwise you get a mix up
+  useEffect(() => {
+    dispatch(setSetting({ dataSource: "geni" }));
+  }, []);
 
   useEffect(() => {
     if (router.query?.access_token && router.query?.expires_in) {

@@ -2,7 +2,7 @@ import { DataSource } from "wikibase/getWikibaseInstance";
 import axios from "axios";
 import serviceSuccessInterceptor from "./serviceSuccessInterceptor";
 
-export type SearchResult = {
+export type WikidataSearchResult = {
   aliases?: string[]; // ["Queen Elizabeth II"]
   id: string; // Q623
   description?: string; // "chemical element with symbol C and atomic number 6; common element of all known life"
@@ -19,8 +19,8 @@ export type SearchResult = {
   url: string; // www.wikidata.org/wiki/Q623
 };
 
-type Response = {
-  search: SearchResult[];
+type WikidataSearchResponse = {
+  search: WikidataSearchResult[];
   "search-continue": number;
   searchinfo: { search: string };
   success: number;
@@ -47,19 +47,19 @@ export const searchTerm = async (
   });
 
   wikibaseService.interceptors.response.use(serviceSuccessInterceptor);
-  const { search, error } = await wikibaseService.get<any, Response>(
-    "/w/api.php",
-    {
-      params: {
-        origin: "*",
-        action: "wbsearchentities",
-        format: "json",
-        uselang: languageCode,
-        language: languageCode,
-        search: term,
-      },
+  const { search, error } = await wikibaseService.get<
+    any,
+    WikidataSearchResponse
+  >("/w/api.php", {
+    params: {
+      origin: "*",
+      action: "wbsearchentities",
+      format: "json",
+      uselang: languageCode,
+      language: languageCode,
+      search: term,
     },
-  );
+  });
   if (error) throw error;
 
   return search;

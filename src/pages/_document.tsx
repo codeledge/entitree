@@ -41,11 +41,6 @@ export default class MyDocument extends Document {
       <Html>
         <Head>
           <link rel="icon" href="/favicon.png" />
-          <script
-            async
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6287145012628815"
-            crossOrigin="anonymous"
-          />
           <script async src="https://platform.twitter.com/widgets.js" />
           <meta
             name="keywords"

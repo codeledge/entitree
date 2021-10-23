@@ -18,6 +18,7 @@ export const getCurrentEntity = async ({
   dataSource: DataSource;
   langCode: LangCode;
   propSlug?: string;
+  geniAccessToken?: string;
 }): Promise<{
   currentEntity: Entity;
   currentProp?: EntityProp;
