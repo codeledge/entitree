@@ -18,12 +18,21 @@ export const getCurrentEntity = async ({
   dataSource: DataSource;
   langCode: LangCode;
   propSlug?: string;
-  geniAccessToken?: string;
 }): Promise<{
   currentEntity: Entity;
   currentProp?: EntityProp;
   currentEntityProps?: EntityProp[];
 }> => {
+  if (dataSource === "geni") {
+    const currentEntity = await getRootEntity(entityId, langCode, {
+      dataSource,
+      addSourceIds: true,
+      addTargetIds: true,
+    });
+
+    return { currentEntity };
+  }
+
   const { CHILD_ID, FAMILY_IDS_MAP, FAMILY_TREE_PROP } =
     getWikibaseConstants(dataSource);
 

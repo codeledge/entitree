@@ -38,7 +38,7 @@ import addWikidataUrl from "./addWikidataUrl";
 import addWikipediaUrl from "./addWikipediaUrl";
 import wbk from "wikibase-sdk";
 
-export default function formatEntity(
+export default function formatWikibaseEntity(
   wikibaseEntity: WikibaseEntity,
   languageCode: LangCode,
   dataSource: string,
