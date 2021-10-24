@@ -1,12 +1,11 @@
-import { Entity } from "types/Entity";
+import { Entity, Image } from "types/Entity";
+
 import { GeniProfile } from "types/Geni";
 import addGeniDates from "./addGeniDates";
 
 export const formatGeniProfile = (geniProfile: GeniProfile) => {
-  // const geniProfile = geniResult; //.focus;
   const entity: Entity = {
     id: "G" + geniProfile?.guid || "",
-    //focus: geniProfile,
   };
 
   entity.gender = geniProfile?.gender || "";
@@ -19,10 +18,11 @@ export const formatGeniProfile = (geniProfile: GeniProfile) => {
   // entity.occupation = geniProfile?.occupation || "";
   const firstNames = geniProfile?.first_name + " " + geniProfile?.middle_name;
   entity.birthName = firstNames;
+
   //add Geni dates and country
   addGeniDates(entity, geniProfile);
   if (geniProfile?.mugshot_urls?.thumb) {
-    const geniImg = {
+    const geniImg: Image = {
       url: geniProfile.mugshot_urls.medium,
       alt: `Geni.com image`,
       sourceUrl: geniProfile.profile_url,
@@ -31,6 +31,5 @@ export const formatGeniProfile = (geniProfile: GeniProfile) => {
     };
     entity.thumbnails = [geniImg];
   }
-  // console.log(entity);
   return entity;
 };
