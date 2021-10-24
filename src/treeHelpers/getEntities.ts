@@ -7,6 +7,10 @@ import {
 import addEntityConnectors, {
   ConnectorOptions,
 } from "../lib/addEntityConnectors";
+import {
+  getGeniImmediateFamilyCall,
+  getGeniProfilesCall,
+} from "services/apiService";
 import { sortByBirthDate, sortByGender } from "../lib/sortEntities";
 
 import { CHILD_ID } from "constants/properties";
@@ -14,8 +18,10 @@ import { DEFAULT_LANGS_CODES } from "../constants/langs";
 import { Entity } from "types/Entity";
 import { EntityNode } from "types/EntityNode";
 import { LangCode } from "types/Lang";
+import { addGeniEntityConnectors } from "lib/geni/addGeniEntityConnectors";
 import filterSpouses from "../lib/filterSpouses";
-import formatEntity from "../lib/formatEntity";
+import { formatGeniProfile } from "../lib/formatGeniProfile";
+import formatWikibaseEntity from "../lib/formatWikibaseEntity";
 import getWikibaseEntities from "wikibase/getWikibaseEntities";
 
 type Options = ConnectorOptions & {
@@ -28,6 +34,24 @@ export default async function getEntities(
   languageCode: LangCode,
   options: Options,
 ): Promise<Entity[]> {
+  if (options.dataSource === "geni") {
+    const profiles = await getGeniProfilesCall(ids);
+
+    const immediateFamilies = await getGeniImmediateFamilyCall(ids);
+
+    const entities = profiles.map((profile, index) => {
+      const formattedEntity = formatGeniProfile(profile);
+      addGeniEntityConnectors(
+        formattedEntity,
+        immediateFamilies[index],
+        options,
+      );
+      return formattedEntity;
+    });
+
+    return entities;
+  }
+
   const languages = DEFAULT_LANGS_CODES;
 
   //avoid duplicate language, but it won't break anyway
@@ -42,7 +66,7 @@ export default async function getEntities(
   const wikibaseEntitiesMap = await getWikibaseEntities({
     ids,
     languages,
-    wikibaseAlias: options.wikibaseAlias,
+    dataSource: options.dataSource,
   });
 
   const entities = await ids.reduce(async (acc: Promise<Entity[]>, id) => {
@@ -56,10 +80,10 @@ export default async function getEntities(
       return accumulator;
 
     //add all custom fields
-    const entity = formatEntity(
+    const entity = formatWikibaseEntity(
       wikibaseEntitiesMap[id],
       languageCode,
-      options?.wikibaseAlias,
+      options?.dataSource,
     );
 
     //filter out isInfantDeath by default

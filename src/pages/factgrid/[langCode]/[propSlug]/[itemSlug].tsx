@@ -42,7 +42,7 @@ const TreePage = ({
 
   // force settings to be as url, otherwise you get a mix up
   useEffect(() => {
-    dispatch(setSetting({ languageCode: langCode, wikibaseAlias: "factgrid" }));
+    dispatch(setSetting({ languageCode: langCode, dataSource: "factgrid" }));
   }, []);
 
   if (errorCode) {
@@ -99,7 +99,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
       const { currentEntity, currentProp, currentEntityProps } =
         await getCurrentEntity({
           entityId,
-          wikibaseAlias: "factgrid",
+          dataSource: "factgrid",
           langCode,
           propSlug: decodedPropSlug,
         });

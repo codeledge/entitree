@@ -38,13 +38,13 @@ import addLifeSpan from "../lib/addLifeSpan";
 import clsx from "clsx";
 import { errorHandler } from "handlers/errorHandler";
 import getFandomPageProps from "../services/fandomService";
-import getGeniProfile from "services/geniService";
 import getWikibaseEntitiesLabel from "wikibase/getWikibaseEntitiesLabel";
 import { isProperyId } from "helpers/isPropertyId";
 import { isValidImage } from "helpers/isValidImage";
 import { useAppSelector } from "store";
 import useBookmarks from "hooks/useBookmarks";
 import { useDispatch } from "react-redux";
+import useGeniProfileInfo from "hooks/useGeniProfileInfo";
 import usePreload from "hooks/usePreload";
 import useRootExpanded from "hooks/useRootExpanded";
 import useVideoOverlay from "hooks/useVideoOverlay";
@@ -55,15 +55,23 @@ import { RightToggle } from "./RightToggle";
 
 export default memo(({ node }: { node: EntityNode }) => {
   const dispatch = useDispatch();
-
-  usePreload(node);
-  useRootExpanded(node);
-  useBookmarks(node);
-  useVideoOverlay(node);
+  const theme = useTheme();
 
   const [showModal, setShowModal] = useState(false);
   const [lifeSpanInYears, setLifeSpanInYears] = useState(node.lifeSpanInYears);
   const [thumbnails, setThumbnails] = useState<Image[]>(node.thumbnails || []);
+  const [thumbnailIndex, setThumbnailIndex] = useState(0);
+  const [secondLabel, setSecondLabel] = useState<string>();
+  const [birthCountry, setBirthCountry] = useState(node.countryOfCitizenship);
+
+  const settings = useAppSelector(({ settings: s }) => s);
+  const { currentProp } = useAppSelector(({ tree }) => tree);
+
+  usePreload(node, settings);
+  useRootExpanded(node);
+  useBookmarks(node);
+  useVideoOverlay(node);
+
   // let processedImageUrls = []; //Don't ask users to import images that have already been imported
   useEffect(() => {
     getDataprickImages(node.id.substr(1))
@@ -92,77 +100,15 @@ export default memo(({ node }: { node: EntityNode }) => {
     }
   }, []);
 
-  useEffect(() => {
-    if (node.geniId && settings.showExternalImages) {
-      getGeniProfile(node.geniId)
-        .then((geniProfile) => {
-          if (geniProfile?.mugshot_urls?.thumb) {
-            const geniImg = {
-              url: geniProfile.mugshot_urls.medium,
-              alt: `Geni.com image`,
-              sourceUrl: geniProfile.profile_url,
-              downloadUrl:
-                geniProfile.mugshot_urls.large ??
-                geniProfile.mugshot_urls.medium,
-            } as Image;
-            setThumbnails((thumbnails) => thumbnails.concat(geniImg));
-          }
-
-          //add Geni dates and country
-          if (
-            geniProfile &&
-            (geniProfile.birth || geniProfile.death) &&
-            node.lifeSpanInYears === undefined
-          ) {
-            if (geniProfile.birth && geniProfile.birth.date) {
-              node.birthYear = "" + geniProfile.birth.date.year; //convert to string
-              if (
-                geniProfile.birth.date.circa &&
-                geniProfile.birth.date.circa === true
-              ) {
-                node.birthYear = "~" + node.birthYear;
-              }
-            }
-            if (geniProfile.death && geniProfile.death.date) {
-              node.deathYear = "" + geniProfile.death.date.year;
-              if (
-                geniProfile.death.date.circa &&
-                geniProfile.death.date.circa === true
-              ) {
-                node.deathYear = "~" + node.deathYear;
-              }
-            }
-            addLifeSpan(node);
-            setLifeSpanInYears(node.lifeSpanInYears);
-          }
-          if (
-            geniProfile &&
-            geniProfile.birth &&
-            geniProfile.birth.location &&
-            geniProfile.birth.location.country_code &&
-            !birthCountry
-          ) {
-            setBirthCountry({
-              code: geniProfile.birth.location.country_code,
-              name: geniProfile.birth.location.country,
-              text: "Born in " + geniProfile.birth.location.country + " (geni)",
-            });
-          } else if (
-            geniProfile &&
-            geniProfile.location &&
-            geniProfile.location.country_code &&
-            !birthCountry
-          ) {
-            setBirthCountry({
-              code: geniProfile.location.country_code,
-              name: geniProfile.location.country,
-              text: "Lived in " + geniProfile.location.country + " (geni)",
-            });
-          }
-        })
-        .catch(errorHandler);
-    }
-  }, []);
+  useGeniProfileInfo(
+    node,
+    settings,
+    setThumbnails,
+    addLifeSpan,
+    setLifeSpanInYears,
+    setBirthCountry,
+    birthCountry,
+  );
 
   useEffect(() => {
     if (node.fandomHost && node.fandomId) {
@@ -195,14 +141,6 @@ export default memo(({ node }: { node: EntityNode }) => {
     }
   }, []);
 
-  const [thumbnailIndex, setThumbnailIndex] = useState(0);
-  const theme = useTheme();
-
-  const [birthCountry, setBirthCountry] = useState(node.countryOfCitizenship);
-
-  const settings = useAppSelector(({ settings: s }) => s);
-  const { currentProp } = useAppSelector(({ tree }) => tree);
-
   const onHideModal = () => {
     setShowModal(false);
   };
@@ -220,7 +158,6 @@ export default memo(({ node }: { node: EntityNode }) => {
   const hasLabelOnly =
     theme.descriptionDisplay === "none" && !settings.secondLabelCode;
 
-  const [secondLabel, setSecondLabel] = useState<string>();
   const hasSecondLabel = Boolean(secondLabel);
   useEffect(() => {
     if (settings.secondLabelCode) {
@@ -244,7 +181,7 @@ export default memo(({ node }: { node: EntityNode }) => {
         getWikibaseEntitiesLabel(
           [node.id],
           settings.secondLabelCode as LangCode,
-          settings.wikibaseAlias,
+          settings.dataSource,
         )
           .then(([secondLabel]) => {
             setSecondLabel(secondLabel);

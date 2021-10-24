@@ -8,7 +8,7 @@ describe("addPeoplePillImage", () => {
     const id = "Q47122";
     const res = await getWikibaseEntities({
       ids: [id],
-      wikibaseAlias: "wikidata",
+      dataSource: "wikidata",
     });
 
     const entity: Entity = {

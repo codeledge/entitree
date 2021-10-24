@@ -1,15 +1,15 @@
 import { Entity, WikibaseEntity } from "types/Entity";
 
 import { DEFAULT_LANGS_CODES } from "../constants/langs";
+import { DataSource } from "wikibase/getWikibaseInstance";
 import { LangCode } from "types/Lang";
-import { WikibaseAlias } from "wikibase/getWikibaseInstance";
 import addLabel from "../lib/addLabel";
 import getWikibaseEntities from "wikibase/getWikibaseEntities";
 
 export default async function getWikibaseEntitiesLabel(
   ids: string[],
   languageCode: LangCode,
-  wikibaseAlias: WikibaseAlias,
+  dataSource: DataSource,
 ) {
   if (!ids || !ids.length)
     throw new Error("You need valid ids to getItemsLabel");
@@ -18,7 +18,7 @@ export default async function getWikibaseEntitiesLabel(
     ids,
     languages: [languageCode].concat(DEFAULT_LANGS_CODES),
     props: ["labels"],
-    wikibaseAlias,
+    dataSource,
   });
 
   const labels = Object.values(allentities).map(

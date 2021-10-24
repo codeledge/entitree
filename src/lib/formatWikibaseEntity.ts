@@ -38,10 +38,10 @@ import addWikidataUrl from "./addWikidataUrl";
 import addWikipediaUrl from "./addWikipediaUrl";
 import wbk from "wikibase-sdk";
 
-export default function formatEntity(
+export default function formatWikibaseEntity(
   wikibaseEntity: WikibaseEntity,
   languageCode: LangCode,
-  wikibaseAlias: string,
+  dataSource: string,
 ) {
   const simpleClaims = wbk.simplify.claims(wikibaseEntity.claims, {
     keepQualifiers: true,
@@ -54,14 +54,14 @@ export default function formatEntity(
 
   addLabel(entity, languageCode);
   addDescription(entity, languageCode);
-  if (wikibaseAlias === "factgrid") {
+  if (dataSource === "factgrid") {
     addFactgridUrl(entity);
     addFactgridIsHuman(entity);
     addFactgridGender(entity);
     addFactgridImages(entity);
   }
 
-  if (wikibaseAlias === "wikidata") {
+  if (dataSource === "wikidata") {
     addBirthDate(entity, languageCode);
     addDeathDate(entity, languageCode);
     addIsInfantDeath(entity);

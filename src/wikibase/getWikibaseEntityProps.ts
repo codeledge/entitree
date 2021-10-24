@@ -1,8 +1,5 @@
 import { DEFAULT_LANG, FAMILY_TREE_TRANSLATIONS } from "constants/langs";
-import {
-  WikibaseAlias,
-  getWikibaseInstance,
-} from "wikibase/getWikibaseInstance";
+import { DataSource, getWikibaseInstance } from "wikibase/getWikibaseInstance";
 
 import { EntityProp } from "types/Entity";
 import { LangCode } from "types/Lang";
@@ -13,9 +10,9 @@ import getWikibaseConstants from "./getWikibaseConstants";
 export default async function getWikibaseEntityProps(
   id: string,
   langCode: LangCode,
-  wikibaseAlias: WikibaseAlias,
+  dataSource: DataSource,
 ) {
-  const wbk = getWikibaseInstance(wikibaseAlias);
+  const wbk = getWikibaseInstance(dataSource);
 
   const url = await new Promise<string>((resolve, reject) => {
     try {
@@ -45,7 +42,7 @@ export default async function getWikibaseEntityProps(
     }
   });
 
-  const { FAMILY_IDS_MAP, CHILD_ID } = getWikibaseConstants(wikibaseAlias);
+  const { FAMILY_IDS_MAP, CHILD_ID } = getWikibaseConstants(dataSource);
 
   return axios
     .get(url)
