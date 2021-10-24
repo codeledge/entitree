@@ -24,6 +24,7 @@ export type SettingsState = {
   showFace: boolean;
   showGenderColor: boolean;
   themeCode: string;
+  orientation: "horizontal" | "vertical";
   dataSource: DataSource;
 };
 
@@ -41,6 +42,7 @@ const initialState: SettingsState = {
   showFace: true,
   showGenderColor: false,
   themeCode: defaultTheme.code,
+  orientation: "horizontal",
   dataSource: "wikidata",
 };
 

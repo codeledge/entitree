@@ -9,14 +9,9 @@ import {
   PARTNER_ID,
   SPOUSE_ID,
 } from "constants/properties";
-import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { FaEye, FaFemale, FaMale, FaUser } from "react-icons/fa";
-import {
-  FiChevronDown,
-  FiChevronLeft,
-  FiChevronRight,
-  FiChevronUp,
-} from "react-icons/fi";
+
 import { GiBigDiamondRing, GiPerson } from "react-icons/gi";
 import {
   IMAGE_SERVER_BASE_URL,
@@ -53,6 +48,10 @@ import useGeniProfileInfo from "hooks/useGeniProfileInfo";
 import usePreload from "hooks/usePreload";
 import useRootExpanded from "hooks/useRootExpanded";
 import useVideoOverlay from "hooks/useVideoOverlay";
+import { TopToggle } from "./TopToggle";
+import { LeftToggle } from "./LeftToggle";
+import { BottomToggle } from "./BottomToggle";
+import { RightToggle } from "./RightToggle";
 
 export default memo(({ node }: { node: EntityNode }) => {
   const dispatch = useDispatch();
@@ -417,96 +416,101 @@ export default memo(({ node }: { node: EntityNode }) => {
 
       {!settings.hideToggleButton && (
         <>
-          {node.nextBeforeIds && !!node.nextBeforeIds.length && (
-            <Button
-              className="siblingToggle relativeToggle"
-              variant="link"
-              disabled={node.loadingSiblings}
-              onClick={() => dispatch(toggleSiblings(node))}
-              title={
-                (node.openSiblingTreeIds ? "Collapse" : "Expand") + " siblings"
-              }
-            >
-              <div className="value">{node.nextBeforeIds.length}</div>
-              <div className="chevron mt-1 mb-1">
-                {node.openSiblingTreeIds ? (
-                  <FiChevronRight />
-                ) : (
-                  <FiChevronLeft />
-                )}
-              </div>
-              <div className="icon">
-                <RiGroupLine />
-              </div>
-            </Button>
-          )}
-          {!!filteredNextAfterIds?.length && (
-            <Button
-              className="spouseToggle relativeToggle"
-              variant="link"
-              disabled={node.loadingSpouses}
-              onClick={() => dispatch(toggleSpouses(node))}
-              title={
-                (node.openSpouseTreeIds ? "Collapse" : "Expand") +
-                " spouses/partners"
-              }
-            >
-              <div className="value">{filteredNextAfterIds.length}</div>
-              <div className="chevron mt-1 mb-1">
-                {node.openSpouseTreeIds ? (
-                  <FiChevronLeft />
-                ) : (
-                  <FiChevronRight />
-                )}
-              </div>
-              <div className="icon">
-                <GiBigDiamondRing />
-              </div>
-            </Button>
-          )}
-          {!!node.sourceIds?.length && (
-            <Button
-              className="parentToggle relativeToggle"
-              variant="link"
-              disabled={node.loadingParents}
-              onClick={() => dispatch(toggleParents(node))}
-            >
-              <span className="value mr-1">{node.sourceIds.length}</span>
-              <span className="chevron">
-                {node.openParentTreeIds ? <FiChevronDown /> : <FiChevronUp />}
-              </span>
-              {currentProp?.id === CHILD_ID && (
-                <span className="icon ml-1">
-                  <RiParentLine />
-                </span>
-              )}
-            </Button>
-          )}
-          {!!node.targetIds?.length && (
-            <Button
-              className="childrenToggle relativeToggle"
-              variant="link"
-              disabled={node.loadingChildren}
-              onClick={() => dispatch(toggleChildren(node))}
-            >
-              <span className="value mr-1">{node.targetsCount}</span>
-              <span className="chevron">
-                {node.openChildTreeIds ? <FiChevronUp /> : <FiChevronDown />}
-              </span>
-              {currentProp?.id === CHILD_ID && (
-                <span className="icon ml-1">
-                  <MdChildCare />
-                </span>
-              )}
-            </Button>
-          )}
-          {node.targetIds &&
+          {!!node.nextBeforeIds?.length &&
+            (settings.orientation === "vertical" ? (
+              <LeftToggle
+                disabled={node.loadingSiblings}
+                onClick={() => dispatch(toggleSiblings(node))}
+                icon={currentProp?.id === CHILD_ID && <RiGroupLine />}
+                open={node.openSiblingTreeIds}
+                counter={node.nextBeforeIds.length}
+                title={
+                  (node.openSiblingTreeIds ? "Collapse" : "Expand") +
+                  " siblings"
+                }
+              />
+            ) : (
+              <TopToggle
+                disabled={node.loadingSiblings}
+                onClick={() => dispatch(toggleSiblings(node))}
+                icon={currentProp?.id === CHILD_ID && <RiGroupLine />}
+                open={node.openSiblingTreeIds}
+                counter={node.nextBeforeIds.length}
+                title={
+                  (node.openSiblingTreeIds ? "Collapse" : "Expand") +
+                  " siblings"
+                }
+              />
+            ))}
+          {!!filteredNextAfterIds?.length &&
+            (settings.orientation === "vertical" ? (
+              <RightToggle
+                disabled={node.loadingSpouses}
+                onClick={() => dispatch(toggleSpouses(node))}
+                icon={currentProp?.id === CHILD_ID && <GiBigDiamondRing />}
+                open={node.openSpouseTreeIds}
+                counter={filteredNextAfterIds.length}
+                title={
+                  (node.openSpouseTreeIds ? "Collapse" : "Expand") +
+                  " spouses/partners"
+                }
+              />
+            ) : (
+              <BottomToggle
+                disabled={node.loadingSpouses}
+                onClick={() => dispatch(toggleSpouses(node))}
+                icon={currentProp?.id === CHILD_ID && <GiBigDiamondRing />}
+                open={node.openSpouseTreeIds}
+                counter={filteredNextAfterIds.length}
+                title={
+                  (node.openSpouseTreeIds ? "Collapse" : "Expand") +
+                  " spouses/partners"
+                }
+              />
+            ))}
+          {!!node.sourceIds?.length &&
+            (settings.orientation === "vertical" ? (
+              <TopToggle
+                disabled={node.loadingParents}
+                onClick={() => dispatch(toggleParents(node))}
+                icon={currentProp?.id === CHILD_ID && <RiParentLine />}
+                open={node.openParentTreeIds}
+                counter={node.sourceIds.length}
+              />
+            ) : (
+              <LeftToggle
+                disabled={node.loadingParents}
+                onClick={() => dispatch(toggleParents(node))}
+                icon={currentProp?.id === CHILD_ID && <RiParentLine />}
+                open={node.openParentTreeIds}
+                counter={node.sourceIds.length}
+              />
+            ))}
+          {!!node.targetIds?.length &&
+            (settings.orientation === "vertical" ? (
+              <BottomToggle
+                disabled={node.loadingChildren}
+                onClick={() => dispatch(toggleChildren(node))}
+                icon={currentProp?.id === CHILD_ID && <MdChildCare />}
+                open={node.openChildTreeIds}
+                counter={node.targetIds.length}
+              />
+            ) : (
+              <RightToggle
+                disabled={node.loadingChildren}
+                onClick={() => dispatch(toggleChildren(node))}
+                icon={currentProp?.id === CHILD_ID && <MdChildCare />}
+                open={node.openChildTreeIds}
+                counter={node.targetIds.length}
+              />
+            ))}
+          {/* {node.targetIds &&
             !node.targetIds.length &&
             !!node.targetsCount &&
             node.targetsCount > 0 &&
             currentProp?.id === CHILD_ID && (
-              <Button
-                className="childrenToggle relativeToggle"
+              <RelativeToggle
+                forChildren
                 variant="link"
                 title="Children not available, please add them on wikidata.org"
               >
@@ -514,8 +518,8 @@ export default memo(({ node }: { node: EntityNode }) => {
                 <span className="icon">
                   <MdChildCare />
                 </span>
-              </Button>
-            )}
+              </RelativeToggle>
+            )} */}
         </>
       )}
 
@@ -560,63 +564,7 @@ const ThemedNodeOuter = styled.div<SettingsState & { gender?: string }>`
       transform: translate(-50%, -50%);
     }
   }
-  .relativeToggle {
-    position: absolute;
-    padding: 2px;
-    font-size: 13px;
-    font-weight: bold;
-    line-height: 1;
-    transition: all;
-    min-height: 28px;
-    display: flex;
-    align-items: center;
-    @media print {
-      color: gray;
-    }
-    &:hover {
-      text-decoration: none;
-    }
-    &:focus {
-      text-decoration: underline;
-      box-shadow: none;
-    }
-    .chevron {
-      stroke-width: 2;
-      font-size: 20px;
-      @media print {
-        display: none;
-      }
-    }
-  }
-  .siblingToggle {
-    right: 100%;
-  }
-  .spouseToggle {
-    left: 100%;
-  }
-  .siblingToggle,
-  .spouseToggle {
-    top: 50%;
-    transform: translateY(-50%);
-    flex-direction: column;
-  }
-  .parentToggle,
-  .childrenToggle {
-    left: 50%;
-    flex-direction: row;
-    white-space: nowrap;
-    transform: translateX(-50%);
-    .value {
-      display: inline-block;
-      min-width: 1em; //default to optional icon width for central alignment
-    }
-  }
-  .parentToggle {
-    bottom: 100%;
-  }
-  .childrenToggle {
-    top: 100%;
-  }
+
   //  .colorIcons {
   //   position: absolute;
   //   bottom: 0;
@@ -630,25 +578,18 @@ const ThemedNodeOuter = styled.div<SettingsState & { gender?: string }>`
     width: 32px;
     z-index: 2; //needed for tooltip
   }
-  ${
-    ({ showGenderColor, gender }) =>
-      showGenderColor &&
-      gender &&
-      (gender === "female"
-        ? css`
-            background-color: #ffcccc;
-          `
-        : gender === "male"
-        ? css`
-            background-color: #ccd9ff;
-          `
-        : "")
-    // gender === "thirdgender"
-    // ? css`
-    //     background-color: rgba(238, 130, 238, 0.11);
-    //   `
-    // : ""
-  }
+  ${({ showGenderColor, gender }) =>
+    showGenderColor &&
+    gender &&
+    (gender === "female"
+      ? css`
+          background-color: #ffcccc;
+        `
+      : gender === "male"
+      ? css`
+          background-color: #ccd9ff;
+        `
+      : "")}
 `;
 
 const Badge = styled.div`
