@@ -1,4 +1,12 @@
-import { GeniProfile, GeniProfileResults } from "types/Geni";
+import {
+  GeniImmediateFamily,
+  GeniImmediateFamilyResults,
+} from "./../types/Geni";
+import {
+  GeniImmediateFamilyResponse,
+  GeniProfile,
+  GeniProfileResults,
+} from "types/Geni";
 
 import axios from "axios";
 import jsonp from "jsonp-promise";
@@ -53,4 +61,25 @@ export const searchGeni = async (names: string, access_token?: string) => {
     },
   );
   return results;
+};
+
+export const getGeniImmediateFamily = async (
+  guids: string,
+  access_token?: string,
+) => {
+  const response = await geniService.get<
+    any,
+    GeniImmediateFamily | GeniImmediateFamilyResults
+  >("/profile/immediate-family", {
+    params: {
+      guids,
+      access_token,
+      fields: "guid,id,gender",
+    },
+    timeout: 8000,
+  });
+
+  if ("results" in response) return response.results;
+
+  return [response];
 };
