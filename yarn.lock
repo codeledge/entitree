@@ -2385,10 +2385,10 @@ enquirer@^2.3.5:
   dependencies:
     ansi-colors "^4.1.1"
 
-entitree-flex@0.3.4:
-  version "0.3.4"
-  resolved "https://registry.yarnpkg.com/entitree-flex/-/entitree-flex-0.3.4.tgz#a782bc9eb04574a41fdd2a4dd3bf57bdc23e3e28"
-  integrity sha512-B5+CFdqUtzQAWiiipJpqk9HDRMdga4RYv9lQO1+0ynRLlYKGW57pQ6ESnsUTHw3MxtbqHIgtsb8KXhFDsV/iaw==
+entitree-flex@0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/entitree-flex/-/entitree-flex-0.4.0.tgz#c852afaebaee5d327a39d782dec41d0a019c0fbc"
+  integrity sha512-h+W/1UzOsiP68baFT76Skdv39msLq6EwfFeeQVATDlc5xlfRYuRZx5TpRTkZxNTuJXF4LUpiT2RR+ohGjl1olQ==
 
 error-ex@^1.3.1:
   version "1.3.2"
