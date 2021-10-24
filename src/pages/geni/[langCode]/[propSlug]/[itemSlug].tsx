@@ -102,7 +102,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     const geni = getGeniCookies(req);
 
-    ////////////// ROOT ///////////////////////////////////////////////////////////////////
+    // Server-side getRootEntity function
     const [profile] = await getGeniProfiles(entityId, geni.access_token);
 
     if (!profile) return { props: { errorCode: 404 } };
@@ -110,10 +110,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
     const currentEntity = formatGeniProfile(profile);
 
     currentEntity.treeId = "0";
-    /////////////////////////////////////////////////////////////////////////////////////////////
 
-    /////////////////// ADD CONNECTORS ///////////////////////////////////////////
-
+    // Server-side addConnetions function
     const [immediateFamily] = await getGeniImmediateFamily(
       entityId,
       geni.access_token,
@@ -125,11 +123,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
       addSourceIds: true,
       addNextBeforeIds: true,
     });
-    /////////////////////////////////////////////////////////////////////////////////////////////
 
     dispatch(setCurrentEntity(currentEntity));
     const currentProp = FAMILY_TREE_PROP;
-    dispatch(setCurrentProp(currentProp));
+    dispatch(setCurrentProp(FAMILY_TREE_PROP));
 
     const { ogDescription, ogTitle } = createMetaTags(
       langCode,
