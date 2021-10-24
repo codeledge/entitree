@@ -81,6 +81,8 @@ export const toggleChildren =
           addUrlBookmark(entityNode.treeId!, CHILD_BOOKMARK_SYMBOL);
       } catch (error) {
         console.error(error);
+      } finally {
+        dispatch(setLoadingChildren({ entityNode, value: false }));
       }
     }
   };
@@ -151,6 +153,8 @@ export const toggleParents =
           addUrlBookmark(entityNode.treeId!, PARENT_BOOKMARK_SYMBOL);
       } catch (error) {
         console.error(error);
+      } finally {
+        dispatch(setLoadingParents({ entityNode, value: false }));
       }
     }
   };
@@ -213,6 +217,8 @@ export const toggleSiblings =
           addUrlBookmark(entityNode.treeId!, SIBLING_BOOKMARK_SYMBOL);
       } catch (error) {
         console.error(error);
+      } finally {
+        dispatch(setLoadingSiblings({ entityNode, value: false }));
       }
     }
   };
@@ -288,6 +294,8 @@ export const toggleSpouses =
           addUrlBookmark(entityNode.treeId!, SPOUSE_BOOKMARK_SYMBOL);
       } catch (error) {
         console.error(error);
+      } finally {
+        dispatch(setLoadingSpouses({ entityNode, value: false }));
       }
     }
   };
