@@ -24,10 +24,24 @@ const geniService = axios.create({
 
 geniService.interceptors.response.use(serviceSuccessInterceptor);
 
-export const searchGeni = async (
-  names: string,
-  access_token?: string,
-): Promise<GeniProfile[]> => {
+export const getGeniProfiles = async (guids: string, access_token?: string) => {
+  const response = await geniService.get<any, GeniProfileResults | GeniProfile>(
+    "/profile",
+    {
+      params: {
+        guids,
+        access_token,
+      },
+      timeout: 8000,
+    },
+  );
+  if ("results" in response) return response.results;
+
+  // for a single guid the response is just the profile
+  return [response];
+};
+
+export const searchGeni = async (names: string, access_token?: string) => {
   const { results } = await geniService.get<any, GeniProfileResults>(
     "/profile/search",
     {

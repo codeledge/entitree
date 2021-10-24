@@ -39,12 +39,12 @@ export interface WikibaseEntity {
 
 export interface Entity extends WikibaseEntity {
   abolishedDate?: string;
+  areTargetIdsSorted?: boolean;
   birthDate?: string;
   birthISO?: string;
   birthName?: string;
   birthPlaceId?: string;
   birthYear?: string;
-  targetsCount?: number;
   closedChildTreeIds?: string[];
   closedParentTreeIds?: string[];
   closedSiblingTreeIds?: string[];
@@ -54,8 +54,6 @@ export interface Entity extends WikibaseEntity {
   deathPlaceId?: string;
   deathYear?: string;
   description?: string;
-  targetIds?: string[];
-  areTargetIdsSorted?: boolean;
   endDate?: string;
   externalLinks?: ExternalLink[];
   eyeColor?: PropColor;
@@ -65,13 +63,14 @@ export interface Entity extends WikibaseEntity {
   fandomUrl?: string;
   gender?: string;
   geniId?: string;
+  geniProfileId?: string;
+  geniProfileUrl?: string;
   hairColor?: PropColor;
   inceptionAblishedSpan?: string;
   inceptionDate?: string;
   isHuman?: boolean;
   isInfantDeath?: boolean;
   label?: string;
-  nextBeforeIds?: string[];
   lifeSpan?: string;
   lifeSpanInYears?: string;
   loadingChildren?: boolean;
@@ -79,6 +78,8 @@ export interface Entity extends WikibaseEntity {
   loadingSiblings?: boolean;
   loadingSpouses?: boolean;
   nameInKana?: string;
+  nextAfterIds?: string[];
+  nextBeforeIds?: string[];
   nickName?: string;
   occupations?: SparqlEmoji[];
   openChildTreeIds?: string[];
@@ -89,14 +90,15 @@ export interface Entity extends WikibaseEntity {
   peoplepillImageUrl?: string;
   peoplepillSlug?: string;
   religion?: SparqlEmoji;
-  nextAfterIds?: string[];
   simpleClaims?: SimpleClaims; //TODO not available on client
+  sourceIds?: string[];
   spousesIds?: string[];
   startDate?: string;
   startEndSpan?: string;
+  targetIds?: string[];
+  targetsCount?: number;
   thumbnails?: Image[];
   treeId?: string;
-  sourceIds?: string[];
   website?: string;
   wikidataUrl?: string;
   wikipediaSlug?: string;

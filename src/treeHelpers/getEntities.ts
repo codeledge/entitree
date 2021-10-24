@@ -15,7 +15,9 @@ import { Entity } from "types/Entity";
 import { EntityNode } from "types/EntityNode";
 import { LangCode } from "types/Lang";
 import filterSpouses from "../lib/filterSpouses";
-import formatEntity from "../lib/formatEntity";
+import { formatGeniProfile } from "../lib/formatGeniProfile";
+import formatWikibaseEntity from "../lib/formatWikibaseEntity";
+import { getGeniProfilesCall } from "services/apiService";
 import getWikibaseEntities from "wikibase/getWikibaseEntities";
 
 type Options = ConnectorOptions & {
@@ -28,6 +30,14 @@ export default async function getEntities(
   languageCode: LangCode,
   options: Options,
 ): Promise<Entity[]> {
+  if (options.dataSource === "geni") {
+    const profiles = await getGeniProfilesCall(ids);
+
+    const entities = profiles.map((profile) => formatGeniProfile(profile));
+
+    return entities;
+  }
+
   const languages = DEFAULT_LANGS_CODES;
 
   //avoid duplicate language, but it won't break anyway
@@ -56,7 +66,7 @@ export default async function getEntities(
       return accumulator;
 
     //add all custom fields
-    const entity = formatEntity(
+    const entity = formatWikibaseEntity(
       wikibaseEntitiesMap[id],
       languageCode,
       options?.dataSource,

@@ -1,9 +1,4 @@
 import React, { useEffect } from "react";
-import {
-  setCurrentEntity,
-  setCurrentEntityProps,
-  setCurrentProp,
-} from "store/treeSlice";
 import { useAppSelector, wrapper } from "store";
 
 import DrawingArea from "components/DrawingArea";
@@ -18,9 +13,11 @@ import { Page } from "layout/Page";
 import SearchBar from "layout/SearchBar";
 import TreeLoader from "layout/TreeLoader";
 import { createMetaTags } from "seo/createMetaTags";
-import { getCurrentEntity } from "treeHelpers/getCurrentEntity";
+import { formatGeniProfile } from "lib/formatGeniProfile";
 import { getGeniCookies } from "helpers/cookies";
+import { getGeniProfiles } from "services/geniService";
 import isInIframe from "lib/isInIframe";
+import { setCurrentEntity } from "store/treeSlice";
 import { setSetting } from "store/settingsSlice";
 import { useDispatch } from "react-redux";
 
@@ -103,15 +100,26 @@ export const getServerSideProps = wrapper.getServerSideProps(
       return { props: { errorCode: 404, message: "ID not found" } };
     }
 
-    const { currentEntity } = { currentEntity: {} };
+    const geni = getGeniCookies(req);
 
-    if (!currentEntity) return { props: { errorCode: 404 } };
+    const [profile] = await getGeniProfiles(
+      entityId.substr(1),
+      geni.access_token,
+    );
 
-    // const { ogDescription, ogTitle } = createMetaTags(
-    //   langCode,
-    //   currentEntity,
-    //   currentProp,
-    // );
+    if (!profile) return { props: { errorCode: 404 } };
+
+    const currentEntity = formatGeniProfile(profile);
+
+    currentEntity.treeId = "0";
+
+    dispatch(setCurrentEntity(currentEntity));
+
+    const { ogDescription, ogTitle } = createMetaTags(
+      langCode,
+      currentEntity,
+      currentProp,
+    );
 
     let ogImage = "";
     let twitterCard = "";
@@ -120,7 +128,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     twitterCard = "summary";
 
     return {
-      props: { ogImage, twitterCard }, //{ ogTitle, ogImage, twitterCard, ogDescription, langCode },
+      props: { ogTitle, ogImage, twitterCard, ogDescription, langCode },
     };
   },
 );
