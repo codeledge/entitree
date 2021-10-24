@@ -1,4 +1,6 @@
 import React, { useEffect } from "react";
+import { getGeniImmediateFamily, getGeniProfiles } from "services/geniService";
+import { setCurrentEntity, setCurrentProp } from "store/treeSlice";
 import { useAppSelector, wrapper } from "store";
 
 import DrawingArea from "components/DrawingArea";
@@ -12,12 +14,12 @@ import { LangCode } from "types/Lang";
 import { Page } from "layout/Page";
 import SearchBar from "layout/SearchBar";
 import TreeLoader from "layout/TreeLoader";
+import { addGeniEntityConnectors } from "lib/geni/addGeniEntityConnectors";
 import { createMetaTags } from "seo/createMetaTags";
 import { formatGeniProfile } from "lib/formatGeniProfile";
 import { getGeniCookies } from "helpers/cookies";
-import { getGeniProfiles } from "services/geniService";
+import { getIdsByUnionAndType } from "lib/geni/getIdsByUnionAndType";
 import isInIframe from "lib/isInIframe";
-import { setCurrentEntity } from "store/treeSlice";
 import { setSetting } from "store/settingsSlice";
 import { useDispatch } from "react-redux";
 
@@ -88,24 +90,20 @@ export const getServerSideProps = wrapper.getServerSideProps(
     if (!LANGS.find(({ code }) => code === langCode))
       return { props: { errorCode: 404 } };
 
-    const currentProp = FAMILY_TREE_PROP;
-
     let entityId;
     if (itemSlug === "me") {
       entityId = "";
     } else if (itemSlug) {
       //check if id is correct
-      entityId = itemSlug;
+      entityId = itemSlug.substr(1);
     } else {
       return { props: { errorCode: 404, message: "ID not found" } };
     }
 
     const geni = getGeniCookies(req);
 
-    const [profile] = await getGeniProfiles(
-      entityId.substr(1),
-      geni.access_token,
-    );
+    // Server-side getRootEntity function
+    const [profile] = await getGeniProfiles(entityId, geni.access_token);
 
     if (!profile) return { props: { errorCode: 404 } };
 
@@ -113,7 +111,22 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     currentEntity.treeId = "0";
 
+    // Server-side addConnetions function
+    const [immediateFamily] = await getGeniImmediateFamily(
+      entityId,
+      geni.access_token,
+    );
+
+    addGeniEntityConnectors(currentEntity, immediateFamily, {
+      addNextAfterIds: true,
+      addTargetIds: true,
+      addSourceIds: true,
+      addNextBeforeIds: true,
+    });
+
     dispatch(setCurrentEntity(currentEntity));
+    const currentProp = FAMILY_TREE_PROP;
+    dispatch(setCurrentProp(FAMILY_TREE_PROP));
 
     const { ogDescription, ogTitle } = createMetaTags(
       langCode,

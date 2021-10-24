@@ -90,10 +90,12 @@ export const treeSlice = createSlice({
     },
     setLoadingChildren: (
       state,
-      { payload: { entityNode } }: PayloadAction<{ entityNode: EntityNode }>,
+      {
+        payload: { entityNode, value = true },
+      }: PayloadAction<{ entityNode: EntityNode; value?: boolean }>,
     ) => {
       if (state.entitiesMap?.[entityNode.treeId!])
-        state.entitiesMap[entityNode.treeId!].loadingChildren = true;
+        state.entitiesMap[entityNode.treeId!].loadingChildren = value;
     },
     collapseChildren: (
       state,
@@ -164,10 +166,12 @@ export const treeSlice = createSlice({
     },
     setLoadingParents: (
       state,
-      { payload: { entityNode } }: PayloadAction<{ entityNode: EntityNode }>,
+      {
+        payload: { entityNode, value = true },
+      }: PayloadAction<{ entityNode: EntityNode; value?: boolean }>,
     ) => {
       if (state.entitiesMap?.[entityNode.treeId!])
-        state.entitiesMap[entityNode.treeId!].loadingParents = true;
+        state.entitiesMap[entityNode.treeId!].loadingParents = value;
     },
     collapseParents: (
       state,
@@ -240,10 +244,12 @@ export const treeSlice = createSlice({
     },
     setLoadingSiblings: (
       state,
-      { payload: { entityNode } }: PayloadAction<{ entityNode: EntityNode }>,
+      {
+        payload: { entityNode, value = true },
+      }: PayloadAction<{ entityNode: EntityNode; value?: boolean }>,
     ) => {
       if (state.entitiesMap?.[entityNode.treeId!])
-        state.entitiesMap[entityNode.treeId!].loadingSiblings = true;
+        state.entitiesMap[entityNode.treeId!].loadingSiblings = value;
     },
     collapseSiblings: (
       state,
@@ -318,10 +324,12 @@ export const treeSlice = createSlice({
     },
     setLoadingSpouses: (
       state,
-      { payload: { entityNode } }: PayloadAction<{ entityNode: EntityNode }>,
+      {
+        payload: { entityNode, value = true },
+      }: PayloadAction<{ entityNode: EntityNode; value?: boolean }>,
     ) => {
       if (state.entitiesMap?.[entityNode.treeId!])
-        state.entitiesMap[entityNode.treeId!].loadingSpouses = true;
+        state.entitiesMap[entityNode.treeId!].loadingSpouses = value;
     },
     collapseSpouses: (
       state,

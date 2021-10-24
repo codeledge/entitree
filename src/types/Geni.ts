@@ -1,24 +1,3 @@
-type GeniLocation = {
-  city: string;
-  state: string;
-  country: string;
-  country_code: string;
-  latitude: number;
-  longitude: number;
-  formatted_location: string;
-};
-
-type GeniEvent = {
-  date: {
-    day: number;
-    month: number;
-    year: number;
-    formatted_date: string;
-    circa: boolean;
-  };
-  location: GeniLocation;
-};
-
 export type GeniProfile = {
   id: string;
   url: string;
@@ -98,18 +77,25 @@ export type GeniProfile = {
   deahtYear: string;
 };
 
-export type GeniRelType = "child" | "partner";
-
-export type GeniEdge = {
-  [key: string]: {
-    rel: GeniRelType;
-  };
+type GeniLocation = {
+  city: string;
+  state: string;
+  country: string;
+  country_code: string;
+  latitude: number;
+  longitude: number;
+  formatted_location: string;
 };
 
-export type GeniNodes = {
-  [key: string]: GeniProfile & {
-    edges: GeniEdge[];
+type GeniEvent = {
+  date: {
+    day: number;
+    month: number;
+    year: number;
+    formatted_date: string;
+    circa: boolean;
   };
+  location: GeniLocation;
 };
 
 export type GeniProfileResults = {
@@ -121,15 +107,24 @@ export type GeniImmediateFamilyResults = {
 };
 
 export type GeniImmediateFamily = {
-  focus?: GeniProfile;
-  nodes?: GeniNodes[];
+  focus: GeniProfile;
+  nodes: Record<string, GeniNode>;
 };
 
-export type GeniApiRouteType = "profile" | "profile/immediate-family";
+export type GeniRelType = "child" | "partner";
 
-export type GeniApiParams = {
-  ids?: string;
-  guids?: string;
-  fields?: string;
-  access_token?: string;
+export type GeniEdge = {
+  rel: GeniRelType;
+};
+
+export type GeniNode = GeniProfile & {
+  edges: Record<string, GeniEdge>;
+};
+
+export type GeniUnion = {
+  id: string;
+  url: string;
+  guid: string;
+  status: "spouse";
+  edges: Record<string, GeniEdge>;
 };
