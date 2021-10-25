@@ -100,6 +100,7 @@ export interface Entity extends WikibaseEntity {
   thumbnails?: Image[];
   treeId?: string;
   website?: string;
+  wikidataId?: string;
   wikidataUrl?: string;
   wikipediaSlug?: string;
   wikipediaUrl?: string;
