@@ -6,16 +6,15 @@ import {
 } from "actions/treeActions";
 
 import { EntityNode } from "types/EntityNode";
-import { SettingsState } from "store/settingsSlice";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 
-export default function usePreload(node: EntityNode, settings: SettingsState) {
+export default function usePreload(node: EntityNode) {
   const dispatch = useDispatch();
 
   //preload connected nodes
   useEffect(() => {
-    if (!node.isRoot && settings.dataSource === "wikidata") {
+    if (!node.isRoot) {
       dispatch(preloadChildren(node));
       dispatch(preloadParents(node));
       dispatch(preloadSiblings(node));

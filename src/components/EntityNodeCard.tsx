@@ -6,8 +6,6 @@ import {
   CHILD_ID,
   NAME_IN_KANA_ID,
   NICKNAME_ID,
-  PARTNER_ID,
-  SPOUSE_ID,
 } from "constants/properties";
 import { FaEye, FaFemale, FaMale, FaUser } from "react-icons/fa";
 import { GiBigDiamondRing, GiPerson } from "react-icons/gi";
@@ -37,7 +35,6 @@ import { MdChildCare } from "react-icons/md";
 import { RightToggle } from "./toggle/RightToggle";
 import { SettingsState } from "store/settingsSlice";
 import { TopToggle } from "./toggle/TopToggle";
-import addLifeSpan from "../lib/addLifeSpan";
 import clsx from "clsx";
 import { errorHandler } from "handlers/errorHandler";
 import getFandomPageProps from "../services/fandomService";
@@ -51,6 +48,7 @@ import useGeniProfileInfo from "hooks/useGeniProfileInfo";
 import usePreload from "hooks/usePreload";
 import useRootExpanded from "hooks/useRootExpanded";
 import useVideoOverlay from "hooks/useVideoOverlay";
+import { filterSpousePartnersIds } from "filters/filterSpousePartnersIds";
 
 export default memo(({ node }: { node: EntityNode }) => {
   const dispatch = useDispatch();
@@ -67,11 +65,12 @@ export default memo(({ node }: { node: EntityNode }) => {
   const { currentProp } = useAppSelector(({ tree }) => tree);
 
   if (node.wikidataId) {
-    usePreload(node, settings);
-    useRootExpanded(node);
+    usePreload(node);
     useBookmarks(node);
     useVideoOverlay(node);
   }
+  //might get stuck on geni, but the expand icons will reset and triggered manually
+  useRootExpanded(node);
 
   // let processedImageUrls = []; //Don't ask users to import images that have already been imported
   useEffect(() => {
@@ -194,23 +193,8 @@ export default memo(({ node }: { node: EntityNode }) => {
   }, [settings.secondLabelCode]);
 
   //this is needed to make it work with root being server side nextAfterIds added!
-  const filteredNextAfterIds = node.nextAfterIds?.filter((rightId) => {
-    if (!node.wikidataUrl) {
-      return true;
-    }
-    if (
-      settings.rightEntityOption.propIds.indexOf(SPOUSE_ID) > -1 &&
-      node.spousesIds?.includes(rightId)
-    )
-      return true;
-    if (
-      settings.rightEntityOption.propIds.indexOf(PARTNER_ID) > -1 &&
-      node.partnersIds?.includes(rightId)
-    )
-      return true;
+  const filteredNextAfterIds = filterSpousePartnersIds(node, settings);
 
-    return false;
-  });
   let thumbnailStyle = {};
   if (
     currentThumbnail?.imageDb === true &&
