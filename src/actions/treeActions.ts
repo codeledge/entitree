@@ -1,10 +1,11 @@
+import { filterSpousePartnersIds } from "../filters/filterSpousePartnersIds";
 import {
   CHILD_BOOKMARK_SYMBOL,
   PARENT_BOOKMARK_SYMBOL,
   SIBLING_BOOKMARK_SYMBOL,
   SPOUSE_BOOKMARK_SYMBOL,
 } from "constants/bookmarks";
-import { CHILD_ID, PARTNER_ID, SPOUSE_ID } from "constants/properties";
+import { CHILD_ID } from "constants/properties";
 import {
   collapseChildren,
   collapseParents,
@@ -260,32 +261,26 @@ export const toggleSpouses =
         addUrlBookmark(entityNode.treeId!, SPOUSE_BOOKMARK_SYMBOL);
     } else {
       try {
-        const { languageCode, rightEntityOption, dataSource } =
-          getState().settings;
+        const { languageCode, dataSource } = getState().settings;
 
         const spouses = await getSpouseEntities(entityNode, languageCode, {
           dataSource,
         });
 
-        const filteredRightEntities = spouses?.filter((spouse) => {
-          if (
-            rightEntityOption.propIds.indexOf(SPOUSE_ID) > -1 &&
-            entityNode.spousesIds?.includes(spouse.id)
-          )
-            return true;
-          if (
-            rightEntityOption.propIds.indexOf(PARTNER_ID) > -1 &&
-            entityNode.partnersIds?.includes(spouse.id)
-          )
-            return true;
+        // This is the client side filter for spouses and/or partners
+        const filteredSpousePartnersIds = filterSpousePartnersIds(
+          entityNode,
+          getState().settings,
+        );
 
-          return false;
-        });
+        const filteredSpouses = spouses?.filter((spouse) =>
+          filteredSpousePartnersIds?.includes(spouse.id),
+        );
 
         dispatch(
           expandSpouses({
             entityNode,
-            spouses: filteredRightEntities,
+            spouses: filteredSpouses,
             options,
           }),
         );

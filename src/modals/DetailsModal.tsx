@@ -194,6 +194,16 @@ export default function DetailsModal({
               <img src="/icons/wikipedia.png" alt="Wikipedia" />
             </a>
           )}
+          {node.geniProfileUrl && (
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Open Geni in a new tab"
+              href={node.geniProfileUrl}
+            >
+              <img src="/icons/geni.png" alt="Geni link" />
+            </a>
+          )}
           {/*{node.wikipediaUrl && (*/}
           {/*  <a*/}
           {/*    target="_blank"*/}

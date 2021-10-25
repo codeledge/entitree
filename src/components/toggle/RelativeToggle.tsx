@@ -33,15 +33,4 @@ export const RelativeToggle = styled(Button)`
     display: inline-block;
     min-width: 1em; //default to optional icon width for central alignment
   }
-
-  ${({ forSiblings, forSpouses, forParents, forChildren, orientation }) => {
-    if (forSiblings)
-      return orientation === "vertical" ? LEFT_TOGGLE : TOP_TOGGLE;
-    if (forSpouses)
-      return orientation === "vertical" ? RIGHT_TOGGLE : BOTTOM_TOGGLE;
-    if (forParents)
-      return orientation === "vertical" ? TOP_TOGGLE : LEFT_TOGGLE;
-    if (forChildren)
-      return orientation === "vertical" ? BOTTOM_TOGGLE : RIGHT_TOGGLE;
-  }}
 `;

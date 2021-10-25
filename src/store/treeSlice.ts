@@ -363,10 +363,10 @@ export const treeSlice = createSlice({
 
       if (mapNode) {
         if (spouses) {
-          spouses.forEach((sibling) => {
-            if (state.entitiesMap) state.entitiesMap[sibling.treeId!] = sibling;
+          spouses.forEach((node) => {
+            if (state.entitiesMap) state.entitiesMap[node.treeId!] = node;
           });
-          mapNode.openSpouseTreeIds = spouses.map((child) => child.treeId!);
+          mapNode.openSpouseTreeIds = spouses.map((node) => node.treeId!);
         } else {
           mapNode.openSpouseTreeIds = mapNode.closedSpouseTreeIds;
         }
