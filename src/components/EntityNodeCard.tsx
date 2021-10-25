@@ -9,14 +9,13 @@ import {
   PARTNER_ID,
   SPOUSE_ID,
 } from "constants/properties";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { FaEye, FaFemale, FaMale, FaUser } from "react-icons/fa";
-
 import { GiBigDiamondRing, GiPerson } from "react-icons/gi";
 import {
   IMAGE_SERVER_BASE_URL,
   getDataprickImages,
 } from "services/imageService";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import React, { memo, useEffect, useState } from "react";
 import { RiGroupLine, RiParentLine } from "react-icons/ri";
 import styled, { css, useTheme } from "styled-components";
@@ -27,13 +26,17 @@ import {
   toggleSpouses,
 } from "actions/treeActions";
 
+import { BottomToggle } from "./toggle/BottomToggle";
 import { BsImage } from "react-icons/bs";
 import DetailsModal from "modals/DetailsModal";
 import { EntityNode } from "types/EntityNode";
 import { Image } from "types/Entity";
 import { LangCode } from "types/Lang";
+import { LeftToggle } from "./toggle/LeftToggle";
 import { MdChildCare } from "react-icons/md";
+import { RightToggle } from "./toggle/RightToggle";
 import { SettingsState } from "store/settingsSlice";
+import { TopToggle } from "./toggle/TopToggle";
 import addLifeSpan from "../lib/addLifeSpan";
 import clsx from "clsx";
 import { errorHandler } from "handlers/errorHandler";
@@ -48,10 +51,6 @@ import useGeniProfileInfo from "hooks/useGeniProfileInfo";
 import usePreload from "hooks/usePreload";
 import useRootExpanded from "hooks/useRootExpanded";
 import useVideoOverlay from "hooks/useVideoOverlay";
-import { TopToggle } from "./TopToggle";
-import { LeftToggle } from "./LeftToggle";
-import { BottomToggle } from "./BottomToggle";
-import { RightToggle } from "./RightToggle";
 
 export default memo(({ node }: { node: EntityNode }) => {
   const dispatch = useDispatch();
@@ -67,10 +66,12 @@ export default memo(({ node }: { node: EntityNode }) => {
   const settings = useAppSelector(({ settings: s }) => s);
   const { currentProp } = useAppSelector(({ tree }) => tree);
 
-  usePreload(node, settings);
-  useRootExpanded(node);
-  useBookmarks(node);
-  useVideoOverlay(node);
+  if (node.wikidataId) {
+    usePreload(node, settings);
+    useRootExpanded(node);
+    useBookmarks(node);
+    useVideoOverlay(node);
+  }
 
   // let processedImageUrls = []; //Don't ask users to import images that have already been imported
   useEffect(() => {
@@ -104,7 +105,6 @@ export default memo(({ node }: { node: EntityNode }) => {
     node,
     settings,
     setThumbnails,
-    addLifeSpan,
     setLifeSpanInYears,
     setBirthCountry,
     birthCountry,
@@ -195,6 +195,9 @@ export default memo(({ node }: { node: EntityNode }) => {
 
   //this is needed to make it work with root being server side nextAfterIds added!
   const filteredNextAfterIds = node.nextAfterIds?.filter((rightId) => {
+    if (!node.wikidataUrl) {
+      return true;
+    }
     if (
       settings.rightEntityOption.propIds.indexOf(SPOUSE_ID) > -1 &&
       node.spousesIds?.includes(rightId)

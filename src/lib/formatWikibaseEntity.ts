@@ -62,6 +62,7 @@ export default function formatWikibaseEntity(
   }
 
   if (dataSource === "wikidata") {
+    entity.wikidataId = entity.id;
     addBirthDate(entity, languageCode);
     addDeathDate(entity, languageCode);
     addIsInfantDeath(entity);

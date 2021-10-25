@@ -1,6 +1,7 @@
+import { FiChevronDown, FiChevronUp } from "react-icons/fi";
+
 import React from "react";
 import { RelativeToggle } from "./RelativeToggle";
-import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import styled from "styled-components";
 
 export const TopToggle = ({
