@@ -1,9 +1,6 @@
 import {
   GeniImmediateFamily,
   GeniImmediateFamilyResults,
-} from "./../types/Geni";
-import {
-  GeniImmediateFamilyResponse,
   GeniProfile,
   GeniProfileResults,
 } from "types/Geni";
