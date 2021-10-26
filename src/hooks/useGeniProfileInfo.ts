@@ -11,11 +11,15 @@ export default function useGeniProfileInfo(
   settings: SettingsState,
   setThumbnails: (t: any) => void,
   setLifeSpanInYears: (t: any) => void,
-  setBirthCountry: (t: any) => void,
-  birthCountry?: Country,
+  setCountry: (c?: Country) => void,
+  country?: Country,
 ) {
   useEffect(() => {
-    if (entityNode.geniId && settings.showExternalImages) {
+    if (
+      entityNode.wikidataId &&
+      entityNode.geniId &&
+      settings.showExternalImages
+    ) {
       getGeniProfile(entityNode.geniId)
         .then((geniProfile) => {
           const geniEntity = formatGeniProfile(geniProfile!);
@@ -27,8 +31,8 @@ export default function useGeniProfileInfo(
           if (!entityNode.lifeSpanInYears && geniEntity.lifeSpanInYears) {
             setLifeSpanInYears(geniEntity.lifeSpanInYears);
           }
-          if (!birthCountry) {
-            setBirthCountry(geniEntity.countryOfCitizenship);
+          if (!country) {
+            setCountry(geniEntity.countryOfCitizenship);
           }
         })
         .catch(errorHandler);

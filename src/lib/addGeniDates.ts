@@ -41,26 +41,4 @@ export default function addGeniDates(entity: Entity, geniProfile: GeniProfile) {
     }
     addLifeSpan(entity);
   }
-  if (
-    geniProfile &&
-    geniProfile.birth &&
-    geniProfile.birth.location &&
-    geniProfile.birth.location.country_code
-  ) {
-    entity.countryOfCitizenship = {
-      code: geniProfile.birth.location.country_code,
-      name: geniProfile.birth.location.country,
-      text: "Born in " + geniProfile.birth.location.country + " (geni)",
-    };
-  } else if (
-    geniProfile &&
-    geniProfile.location &&
-    geniProfile.location.country_code
-  ) {
-    entity.countryOfCitizenship = {
-      code: geniProfile.location.country_code,
-      name: geniProfile.location.country,
-      text: "Lived in " + geniProfile.location.country + " (geni)",
-    };
-  }
 }

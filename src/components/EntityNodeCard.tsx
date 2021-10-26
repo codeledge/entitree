@@ -59,7 +59,7 @@ export default memo(({ node }: { node: EntityNode }) => {
   const [thumbnails, setThumbnails] = useState<Image[]>(node.thumbnails || []);
   const [thumbnailIndex, setThumbnailIndex] = useState(0);
   const [secondLabel, setSecondLabel] = useState<string>();
-  const [birthCountry, setBirthCountry] = useState(node.countryOfCitizenship);
+  const [country, setCountry] = useState(node.countryOfCitizenship);
 
   const settings = useAppSelector(({ settings: s }) => s);
   const { currentProp } = useAppSelector(({ tree }) => tree);
@@ -74,28 +74,30 @@ export default memo(({ node }: { node: EntityNode }) => {
 
   // let processedImageUrls = []; //Don't ask users to import images that have already been imported
   useEffect(() => {
-    getDataprickImages(node.id.substr(1))
-      .then((imageSet) => {
-        imageSet?.forEach((thumbnail) => {
-          setThumbnails((thumbnails) => [thumbnail, ...thumbnails]);
-        });
-      })
-      .catch(errorHandler);
-    if (settings.showExternalImages) {
-      if (node.peoplepillImageUrl) {
-        isValidImage(node.peoplepillImageUrl)
-          .then((valid) => {
-            if (valid) {
-              const ppImage = {
-                url: node.peoplepillImageUrl,
-                sourceUrl: `https://peoplepill.com/people/${node.peoplepillSlug}`,
-                downloadUrl: node.peoplepillImageUrl,
-                alt: `Image from peoplepill`,
-              } as Image;
-              setThumbnails((thumbnails) => [ppImage, ...thumbnails]);
-            }
-          })
-          .catch(errorHandler);
+    if (node.wikidataId) {
+      getDataprickImages(node.id.substr(1))
+        .then((imageSet) => {
+          imageSet?.forEach((thumbnail) => {
+            setThumbnails((thumbnails) => [thumbnail, ...thumbnails]);
+          });
+        })
+        .catch(errorHandler);
+      if (settings.showExternalImages) {
+        if (node.peoplepillImageUrl) {
+          isValidImage(node.peoplepillImageUrl)
+            .then((valid) => {
+              if (valid) {
+                const ppImage = {
+                  url: node.peoplepillImageUrl,
+                  sourceUrl: `https://peoplepill.com/people/${node.peoplepillSlug}`,
+                  downloadUrl: node.peoplepillImageUrl,
+                  alt: `Image from peoplepill`,
+                } as Image;
+                setThumbnails((thumbnails) => [ppImage, ...thumbnails]);
+              }
+            })
+            .catch(errorHandler);
+        }
       }
     }
   }, []);
@@ -105,8 +107,8 @@ export default memo(({ node }: { node: EntityNode }) => {
     settings,
     setThumbnails,
     setLifeSpanInYears,
-    setBirthCountry,
-    birthCountry,
+    setCountry,
+    country,
   );
 
   useEffect(() => {
@@ -159,7 +161,7 @@ export default memo(({ node }: { node: EntityNode }) => {
 
   const hasSecondLabel = Boolean(secondLabel);
   useEffect(() => {
-    if (settings.secondLabelCode) {
+    if (node.wikidataId && settings.secondLabelCode) {
       if (isProperyId(settings.secondLabelCode)) {
         switch (settings.secondLabelCode) {
           case BIRTH_NAME_ID:
@@ -355,17 +357,17 @@ export default memo(({ node }: { node: EntityNode }) => {
 
       {settings.showExtraInfo && (
         <Badge>
-          {settings.extraInfo === "countryFlag" && birthCountry && (
+          {settings.extraInfo === "countryFlag" && country && (
             <div className="flagIcons">
               <OverlayTrigger
                 placement="bottom"
-                overlay={<Tooltip id="country">{birthCountry.text}</Tooltip>}
+                overlay={<Tooltip id="country">{country.text}</Tooltip>}
               >
                 <span>
                   <img
                     alt=""
-                    src={`https://www.countryflags.io/${birthCountry.code}/flat/32.png`}
-                    title={birthCountry.name}
+                    src={`https://www.countryflags.io/${country.code}/flat/32.png`}
+                    title={country.name}
                   />
                 </span>
               </OverlayTrigger>

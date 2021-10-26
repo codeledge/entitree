@@ -308,7 +308,7 @@ export default function SettingsModal({ show, onHideModal }) {
             (blue for men, red for women)
           </Form.Text>
         </Form.Group>
-        {dataSource === "wikidata" && (
+        {(dataSource === "wikidata" || dataSource === "geni") && (
           <>
             <Form.Group controlId="extraInfo">
               <Form.Check

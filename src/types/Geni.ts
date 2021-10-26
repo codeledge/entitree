@@ -45,22 +45,7 @@ export type GeniProfile = {
   // creator: "https://www.geni.com/api/user-1",
   birth: GeniEvent;
   death: GeniEvent;
-  // death: {
-  // date: {
-  // day: 31,
-  // month: 7,
-  // year: 1996,
-  // formatted_date: "July 31, 1996"
-  // },
   location: GeniLocation;
-  // location: {
-  // city: "Houston",
-  // state: "Texas",
-  // latitude: 29.76047,
-  // longitude: -95.36982,
-  // formatted_location: "Houston, Texas"
-  // }
-  // },
   // photo_urls: {
   // medium: "https://photos.geni.com/p10/1092/4345/53444837f974770e/yip94wig_medium.jpg",
   // small: "https://photos.geni.com/p10/1092/4345/53444837f974770e/yip94wig_small.jpg",

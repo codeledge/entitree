@@ -19,8 +19,8 @@ export const formatGeniProfile = (geniProfile: GeniProfile) => {
   const firstNames = geniProfile?.first_name + " " + geniProfile?.middle_name;
   entity.birthName = firstNames;
 
-  //add Geni dates and country
   addGeniDates(entity, geniProfile);
+  addCountryOfCitizenship(entity, geniProfile);
   if (geniProfile?.mugshot_urls?.thumb) {
     const geniImg: Image = {
       url: geniProfile.mugshot_urls.medium,
@@ -32,4 +32,20 @@ export const formatGeniProfile = (geniProfile: GeniProfile) => {
     entity.thumbnails = [geniImg];
   }
   return entity;
+};
+
+const addCountryOfCitizenship = (entity: Entity, geniProfile: GeniProfile) => {
+  if (geniProfile?.birth?.location.country_code) {
+    entity.countryOfCitizenship = {
+      code: geniProfile.birth.location.country_code,
+      name: geniProfile.birth.location.country,
+      text: "Born in " + geniProfile.birth.location.country + " (geni)",
+    };
+  } else if (geniProfile?.location?.country_code) {
+    entity.countryOfCitizenship = {
+      code: geniProfile.location.country_code,
+      name: geniProfile.location.country,
+      text: "Lived in " + geniProfile.location.country + " (geni)",
+    };
+  }
 };
