@@ -20,12 +20,9 @@ export default function useGeniProfileInfo(
       getGeniProfile(entityNode.geniId)
         .then((geniProfile) => {
           const geniEntity = formatGeniProfile(geniProfile!);
-          if (
-            geniEntity?.thumbnails?.[0] &&
-            geniEntity.thumbnails[0] !== undefined
-          ) {
-            setThumbnails(
-              (thumbnails) => thumbnails.concat(geniEntity.thumbnails[0]), //FIX IMPORTANT
+          if (geniEntity?.thumbnails?.[0]) {
+            setThumbnails((thumbnails) =>
+              thumbnails.concat(geniEntity.thumbnails![0]),
             );
           }
           if (!entityNode.lifeSpanInYears && geniEntity.lifeSpanInYears) {
