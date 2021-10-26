@@ -1,6 +1,5 @@
 import { Country } from "constants/countries";
 import { EntityNode } from "types/EntityNode";
-import { Image } from "types/Entity";
 import { SettingsState } from "store/settingsSlice";
 import { errorHandler } from "handlers/errorHandler";
 import { formatGeniProfile } from "lib/formatGeniProfile";
