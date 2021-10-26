@@ -34,6 +34,8 @@ export default async function getEntities(
   languageCode: LangCode,
   options: Options,
 ): Promise<Entity[]> {
+  if (!ids?.length) return [];
+
   if (options.dataSource === "geni") {
     const profiles = await getGeniProfilesCall(ids);
 
@@ -148,6 +150,7 @@ export const getParentEntities = async (
   options: Options,
 ): Promise<Entity[]> => {
   if (!entityNode.sourceIds) return [];
+
   const parents = await getEntities(
     entityNode.sourceIds,
     languageCode,
