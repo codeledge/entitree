@@ -43,6 +43,7 @@ export interface Entity extends WikibaseEntity {
   birthDate?: string;
   birthISO?: string;
   birthName?: string;
+  birthPlace?: string;
   birthPlaceId?: string;
   birthYear?: string;
   closedChildTreeIds?: string[];
@@ -51,6 +52,7 @@ export interface Entity extends WikibaseEntity {
   closedSpouseTreeIds?: string[];
   countryOfCitizenship?: Country;
   deathDate?: string;
+  deathPlace?: string;
   deathPlaceId?: string;
   deathYear?: string;
   description?: string;

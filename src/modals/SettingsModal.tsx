@@ -109,34 +109,6 @@ export default function SettingsModal({ show, onHideModal }) {
           </div>
         </Collapse>
         <hr />
-        <Dropdown>
-          <Dropdown.Toggle as={CustomToggle}>
-            <span className="label">Orientation</span> {orientation}
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            <Dropdown.Item
-              eventKey={1}
-              active={orientation === "vertical"}
-              onClick={() => {
-                dispatch(setSetting({ orientation: "vertical" }));
-              }}
-            >
-              Vertical
-            </Dropdown.Item>
-            <Dropdown.Item
-              eventKey={2}
-              active={orientation === "horizontal"}
-              onClick={() => {
-                dispatch(setSetting({ orientation: "horizontal" }));
-              }}
-            >
-              Horizontal
-            </Dropdown.Item>
-          </Dropdown.Menu>
-          <Form.Text className="text-muted mt-0">
-            Choose which way your tree will grow
-          </Form.Text>
-        </Dropdown>
         <Dropdown className="langDropdown">
           <Dropdown.Toggle as={CustomToggle}>
             <span className="label">Language</span> {currentLang?.name}
@@ -250,6 +222,34 @@ export default function SettingsModal({ show, onHideModal }) {
             Decide what to show on the right of each person, this applies only
             to humans and fictional characters. Reload the page (F5) to apply
             settings.
+          </Form.Text>
+        </Dropdown>
+        <Dropdown>
+          <Dropdown.Toggle as={CustomToggle}>
+            <span className="label">Orientation</span> {orientation}
+          </Dropdown.Toggle>
+          <Dropdown.Menu>
+            <Dropdown.Item
+              eventKey={1}
+              active={orientation === "vertical"}
+              onClick={() => {
+                dispatch(setSetting({ orientation: "vertical" }));
+              }}
+            >
+              Vertical
+            </Dropdown.Item>
+            <Dropdown.Item
+              eventKey={2}
+              active={orientation === "horizontal"}
+              onClick={() => {
+                dispatch(setSetting({ orientation: "horizontal" }));
+              }}
+            >
+              Horizontal
+            </Dropdown.Item>
+          </Dropdown.Menu>
+          <Form.Text className="text-muted mt-0">
+            Choose which way your tree will grow
           </Form.Text>
         </Dropdown>
         <hr />
@@ -404,7 +404,7 @@ export default function SettingsModal({ show, onHideModal }) {
                   )
                 }
                 type="checkbox"
-                label="Remove image background (NEW)"
+                label="Remove image background"
               />
               {/* {true && (
             <Dropdown className="imageDropdown d-inline-block ml-1">
