@@ -51,7 +51,7 @@ export default function SearchBar() {
         setShowSuggestions(true);
         setLoadingSuggestions(true);
         try {
-          if (dataSource === "wikidata") {
+          if (dataSource === "wikidata" || dataSource === "factgrid") {
             const results = await wikidataSearchTerm(
               debouncedSearchTerm,
               currentLang.code,
