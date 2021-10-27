@@ -14,7 +14,9 @@ import { useCurrentTheme } from "hooks/useCurrentTheme";
 import usePageView from "hooks/usePageView";
 import useReadQuery from "../hooks/useReadQuery";
 
-ReactGA.initialize("UA-171207101-1");
+ReactGA.initialize(process.env.NEXT_PUBLIC_GA_TRACKING_CODE || "", {
+  testMode: !process.env.NEXT_PUBLIC_GA_TRACKING_CODE,
+});
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const currentTheme = useCurrentTheme();

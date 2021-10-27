@@ -49,8 +49,9 @@ export const Navigation = ({
 const ZoomInButton = memo(({ zoomIn }: any) => {
   const zoomInWrapper = () => {
     ReactGA.event({
-      category: "Navigation",
-      action: "zoomIn",
+      category: "UI",
+      action: "click",
+      label: "zoomIn",
     });
     zoomIn();
   };
@@ -92,8 +93,9 @@ const StyledNavigation = styled.div`
 const ZoomOutButton = memo(({ zoomOut }: any) => {
   const zoomOutWrapper = () => {
     ReactGA.event({
-      category: "Navigation",
-      action: "zoomOut",
+      category: "UI",
+      action: "click",
+      label: "zoomOut",
     });
     zoomOut();
   };
@@ -114,8 +116,9 @@ const CenterTreeButton = memo(
   ({ resetTransform }: { resetTransform: () => void }) => {
     const onRecenter = () => {
       ReactGA.event({
-        category: "Navigation",
-        action: "recenter",
+        category: "UI",
+        action: "click",
+        label: "recenter",
       });
       resetTransform();
     };
@@ -142,8 +145,9 @@ const FitTreeButton = memo(
 
     const onFitTree = () => {
       ReactGA.event({
-        category: "Navigation",
-        action: "fitTree",
+        category: "UI",
+        action: "click",
+        label: "fitTree",
       });
 
       //node is translated -50%, -50%, so leave som margins
@@ -180,13 +184,22 @@ const ShareButton = memo(() => {
     seTitle(document.title);
   }, []);
 
+  const onShowShareModal = () => {
+    ReactGA.event({
+      category: "UI",
+      action: "click",
+      label: "shareModal",
+    });
+    setShowShareModal(true);
+  };
+
   return (
     <>
       <OverlayTrigger
         placement="right"
         overlay={<Tooltip id="share">Share</Tooltip>}
       >
-        <Button variant="light" onClick={() => setShowShareModal(true)}>
+        <Button variant="light" onClick={onShowShareModal}>
           <FaRegShareSquare />
         </Button>
       </OverlayTrigger>
