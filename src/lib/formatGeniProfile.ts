@@ -16,8 +16,15 @@ export const formatGeniProfile = (geniProfile: GeniProfile) => {
   entity.geniId = geniProfile?.guid; //geniProfile?.profile_url.split("/").pop();
   entity.geniProfileUrl = geniProfile?.profile_url;
   // entity.occupation = geniProfile?.occupation || "";
-  const firstNames = geniProfile?.first_name + " " + geniProfile?.middle_name;
-  entity.birthName = firstNames;
+  const firstNames =
+    geniProfile?.first_name +
+    (geniProfile?.middle_name ? " " + geniProfile?.middle_name : "");
+  entity.birthName =
+    firstNames +
+    " " +
+    (geniProfile.maiden_name ? geniProfile.maiden_name : geniProfile.last_name);
+  entity.birthPlace = geniProfile?.birth?.location?.formatted_location || "";
+  entity.deathPlace = geniProfile?.death?.location?.formatted_location || "";
 
   addGeniDates(entity, geniProfile);
   addCountryOfCitizenship(entity, geniProfile);

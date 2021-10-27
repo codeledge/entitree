@@ -32,8 +32,8 @@ export default function DetailsModal({
 
   const dispatch = useDispatch();
   const [images, setImages] = useState(nodeImages);
-  const [birthPlace, setBirthPlace] = useState<string>();
-  const [deathPlace, setDeathPlace] = useState<string>();
+  const [birthPlace, setBirthPlace] = useState(node.birthPlace);
+  const [deathPlace, setDeathPlace] = useState(node.deathPlace);
   const [wikipediaExtract, setWikipediaExtract] = useState<string>();
 
   useEffect(() => {
