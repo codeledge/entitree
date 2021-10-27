@@ -7,14 +7,14 @@ import {
 } from "../constants/properties";
 import getClaimIds, { checkIfClaimsHasSeriesOrdinal } from "./getClaimIds";
 
+import { DataSource } from "wikibase/getWikibaseInstance";
 import { Entity } from "types/Entity";
-import { WikibaseAlias } from "wikibase/getWikibaseInstance";
 import getSimpleClaimValue from "./getSimpleClaimValue";
 import getWikibaseSourceIds from "wikibase/getWikibaseSourceIds";
 import { sortClaimsByStartDate } from "claims/sortClaimsByStartDate";
 
 export type ConnectorOptions = {
-  wikibaseAlias: WikibaseAlias;
+  dataSource: DataSource;
   currentPropId?: string;
   addSourceIds?: boolean;
   addTargetIds?: boolean;
@@ -30,7 +30,7 @@ export default async function addEntityConnectors(
     entity.sourceIds = await getWikibaseSourceIds(
       entity.id,
       options.currentPropId,
-      options.wikibaseAlias,
+      options.dataSource,
     );
   } else {
     delete entity.sourceIds;

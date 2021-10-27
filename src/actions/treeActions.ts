@@ -1,10 +1,11 @@
+import { filterSpousePartnersIds } from "../filters/filterSpousePartnersIds";
 import {
   CHILD_BOOKMARK_SYMBOL,
   PARENT_BOOKMARK_SYMBOL,
   SIBLING_BOOKMARK_SYMBOL,
   SPOUSE_BOOKMARK_SYMBOL,
 } from "constants/bookmarks";
-import { CHILD_ID, PARTNER_ID, SPOUSE_ID } from "constants/properties";
+import { CHILD_ID } from "constants/properties";
 import {
   collapseChildren,
   collapseParents,
@@ -64,11 +65,11 @@ export const toggleChildren =
         addUrlBookmark(entityNode.treeId!, CHILD_BOOKMARK_SYMBOL);
     } else {
       try {
-        const { languageCode, wikibaseAlias } = getState().settings;
+        const { languageCode, dataSource } = getState().settings;
         const { currentProp } = getState().tree;
 
         const children = await getChildEntities(entityNode, languageCode, {
-          wikibaseAlias,
+          dataSource,
           currentPropId: currentProp?.id,
           addTargetIds: true,
           addNextAfterIds: currentProp?.id === CHILD_ID,
@@ -81,6 +82,8 @@ export const toggleChildren =
           addUrlBookmark(entityNode.treeId!, CHILD_BOOKMARK_SYMBOL);
       } catch (error) {
         console.error(error);
+      } finally {
+        dispatch(setLoadingChildren({ entityNode, value: false }));
       }
     }
   };
@@ -94,11 +97,11 @@ export const preloadChildren =
     )
       return;
 
-    const { languageCode, wikibaseAlias } = getState().settings;
+    const { languageCode, dataSource } = getState().settings;
     const { currentProp } = getState().tree;
 
     const children = await getChildEntities(entityNode, languageCode, {
-      wikibaseAlias,
+      dataSource,
       currentPropId: currentProp?.id,
       addTargetIds: true,
       addNextAfterIds: currentProp?.id === CHILD_ID,
@@ -135,11 +138,11 @@ export const toggleParents =
         addUrlBookmark(entityNode.treeId!, PARENT_BOOKMARK_SYMBOL);
     } else {
       try {
-        const { languageCode, wikibaseAlias } = getState().settings;
+        const { languageCode, dataSource } = getState().settings;
         const { currentProp } = getState().tree;
 
         const parents = await getParentEntities(entityNode, languageCode, {
-          wikibaseAlias,
+          dataSource,
           currentPropId: currentProp?.id,
           addSourceIds: true,
           addNextBeforeIds: currentProp?.id === CHILD_ID,
@@ -151,6 +154,8 @@ export const toggleParents =
           addUrlBookmark(entityNode.treeId!, PARENT_BOOKMARK_SYMBOL);
       } catch (error) {
         console.error(error);
+      } finally {
+        dispatch(setLoadingParents({ entityNode, value: false }));
       }
     }
   };
@@ -164,11 +169,11 @@ export const preloadParents =
       !entityNode.sourceIds
     )
       return;
-    const { languageCode, wikibaseAlias } = getState().settings;
+    const { languageCode, dataSource } = getState().settings;
     const { currentProp } = getState().tree;
 
     const parents = await getParentEntities(entityNode, languageCode, {
-      wikibaseAlias,
+      dataSource,
       currentPropId: currentProp?.id,
       addSourceIds: true,
       addNextBeforeIds: currentProp?.id === CHILD_ID,
@@ -195,10 +200,10 @@ export const toggleSiblings =
         addUrlBookmark(entityNode.treeId!, SIBLING_BOOKMARK_SYMBOL);
     } else {
       try {
-        const { languageCode, wikibaseAlias } = getState().settings;
+        const { languageCode, dataSource } = getState().settings;
 
         const siblings = await getSiblingEntities(entityNode, languageCode, {
-          wikibaseAlias,
+          dataSource,
         });
 
         dispatch(
@@ -213,6 +218,8 @@ export const toggleSiblings =
           addUrlBookmark(entityNode.treeId!, SIBLING_BOOKMARK_SYMBOL);
       } catch (error) {
         console.error(error);
+      } finally {
+        dispatch(setLoadingSiblings({ entityNode, value: false }));
       }
     }
   };
@@ -227,9 +234,9 @@ export const preloadSiblings =
     )
       return;
 
-    const { languageCode, wikibaseAlias } = getState().settings;
+    const { languageCode, dataSource } = getState().settings;
     const siblings = await getSiblingEntities(entityNode, languageCode, {
-      wikibaseAlias,
+      dataSource,
     });
 
     dispatch(setPreloadedSiblings({ entityNode, siblings }));
@@ -254,32 +261,26 @@ export const toggleSpouses =
         addUrlBookmark(entityNode.treeId!, SPOUSE_BOOKMARK_SYMBOL);
     } else {
       try {
-        const { languageCode, rightEntityOption, wikibaseAlias } =
-          getState().settings;
+        const { languageCode, dataSource } = getState().settings;
 
         const spouses = await getSpouseEntities(entityNode, languageCode, {
-          wikibaseAlias,
+          dataSource,
         });
 
-        const filteredRightEntities = spouses?.filter((spouse) => {
-          if (
-            rightEntityOption.propIds.indexOf(SPOUSE_ID) > -1 &&
-            entityNode.spousesIds?.includes(spouse.id)
-          )
-            return true;
-          if (
-            rightEntityOption.propIds.indexOf(PARTNER_ID) > -1 &&
-            entityNode.partnersIds?.includes(spouse.id)
-          )
-            return true;
+        // This is the client side filter for spouses and/or partners
+        const filteredSpousePartnersIds = filterSpousePartnersIds(
+          entityNode,
+          getState().settings,
+        );
 
-          return false;
-        });
+        const filteredSpouses = spouses?.filter((spouse) =>
+          filteredSpousePartnersIds?.includes(spouse.id),
+        );
 
         dispatch(
           expandSpouses({
             entityNode,
-            spouses: filteredRightEntities,
+            spouses: filteredSpouses,
             options,
           }),
         );
@@ -288,6 +289,8 @@ export const toggleSpouses =
           addUrlBookmark(entityNode.treeId!, SPOUSE_BOOKMARK_SYMBOL);
       } catch (error) {
         console.error(error);
+      } finally {
+        dispatch(setLoadingSpouses({ entityNode, value: false }));
       }
     }
   };
@@ -302,9 +305,9 @@ export const preloadSpouses =
     )
       return;
 
-    const { languageCode, wikibaseAlias } = getState().settings;
+    const { languageCode, dataSource } = getState().settings;
     const spouses = await getSpouseEntities(entityNode, languageCode, {
-      wikibaseAlias,
+      dataSource,
     });
 
     dispatch(setPreloadedSpouses({ entityNode, spouses }));

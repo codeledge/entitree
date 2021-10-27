@@ -6,22 +6,14 @@ import {
   CHILD_ID,
   NAME_IN_KANA_ID,
   NICKNAME_ID,
-  PARTNER_ID,
-  SPOUSE_ID,
 } from "constants/properties";
-import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { FaEye, FaFemale, FaMale, FaUser } from "react-icons/fa";
-import {
-  FiChevronDown,
-  FiChevronLeft,
-  FiChevronRight,
-  FiChevronUp,
-} from "react-icons/fi";
 import { GiBigDiamondRing, GiPerson } from "react-icons/gi";
 import {
   IMAGE_SERVER_BASE_URL,
   getDataprickImages,
 } from "services/imageService";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import React, { memo, useEffect, useState } from "react";
 import { RiGroupLine, RiParentLine } from "react-icons/ri";
 import styled, { css, useTheme } from "styled-components";
@@ -32,138 +24,92 @@ import {
   toggleSpouses,
 } from "actions/treeActions";
 
+import { BottomToggle } from "./toggle/BottomToggle";
 import { BsImage } from "react-icons/bs";
 import DetailsModal from "modals/DetailsModal";
 import { EntityNode } from "types/EntityNode";
 import { Image } from "types/Entity";
 import { LangCode } from "types/Lang";
+import { LeftToggle } from "./toggle/LeftToggle";
 import { MdChildCare } from "react-icons/md";
+import { RightToggle } from "./toggle/RightToggle";
 import { SettingsState } from "store/settingsSlice";
-import addLifeSpan from "../lib/addLifeSpan";
+import { TopToggle } from "./toggle/TopToggle";
 import clsx from "clsx";
 import { errorHandler } from "handlers/errorHandler";
 import getFandomPageProps from "../services/fandomService";
-import getGeniProfile from "services/geniService";
 import getWikibaseEntitiesLabel from "wikibase/getWikibaseEntitiesLabel";
 import { isProperyId } from "helpers/isPropertyId";
 import { isValidImage } from "helpers/isValidImage";
 import { useAppSelector } from "store";
 import useBookmarks from "hooks/useBookmarks";
 import { useDispatch } from "react-redux";
+import useGeniProfileInfo from "hooks/useGeniProfileInfo";
 import usePreload from "hooks/usePreload";
 import useRootExpanded from "hooks/useRootExpanded";
 import useVideoOverlay from "hooks/useVideoOverlay";
+import { filterSpousePartnersIds } from "filters/filterSpousePartnersIds";
 
 export default memo(({ node }: { node: EntityNode }) => {
   const dispatch = useDispatch();
-
-  usePreload(node);
-  useRootExpanded(node);
-  useBookmarks(node);
-  useVideoOverlay(node);
+  const theme = useTheme();
 
   const [showModal, setShowModal] = useState(false);
   const [lifeSpanInYears, setLifeSpanInYears] = useState(node.lifeSpanInYears);
   const [thumbnails, setThumbnails] = useState<Image[]>(node.thumbnails || []);
+  const [thumbnailIndex, setThumbnailIndex] = useState(0);
+  const [secondLabel, setSecondLabel] = useState<string>();
+  const [country, setCountry] = useState(node.countryOfCitizenship);
+
+  const settings = useAppSelector(({ settings: s }) => s);
+  const { currentProp } = useAppSelector(({ tree }) => tree);
+
+  if (node.wikidataId) {
+    usePreload(node);
+    useBookmarks(node);
+    useVideoOverlay(node);
+  }
+  //might get stuck on geni, but the expand icons will reset and triggered manually
+  useRootExpanded(node);
+
   // let processedImageUrls = []; //Don't ask users to import images that have already been imported
   useEffect(() => {
-    getDataprickImages(node.id.substr(1))
-      .then((imageSet) => {
-        imageSet?.forEach((thumbnail) => {
-          setThumbnails((thumbnails) => [thumbnail, ...thumbnails]);
-        });
-      })
-      .catch(errorHandler);
-    if (settings.showExternalImages) {
-      if (node.peoplepillImageUrl) {
-        isValidImage(node.peoplepillImageUrl)
-          .then((valid) => {
-            if (valid) {
-              const ppImage = {
-                url: node.peoplepillImageUrl,
-                sourceUrl: `https://peoplepill.com/people/${node.peoplepillSlug}`,
-                downloadUrl: node.peoplepillImageUrl,
-                alt: `Image from peoplepill`,
-              } as Image;
-              setThumbnails((thumbnails) => [ppImage, ...thumbnails]);
-            }
-          })
-          .catch(errorHandler);
+    if (node.wikidataId) {
+      getDataprickImages(node.id.substr(1))
+        .then((imageSet) => {
+          imageSet?.forEach((thumbnail) => {
+            setThumbnails((thumbnails) => [thumbnail, ...thumbnails]);
+          });
+        })
+        .catch(errorHandler);
+      if (settings.showExternalImages) {
+        if (node.peoplepillImageUrl) {
+          isValidImage(node.peoplepillImageUrl)
+            .then((valid) => {
+              if (valid) {
+                const ppImage = {
+                  url: node.peoplepillImageUrl,
+                  sourceUrl: `https://peoplepill.com/people/${node.peoplepillSlug}`,
+                  downloadUrl: node.peoplepillImageUrl,
+                  alt: `Image from peoplepill`,
+                } as Image;
+                setThumbnails((thumbnails) => [ppImage, ...thumbnails]);
+              }
+            })
+            .catch(errorHandler);
+        }
       }
     }
   }, []);
 
-  useEffect(() => {
-    if (node.geniId && settings.showExternalImages) {
-      getGeniProfile(node.geniId)
-        .then((geniProfile) => {
-          if (geniProfile?.mugshot_urls?.thumb) {
-            const geniImg = {
-              url: geniProfile.mugshot_urls.medium,
-              alt: `Geni.com image`,
-              sourceUrl: geniProfile.profile_url,
-              downloadUrl:
-                geniProfile.mugshot_urls.large ??
-                geniProfile.mugshot_urls.medium,
-            } as Image;
-            setThumbnails((thumbnails) => thumbnails.concat(geniImg));
-          }
-
-          //add Geni dates and country
-          if (
-            geniProfile &&
-            (geniProfile.birth || geniProfile.death) &&
-            node.lifeSpanInYears === undefined
-          ) {
-            if (geniProfile.birth && geniProfile.birth.date) {
-              node.birthYear = "" + geniProfile.birth.date.year; //convert to string
-              if (
-                geniProfile.birth.date.circa &&
-                geniProfile.birth.date.circa === true
-              ) {
-                node.birthYear = "~" + node.birthYear;
-              }
-            }
-            if (geniProfile.death && geniProfile.death.date) {
-              node.deathYear = "" + geniProfile.death.date.year;
-              if (
-                geniProfile.death.date.circa &&
-                geniProfile.death.date.circa === true
-              ) {
-                node.deathYear = "~" + node.deathYear;
-              }
-            }
-            addLifeSpan(node);
-            setLifeSpanInYears(node.lifeSpanInYears);
-          }
-          if (
-            geniProfile &&
-            geniProfile.birth &&
-            geniProfile.birth.location &&
-            geniProfile.birth.location.country_code &&
-            !birthCountry
-          ) {
-            setBirthCountry({
-              code: geniProfile.birth.location.country_code,
-              name: geniProfile.birth.location.country,
-              text: "Born in " + geniProfile.birth.location.country + " (geni)",
-            });
-          } else if (
-            geniProfile &&
-            geniProfile.location &&
-            geniProfile.location.country_code &&
-            !birthCountry
-          ) {
-            setBirthCountry({
-              code: geniProfile.location.country_code,
-              name: geniProfile.location.country,
-              text: "Lived in " + geniProfile.location.country + " (geni)",
-            });
-          }
-        })
-        .catch(errorHandler);
-    }
-  }, []);
+  useGeniProfileInfo(
+    node,
+    settings,
+    setThumbnails,
+    setLifeSpanInYears,
+    setCountry,
+    country,
+  );
 
   useEffect(() => {
     if (node.fandomHost && node.fandomId) {
@@ -196,14 +142,6 @@ export default memo(({ node }: { node: EntityNode }) => {
     }
   }, []);
 
-  const [thumbnailIndex, setThumbnailIndex] = useState(0);
-  const theme = useTheme();
-
-  const [birthCountry, setBirthCountry] = useState(node.countryOfCitizenship);
-
-  const settings = useAppSelector(({ settings: s }) => s);
-  const { currentProp } = useAppSelector(({ tree }) => tree);
-
   const onHideModal = () => {
     setShowModal(false);
   };
@@ -221,10 +159,9 @@ export default memo(({ node }: { node: EntityNode }) => {
   const hasLabelOnly =
     theme.descriptionDisplay === "none" && !settings.secondLabelCode;
 
-  const [secondLabel, setSecondLabel] = useState<string>();
   const hasSecondLabel = Boolean(secondLabel);
   useEffect(() => {
-    if (settings.secondLabelCode) {
+    if (node.wikidataId && settings.secondLabelCode) {
       if (isProperyId(settings.secondLabelCode)) {
         switch (settings.secondLabelCode) {
           case BIRTH_NAME_ID:
@@ -245,7 +182,7 @@ export default memo(({ node }: { node: EntityNode }) => {
         getWikibaseEntitiesLabel(
           [node.id],
           settings.secondLabelCode as LangCode,
-          settings.wikibaseAlias,
+          settings.dataSource,
         )
           .then(([secondLabel]) => {
             setSecondLabel(secondLabel);
@@ -258,20 +195,8 @@ export default memo(({ node }: { node: EntityNode }) => {
   }, [settings.secondLabelCode]);
 
   //this is needed to make it work with root being server side nextAfterIds added!
-  const filteredNextAfterIds = node.nextAfterIds?.filter((rightId) => {
-    if (
-      settings.rightEntityOption.propIds.indexOf(SPOUSE_ID) > -1 &&
-      node.spousesIds?.includes(rightId)
-    )
-      return true;
-    if (
-      settings.rightEntityOption.propIds.indexOf(PARTNER_ID) > -1 &&
-      node.partnersIds?.includes(rightId)
-    )
-      return true;
+  const filteredNextAfterIds = filterSpousePartnersIds(node, settings);
 
-    return false;
-  });
   let thumbnailStyle = {};
   if (
     currentThumbnail?.imageDb === true &&
@@ -432,17 +357,17 @@ export default memo(({ node }: { node: EntityNode }) => {
 
       {settings.showExtraInfo && (
         <Badge>
-          {settings.extraInfo === "countryFlag" && birthCountry && (
+          {settings.extraInfo === "countryFlag" && country && (
             <div className="flagIcons">
               <OverlayTrigger
                 placement="bottom"
-                overlay={<Tooltip id="country">{birthCountry.text}</Tooltip>}
+                overlay={<Tooltip id="country">{country.text}</Tooltip>}
               >
                 <span>
                   <img
                     alt=""
-                    src={`https://www.countryflags.io/${birthCountry.code}/flat/32.png`}
-                    title={birthCountry.name}
+                    src={`https://www.countryflags.io/${country.code}/flat/32.png`}
+                    title={country.name}
                   />
                 </span>
               </OverlayTrigger>
@@ -480,96 +405,101 @@ export default memo(({ node }: { node: EntityNode }) => {
 
       {!settings.hideToggleButton && (
         <>
-          {node.nextBeforeIds && !!node.nextBeforeIds.length && (
-            <Button
-              className="siblingToggle relativeToggle"
-              variant="link"
-              disabled={node.loadingSiblings}
-              onClick={() => dispatch(toggleSiblings(node))}
-              title={
-                (node.openSiblingTreeIds ? "Collapse" : "Expand") + " siblings"
-              }
-            >
-              <div className="value">{node.nextBeforeIds.length}</div>
-              <div className="chevron mt-1 mb-1">
-                {node.openSiblingTreeIds ? (
-                  <FiChevronRight />
-                ) : (
-                  <FiChevronLeft />
-                )}
-              </div>
-              <div className="icon">
-                <RiGroupLine />
-              </div>
-            </Button>
-          )}
-          {!!filteredNextAfterIds?.length && (
-            <Button
-              className="spouseToggle relativeToggle"
-              variant="link"
-              disabled={node.loadingSpouses}
-              onClick={() => dispatch(toggleSpouses(node))}
-              title={
-                (node.openSpouseTreeIds ? "Collapse" : "Expand") +
-                " spouses/partners"
-              }
-            >
-              <div className="value">{filteredNextAfterIds.length}</div>
-              <div className="chevron mt-1 mb-1">
-                {node.openSpouseTreeIds ? (
-                  <FiChevronLeft />
-                ) : (
-                  <FiChevronRight />
-                )}
-              </div>
-              <div className="icon">
-                <GiBigDiamondRing />
-              </div>
-            </Button>
-          )}
-          {!!node.sourceIds?.length && (
-            <Button
-              className="parentToggle relativeToggle"
-              variant="link"
-              disabled={node.loadingParents}
-              onClick={() => dispatch(toggleParents(node))}
-            >
-              <span className="value mr-1">{node.sourceIds.length}</span>
-              <span className="chevron">
-                {node.openParentTreeIds ? <FiChevronDown /> : <FiChevronUp />}
-              </span>
-              {currentProp?.id === CHILD_ID && (
-                <span className="icon ml-1">
-                  <RiParentLine />
-                </span>
-              )}
-            </Button>
-          )}
-          {!!node.targetIds?.length && (
-            <Button
-              className="childrenToggle relativeToggle"
-              variant="link"
-              disabled={node.loadingChildren}
-              onClick={() => dispatch(toggleChildren(node))}
-            >
-              <span className="value mr-1">{node.targetsCount}</span>
-              <span className="chevron">
-                {node.openChildTreeIds ? <FiChevronUp /> : <FiChevronDown />}
-              </span>
-              {currentProp?.id === CHILD_ID && (
-                <span className="icon ml-1">
-                  <MdChildCare />
-                </span>
-              )}
-            </Button>
-          )}
-          {node.targetIds &&
+          {!!node.nextBeforeIds?.length &&
+            (settings.orientation === "vertical" ? (
+              <LeftToggle
+                disabled={node.loadingSiblings}
+                onClick={() => dispatch(toggleSiblings(node))}
+                icon={currentProp?.id === CHILD_ID && <RiGroupLine />}
+                open={node.openSiblingTreeIds}
+                counter={node.nextBeforeIds.length}
+                title={
+                  (node.openSiblingTreeIds ? "Collapse" : "Expand") +
+                  " siblings"
+                }
+              />
+            ) : (
+              <TopToggle
+                disabled={node.loadingSiblings}
+                onClick={() => dispatch(toggleSiblings(node))}
+                icon={currentProp?.id === CHILD_ID && <RiGroupLine />}
+                open={node.openSiblingTreeIds}
+                counter={node.nextBeforeIds.length}
+                title={
+                  (node.openSiblingTreeIds ? "Collapse" : "Expand") +
+                  " siblings"
+                }
+              />
+            ))}
+          {!!filteredNextAfterIds?.length &&
+            (settings.orientation === "vertical" ? (
+              <RightToggle
+                disabled={node.loadingSpouses}
+                onClick={() => dispatch(toggleSpouses(node))}
+                icon={currentProp?.id === CHILD_ID && <GiBigDiamondRing />}
+                open={node.openSpouseTreeIds}
+                counter={filteredNextAfterIds.length}
+                title={
+                  (node.openSpouseTreeIds ? "Collapse" : "Expand") +
+                  " spouses/partners"
+                }
+              />
+            ) : (
+              <BottomToggle
+                disabled={node.loadingSpouses}
+                onClick={() => dispatch(toggleSpouses(node))}
+                icon={currentProp?.id === CHILD_ID && <GiBigDiamondRing />}
+                open={node.openSpouseTreeIds}
+                counter={filteredNextAfterIds.length}
+                title={
+                  (node.openSpouseTreeIds ? "Collapse" : "Expand") +
+                  " spouses/partners"
+                }
+              />
+            ))}
+          {!!node.sourceIds?.length &&
+            (settings.orientation === "vertical" ? (
+              <TopToggle
+                disabled={node.loadingParents}
+                onClick={() => dispatch(toggleParents(node))}
+                icon={currentProp?.id === CHILD_ID && <RiParentLine />}
+                open={node.openParentTreeIds}
+                counter={node.sourceIds.length}
+              />
+            ) : (
+              <LeftToggle
+                disabled={node.loadingParents}
+                onClick={() => dispatch(toggleParents(node))}
+                icon={currentProp?.id === CHILD_ID && <RiParentLine />}
+                open={node.openParentTreeIds}
+                counter={node.sourceIds.length}
+              />
+            ))}
+          {!!node.targetIds?.length &&
+            (settings.orientation === "vertical" ? (
+              <BottomToggle
+                disabled={node.loadingChildren}
+                onClick={() => dispatch(toggleChildren(node))}
+                icon={currentProp?.id === CHILD_ID && <MdChildCare />}
+                open={node.openChildTreeIds}
+                counter={node.targetIds.length}
+              />
+            ) : (
+              <RightToggle
+                disabled={node.loadingChildren}
+                onClick={() => dispatch(toggleChildren(node))}
+                icon={currentProp?.id === CHILD_ID && <MdChildCare />}
+                open={node.openChildTreeIds}
+                counter={node.targetIds.length}
+              />
+            ))}
+          {/* {node.targetIds &&
             !node.targetIds.length &&
             !!node.targetsCount &&
             node.targetsCount > 0 &&
             currentProp?.id === CHILD_ID && (
-              <Button
-                className="childrenToggle relativeToggle"
+              <RelativeToggle
+                forChildren
                 variant="link"
                 title="Children not available, please add them on wikidata.org"
               >
@@ -577,8 +507,8 @@ export default memo(({ node }: { node: EntityNode }) => {
                 <span className="icon">
                   <MdChildCare />
                 </span>
-              </Button>
-            )}
+              </RelativeToggle>
+            )} */}
         </>
       )}
 
@@ -623,63 +553,7 @@ const ThemedNodeOuter = styled.div<SettingsState & { gender?: string }>`
       transform: translate(-50%, -50%);
     }
   }
-  .relativeToggle {
-    position: absolute;
-    padding: 2px;
-    font-size: 13px;
-    font-weight: bold;
-    line-height: 1;
-    transition: all;
-    min-height: 28px;
-    display: flex;
-    align-items: center;
-    @media print {
-      color: gray;
-    }
-    &:hover {
-      text-decoration: none;
-    }
-    &:focus {
-      text-decoration: underline;
-      box-shadow: none;
-    }
-    .chevron {
-      stroke-width: 2;
-      font-size: 20px;
-      @media print {
-        display: none;
-      }
-    }
-  }
-  .siblingToggle {
-    right: 100%;
-  }
-  .spouseToggle {
-    left: 100%;
-  }
-  .siblingToggle,
-  .spouseToggle {
-    top: 50%;
-    transform: translateY(-50%);
-    flex-direction: column;
-  }
-  .parentToggle,
-  .childrenToggle {
-    left: 50%;
-    flex-direction: row;
-    white-space: nowrap;
-    transform: translateX(-50%);
-    .value {
-      display: inline-block;
-      min-width: 1em; //default to optional icon width for central alignment
-    }
-  }
-  .parentToggle {
-    bottom: 100%;
-  }
-  .childrenToggle {
-    top: 100%;
-  }
+
   //  .colorIcons {
   //   position: absolute;
   //   bottom: 0;
@@ -693,25 +567,18 @@ const ThemedNodeOuter = styled.div<SettingsState & { gender?: string }>`
     width: 32px;
     z-index: 2; //needed for tooltip
   }
-  ${
-    ({ showGenderColor, gender }) =>
-      showGenderColor &&
-      gender &&
-      (gender === "female"
-        ? css`
-            background-color: #ffcccc;
-          `
-        : gender === "male"
-        ? css`
-            background-color: #ccd9ff;
-          `
-        : "")
-    // gender === "thirdgender"
-    // ? css`
-    //     background-color: rgba(238, 130, 238, 0.11);
-    //   `
-    // : ""
-  }
+  ${({ showGenderColor, gender }) =>
+    showGenderColor &&
+    gender &&
+    (gender === "female"
+      ? css`
+          background-color: #ffcccc;
+        `
+      : gender === "male"
+      ? css`
+          background-color: #ccd9ff;
+        `
+      : "")}
 `;
 
 const Badge = styled.div`

@@ -20,7 +20,7 @@ export function sortByBirthDate(entities: Entity[]) {
 }
 
 export function sortByGender(entities: Entity[]) {
-  entities.sort((a, b) => {
+  entities.sort((a) => {
     try {
       return a.gender === "male" ? -1 : 1;
     } catch (error) {

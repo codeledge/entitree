@@ -36,7 +36,7 @@ export default function SettingsModal({ show, onHideModal }) {
 
   const {
     languageCode,
-    wikibaseAlias,
+    dataSource,
     rightEntityOption,
     showGenderColor,
     showExtraInfo,
@@ -48,6 +48,7 @@ export default function SettingsModal({ show, onHideModal }) {
     imageType,
     imageOverflow,
     followNavigation,
+    orientation,
   } = useAppSelector(({ settings }) => settings);
   const { currentProp, currentEntity } = useAppSelector(({ tree }) => tree);
 
@@ -124,7 +125,7 @@ export default function SettingsModal({ show, onHideModal }) {
                     dispatch(
                       switchLanguage(
                         lang.code,
-                        wikibaseAlias,
+                        dataSource,
                         currentEntity.id,
                         currentProp?.id,
                       ),
@@ -223,6 +224,34 @@ export default function SettingsModal({ show, onHideModal }) {
             settings.
           </Form.Text>
         </Dropdown>
+        <Dropdown>
+          <Dropdown.Toggle as={CustomToggle}>
+            <span className="label">Orientation</span> {orientation}
+          </Dropdown.Toggle>
+          <Dropdown.Menu>
+            <Dropdown.Item
+              eventKey={1}
+              active={orientation === "vertical"}
+              onClick={() => {
+                dispatch(setSetting({ orientation: "vertical" }));
+              }}
+            >
+              Vertical
+            </Dropdown.Item>
+            <Dropdown.Item
+              eventKey={2}
+              active={orientation === "horizontal"}
+              onClick={() => {
+                dispatch(setSetting({ orientation: "horizontal" }));
+              }}
+            >
+              Horizontal
+            </Dropdown.Item>
+          </Dropdown.Menu>
+          <Form.Text className="text-muted mt-0">
+            Choose which way your tree will grow
+          </Form.Text>
+        </Dropdown>
         <hr />
         <Form.Group controlId="followNavigation">
           <Form.Check
@@ -279,7 +308,7 @@ export default function SettingsModal({ show, onHideModal }) {
             (blue for men, red for women)
           </Form.Text>
         </Form.Group>
-        {wikibaseAlias === "wikidata" && (
+        {(dataSource === "wikidata" || dataSource === "geni") && (
           <>
             <Form.Group controlId="extraInfo">
               <Form.Check
@@ -375,7 +404,7 @@ export default function SettingsModal({ show, onHideModal }) {
                   )
                 }
                 type="checkbox"
-                label="Remove image background (NEW)"
+                label="Remove image background"
               />
               {/* {true && (
             <Dropdown className="imageDropdown d-inline-block ml-1">

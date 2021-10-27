@@ -1,7 +1,9 @@
 import { Button, Figure, Modal } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 
+import { EntityNode } from "types/EntityNode";
 import { FiExternalLink } from "react-icons/fi";
+import { Image } from "types/Entity";
 import { errorHandler } from "handlers/errorHandler";
 import { getEntityUrl } from "helpers/getEntityUrl";
 import getWikibaseEntitiesLabel from "wikibase/getWikibaseEntitiesLabel";
@@ -13,8 +15,16 @@ import { useAppSelector } from "store";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 
-export default function DetailsModal({ node, onHideModal, nodeImages }) {
-  const { languageCode, wikibaseAlias } = useAppSelector(
+export default function DetailsModal({
+  node,
+  onHideModal,
+  nodeImages,
+}: {
+  node: EntityNode;
+  onHideModal: () => void;
+  nodeImages: Image[];
+}) {
+  const { languageCode, dataSource } = useAppSelector(
     ({ settings }) => settings,
   );
   const { currentEntity, currentProp } = useAppSelector(({ tree }) => tree);
@@ -22,8 +32,8 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
 
   const dispatch = useDispatch();
   const [images, setImages] = useState(nodeImages);
-  const [birthPlace, setBirthPlace] = useState<string>();
-  const [deathPlace, setDeathPlace] = useState<string>();
+  const [birthPlace, setBirthPlace] = useState(node.birthPlace);
+  const [deathPlace, setDeathPlace] = useState(node.deathPlace);
   const [wikipediaExtract, setWikipediaExtract] = useState<string>();
 
   useEffect(() => {
@@ -32,28 +42,25 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
         .then(({ data: { extract, thumbnail } }) => {
           if (extract) setWikipediaExtract(extract);
           if (thumbnail && !images.length) {
-            setImages({
-              url: thumbnail.source,
-              alt: `${node.label}'s Wikipedia image`,
-            });
+            setImages((i) => [
+              ...i,
+              {
+                url: thumbnail.source,
+                alt: `${node.label}'s Wikipedia image`,
+              },
+            ]);
           }
         })
         .catch(errorHandler);
     }
-  }, [
-    languageCode,
-    wikibaseAlias,
-    images.length,
-    node.wikipediaSlug,
-    node.label,
-  ]);
+  }, [languageCode, dataSource, images.length, node.wikipediaSlug, node.label]);
 
   useEffect(() => {
     if (node.birthPlaceId || node.deathPlaceId) {
       getWikibaseEntitiesLabel(
-        [node.birthPlaceId, node.deathPlaceId],
+        [node.birthPlaceId || "", node.deathPlaceId || ""],
         languageCode,
-        wikibaseAlias,
+        dataSource,
       )
         .then(([birthPlaceLabel, deathPlaceLabel]) => {
           setBirthPlace(birthPlaceLabel);
@@ -61,46 +68,14 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
         })
         .catch(errorHandler);
     }
-  }, [languageCode, wikibaseAlias, node.birthPlaceId, node.deathPlaceId]);
+  }, [languageCode, dataSource, node.birthPlaceId, node.deathPlaceId]);
 
   return (
     <StyledModal show onHide={onHideModal}>
       <Modal.Header closeButton>
-        <Modal.Title>
-          {node.label}
-          {node.secondLabel && (
-            <>
-              <span className="labelsecondLabel">
-                &nbsp;({node.secondLabel})
-              </span>
-            </>
-          )}
-        </Modal.Title>
+        <Modal.Title>{node.label}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <ins
-          className="adsbygoogle"
-          style={{ display: "block" }}
-          data-ad-client="ca-pub-6287145012628815"
-          data-ad-slot="4149428847"
-          data-ad-format="auto"
-          data-full-width-responsive="true"
-        />
-        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-        {/* {video && (
-          <>
-            <a href={video.url}>Youtube Video</a>
-          </>
-          <IFrameWrapper className="mb-2">
-            <iframe
-              src={video.embedLink}
-              title="YouTube video player"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          </IFrameWrapper>
-        )} */}
         {!!images.length && (
           <div className="allImages">
             {images &&
@@ -219,6 +194,16 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
               <img src="/icons/wikipedia.png" alt="Wikipedia" />
             </a>
           )}
+          {node.geniProfileUrl && (
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Open Geni in a new tab"
+              href={node.geniProfileUrl}
+            >
+              <img src="/icons/geni.png" alt="Geni link" />
+            </a>
+          )}
           {/*{node.wikipediaUrl && (*/}
           {/*  <a*/}
           {/*    target="_blank"*/}
@@ -271,8 +256,8 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
               const url = getEntityUrl(
                 languageCode,
                 currentProp?.slug || "",
-                node,
-                wikibaseAlias,
+                node.wikipediaSlug || node.id,
+                dataSource,
               );
               router.push(url);
               onHideModal();
@@ -288,19 +273,6 @@ export default function DetailsModal({ node, onHideModal, nodeImages }) {
     </StyledModal>
   );
 }
-
-// const IFrameWrapper = styled.div`
-//   position: relative;
-//   padding-bottom: 56.25%; /* 16:9, for an aspect ratio of 1:1 change to this value to 100% */
-
-//   iframe {
-//     position: absolute;
-//     top: 0;
-//     left: 0;
-//     width: 100%;
-//     height: 100%;
-//   }
-// `;
 
 const StyledModal = styled(Modal)`
   .allImages {

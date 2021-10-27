@@ -90,10 +90,12 @@ export const treeSlice = createSlice({
     },
     setLoadingChildren: (
       state,
-      { payload: { entityNode } }: PayloadAction<{ entityNode: EntityNode }>,
+      {
+        payload: { entityNode, value = true },
+      }: PayloadAction<{ entityNode: EntityNode; value?: boolean }>,
     ) => {
       if (state.entitiesMap?.[entityNode.treeId!])
-        state.entitiesMap[entityNode.treeId!].loadingChildren = true;
+        state.entitiesMap[entityNode.treeId!].loadingChildren = value;
     },
     collapseChildren: (
       state,
@@ -164,10 +166,12 @@ export const treeSlice = createSlice({
     },
     setLoadingParents: (
       state,
-      { payload: { entityNode } }: PayloadAction<{ entityNode: EntityNode }>,
+      {
+        payload: { entityNode, value = true },
+      }: PayloadAction<{ entityNode: EntityNode; value?: boolean }>,
     ) => {
       if (state.entitiesMap?.[entityNode.treeId!])
-        state.entitiesMap[entityNode.treeId!].loadingParents = true;
+        state.entitiesMap[entityNode.treeId!].loadingParents = value;
     },
     collapseParents: (
       state,
@@ -240,10 +244,12 @@ export const treeSlice = createSlice({
     },
     setLoadingSiblings: (
       state,
-      { payload: { entityNode } }: PayloadAction<{ entityNode: EntityNode }>,
+      {
+        payload: { entityNode, value = true },
+      }: PayloadAction<{ entityNode: EntityNode; value?: boolean }>,
     ) => {
       if (state.entitiesMap?.[entityNode.treeId!])
-        state.entitiesMap[entityNode.treeId!].loadingSiblings = true;
+        state.entitiesMap[entityNode.treeId!].loadingSiblings = value;
     },
     collapseSiblings: (
       state,
@@ -318,10 +324,12 @@ export const treeSlice = createSlice({
     },
     setLoadingSpouses: (
       state,
-      { payload: { entityNode } }: PayloadAction<{ entityNode: EntityNode }>,
+      {
+        payload: { entityNode, value = true },
+      }: PayloadAction<{ entityNode: EntityNode; value?: boolean }>,
     ) => {
       if (state.entitiesMap?.[entityNode.treeId!])
-        state.entitiesMap[entityNode.treeId!].loadingSpouses = true;
+        state.entitiesMap[entityNode.treeId!].loadingSpouses = value;
     },
     collapseSpouses: (
       state,
@@ -355,10 +363,10 @@ export const treeSlice = createSlice({
 
       if (mapNode) {
         if (spouses) {
-          spouses.forEach((sibling) => {
-            if (state.entitiesMap) state.entitiesMap[sibling.treeId!] = sibling;
+          spouses.forEach((node) => {
+            if (state.entitiesMap) state.entitiesMap[node.treeId!] = node;
           });
-          mapNode.openSpouseTreeIds = spouses.map((child) => child.treeId!);
+          mapNode.openSpouseTreeIds = spouses.map((node) => node.treeId!);
         } else {
           mapNode.openSpouseTreeIds = mapNode.closedSpouseTreeIds;
         }

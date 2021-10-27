@@ -1,28 +1,27 @@
 import { DEFAULT_PROPERTY_ALL } from "constants/properties";
-import { Entity } from "types/Entity";
+import { DataSource } from "wikibase/getWikibaseInstance";
 import { LangCode } from "types/Lang";
-import { WikibaseAlias } from "wikibase/getWikibaseInstance";
 
 export const getEntityUrl = (
   langCode: LangCode,
   propSlug: string, //pass empty for "all"
-  entity: Pick<Entity, "id" | "wikipediaSlug">,
-  wikibaseAlias: WikibaseAlias,
+  entitySlug: string,
+  dataSource: DataSource,
 ) => {
-  let wikibasePrefix = "";
-  let slug = "";
-  switch (wikibaseAlias) {
+  let dataSourcePrefix = "";
+  switch (dataSource) {
     case "wikidata":
-      slug = entity.wikipediaSlug || entity.id;
       break;
     case "factgrid":
-      wikibasePrefix += "/factgrid";
-      slug = entity.id; //factgrid not supporting slug at the moment
+      dataSourcePrefix += "/factgrid";
+      break;
+    case "geni":
+      dataSourcePrefix += "/geni";
       break;
     default:
       break;
   }
-  return `${wikibasePrefix}/${langCode}/${
+  return `${dataSourcePrefix}/${langCode}/${
     (propSlug && encodeURIComponent(propSlug)) || DEFAULT_PROPERTY_ALL
-  }/${encodeURIComponent(slug)}`;
+  }/${encodeURIComponent(entitySlug)}`;
 };

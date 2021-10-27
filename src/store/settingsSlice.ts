@@ -2,9 +2,9 @@ import { Lang, LangCode, SecondLabel } from "types/Lang";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 import { DEFAULT_LANG_CODE } from "constants/langs";
+import { DataSource } from "wikibase/getWikibaseInstance";
 import { DefaultTheme } from "styled-components";
 import { RIGHT_ENTITY_OPTIONS } from "constants/properties";
-import { WikibaseAlias } from "wikibase/getWikibaseInstance";
 import { defaultTheme } from "constants/themes";
 
 export type SettingsState = {
@@ -24,7 +24,8 @@ export type SettingsState = {
   showFace: boolean;
   showGenderColor: boolean;
   themeCode: string;
-  wikibaseAlias: WikibaseAlias;
+  orientation: "horizontal" | "vertical";
+  dataSource: DataSource;
 };
 
 const initialState: SettingsState = {
@@ -41,7 +42,8 @@ const initialState: SettingsState = {
   showFace: true,
   showGenderColor: false,
   themeCode: defaultTheme.code,
-  wikibaseAlias: "wikidata",
+  orientation: "horizontal",
+  dataSource: "wikidata",
 };
 
 export const SETTINGS_SLICE_NAME = "settings";

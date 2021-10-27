@@ -1,7 +1,7 @@
 import { Button, Spinner } from "react-bootstrap";
 import React, { useRef } from "react";
 
-import { SearchResult } from "services/wikidataService";
+import { SearchResult } from "./SearchBar";
 import { getEntityUrl } from "helpers/getEntityUrl";
 import getEntityWikipediaSlug from "wikipedia/getEntityWikipediaSlug";
 import { reset } from "store/treeSlice";
@@ -28,9 +28,35 @@ export default function SearchSuggestions({
 
   const { currentProp } = useAppSelector(({ tree }) => tree);
 
-  const { languageCode, wikibaseAlias } = useAppSelector(
+  const { languageCode, dataSource } = useAppSelector(
     ({ settings }) => settings,
   );
+
+  const onSuggestionClick = async (searchResult: SearchResult) => {
+    setShowSuggestions(false);
+    dispatch(reset());
+
+    let targetUrl = "";
+    if (dataSource === "wikidata") {
+      const wikipediaSlug = await getEntityWikipediaSlug(
+        searchResult.id,
+        languageCode,
+        dataSource,
+      );
+
+      targetUrl = getEntityUrl(
+        languageCode,
+        currentProp?.slug || "",
+        wikipediaSlug || searchResult.id,
+        "wikidata",
+      );
+    }
+    if (dataSource === "geni") {
+      targetUrl = getEntityUrl("en", "family_tree", searchResult.id, "geni");
+    }
+
+    if (targetUrl) router.push(targetUrl);
+  };
 
   return (
     <StyledSuggestions
@@ -50,28 +76,10 @@ export default function SearchSuggestions({
           key={searchResult.id}
           className="searchResultBtn"
           variant="light"
-          onClick={async () => {
-            setShowSuggestions(false);
-            dispatch(reset());
-            const wikipediaSlug = await getEntityWikipediaSlug(
-              searchResult.id,
-              languageCode,
-              wikibaseAlias,
-            );
-            const url = getEntityUrl(
-              languageCode,
-              currentProp?.slug || "",
-              {
-                id: searchResult.id,
-                wikipediaSlug,
-              },
-              wikibaseAlias,
-            );
-            router.push(url);
-          }}
+          onClick={() => onSuggestionClick(searchResult)}
         >
-          <b>{searchResult.label}</b>
-          {searchResult.description && <i>{searchResult.description}</i>}
+          <b>{searchResult.title}</b>
+          {searchResult.subtitle && <i>{searchResult.subtitle}</i>}
         </Button>
       ))}
     </StyledSuggestions>
