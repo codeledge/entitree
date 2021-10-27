@@ -1,4 +1,4 @@
-import { Action, combineReducers } from "redux";
+import { Action, combineReducers, Store } from "redux";
 import {
   FLUSH,
   PAUSE,
@@ -9,7 +9,7 @@ import {
   persistReducer,
   persistStore,
 } from "redux-persist";
-import { MakeStore, createWrapper } from "next-redux-wrapper";
+import { createWrapper } from "next-redux-wrapper";
 import { ThunkAction, configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import settingsReducer, { SETTINGS_SLICE_NAME } from "./settingsSlice";
@@ -42,9 +42,10 @@ const store = configureStore({
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     }),
+  devTools: true,
 });
 
-const makeStore: MakeStore = () => store;
+const makeStore = () => store;
 
 export const persistor = persistStore(store);
 

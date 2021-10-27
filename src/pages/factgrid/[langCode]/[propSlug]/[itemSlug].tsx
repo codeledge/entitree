@@ -24,6 +24,7 @@ import { isItemId } from "helpers/isItemId";
 import { setSetting } from "store/settingsSlice";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
+import { PageProps } from "types/PageProps";
 
 const TreePage = ({
   errorCode,
@@ -75,69 +76,71 @@ const Page = styled(Div100vh)`
   flex-direction: column;
 `;
 
-export const getServerSideProps = wrapper.getServerSideProps(
-  async ({ store: { dispatch }, query }) => {
-    const { langCode, propSlug, itemSlug } = query as {
-      langCode: LangCode;
-      propSlug: string;
-      itemSlug: string;
-    };
+export const getServerSideProps = wrapper.getServerSideProps<PageProps>(
+  ({ dispatch }) =>
+    async ({ query }) => {
+      const { langCode, propSlug, itemSlug } = query as {
+        langCode: LangCode;
+        propSlug: string;
+        itemSlug: string;
+      };
 
-    if (!LANGS.find(({ code }) => code === langCode))
-      return { props: { errorCode: 404 } };
+      if (!LANGS.find(({ code }) => code === langCode))
+        return { props: { errorCode: 404 } };
 
-    const decodedPropSlug = decodeURIComponent(propSlug);
+      const decodedPropSlug = decodeURIComponent(propSlug);
 
-    let entityId;
-    if (isItemId(itemSlug)) {
-      entityId = itemSlug;
-    } else {
-      return { props: { errorCode: 404, message: "Slug must be a QID" } };
-    }
-
-    try {
-      const { currentEntity, currentProp, currentEntityProps } =
-        await getCurrentEntity({
-          entityId,
-          dataSource: "factgrid",
-          langCode,
-          propSlug: decodedPropSlug,
-        });
-
-      if (!currentEntity) return { props: { errorCode: 404 } };
-
-      //redirect to "all" if prop not found
-      if (propSlug !== DEFAULT_PROPERTY_ALL && !currentProp) {
-        return {
-          redirect: {
-            destination: `/factgrid/${langCode}/${DEFAULT_PROPERTY_ALL}/${itemSlug}`,
-          },
-        };
+      let entityId;
+      if (isItemId(itemSlug)) {
+        entityId = itemSlug;
+      } else {
+        return { props: { errorCode: 404, message: "Slug must be a QID" } };
       }
 
-      dispatch(setCurrentEntity(currentEntity));
-      if (currentEntityProps)
-        dispatch(setCurrentEntityProps(currentEntityProps));
-      if (currentProp) dispatch(setCurrentProp(currentProp));
+      try {
+        const { currentEntity, currentProp, currentEntityProps } =
+          await getCurrentEntity({
+            entityId,
+            dataSource: "factgrid",
+            langCode,
+            propSlug: decodedPropSlug,
+          });
 
-      const { ogDescription, ogTitle } = createMetaTags(
-        langCode,
-        currentEntity,
-        currentProp,
-      );
+        if (!currentEntity) return { props: { errorCode: 404 } };
 
-      const ogImage = "icons/entitree_square.png";
-      const twitterCard = "summary";
+        //redirect to "all" if prop not found
+        if (propSlug !== DEFAULT_PROPERTY_ALL && !currentProp) {
+          return {
+            redirect: {
+              destination: `/factgrid/${langCode}/${DEFAULT_PROPERTY_ALL}/${itemSlug}`,
+              permanent: false,
+            },
+          };
+        }
 
-      return {
-        props: { ogTitle, ogImage, twitterCard, ogDescription, langCode },
-      };
-    } catch (error: any) {
-      errorHandler(error);
+        dispatch(setCurrentEntity(currentEntity));
+        if (currentEntityProps)
+          dispatch(setCurrentEntityProps(currentEntityProps));
+        if (currentProp) dispatch(setCurrentProp(currentProp));
 
-      return { props: { errorCode: error.response?.status || 500 } };
-    }
-  },
+        const { ogDescription, ogTitle } = createMetaTags(
+          langCode,
+          currentEntity,
+          currentProp,
+        );
+
+        const ogImage = "icons/entitree_square.png";
+        const twitterCard = "summary";
+
+        return {
+          props: { ogTitle, ogImage, twitterCard, ogDescription, langCode },
+        };
+      } catch (error: any) {
+        errorHandler(error);
+
+        return { props: { errorCode: error.response?.status || 500 } };
+      }
+    },
 );
 
 export default TreePage;
