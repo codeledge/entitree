@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(req: NextRequest) {
-  console.log("URL", req.nextUrl.pathname);
   if (process.env.NODE_ENV === "production")
     if (req.headers.get("x-forwarded-proto") === "http") {
       const host = req.headers.get("host");
