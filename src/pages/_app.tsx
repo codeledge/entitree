@@ -14,7 +14,7 @@ import { useCurrentTheme } from "hooks/useCurrentTheme";
 import usePageView from "hooks/usePageView";
 import useReadQuery from "../hooks/useReadQuery";
 
-ReactGA.initialize(process.env.NEXT_PUBLIC_GA_TRACKING_CODE || "", {
+ReactGA.initialize(process.env.NEXT_PUBLIC_GA_TRACKING_CODE || "placeholder", {
   testMode: !process.env.NEXT_PUBLIC_GA_TRACKING_CODE,
 });
 
