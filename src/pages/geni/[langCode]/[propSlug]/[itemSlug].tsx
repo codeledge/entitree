@@ -18,10 +18,10 @@ import { addGeniEntityConnectors } from "lib/geni/addGeniEntityConnectors";
 import { createMetaTags } from "seo/createMetaTags";
 import { formatGeniProfile } from "lib/formatGeniProfile";
 import { getGeniCookies } from "helpers/cookies";
-import { getIdsByUnionAndType } from "lib/geni/getIdsByUnionAndType";
 import isInIframe from "lib/isInIframe";
 import { setSetting } from "store/settingsSlice";
 import { useDispatch } from "react-redux";
+import { PageProps } from "types/PageProps";
 
 const GeniTreePage = ({
   errorCode,
@@ -68,82 +68,83 @@ const GeniTreePage = ({
   );
 };
 
-export const getServerSideProps = wrapper.getServerSideProps(
-  async ({ store: { dispatch }, query, req }) => {
-    const { langCode, propSlug, itemSlug } = query as {
-      langCode: LangCode;
-      propSlug: string;
-      itemSlug: string;
-    };
-
-    const geniCookie = getGeniCookies(req);
-
-    if (!geniCookie?.access_token) {
-      return {
-        redirect: {
-          destination: "/geni",
-          permanent: false,
-        },
+export const getServerSideProps = wrapper.getServerSideProps<PageProps>(
+  ({ dispatch }) =>
+    async ({ query, req }) => {
+      const { langCode, propSlug, itemSlug } = query as {
+        langCode: LangCode;
+        propSlug: string;
+        itemSlug: string;
       };
-    }
 
-    if (!LANGS.find(({ code }) => code === langCode))
-      return { props: { errorCode: 404 } };
+      const geniCookie = getGeniCookies(req);
 
-    let entityId;
-    if (itemSlug === "me") {
-      entityId = "";
-    } else if (itemSlug) {
-      //check if id is correct
-      entityId = itemSlug.substr(1);
-    } else {
-      return { props: { errorCode: 404, message: "ID not found" } };
-    }
+      if (!geniCookie?.access_token) {
+        return {
+          redirect: {
+            destination: "/geni",
+            permanent: false,
+          },
+        };
+      }
 
-    const geni = getGeniCookies(req);
+      if (!LANGS.find(({ code }) => code === langCode))
+        return { props: { errorCode: 404 } };
 
-    // Server-side getRootEntity function
-    const [profile] = await getGeniProfiles(entityId, geni.access_token);
+      let entityId;
+      if (itemSlug === "me") {
+        entityId = "";
+      } else if (itemSlug) {
+        //check if id is correct
+        entityId = itemSlug.substr(1);
+      } else {
+        return { props: { errorCode: 404, message: "ID not found" } };
+      }
 
-    if (!profile) return { props: { errorCode: 404 } };
+      const geni = getGeniCookies(req);
 
-    const currentEntity = formatGeniProfile(profile);
+      // Server-side getRootEntity function
+      const [profile] = await getGeniProfiles(entityId, geni.access_token);
 
-    currentEntity.treeId = "0";
+      if (!profile) return { props: { errorCode: 404 } };
 
-    // Server-side addConnetions function
-    const [immediateFamily] = await getGeniImmediateFamily(
-      entityId,
-      geni.access_token,
-    );
+      const currentEntity = formatGeniProfile(profile);
 
-    addGeniEntityConnectors(currentEntity, immediateFamily, {
-      addNextAfterIds: true,
-      addTargetIds: true,
-      addSourceIds: true,
-      addNextBeforeIds: true,
-    });
+      currentEntity.treeId = "0";
 
-    dispatch(setCurrentEntity(currentEntity));
-    const currentProp = FAMILY_TREE_PROP;
-    dispatch(setCurrentProp(FAMILY_TREE_PROP));
+      // Server-side addConnetions function
+      const [immediateFamily] = await getGeniImmediateFamily(
+        entityId,
+        geni.access_token,
+      );
 
-    const { ogDescription, ogTitle } = createMetaTags(
-      langCode,
-      currentEntity,
-      currentProp,
-    );
+      addGeniEntityConnectors(currentEntity, immediateFamily, {
+        addNextAfterIds: true,
+        addTargetIds: true,
+        addSourceIds: true,
+        addNextBeforeIds: true,
+      });
 
-    let ogImage = "";
-    let twitterCard = "";
+      dispatch(setCurrentEntity(currentEntity));
+      const currentProp = FAMILY_TREE_PROP;
+      dispatch(setCurrentProp(FAMILY_TREE_PROP));
 
-    ogImage = "icons/entitree_square.png";
-    twitterCard = "summary";
+      const { ogDescription, ogTitle } = createMetaTags(
+        langCode,
+        currentEntity,
+        currentProp,
+      );
 
-    return {
-      props: { ogTitle, ogImage, twitterCard, ogDescription, langCode },
-    };
-  },
+      let ogImage = "";
+      let twitterCard = "";
+
+      ogImage = "icons/entitree_square.png";
+      twitterCard = "summary";
+
+      return {
+        props: { ogTitle, ogImage, twitterCard, ogDescription, langCode },
+      };
+    },
 );
 
 export default GeniTreePage;

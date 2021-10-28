@@ -24,16 +24,20 @@ export default function Header({ simple }: { simple?: boolean }) {
   const dispatch = useDispatch();
 
   const openSettingsModal = () => {
-    ReactGA.modalview("settings");
+    ReactGA.event({
+      category: "UI",
+      action: `click`,
+      label: "Settings modal button",
+    });
     setShowSettingsModal(true);
   };
 
   const openExampleLink = (e) => {
     dispatch(setLoadingEntity(true));
     ReactGA.event({
-      category: "Examples",
-      action: "Clicked on example",
-      label: e.target.href,
+      category: "UI",
+      action: "click",
+      label: "example " + e.target.href,
     });
   };
 

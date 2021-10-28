@@ -23,6 +23,7 @@ import {
   toggleSiblings,
   toggleSpouses,
 } from "actions/treeActions";
+import ReactGA from "react-ga";
 
 import { BottomToggle } from "./toggle/BottomToggle";
 import { BsImage } from "react-icons/bs";
@@ -150,10 +151,16 @@ export default memo(({ node }: { node: EntityNode }) => {
 
   const onThumbClick =
     thumbnails.length > 1
-      ? () =>
+      ? () => {
+          ReactGA.event({
+            category: "UI",
+            action: "click",
+            label: "thumbnail",
+          });
           setThumbnailIndex(
             (thumbnailIndex) => (thumbnailIndex + 1) % thumbnails.length,
-          )
+          );
+        }
       : undefined;
 
   const hasLabelOnly =

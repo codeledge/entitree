@@ -25,6 +25,7 @@ import isInIframe from "lib/isInIframe";
 import { isItemId } from "helpers/isItemId";
 import { setSetting } from "store/settingsSlice";
 import { useDispatch } from "react-redux";
+import { PageProps } from "types/PageProps";
 
 const TreePage = ({
   errorCode,
@@ -71,121 +72,125 @@ const TreePage = ({
   );
 };
 
-export const getServerSideProps = wrapper.getServerSideProps(
-  async ({ store: { dispatch }, query }) => {
-    const { langCode, propSlug, itemSlug } = query as {
-      langCode: LangCode;
-      propSlug: string;
-      itemSlug: string;
-    };
+export const getServerSideProps = wrapper.getServerSideProps<PageProps>(
+  ({ dispatch }) =>
+    async ({ query }) => {
+      const { langCode, propSlug, itemSlug } = query as {
+        langCode: LangCode;
+        propSlug: string;
+        itemSlug: string;
+      };
 
-    if (!LANGS.find(({ code }) => code === langCode))
-      return { props: { errorCode: 404 } };
+      if (!LANGS.find(({ code }) => code === langCode))
+        return { props: { errorCode: 404 } };
 
-    const decodedPropSlug = decodeURIComponent(propSlug);
-    const decodedItemSlug = decodeURIComponent(itemSlug);
+      const decodedPropSlug = decodeURIComponent(propSlug);
+      const decodedItemSlug = decodeURIComponent(itemSlug);
 
-    let entityId = "";
-    let entityThumbnail = "";
-    if (isItemId(itemSlug)) {
-      entityId = itemSlug;
-    } else {
-      try {
-        //TODO: cache this
-        const {
-          data: {
-            wikibase_item,
-            thumbnail,
-            titles: { canonical },
-          },
-        } = await getWikipediaArticle(decodedItemSlug, langCode);
+      let entityId = "";
+      let entityThumbnail = "";
+      if (isItemId(itemSlug)) {
+        entityId = itemSlug;
+      } else {
+        try {
+          //TODO: cache this
+          const {
+            data: {
+              wikibase_item,
+              thumbnail,
+              titles: { canonical },
+            },
+          } = await getWikipediaArticle(decodedItemSlug, langCode);
 
-        //the wikipedia article redirects to another article
-        if (canonical !== itemSlug) {
-          //try to get the item from wikidata and avoid the redirects
-          entityId = await getEntityIdFromSlug(decodedItemSlug, langCode);
-          if (!entityId) {
-            // ok, not found, redirect to page then
-            return {
-              redirect: {
-                destination: `/${langCode}/${propSlug}/${canonical}`,
-              },
-            };
+          //the wikipedia article redirects to another article
+          if (canonical !== itemSlug) {
+            //try to get the item from wikidata and avoid the redirects
+            entityId = await getEntityIdFromSlug(decodedItemSlug, langCode);
+            if (!entityId) {
+              // ok, not found, redirect to page then
+              return {
+                redirect: {
+                  destination: `/${langCode}/${propSlug}/${canonical}`,
+                  permanent: false,
+                },
+              };
+            }
+            // losing entityThumbnail feature for those isolated cases
+          } else {
+            if (wikibase_item) entityId = wikibase_item;
+            if (thumbnail) entityThumbnail = thumbnail.source;
           }
-          // losing entityThumbnail feature for those isolated cases
-        } else {
-          if (wikibase_item) entityId = wikibase_item;
-          if (thumbnail) entityThumbnail = thumbnail.source;
+        } catch (error: any) {
+          console.error(error);
+          return { props: { errorCode: error.response?.status || 500 } };
         }
+      }
+
+      //entityId might STILL not be found
+      if (!entityId) return { props: { errorCode: 404 } };
+
+      try {
+        const { currentEntity, currentProp, currentEntityProps } =
+          await getCurrentEntity({
+            entityId,
+            dataSource: "wikidata",
+            langCode,
+            propSlug: decodedPropSlug,
+          });
+
+        // TODO: Extract getCurrentEntity here and put the redirects when needed to fetch less data
+        if (!currentEntity) return { props: { errorCode: 404 } };
+
+        // redirect prop "all" to "family_tree"
+        if (currentProp && currentProp?.slug !== propSlug) {
+          return {
+            redirect: {
+              destination: `/${langCode}/${currentProp?.slug}/${itemSlug}`,
+              permanent: false,
+            },
+          };
+        }
+
+        // redirect prop "family_tree" to "all" if not found
+        if (propSlug !== DEFAULT_PROPERTY_ALL && !currentProp) {
+          return {
+            redirect: {
+              destination: `/${langCode}/${DEFAULT_PROPERTY_ALL}/${itemSlug}`,
+              permanent: false,
+            },
+          };
+        }
+
+        dispatch(setCurrentEntity(currentEntity));
+        if (currentEntityProps)
+          dispatch(setCurrentEntityProps(currentEntityProps));
+        if (currentProp) dispatch(setCurrentProp(currentProp));
+
+        const { ogDescription, ogTitle } = createMetaTags(
+          langCode,
+          currentEntity,
+          currentProp,
+        );
+
+        let ogImage = "";
+        let twitterCard = "";
+
+        if (entityThumbnail) {
+          ogImage = entityThumbnail;
+        } else {
+          ogImage = "icons/entitree_square.png";
+          twitterCard = "summary";
+        }
+
+        return {
+          props: { ogTitle, ogImage, twitterCard, ogDescription, langCode },
+        };
       } catch (error: any) {
         console.error(error);
+
         return { props: { errorCode: error.response?.status || 500 } };
       }
-    }
-
-    //entityId might STILL not be found
-    if (!entityId) return { props: { errorCode: 404 } };
-
-    try {
-      const { currentEntity, currentProp, currentEntityProps } =
-        await getCurrentEntity({
-          entityId,
-          dataSource: "wikidata",
-          langCode,
-          propSlug: decodedPropSlug,
-        });
-
-      // TODO: Extract getCurrentEntity here and put the redirects when needed to fetch less data
-      if (!currentEntity) return { props: { errorCode: 404 } };
-
-      // redirect prop "all" to "family_tree"
-      if (currentProp && currentProp?.slug !== propSlug) {
-        return {
-          redirect: {
-            destination: `/${langCode}/${currentProp?.slug}/${itemSlug}`,
-          },
-        };
-      }
-
-      // redirect prop "family_tree" to "all" if not found
-      if (propSlug !== DEFAULT_PROPERTY_ALL && !currentProp) {
-        return {
-          redirect: {
-            destination: `/${langCode}/${DEFAULT_PROPERTY_ALL}/${itemSlug}`,
-          },
-        };
-      }
-
-      dispatch(setCurrentEntity(currentEntity));
-      if (currentEntityProps)
-        dispatch(setCurrentEntityProps(currentEntityProps));
-      if (currentProp) dispatch(setCurrentProp(currentProp));
-
-      const { ogDescription, ogTitle } = createMetaTags(
-        langCode,
-        currentEntity,
-        currentProp,
-      );
-
-      let ogImage = "";
-      let twitterCard = "";
-
-      if (entityThumbnail) {
-        ogImage = entityThumbnail;
-      } else {
-        ogImage = "icons/entitree_square.png";
-        twitterCard = "summary";
-      }
-
-      return {
-        props: { ogTitle, ogImage, twitterCard, ogDescription, langCode },
-      };
-    } catch (error: any) {
-      console.error(error);
-
-      return { props: { errorCode: error.response?.status || 500 } };
-    }
-  },
+    },
 );
 
 export default TreePage;

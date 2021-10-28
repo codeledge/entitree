@@ -1,5 +1,6 @@
 import { Button, Figure, Modal } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
+import ReactGA from "react-ga";
 
 import { EntityNode } from "types/EntityNode";
 import { FiExternalLink } from "react-icons/fi";
@@ -24,6 +25,10 @@ export default function DetailsModal({
   onHideModal: () => void;
   nodeImages: Image[];
 }) {
+  useEffect(() => {
+    ReactGA.modalview("details");
+  }, []);
+
   const { languageCode, dataSource } = useAppSelector(
     ({ settings }) => settings,
   );

@@ -23,11 +23,7 @@ import { useDispatch } from "react-redux";
 
 export default function SettingsModal({ show, onHideModal }) {
   useEffect(() => {
-    ReactGA.event({
-      category: "Settings",
-      action: `User interaction`,
-      label: "modal opened",
-    });
+    ReactGA.modalview("settings");
   }, []);
 
   const currentTheme = useTheme();

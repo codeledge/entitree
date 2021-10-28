@@ -37,25 +37,45 @@ export default function SearchSuggestions({
     dispatch(reset());
 
     let targetUrl = "";
-    if (dataSource === "wikidata") {
-      const wikipediaSlug = await getEntityWikipediaSlug(
-        searchResult.id,
-        languageCode,
-        dataSource,
-      );
+    switch (dataSource) {
+      case "factgrid":
+        targetUrl = getEntityUrl(
+          languageCode,
+          currentProp?.slug || "",
+          searchResult.id,
+          dataSource,
+        );
+        break;
+      case "geni":
+        targetUrl = getEntityUrl(
+          "en",
+          "family_tree",
+          searchResult.id,
+          dataSource,
+        );
+        break;
+      case "wikidata":
+      default:
+        {
+          const wikipediaSlug = await getEntityWikipediaSlug(
+            searchResult.id,
+            languageCode,
+            dataSource,
+          );
 
-      targetUrl = getEntityUrl(
-        languageCode,
-        currentProp?.slug || "",
-        wikipediaSlug || searchResult.id,
-        "wikidata",
-      );
-    }
-    if (dataSource === "geni") {
-      targetUrl = getEntityUrl("en", "family_tree", searchResult.id, "geni");
+          targetUrl = getEntityUrl(
+            languageCode,
+            currentProp?.slug || "",
+            wikipediaSlug || searchResult.id,
+            dataSource,
+          );
+        }
+        break;
     }
 
-    if (targetUrl) router.push(targetUrl);
+    if (!targetUrl) throw new Error("targetUrl is empty");
+
+    router.push(targetUrl);
   };
 
   return (
