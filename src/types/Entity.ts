@@ -88,13 +88,13 @@ export interface Entity extends WikibaseEntity {
   openParentTreeIds?: string[];
   openSiblingTreeIds?: string[];
   openSpouseTreeIds?: string[];
-  partnersIds?: string[];
+  partnersIds?: string[]; // a subset of nextAfterIds
   peoplepillImageUrl?: string;
   peoplepillSlug?: string;
   religion?: SparqlEmoji;
   simpleClaims?: SimpleClaims; //TODO not available on client
   sourceIds?: string[];
-  spousesIds?: string[];
+  spousesIds?: string[]; // a subset of nextAfterIds
   startDate?: string;
   startEndSpan?: string;
   targetIds?: string[];
