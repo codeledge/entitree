@@ -1,4 +1,4 @@
-import { LANG_MAP } from "constants/langs";
+import { ALL_LANGS } from "constants/langs";
 
 // keep compatibility
 export interface Lang extends SecondLabel {
@@ -11,4 +11,4 @@ export type SecondLabel = {
   name: string;
 };
 
-export type LangCode = keyof typeof LANG_MAP;
+export type LangCode = keyof typeof ALL_LANGS;

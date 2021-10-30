@@ -373,7 +373,7 @@ export default memo(({ node }: { node: EntityNode }) => {
                 <span>
                   <img
                     alt=""
-                    src={`https://www.countryflags.io/${country.code}/flat/32.png`}
+                    src={`https://flagpedia.net/data/flags/w40/${country.code.toLowerCase()}.png`}
                     title={country.name}
                   />
                 </span>
@@ -573,7 +573,15 @@ const ThemedNodeOuter = styled.div<SettingsState & { gender?: string }>`
     right: 0px;
     width: 32px;
     z-index: 2; //needed for tooltip
+    border-radius: 2px;
+    overflow: hidden;
+    img {
+      max-width: 100%;
+      max-height: 100%;
+      vertical-align: baseline;
+    }
   }
+
   ${({ showGenderColor, gender }) =>
     showGenderColor &&
     gender &&

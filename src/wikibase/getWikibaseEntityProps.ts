@@ -1,4 +1,4 @@
-import { DEFAULT_LANG, FAMILY_TREE_TRANSLATIONS } from "constants/langs";
+import { DEFAULT_LANG, FAMILY_TREE_PROP_TRANSLATIONS } from "constants/langs";
 import { DataSource, getWikibaseInstance } from "wikibase/getWikibaseInstance";
 
 import { EntityProp } from "types/Entity";
@@ -62,7 +62,8 @@ export default async function getWikibaseEntityProps(
             thisProp.isFav = true;
 
             //label is "child", you want "family tree" if available
-            const translatedFamilyTree = FAMILY_TREE_TRANSLATIONS[langCode];
+            const translatedFamilyTree =
+              FAMILY_TREE_PROP_TRANSLATIONS[langCode];
 
             if (translatedFamilyTree) {
               thisProp.overrideLabel = translatedFamilyTree;

@@ -11,7 +11,7 @@ export const filterSpousePartnersIds = (
     return node.nextAfterIds;
   }
 
-  node.nextAfterIds?.filter((nextAfterId) => {
+  return node.nextAfterIds?.filter((nextAfterId) => {
     if (
       settings.rightEntityOption.propIds.indexOf(SPOUSE_ID) > -1 &&
       node.spousesIds?.includes(nextAfterId)
