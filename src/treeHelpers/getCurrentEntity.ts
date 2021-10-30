@@ -2,7 +2,7 @@ import { Entity, EntityProp } from "types/Entity";
 
 import { DEFAULT_PROPERTY_ALL } from "constants/properties";
 import { DataSource } from "wikibase/getWikibaseInstance";
-import { FAMILY_TREE_TRANSLATIONS } from "constants/langs";
+import { FAMILY_TREE_PROP_TRANSLATIONS } from "constants/langs";
 import { LangCode } from "types/Lang";
 import { getRootEntity } from "treeHelpers/getEntities";
 import getWikibaseConstants from "wikibase/getWikibaseConstants";
@@ -64,7 +64,7 @@ export const getCurrentEntity = async ({
     });
 
     //check if there is a translation for it
-    const translatedFamilyTree = FAMILY_TREE_TRANSLATIONS[langCode];
+    const translatedFamilyTree = FAMILY_TREE_PROP_TRANSLATIONS[langCode];
     if (translatedFamilyTree) {
       familyTreeProp.overrideLabel = translatedFamilyTree;
       familyTreeProp.slug = translatedFamilyTree.replace(/\s/g, "_");

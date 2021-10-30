@@ -20,7 +20,7 @@ const DISAMBIGUATION_PAGE_DESC = {
   ne: "------",
 };
 
-export const LANG_MAP = {
+export const ALL_LANGS = {
   abs: "Ambonese Malay",
   ab: "Abkhazian",
   ace: "Achinese",
@@ -442,11 +442,10 @@ export const LANG_MAP = {
   zu: "Zulu",
 };
 
-//Support only langs that have disambig page translation
-export const LANGS = Object.keys(DISAMBIGUATION_PAGE_DESC).map((code) => {
+export const LANGS = Object.keys(ALL_LANGS).map((code) => {
   return {
     code,
-    name: LANG_MAP[code],
+    name: ALL_LANGS[code],
     disambPageDesc: DISAMBIGUATION_PAGE_DESC[code],
   } as Lang;
 });
@@ -457,18 +456,13 @@ export const DEFAULT_LANG = LANGS.find(
   (lang) => lang.code === DEFAULT_LANG_CODE,
 )!;
 
-//TODO This could match all supported langs, so changing lang doesn't need a reload
-export const DEFAULT_LANGS_CODES: LangCode[] = [
-  "en",
-  "fr",
-  "de",
-  "it",
-  "es",
-  "nl",
-  "pt",
-];
+//TODO This "could" match all supported langs, so changing lang doesn't need a reload
+//Fetch always langs that have disambig page translation (main languages)
+export const DEFAULT_LANGS_CODES: LangCode[] = Object.keys(
+  DISAMBIGUATION_PAGE_DESC,
+) as LangCode[];
 
-export const FAMILY_TREE_TRANSLATIONS = {
+export const FAMILY_TREE_PROP_TRANSLATIONS = {
   "zh-hans": "家族树",
   "zh-hant": "家族樹",
   "zh-hk": "家族樹",
