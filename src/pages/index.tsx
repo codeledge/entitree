@@ -43,10 +43,7 @@ export default function Home() {
                 <StyledCol xs={12} md={6}>
                   <a title="" href="/geni">
                     <Card>
-                      <ImgBox
-                        alt="Queen Elizabeth II family tree"
-                        src="https://upload.wikimedia.org/wikipedia/commons/f/fe/Geni_Logo.png"
-                      />
+                      <ImgBox alt="Geni Logo" src="/icons/geni_big.png" />
 
                       <Card.Body>
                         Start exploring &amp; visualizing your own family tree,
