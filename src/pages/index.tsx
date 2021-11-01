@@ -41,6 +41,21 @@ export default function Home() {
               </p>
               <StyledRow>
                 <StyledCol xs={12} md={6}>
+                  <a title="" href="/geni">
+                    <Card>
+                      <ImgBox
+                        alt="Queen Elizabeth II family tree"
+                        src="https://upload.wikimedia.org/wikipedia/commons/f/fe/Geni_Logo.png"
+                      />
+
+                      <Card.Body>
+                        Start exploring &amp; visualizing your own family tree,
+                        if you have an account on Geni.com
+                      </Card.Body>
+                    </Card>
+                  </a>
+                </StyledCol>
+                <StyledCol xs={12} md={6}>
                   <a
                     title="Go to Queen Elizabeth II family tree"
                     href="/en/family_tree/Elizabeth_II"
@@ -57,6 +72,8 @@ export default function Home() {
                     </Card>
                   </a>
                 </StyledCol>
+              </StyledRow>
+              <StyledRow>
                 <StyledCol xs={12} md={6}>
                   <a
                     title="Go to Freddie mercury's family tree"
@@ -69,26 +86,6 @@ export default function Home() {
                       />
                       <Card.Body>
                         Search for anyone in the world, literally, anyone 🌎
-                      </Card.Body>
-                    </Card>
-                  </a>
-                </StyledCol>
-              </StyledRow>
-              <StyledRow>
-                <StyledCol xs={12} md={6}>
-                  <a
-                    title="The Simpson's family tree"
-                    href="/en/family_tree/Homer_Simpson?0u0=u"
-                  >
-                    <Card>
-                      <ImgBox
-                        alt="The Simpson's family tree"
-                        src="/examples/simpsons.png"
-                      />
-
-                      <Card.Body>
-                        Get entertained with Fictional characters and their
-                        ancestors
                       </Card.Body>
                     </Card>
                   </a>
