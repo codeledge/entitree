@@ -1,6 +1,6 @@
 import { Button, Container } from "react-bootstrap";
 import { Content, Main, Page } from "layout/Page";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import Footer from "layout/Footer";
@@ -14,6 +14,7 @@ import { useRouter } from "next/router";
 
 export default function GeniHome() {
   const router = useRouter();
+  const [session, setSession] = useState();
   const [cookie, setCookie, removeCookie] = useCookies(["geni"]);
   const dispatch = useDispatch();
 
@@ -21,6 +22,11 @@ export default function GeniHome() {
   useEffect(() => {
     dispatch(setSetting({ dataSource: "geni" }));
   }, []);
+
+  //Use session as a state otherwise server gets confused with pre-render
+  useEffect(() => {
+    setSession(cookie.geni);
+  }, [cookie.geni]);
 
   useEffect(() => {
     if (router.query?.access_token && router.query?.expires_in) {
@@ -54,17 +60,23 @@ export default function GeniHome() {
             </p>
             <br />
             <br />
-            {cookie.geni ? (
+            {session ? (
               <Centered>
                 <p>✅ You are logged in</p>
-                <Button href="/geni/en/family_tree/me" variant="success">
+                <Button
+                  key="show-tree"
+                  variant="success"
+                  href="/geni/en/family_tree/me"
+                >
                   Show my tree
                 </Button>
                 <br />
                 <br />
                 <hr />
                 <Button
-                  onClick={() => removeCookie("geni")}
+                  onClick={() => {
+                    removeCookie("geni");
+                  }}
                   variant="outline-primary"
                 >
                   Logout
@@ -76,6 +88,7 @@ export default function GeniHome() {
                   <b>Login with your Geni.com account</b>
                 </p>
                 <a
+                  key="log-in"
                   href={`https://www.geni.com/platform/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_GENI_APP_ID}&response_type=token`}
                 >
                   <img
