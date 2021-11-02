@@ -11,7 +11,7 @@ export const Main = styled.main`
   position: relative;
 `;
 
-export const Content = styled.main`
+export const Content = styled.div`
   max-width: 680px;
   margin: 0 auto;
 `;

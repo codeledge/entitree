@@ -1,6 +1,7 @@
 import { Button, Container } from "react-bootstrap";
 import { Content, Main, Page } from "layout/Page";
 import React, { useEffect } from "react";
+import styled from "styled-components";
 
 import Footer from "layout/Footer";
 import Header from "layout/Header";
@@ -49,42 +50,41 @@ export default function GeniHome() {
             <p>
               Visualize connected Geni people items on a dynamic, navigable tree
               diagram. Discover properties of People, Organizations and Events
-              with a direct link to Wikipedia Aticles. <br />
-              <br />
-              {cookie.geni ? (
-                <>
-                  <a href="/geni/en/family_tree/me">
-                    <Button title="">Show my tree</Button>
-                  </a>
-                  <br />
-                  <div>✅ You are logged in</div>
-                  <br />
-                  <hr />
-                  <Button
-                    color="#ff5c5c"
-                    onClick={() => removeCookie("geni")}
-                    title=""
-                  >
-                    Logout
-                  </Button>
-
-                  <br />
-                </>
-              ) : (
-                <div>
-                  Please login first.
-                  <br />
-                  <a
-                    href={`https://www.geni.com/platform/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_GENI_APP_ID}&response_type=token`}
-                  >
-                    <img
-                      alt="Login with Geni"
-                      src="https://www.geni.com/images/connect/login-large.png"
-                    />
-                  </a>
-                </div>
-              )}
+              with a direct link to Wikipedia Aticles.
             </p>
+            <br />
+            <br />
+            {cookie.geni ? (
+              <Centered>
+                <p>✅ You are logged in</p>
+                <Button href="/geni/en/family_tree/me" variant="success">
+                  Show my tree
+                </Button>
+                <br />
+                <br />
+                <hr />
+                <Button
+                  onClick={() => removeCookie("geni")}
+                  variant="outline-primary"
+                >
+                  Logout
+                </Button>
+              </Centered>
+            ) : (
+              <Centered>
+                <p>
+                  <b>Login with your Geni.com account</b>
+                </p>
+                <a
+                  href={`https://www.geni.com/platform/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_GENI_APP_ID}&response_type=token`}
+                >
+                  <img
+                    alt="Login with Geni"
+                    src="https://www.geni.com/images/connect/login-large.png"
+                  />
+                </a>
+              </Centered>
+            )}
           </Content>
         </Container>
       </Main>
@@ -92,3 +92,7 @@ export default function GeniHome() {
     </Page>
   );
 }
+
+const Centered = styled.div`
+  text-align: center;
+`;

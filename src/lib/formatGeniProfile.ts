@@ -42,7 +42,7 @@ export const formatGeniProfile = (geniProfile: GeniProfile) => {
 };
 
 const addCountryOfCitizenship = (entity: Entity, geniProfile: GeniProfile) => {
-  if (geniProfile?.birth?.location.country_code) {
+  if (geniProfile?.birth?.location?.country_code) {
     entity.countryOfCitizenship = {
       code: geniProfile.birth.location.country_code,
       name: geniProfile.birth.location.country,
