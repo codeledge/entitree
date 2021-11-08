@@ -4926,10 +4926,10 @@ react-cookie@4.1.1:
     hoist-non-react-statics "^3.0.0"
     universal-cookie "^4.0.0"
 
-react-div-100vh@0.6.0:
-  version "0.6.0"
-  resolved "https://registry.npmjs.org/react-div-100vh/-/react-div-100vh-0.6.0.tgz"
-  integrity sha512-ErV0VTNXUd8jZqofC0ExZr5u+XDD2kN2te4SbwtqsyTm0UOjVYu53kP+FalGQrTe+DoMG8VYR2dITcAFu7c/5w==
+react-div-100vh@0.7.0-beta.1:
+  version "0.7.0-beta.1"
+  resolved "https://registry.yarnpkg.com/react-div-100vh/-/react-div-100vh-0.7.0-beta.1.tgz#d775068800c3b2eb7586740277daf0bd96f815d4"
+  integrity sha512-Br/cq3GgHwsV27+DFyzYxDOER+12GxW76Lo4Nb2KtjpxtSgJ3bEDOaANZmIWUIsISuHWChNSjtgitSOkz3rQdw==
 
 react-dom@17.0.2:
   version "17.0.2"

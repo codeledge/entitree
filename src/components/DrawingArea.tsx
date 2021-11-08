@@ -13,6 +13,12 @@ export default function DrawingArea() {
       velocityAnimation={{
         disabled: true,
       }}
+      alignmentAnimation={{
+        disabled: true,
+      }}
+      zoomAnimation={{
+        disabled: true,
+      }}
       doubleClick={{
         disabled: true,
       }}
