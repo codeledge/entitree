@@ -88,11 +88,6 @@ export default async function getEntities(
       options?.dataSource,
     );
 
-    //filter out isInfantDeath by default
-    if (entity.isHuman && entity.isInfantDeath) {
-      return accumulator;
-    }
-
     // siblings and spouses don't need connectors, so no currentPropId is passed
     if (options?.currentPropId) {
       await addEntityConnectors(entity, options);
