@@ -36,7 +36,6 @@ import { MdChildCare } from "react-icons/md";
 import { RightToggle } from "./toggle/RightToggle";
 import { SettingsState } from "store/settingsSlice";
 import { TopToggle } from "./toggle/TopToggle";
-import clsx from "clsx";
 import { errorHandler } from "handlers/errorHandler";
 import getFandomPageProps from "../services/fandomService";
 import getWikibaseEntitiesLabel from "wikibase/getWikibaseEntitiesLabel";
@@ -226,9 +225,7 @@ export default memo(({ node }: { node: EntityNode }) => {
       <ThemedNodeInner>
         {theme.thumbDisplay && (
           <ThemedThumbnail
-            className={clsx("imgWrapper", {
-              hasThumbnails: thumbnails.length > 1,
-            })}
+            hasThumbnails={thumbnails.length > 1}
             style={thumbnailStyle}
             onClick={onThumbClick}
             maskType={settings.imageOverflow}
@@ -280,16 +277,12 @@ export default memo(({ node }: { node: EntityNode }) => {
           </ThemedThumbnail>
         )}
         <ThemedContent className="content" hasSecondLabel={hasSecondLabel}>
-          <div
-            className={clsx({
-              "line-clamp": !hasLabelOnly,
-            })}
-          >
+          <div className={!hasLabelOnly ? "line-clamp" : ""}>
             {node.isRoot ? (
               <h1
-                className={clsx(`label btn btn-link mb-0`, {
-                  "line-clamp": hasLabelOnly,
-                })}
+                className={`label btn btn-link mb-0${
+                  hasLabelOnly ? " line-clamp" : ""
+                }`}
                 role="button"
                 tabIndex={0}
                 onKeyPress={() => setShowModal(true)}
@@ -306,9 +299,9 @@ export default memo(({ node }: { node: EntityNode }) => {
               </h1>
             ) : (
               <span
-                className={clsx(`label btn btn-link`, {
-                  "line-clamp": hasLabelOnly,
-                })}
+                className={`label btn btn-link${
+                  hasLabelOnly ? " line-clamp" : ""
+                }`}
                 role="button"
                 tabIndex={0}
                 onKeyPress={() => setShowModal(true)}
@@ -613,7 +606,10 @@ const ThemedNodeInner = styled.div`
     theme.nodeFlexDirection === "column" && `width: ${theme.thumbWidth}px`};
 `;
 
-const ThemedThumbnail = styled.div<{ maskType?: string }>`
+const ThemedThumbnail = styled.div<{
+  maskType?: string;
+  hasThumbnails?: boolean;
+}>`
   overflow: hidden;
   position: relative;
   flex-shrink: 0;
@@ -626,9 +622,12 @@ const ThemedThumbnail = styled.div<{ maskType?: string }>`
   ${({ theme }) =>
     theme.nodeFlexDirection === "column" &&
     `margin-top: ${(theme.nodeWidth - theme.thumbWidth) / 2}px`};
-  &.hasThumbnails {
-    cursor: pointer;
-  }
+  ${({ hasThumbnails }) =>
+    hasThumbnails &&
+    css`
+      cursor: pointer;
+    `};
+
   .defaultImgMessage {
     color: gray;
     font-size: 50px;

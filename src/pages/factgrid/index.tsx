@@ -36,6 +36,11 @@ export default function Home() {
                 diagram. Discover properties of People, Organizations and Events
                 with a direct link to Wikipedia Aticles.
               </p>
+              <img
+                src="/icons/factgrid.png"
+                style={{ width: "300px" }}
+                alt="FactGrid Logo"
+              />{" "}
             </Content>
           </Container>
         )}

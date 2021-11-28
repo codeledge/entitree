@@ -42,7 +42,7 @@ const initialState: SettingsState = {
   showFace: true,
   showGenderColor: false,
   themeCode: defaultTheme.code,
-  orientation: "horizontal",
+  orientation: "vertical",
   dataSource: "wikidata",
 };
 
