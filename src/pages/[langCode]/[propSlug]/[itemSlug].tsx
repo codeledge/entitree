@@ -37,7 +37,7 @@ const TreePage = ({
   twitterImage,
   twitterTitle,
   langCode,
-}) => {
+}: PageProps) => {
   const { loadingEntity } = useAppSelector(({ tree }) => tree);
 
   const dispatch = useDispatch();
@@ -110,7 +110,9 @@ export const getServerSideProps = wrapper.getServerSideProps<PageProps>(
               // ok, not found, redirect to page then
               return {
                 redirect: {
-                  destination: `/${langCode}/${propSlug}/${canonical}`,
+                  destination: `/${langCode}/${propSlug}/${encodeURIComponent(
+                    canonical,
+                  )}`,
                   permanent: false,
                 },
               };
