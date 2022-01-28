@@ -38,6 +38,7 @@
     "react/no-unescaped-entities": "off",
     "react/react-in-jsx-scope": "off",
     "react/require-default-props": "off",
+    "react/function-component-definition": "off",
     "import/extensions": [
       "error",
       "ignorePackages",

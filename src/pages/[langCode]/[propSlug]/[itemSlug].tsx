@@ -5,7 +5,6 @@ import {
   setCurrentProp,
 } from "store/treeSlice";
 import { useAppSelector, wrapper } from "store";
-
 import { DEFAULT_PROPERTY_ALL } from "constants/properties";
 import DrawingArea from "components/DrawingArea";
 import Error from "next/error";
@@ -37,7 +36,7 @@ const TreePage = ({
   twitterImage,
   twitterTitle,
   langCode,
-}) => {
+}: PageProps) => {
   const { loadingEntity } = useAppSelector(({ tree }) => tree);
 
   const dispatch = useDispatch();
@@ -110,7 +109,9 @@ export const getServerSideProps = wrapper.getServerSideProps<PageProps>(
               // ok, not found, redirect to page then
               return {
                 redirect: {
-                  destination: `/${langCode}/${propSlug}/${canonical}`,
+                  destination: `/${langCode}/${encodeURIComponent(
+                    propSlug,
+                  )}/${encodeURIComponent(canonical)}`,
                   permanent: false,
                 },
               };
@@ -141,11 +142,13 @@ export const getServerSideProps = wrapper.getServerSideProps<PageProps>(
         // TODO: Extract getCurrentEntity here and put the redirects when needed to fetch less data
         if (!currentEntity) return { props: { errorCode: 404 } };
 
-        // redirect prop "all" to "family_tree"
+        // redirect prop "all" (or anything not found) to "family_tree" (or the relative translation)
         if (currentProp && currentProp?.slug !== propSlug) {
           return {
             redirect: {
-              destination: `/${langCode}/${currentProp?.slug}/${itemSlug}`,
+              destination: `/${langCode}/${encodeURIComponent(
+                currentProp?.slug,
+              )}/${itemSlug}`,
               permanent: false,
             },
           };
