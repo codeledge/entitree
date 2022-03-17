@@ -144,8 +144,8 @@ export default function Home() {
               <StyledRow>
                 <StyledCol xs={12} md={6}>
                   <a
-                    title="Go to Entitree's Medium page"
-                    href="https://medium.com/family-trees"
+                    title="Go to Entitree's Blog page"
+                    href="https://blog.entitree.com/"
                   >
                     <Card>
                       <ImgBox
@@ -153,7 +153,7 @@ export default function Home() {
                         src="/examples/lana-del-rey.png"
                       />
                       <Card.Body>
-                        Read more Medium articles, there are more than 600 trees
+                        Read more Blog articles, there are more than 600 trees
                         created 📝
                       </Card.Body>
                     </Card>
