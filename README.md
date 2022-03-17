@@ -78,4 +78,6 @@ NEXT_PUBLIC_GENI_APP_ID=564
 
 ## License
 
-Copyright (c) 2021, Codeledge
+GNU General Public License v3.0
+
+Copyright (c) 2022, Codeledge
