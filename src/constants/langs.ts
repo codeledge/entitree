@@ -1,15 +1,15 @@
 import { Lang, LangCode } from "types/Lang";
 
 const DISAMBIGUATION_PAGE_DESC = {
-  ar: "صفحة توضيح لويكيميديا",
-  da: "Wikipedia-flertydigside",
-  de: "Wikimedia-Begriffsklärungsseite",
   en: "Wikimedia disambiguation page",
+  de: "Wikimedia-Begriffsklärungsseite",
+  da: "Wikipedia-flertydigside",
   es: "página de desambiguación de Wikimedia",
   fr: "page d'homonymie de Wikimedia",
   id: "halaman disambiguasi Wikimedia",
   it: "pagina di disambiguazione di un progetto Wikimedia",
   ja: "ウィキメディアの曖昧さ回避ページ",
+  ar: "صفحة توضيح لويكيميديا",
   hi: "बहुविकल्पी पृष्ठ",
   hu: "egyértelműsítő lap",
   nl: "Wikimedia-doorverwijspagina",
