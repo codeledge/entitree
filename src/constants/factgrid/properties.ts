@@ -5,7 +5,7 @@ export const INSTANCE_OF_ID = "P2";
 // export const BIRTH_DATE_ID = "P569";
 // export const BIRTH_NAME_ID = "P1477";
 // export const BIRTH_PLACE_ID = "P19";
-export const CHILD_ID = "P150";
+export const WD_CHILD = "P150";
 // export const COUNTRY_OF_CITIZENSHIP = "P27";
 // export const DEATH_DATE_ID = "P570";
 // export const DEATH_PLACE_ID = "P20";
@@ -41,7 +41,7 @@ export const SPOUSE_ID = "P84";
 // export const WIKITREE_ID = "P2949";
 
 export const FAMILY_IDS_MAP = {
-  [CHILD_ID]: true,
+  [WD_CHILD]: true,
   // [SIBLINGS_ID]: true,
   [SPOUSE_ID]: true,
   [FATHER_ID]: true,
@@ -49,7 +49,7 @@ export const FAMILY_IDS_MAP = {
 };
 
 export const FAMILY_TREE_PROP = {
-  id: CHILD_ID,
+  id: WD_CHILD,
   slug: "family_tree",
   label: "child",
   overrideLabel: "family tree",

@@ -1,13 +1,13 @@
 import { Claim } from "types/Claim";
 import { DateTime } from "luxon";
-import { START_DATE_ID } from "constants/properties";
+import { WD_START_TIME } from "@entitree/wikidata-helper";
 import { getTimeQualifier } from "./getTimeQualifier";
 
 export function sortClaimsByStartDate(claims: Claim[]) {
   return claims
     .sort((a, b) => {
-      const startDateA = getTimeQualifier(a, START_DATE_ID);
-      const startDateB = getTimeQualifier(b, START_DATE_ID);
+      const startDateA = getTimeQualifier(a, WD_START_TIME);
+      const startDateB = getTimeQualifier(b, WD_START_TIME);
       try {
         return startDateA &&
           startDateB &&

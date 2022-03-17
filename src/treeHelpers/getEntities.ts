@@ -13,11 +13,11 @@ import {
 } from "services/apiService";
 import { sortByBirthDate, sortByGender } from "../lib/sortEntities";
 
-import { CHILD_ID } from "constants/properties";
 import { DEFAULT_LANGS_CODES } from "../constants/langs";
 import { Entity } from "types/Entity";
 import { EntityNode } from "types/EntityNode";
 import { LangCode } from "types/Lang";
+import { WD_CHILD } from "@entitree/wikidata-helper";
 import { addGeniEntityConnectors } from "lib/geni/addGeniEntityConnectors";
 import filterSpouses from "../lib/filterSpouses";
 import { formatGeniProfile } from "../lib/formatGeniProfile";
@@ -132,7 +132,7 @@ export const getChildEntities = async (
     node.treeId = `${entityNode.treeId}${CHILD_BOOKMARK_SYMBOL}${index}`;
   });
 
-  if (options?.currentPropId === CHILD_ID && !options?.areTargetIdsSorted) {
+  if (options?.currentPropId === WD_CHILD && !options?.areTargetIdsSorted) {
     sortByBirthDate(children);
   }
 
@@ -157,7 +157,7 @@ export const getParentEntities = async (
     node.treeId = `${entityNode.treeId}${PARENT_BOOKMARK_SYMBOL}${index}`;
   });
 
-  if (options?.currentPropId === CHILD_ID) {
+  if (options?.currentPropId === WD_CHILD) {
     sortByGender(parents);
   }
 

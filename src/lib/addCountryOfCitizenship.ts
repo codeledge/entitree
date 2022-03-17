@@ -1,12 +1,12 @@
 import { COUNTRIES } from "constants/countries";
-import { COUNTRY_OF_CITIZENSHIP } from "constants/properties";
 import { Entity } from "types/Entity";
+import { WD_COUNTRY_OF_CITIZENSHIP } from "@entitree/wikidata-helper";
 import getSimpleClaimValue from "./getSimpleClaimValue";
 
 export default function addCountryOfCitizenship(entity: Entity) {
   const countryId = getSimpleClaimValue(
     entity.simpleClaims,
-    COUNTRY_OF_CITIZENSHIP,
+    WD_COUNTRY_OF_CITIZENSHIP,
   );
 
   if (!countryId) return;

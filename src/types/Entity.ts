@@ -1,7 +1,7 @@
 import { Claim } from "./Claim";
 import { Country } from "constants/countries";
 import { LangCode } from "types/Lang";
-import { PropColor } from "constants/eyeHairColors";
+import { PropColor } from "@entitree/wikidata-helper";
 import { SparqlEmoji } from "types/SparqlEmoji";
 
 export interface Sitelink {
@@ -122,7 +122,7 @@ export type EntityProp = {
   slug: string;
   label: string;
   overrideLabel?: string;
-  overrideLabels?: Record<LangCode, string>; // actually only CHILD_ID has
+  overrideLabels?: Record<LangCode, string>; // actually only WD_CHILD has
   isFav?: boolean;
 };
 

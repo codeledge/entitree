@@ -1,16 +1,20 @@
+import {
+  WD_ENGLISH,
+  WD_FANDOM_ARTICLE_ID,
+  WD_LANGUAGE_OF_WORK_OR_NAME,
+} from "@entitree/wikidata-helper";
+
 import { Entity } from "types/Entity";
-import { ENGLISH_ID } from "constants/entities";
-import { FANDOM_ARTICLE_ID, LANGUAGE_OF_WORK_ID } from "constants/properties";
 import getSimpleClaimValue from "./getSimpleClaimValue";
 
 export default function addFandom(entity: Entity) {
-  if (getSimpleClaimValue(entity.simpleClaims, FANDOM_ARTICLE_ID)) {
-    const fandomClaims = entity.simpleClaims?.[FANDOM_ARTICLE_ID];
+  if (getSimpleClaimValue(entity.simpleClaims, WD_FANDOM_ARTICLE_ID)) {
+    const fandomClaims = entity.simpleClaims?.[WD_FANDOM_ARTICLE_ID];
     const englishArticle = fandomClaims?.find(
       (entry) =>
         entry.qualifiers &&
-        entry.qualifiers[LANGUAGE_OF_WORK_ID] &&
-        entry.qualifiers[LANGUAGE_OF_WORK_ID][0] === ENGLISH_ID,
+        entry.qualifiers[WD_LANGUAGE_OF_WORK_OR_NAME] &&
+        entry.qualifiers[WD_LANGUAGE_OF_WORK_OR_NAME][0] === WD_ENGLISH,
     );
     let fandomId: any;
     if (englishArticle) {
@@ -18,7 +22,7 @@ export default function addFandom(entity: Entity) {
     } else {
       fandomId = getSimpleClaimValue(
         entity.simpleClaims,
-        FANDOM_ARTICLE_ID,
+        WD_FANDOM_ARTICLE_ID,
       )?.split(":");
     }
     //exclude russian fandoms as they don't have an api

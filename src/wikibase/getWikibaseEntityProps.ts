@@ -42,7 +42,7 @@ export default async function getWikibaseEntityProps(
     }
   });
 
-  const { FAMILY_IDS_MAP, CHILD_ID } = getWikibaseConstants(dataSource);
+  const { FAMILY_IDS_MAP, WD_CHILD } = getWikibaseConstants(dataSource);
 
   return axios
     .get(url)
@@ -57,7 +57,7 @@ export default async function getWikibaseEntityProps(
           };
           if (FAMILY_IDS_MAP[id]) {
             // filter out mother/siblings etc props
-            if (id !== CHILD_ID) return filteredProps;
+            if (id !== WD_CHILD) return filteredProps;
 
             thisProp.isFav = true;
 

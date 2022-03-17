@@ -1,9 +1,9 @@
-import { BIRTH_NAME_ID } from "../constants/properties";
 import { Entity } from "types/Entity";
+import { WD_BIRTH_NAME } from "@entitree/wikidata-helper";
 import { getBestClaimValueText } from "./getBestClaim";
 
 export default function addBirthName(entity: Entity) {
-  const claim = entity.claims?.[BIRTH_NAME_ID];
+  const claim = entity.claims?.[WD_BIRTH_NAME];
 
   if (claim) entity.birthName = getBestClaimValueText(claim);
 }

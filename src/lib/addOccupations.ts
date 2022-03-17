@@ -1,13 +1,12 @@
 import { Entity, SimpleClaim } from "types/Entity";
+import { OCCUPATION_MAP, WD_OCCUPATION } from "@entitree/wikidata-helper";
 
-import { OCCUPATION_ID } from "constants/properties";
-import { OCCUPATION_MAP } from "constants/occupations";
 import { SparqlEmoji } from "types/SparqlEmoji";
 
 export default function addOccupations(entity: Entity) {
-  const occs = entity.simpleClaims?.[OCCUPATION_ID];
+  const occs = entity.simpleClaims?.[WD_OCCUPATION];
   if (occs !== undefined) {
-    const emojis = getEmojisByOccupations(entity.simpleClaims?.[OCCUPATION_ID]);
+    const emojis = getEmojisByOccupations(entity.simpleClaims?.[WD_OCCUPATION]);
     entity.occupations = emojis;
   }
 }

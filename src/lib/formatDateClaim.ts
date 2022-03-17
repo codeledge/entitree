@@ -1,11 +1,14 @@
-import { CIRCA_ID, PRESUMABLY_ID } from "../constants/entities";
 import { Claim, ClaimSnakTimeValue } from "types/Claim";
+import {
+  WD_CIRCA,
+  WD_PRESUMABLY,
+  WD_SOURCING_CIRCUMSTANCES,
+} from "@entitree/wikidata-helper";
 import { getBestClaim, getBestClaimValue } from "./getBestClaim";
 
 import { DEFAULT_LANG_CODE } from "../constants/langs";
 import { DateTime } from "luxon";
 import { LangCode } from "types/Lang";
-import { SOURCING_CIRCUMSTANCES_ID } from "../constants/properties";
 import ordinalize from "ordinalize";
 import wbk from "wikidata-sdk";
 
@@ -25,7 +28,7 @@ export default function formatDateClaim(
   const value = getBestClaimValue(claims) as ClaimSnakTimeValue["value"];
   if (!value) return "";
   const sourcingCircumstances =
-    dateClaim?.qualifiers?.[SOURCING_CIRCUMSTANCES_ID]?.[0]?.datavalue?.value[
+    dateClaim?.qualifiers?.[WD_SOURCING_CIRCUMSTANCES]?.[0]?.datavalue?.value[
       "id"
     ];
 
@@ -75,10 +78,10 @@ function parseDate(
   }
   let sourcingPrefix = "";
   let sourcingPostfix = "";
-  if (sourcingCircumstances === CIRCA_ID) {
+  if (sourcingCircumstances === WD_CIRCA) {
     // circa
     sourcingPrefix = "~";
-  } else if (sourcingCircumstances === PRESUMABLY_ID) {
+  } else if (sourcingCircumstances === WD_PRESUMABLY) {
     // presumably/maybe
     sourcingPostfix = "?";
   }

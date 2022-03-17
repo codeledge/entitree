@@ -1,9 +1,9 @@
-import { BIRTH_PLACE_ID } from "../constants/properties";
 import { Entity } from "types/Entity";
+import { WD_PLACE_OF_BIRTH } from "@entitree/wikidata-helper";
 import { getBestClaimValueId } from "./getBestClaim";
 
 export default function addBirthPlaceId(entity: Entity) {
-  const claim = entity.claims?.[BIRTH_PLACE_ID];
+  const claim = entity.claims?.[WD_PLACE_OF_BIRTH];
 
   if (claim) entity.birthPlaceId = getBestClaimValueId(claim);
 }
