@@ -1,6 +1,6 @@
 import { DataSource, getWikibaseInstance } from "wikibase/getWikibaseInstance";
 
-// import { WikibaseEntity } from "types/Entity";
+import { WikibaseEntity } from "types/Entity";
 import axios from "axios";
 
 type GetWikibaseEntitiesProps = {
