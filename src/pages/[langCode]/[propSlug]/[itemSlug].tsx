@@ -5,6 +5,7 @@ import {
   setCurrentProp,
 } from "store/treeSlice";
 import { useAppSelector, wrapper } from "store";
+
 import { DEFAULT_PROPERTY_ALL } from "constants/properties";
 import DrawingArea from "components/DrawingArea";
 import Error from "next/error";
@@ -14,17 +15,17 @@ import Header from "layout/Header";
 import { LANGS } from "constants/langs";
 import { LangCode } from "types/Lang";
 import { Page } from "layout/Page";
+import { PageProps } from "types/PageProps";
 import SearchBar from "layout/SearchBar";
 import TreeLoader from "layout/TreeLoader";
 import { createMetaTags } from "seo/createMetaTags";
 import { getCurrentEntity } from "treeHelpers/getCurrentEntity";
 import getEntityIdFromSlug from "wikidata/getEntityIdFromSlug";
-import getWikipediaArticle from "wikipedia/getWikipediaArticle";
+import { getWikipediaArticle } from "@entitree/wikidata-helper";
 import isInIframe from "lib/isInIframe";
 import { isItemId } from "helpers/isItemId";
 import { setSetting } from "store/settingsSlice";
 import { useDispatch } from "react-redux";
-import { PageProps } from "types/PageProps";
 
 const TreePage = ({
   errorCode,
@@ -94,11 +95,9 @@ export const getServerSideProps = wrapper.getServerSideProps<PageProps>(
         try {
           //TODO: cache this
           const {
-            data: {
-              wikibase_item,
-              thumbnail,
-              titles: { canonical },
-            },
+            wikibase_item,
+            thumbnail,
+            titles: { canonical },
           } = await getWikipediaArticle(decodedItemSlug, langCode);
 
           //the wikipedia article redirects to another article
