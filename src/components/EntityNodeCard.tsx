@@ -15,6 +15,7 @@ import {
   WD_CHILD,
   WD_NAME_IN_KANA,
   WD_NICKNAME,
+  isProperyId,
 } from "@entitree/helper";
 import styled, { css, useTheme } from "styled-components";
 import {
@@ -40,7 +41,6 @@ import { errorHandler } from "handlers/errorHandler";
 import { filterSpousePartnersIds } from "filters/filterSpousePartnersIds";
 import getFandomPageProps from "../services/fandomService";
 import getWikibaseEntitiesLabel from "wikibase/getWikibaseEntitiesLabel";
-import { isProperyId } from "helpers/isPropertyId";
 import { isValidImage } from "helpers/isValidImage";
 import { useAppSelector } from "store";
 import useBookmarks from "hooks/useBookmarks";

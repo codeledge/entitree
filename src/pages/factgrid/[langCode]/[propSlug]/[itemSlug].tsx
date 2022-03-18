@@ -15,16 +15,16 @@ import { HeadMeta } from "layout/HeadMeta";
 import Header from "layout/Header";
 import { LANGS } from "constants/langs";
 import { LangCode } from "types/Lang";
+import { PageProps } from "types/PageProps";
 import SearchBar from "layout/SearchBar";
 import TreeLoader from "layout/TreeLoader";
 import { createMetaTags } from "seo/createMetaTags";
 import { errorHandler } from "handlers/errorHandler";
 import { getCurrentEntity } from "treeHelpers/getCurrentEntity";
-import { isItemId } from "helpers/isItemId";
+import { isItemId } from "@entitree/helper";
 import { setSetting } from "store/settingsSlice";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
-import { PageProps } from "types/PageProps";
 
 const TreePage = ({
   errorCode,
@@ -112,7 +112,9 @@ export const getServerSideProps = wrapper.getServerSideProps<PageProps>(
         if (propSlug !== DEFAULT_PROPERTY_ALL && !currentProp) {
           return {
             redirect: {
-              destination: `/factgrid/${langCode}/${DEFAULT_PROPERTY_ALL}/${itemSlug}`,
+              destination: `/factgrid/${String(
+                langCode,
+              )}/${DEFAULT_PROPERTY_ALL}/${itemSlug}`,
               permanent: false,
             },
           };
