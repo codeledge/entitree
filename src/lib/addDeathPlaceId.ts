@@ -1,5 +1,5 @@
 import { Entity } from "types/Entity";
-import { WD_PLACE_OF_DEATH } from "@entitree/wikidata-helper";
+import { WD_PLACE_OF_DEATH } from "@entitree/helper";
 import { getBestClaimValueId } from "./getBestClaim";
 
 export default function addDeathPlaceId(entity: Entity) {

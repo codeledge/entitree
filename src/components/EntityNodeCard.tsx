@@ -15,7 +15,7 @@ import {
   WD_CHILD,
   WD_NAME_IN_KANA,
   WD_NICKNAME,
-} from "@entitree/wikidata-helper";
+} from "@entitree/helper";
 import styled, { css, useTheme } from "styled-components";
 import {
   toggleChildren,

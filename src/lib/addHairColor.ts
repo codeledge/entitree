@@ -1,4 +1,4 @@
-import { EYE_AND_HAIR_COLORS, WD_HAIR_COLOR } from "@entitree/wikidata-helper";
+import { EYE_AND_HAIR_COLORS, WD_HAIR_COLOR } from "@entitree/helper";
 
 import { Entity } from "types/Entity";
 import getSimpleClaimValue from "./getSimpleClaimValue";

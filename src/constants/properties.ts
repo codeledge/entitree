@@ -7,7 +7,7 @@ import {
   WD_SIBLING,
   WD_SPOUSE,
   WD_UNMARRIED_PARTNER,
-} from "@entitree/wikidata-helper";
+} from "@entitree/helper";
 
 import { EntityProp } from "types/Entity";
 import { SecondLabel } from "types/Lang";

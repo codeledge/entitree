@@ -1,4 +1,4 @@
-import { WD_DATE_OF_BIRTH, WD_DATE_OF_DEATH } from "@entitree/wikidata-helper";
+import { WD_DATE_OF_BIRTH, WD_DATE_OF_DEATH } from "@entitree/helper";
 
 import { DateTime } from "luxon";
 import { Entity } from "types/Entity";

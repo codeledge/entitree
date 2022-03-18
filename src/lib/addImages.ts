@@ -1,4 +1,4 @@
-import { WD_IMAGE, WD_LOGO_IMAGE } from "@entitree/wikidata-helper";
+import { WD_IMAGE, WD_LOGO_IMAGE } from "@entitree/helper";
 
 import { Entity } from "types/Entity";
 

@@ -1,6 +1,6 @@
 import { Entity } from "types/Entity";
 import { LangCode } from "types/Lang";
-import { WD_INCEPTION } from "@entitree/wikidata-helper";
+import { WD_INCEPTION } from "@entitree/helper";
 import formatDateClaim from "./formatDateClaim";
 
 export default function addInceptionDate(

@@ -1,5 +1,5 @@
 import { Entity } from "types/Entity";
-import { WD_INSTANCE_OF } from "@entitree/wikidata-helper";
+import { WD_INSTANCE_OF } from "@entitree/helper";
 import addPeoplePillImage from "./addPeoplePillImage";
 import getWikibaseEntities from "wikibase/getWikibaseEntities";
 

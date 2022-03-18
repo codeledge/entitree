@@ -1,7 +1,4 @@
-import {
-  RELIGIONS,
-  WD_RELIGION_OR_WORLD_VIEW,
-} from "@entitree/wikidata-helper";
+import { RELIGIONS, WD_RELIGION_OR_WORLD_VIEW } from "@entitree/helper";
 
 import { Entity } from "types/Entity";
 import getSimpleClaimValue from "./getSimpleClaimValue";

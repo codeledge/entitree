@@ -1,4 +1,4 @@
-import { WD_SPOUSE, WD_UNMARRIED_PARTNER } from "@entitree/wikidata-helper";
+import { WD_SPOUSE, WD_UNMARRIED_PARTNER } from "@entitree/helper";
 
 import { EntityNode } from "types/EntityNode";
 import { SettingsState } from "store/settingsSlice";

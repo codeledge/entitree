@@ -2,7 +2,7 @@ import {
   WD_ENGLISH,
   WD_FANDOM_ARTICLE_ID,
   WD_LANGUAGE_OF_WORK_OR_NAME,
-} from "@entitree/wikidata-helper";
+} from "@entitree/helper";
 
 import { Entity } from "types/Entity";
 import getSimpleClaimValue from "./getSimpleClaimValue";

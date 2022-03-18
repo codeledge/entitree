@@ -1,5 +1,5 @@
 import { Entity, SimpleClaim } from "types/Entity";
-import { OCCUPATION_MAP, WD_OCCUPATION } from "@entitree/wikidata-helper";
+import { OCCUPATION_MAP, WD_OCCUPATION } from "@entitree/helper";
 
 import { SparqlEmoji } from "types/SparqlEmoji";
 

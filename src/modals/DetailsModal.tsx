@@ -8,7 +8,7 @@ import ReactGA from "react-ga";
 import { errorHandler } from "handlers/errorHandler";
 import { getEntityUrl } from "helpers/getEntityUrl";
 import getWikibaseEntitiesLabel from "wikibase/getWikibaseEntitiesLabel";
-import { getWikipediaArticle } from "@entitree/wikidata-helper";
+import { getWikipediaArticle } from "@entitree/helper";
 import { missingImagesLink } from "services/imageService";
 import { setLoadingEntity } from "store/treeSlice";
 import styled from "styled-components";

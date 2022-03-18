@@ -1,5 +1,5 @@
 import { Entity } from "types/Entity";
-import { WD_BIRTH_NAME } from "@entitree/wikidata-helper";
+import { WD_BIRTH_NAME } from "@entitree/helper";
 import { getBestClaimValueText } from "./getBestClaim";
 
 export default function addBirthName(entity: Entity) {

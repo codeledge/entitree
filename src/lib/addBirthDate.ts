@@ -2,7 +2,7 @@ import formatDateClaim, { getDateClaimISO } from "./formatDateClaim";
 
 import { Entity } from "types/Entity";
 import { LangCode } from "types/Lang";
-import { WD_DATE_OF_BIRTH } from "@entitree/wikidata-helper";
+import { WD_DATE_OF_BIRTH } from "@entitree/helper";
 
 export default function addBirthDate(entity: Entity, languageCode: LangCode) {
   const birthDateClaims = entity.claims?.[WD_DATE_OF_BIRTH];

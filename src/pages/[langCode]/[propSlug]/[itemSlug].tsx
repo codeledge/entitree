@@ -21,7 +21,7 @@ import TreeLoader from "layout/TreeLoader";
 import { createMetaTags } from "seo/createMetaTags";
 import { getCurrentEntity } from "treeHelpers/getCurrentEntity";
 import getEntityIdFromSlug from "wikidata/getEntityIdFromSlug";
-import { getWikipediaArticle } from "@entitree/wikidata-helper";
+import { getWikipediaArticle } from "@entitree/helper";
 import isInIframe from "lib/isInIframe";
 import { isItemId } from "helpers/isItemId";
 import { setSetting } from "store/settingsSlice";

@@ -1,4 +1,4 @@
-import { WD_NAME_IN_KANA, WD_NICKNAME } from "@entitree/wikidata-helper";
+import { WD_NAME_IN_KANA, WD_NICKNAME } from "@entitree/helper";
 
 import { Entity } from "types/Entity";
 import getSimpleClaimValue from "./getSimpleClaimValue";

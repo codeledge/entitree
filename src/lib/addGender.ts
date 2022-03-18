@@ -4,7 +4,7 @@ import {
   WD_HUMAN_FEMALE,
   WD_HUMAN_MALE,
   WD_SEX_OR_GENDER,
-} from "@entitree/wikidata-helper";
+} from "@entitree/helper";
 
 import { Entity } from "types/Entity";
 import getSimpleClaimValue from "./getSimpleClaimValue";

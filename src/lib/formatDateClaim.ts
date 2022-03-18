@@ -3,7 +3,7 @@ import {
   WD_CIRCA,
   WD_PRESUMABLY,
   WD_SOURCING_CIRCUMSTANCES,
-} from "@entitree/wikidata-helper";
+} from "@entitree/helper";
 import { getBestClaim, getBestClaimValue } from "./getBestClaim";
 
 import { DEFAULT_LANG_CODE } from "../constants/langs";

@@ -34,7 +34,7 @@ import { Entity } from "types/Entity";
 import { EntityNode } from "types/EntityNode";
 import ReactGA from "react-ga";
 import { ToggleOptions } from "../types/ToggleOptions";
-import { WD_CHILD } from "@entitree/wikidata-helper";
+import { WD_CHILD } from "@entitree/helper";
 import { addUrlBookmark } from "treeHelpers/addUrlBookmark";
 import { filterSpousePartnersIds } from "../filters/filterSpousePartnersIds";
 import { removeUrlBookmark } from "treeHelpers/removeUrlBookmark";

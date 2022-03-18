@@ -3,7 +3,7 @@ import {
   WD_HUMAN,
   WD_HUMAN_FETUS,
   WD_INSTANCE_OF,
-} from "@entitree/wikidata-helper";
+} from "@entitree/helper";
 
 import { Entity } from "types/Entity";
 

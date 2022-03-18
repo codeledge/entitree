@@ -4,7 +4,7 @@ import {
   WD_SIBLING,
   WD_SPOUSE,
   WD_UNMARRIED_PARTNER,
-} from "@entitree/wikidata-helper";
+} from "@entitree/helper";
 import getClaimIds, { checkIfClaimsHasSeriesOrdinal } from "./getClaimIds";
 
 import { DataSource } from "wikibase/getWikibaseInstance";

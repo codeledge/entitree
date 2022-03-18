@@ -17,7 +17,7 @@ import { DEFAULT_LANGS_CODES } from "../constants/langs";
 import { Entity } from "types/Entity";
 import { EntityNode } from "types/EntityNode";
 import { LangCode } from "types/Lang";
-import { WD_CHILD } from "@entitree/wikidata-helper";
+import { WD_CHILD } from "@entitree/helper";
 import { addGeniEntityConnectors } from "lib/geni/addGeniEntityConnectors";
 import filterSpouses from "../lib/filterSpouses";
 import { formatGeniProfile } from "../lib/formatGeniProfile";

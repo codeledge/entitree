@@ -1,6 +1,6 @@
 import { COUNTRIES } from "constants/countries";
 import { Entity } from "types/Entity";
-import { WD_COUNTRY_OF_CITIZENSHIP } from "@entitree/wikidata-helper";
+import { WD_COUNTRY_OF_CITIZENSHIP } from "@entitree/helper";
 import getSimpleClaimValue from "./getSimpleClaimValue";
 
 export default function addCountryOfCitizenship(entity: Entity) {

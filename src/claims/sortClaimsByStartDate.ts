@@ -1,6 +1,6 @@
 import { Claim } from "types/Claim";
 import { DateTime } from "luxon";
-import { WD_START_TIME } from "@entitree/wikidata-helper";
+import { WD_START_TIME } from "@entitree/helper";
 import { getTimeQualifier } from "./getTimeQualifier";
 
 export function sortClaimsByStartDate(claims: Claim[]) {

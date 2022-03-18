@@ -1,4 +1,4 @@
-import { WD_HUMAN, WD_INSTANCE_OF } from "@entitree/wikidata-helper";
+import { WD_HUMAN, WD_INSTANCE_OF } from "@entitree/helper";
 
 import { Entity } from "types/Entity";
 import getSimpleClaimValue from "./getSimpleClaimValue";

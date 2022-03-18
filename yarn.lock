@@ -759,10 +759,10 @@
   resolved "https://registry.npmjs.org/@emotion/unitless/-/unitless-0.7.5.tgz"
   integrity sha512-OWORNpfjMsSSUBVrRBVGECkhWcULOAJz9ZW8uK9qgxD+87M7jHRcvh/A96XXNhXTLmKcoYSQtBEX7lHMO7YRwg==
 
-"@entitree/wikidata-helper@0.0.8":
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/@entitree/wikidata-helper/-/wikidata-helper-0.0.8.tgz#05f15b033875f34657d83af954b901b6c8f34afb"
-  integrity sha512-p7Bo8isOf7cfHg9WH/a6voIDYiUW69DxRiXDvIPjIo8sSWle4vmFnJvF3toyoX1OneU94ICYP6eh0zlpaw3IIg==
+"@entitree/helper@0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@entitree/helper/-/helper-0.0.1.tgz#dea828f676ef80b8451624078651d55d6e510a68"
+  integrity sha512-ipCzitbPzxXe8vOua/AHne5jAdt3wMBwk5F+5CKTfjLRguEFLpR8Cz47fp4alRmnezZJzJgO3vS2TtNJIcSpEg==
   dependencies:
     "@changesets/cli" "^2.20.0"
     "@types/luxon" "^2.0.9"
