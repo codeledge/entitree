@@ -149,7 +149,7 @@ export default function Home() {
                   >
                     <Card>
                       <ImgBox
-                        alt="Medium article"
+                        alt="Blog articles"
                         src="/examples/lana-del-rey.png"
                       />
                       <Card.Body>
@@ -174,6 +174,24 @@ export default function Home() {
                       </Card.Body>
                     </a>
                   </Card>
+                </StyledCol>
+              </StyledRow>
+              <StyledRow>
+                <StyledCol xs={12} md={6}>
+                  <a
+                    title="Chat with us on Telegram"
+                    href="https://t.me/+wB73NTv6QxtjNGUy"
+                  >
+                    <Card>
+                      <ImgBox
+                        alt="Telegram Logo"
+                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/240px-Telegram_logo.svg.png"
+                      />
+                      <Card.Body>
+                        Chat with us on Telegram and join the community 💬
+                      </Card.Body>
+                    </Card>
+                  </a>
                 </StyledCol>
               </StyledRow>
               <SubTitle>What they say about us:</SubTitle>
