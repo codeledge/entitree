@@ -124,9 +124,9 @@ export default function SearchBar() {
       <Container>
         <Form.Group className="searchBox" controlId="searchBox">
           <InputGroup>
-            <InputGroup.Prepend>
+            <InputGroup.Text>
               <FaSearch />
-            </InputGroup.Prepend>
+            </InputGroup.Text>
             <Form.Control
               onKeyDown={() => setFromKeyboard(true)}
               onChange={(e) => {
@@ -142,7 +142,7 @@ export default function SearchBar() {
               spellCheck="false"
             />
             {currentEntity && (
-              <InputGroup.Append>
+              <InputGroup.Text>
                 <Dropdown>
                   <Overlay
                     placement="bottom"
@@ -171,7 +171,7 @@ export default function SearchBar() {
                     </Dropdown.Toggle>
                   )}
 
-                  <Dropdown.Menu alignRight>
+                  <Dropdown.Menu>
                     {currentEntityProps?.map((prop) => (
                       <Dropdown.Item
                         key={prop.id}
@@ -192,7 +192,7 @@ export default function SearchBar() {
                     ))}
                   </Dropdown.Menu>
                 </Dropdown>
-              </InputGroup.Append>
+              </InputGroup.Text>
             )}
           </InputGroup>
           {showSuggestions && (
