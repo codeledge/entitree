@@ -168,7 +168,7 @@ export default memo(({ node }: { node: EntityNode }) => {
   const hasSecondLabel = Boolean(secondLabel);
   useEffect(() => {
     if (node.wikidataId && settings.secondLabelCode) {
-      if (isProperyId(settings.secondLabelCode)) {
+      if (isProperyId(settings.secondLabelCode as string)) {
         switch (settings.secondLabelCode) {
           case WD_BIRTH_NAME:
             setSecondLabel(node.birthName);
