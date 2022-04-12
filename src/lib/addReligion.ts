@@ -1,4 +1,4 @@
-import { RELIGIONS, WD_RELIGION_OR_WORLD_VIEW } from "@entitree/helper";
+import { RELIGIONS, WD_RELIGION_OR_WORLDVIEW } from "@entitree/helper";
 
 import { Entity } from "types/Entity";
 import getSimpleClaimValue from "./getSimpleClaimValue";
@@ -6,7 +6,7 @@ import getSimpleClaimValue from "./getSimpleClaimValue";
 export default function addReligion(entity: Entity) {
   const religionId = getSimpleClaimValue(
     entity.simpleClaims,
-    WD_RELIGION_OR_WORLD_VIEW,
+    WD_RELIGION_OR_WORLDVIEW,
   );
 
   const religion = RELIGIONS.find(

@@ -1,11 +1,12 @@
 import { Entity, EntityProp } from "types/Entity";
 
+import { LangCode } from "types/Lang";
 import { SITE_NAME } from "constants/meta";
 import { WD_CHILD } from "constants/properties";
 import pluralize from "pluralize";
 
 export const createMetaTags = (
-  langCode: string,
+  langCode: LangCode,
   currentEntity: Entity,
   currentProp?: EntityProp,
 ) => {

@@ -7,7 +7,7 @@ export interface Lang extends SecondLabel {
 }
 
 export type SecondLabel = {
-  code: string;
+  code: LangCode;
   name: string;
 };
 

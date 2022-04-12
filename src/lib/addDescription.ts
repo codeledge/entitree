@@ -1,6 +1,7 @@
 import { Entity } from "types/Entity";
+import { LangCode } from "types/Lang";
 
-export default function addDescription(entity: Entity, languageCode: string) {
+export default function addDescription(entity: Entity, languageCode: LangCode) {
   const { descriptions } = entity;
   if (!descriptions) return;
   const descriptionObject = descriptions[languageCode];
