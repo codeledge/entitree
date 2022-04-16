@@ -19,7 +19,7 @@ import { EntityNode } from "types/EntityNode";
 import { LangCode } from "types/Lang";
 import { WD_CHILD } from "@entitree/helper";
 import { addGeniEntityConnectors } from "lib/geni/addGeniEntityConnectors";
-import filterSpouses from "../lib/filterSpouses";
+// import filterSpouses from "../lib/filterSpouses";
 import { formatGeniProfile } from "../lib/formatGeniProfile";
 import formatWikibaseEntity from "../lib/formatWikibaseEntity";
 import getWikibaseEntities from "wikibase/getWikibaseEntities";
@@ -182,7 +182,7 @@ export const getSpouseEntities = async (
   });
 
   //TODO: not doing anything ATM, leave an example!
-  filterSpouses(spouses);
+  // filterSpouses(spouses);
 
   return spouses;
 };
