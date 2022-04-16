@@ -1,8 +1,8 @@
+import { PropColor, SparqlEmoji } from "@entitree/helper";
+
 import { Claim } from "./Claim";
 import { Country } from "constants/countries";
 import { LangCode } from "types/Lang";
-import { PropColor } from "@entitree/helper";
-import { SparqlEmoji } from "types/SparqlEmoji";
 
 export interface Sitelink {
   site: string;

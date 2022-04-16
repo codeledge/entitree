@@ -20,7 +20,7 @@ import { useCurrentLang } from "hooks/useCurrentLang";
 import useDebounce from "../hooks/useDebounce";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
-import { searchTerm as wikidataSearchTerm } from "services/wikidataService";
+import { wikibaseSearchEntities } from "@entitree/helper";
 
 export type SearchResult = {
   id: string;
@@ -52,9 +52,9 @@ export default function SearchBar() {
         setLoadingSuggestions(true);
         try {
           if (dataSource === "wikidata" || dataSource === "factgrid") {
-            const results = await wikidataSearchTerm(
+            const results = await wikibaseSearchEntities(
               debouncedSearchTerm,
-              currentLang.code,
+              currentLang.code as string,
               dataSource,
             );
             const filteredResults = results.filter(({ id, description }) => {

@@ -1,7 +1,5 @@
 import { Entity, SimpleClaim } from "types/Entity";
-import { OCCUPATION_MAP, WD_OCCUPATION } from "@entitree/helper";
-
-import { SparqlEmoji } from "types/SparqlEmoji";
+import { OCCUPATION_MAP, SparqlEmoji, WD_OCCUPATION } from "@entitree/helper";
 
 export default function addOccupations(entity: Entity) {
   const occs = entity.simpleClaims?.[WD_OCCUPATION];
