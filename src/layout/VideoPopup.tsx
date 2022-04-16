@@ -6,31 +6,31 @@ import styled from "styled-components";
 import { useAppSelector } from "store";
 import { useDispatch } from "react-redux";
 
-export default function VideoPopup() {
-  const dispatch = useDispatch();
-  const video = useAppSelector(({ alert }) => alert.video);
+// export default function VideoPopup() {
+//   const dispatch = useDispatch();
+//   const video = useAppSelector(({ alert }) => alert.video);
 
-  if (!video) return null;
+//   if (!video) return null;
 
-  return (
-    <Draggable bounds="parent">
-      <StyledToast onClose={() => dispatch(setVideo(undefined))} show>
-        <Toast.Header>
-          <strong className="mr-auto">{video.label}</strong>
-        </Toast.Header>
-        <StyledBody>
-          <IFrameWrapper className="mb-2">
-            <iframe
-              src={video.embedLink}
-              title="YouTube video player"
-              allowFullScreen
-            />
-          </IFrameWrapper>
-        </StyledBody>
-      </StyledToast>
-    </Draggable>
-  );
-}
+//   return (
+//     <Draggable bounds="parent">
+//       <StyledToast onClose={() => dispatch(setVideo(undefined))} show>
+//         <Toast.Header>
+//           <strong className="mr-auto">{video.label}</strong>
+//         </Toast.Header>
+//         <StyledBody>
+//           <IFrameWrapper className="mb-2">
+//             <iframe
+//               src={video.embedLink}
+//               title="YouTube video player"
+//               allowFullScreen
+//             />
+//           </IFrameWrapper>
+//         </StyledBody>
+//       </StyledToast>
+//     </Draggable>
+//   );
+// }
 
 const IFrameWrapper = styled.div`
   position: relative;
