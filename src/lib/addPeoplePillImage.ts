@@ -22,7 +22,7 @@ export default function addPeoplePillImage(entity: Entity) {
     if (entity.peoplepillSlug) {
       entity.peoplepillImageUrl =
         "https://web.archive.org/web/20220210233602if_/https://peoplepill.com/media/people/thumbs/" +
-        entity.peoplepillSlug?.substring(0, 1).toUpperCase() +
+        entity.peoplepillSlug.substring(0, 1).toUpperCase() +
         "/" +
         entity.peoplepillSlug +
         ".jpg";

@@ -5,7 +5,7 @@ import addGeniDates from "./addGeniDates";
 
 export const formatGeniProfile = (geniProfile: GeniProfile) => {
   const entity: Entity = {
-    id: "G" + geniProfile?.guid || "",
+    id: "G" + geniProfile.guid || "",
   };
 
   entity.gender = geniProfile?.gender || "";
@@ -17,8 +17,8 @@ export const formatGeniProfile = (geniProfile: GeniProfile) => {
   entity.geniProfileUrl = geniProfile?.profile_url;
   // entity.occupation = geniProfile?.occupation || "";
   const firstNames =
-    geniProfile?.first_name +
-    (geniProfile?.middle_name ? " " + geniProfile?.middle_name : "");
+    geniProfile.first_name +
+    (geniProfile?.middle_name ? " " + geniProfile.middle_name : "");
   entity.birthName =
     firstNames +
     " " +

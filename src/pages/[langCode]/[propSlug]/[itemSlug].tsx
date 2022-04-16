@@ -49,6 +49,9 @@ const TreePage = ({
   if (errorCode) {
     return <Error statusCode={errorCode} />;
   }
+  // if (typeof window === "undefined") {
+  //   return <>f</>;
+  // }
 
   return (
     <>
@@ -120,7 +123,7 @@ export const getServerSideProps = wrapper.getServerSideProps<PageProps>(
             if (thumbnail) entityThumbnail = thumbnail.source;
           }
         } catch (error: any) {
-          console.error(error);
+          console.error(error); // eslint-disable-line no-console
           return { props: { errorCode: error.response?.status || 500 } };
         }
       }
@@ -187,7 +190,7 @@ export const getServerSideProps = wrapper.getServerSideProps<PageProps>(
           props: { ogTitle, ogImage, twitterCard, ogDescription, langCode },
         };
       } catch (error: any) {
-        console.error(error);
+        console.error(error); // eslint-disable-line no-console
 
         return { props: { errorCode: error.response?.status || 500 } };
       }
