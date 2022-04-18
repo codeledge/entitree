@@ -1,11 +1,11 @@
+import { WD_HUMAN, WD_INSTANCE_OF } from "@entitree/helper";
+
 import { Entity } from "types/Entity";
-import { HUMAN_ID } from "constants/entities";
-import { INSTANCE_OF_ID } from "constants/properties";
 import getSimpleClaimValue from "./getSimpleClaimValue";
 
 export default function addPeoplePillImage(entity: Entity) {
   if (
-    getSimpleClaimValue(entity.simpleClaims, INSTANCE_OF_ID) === HUMAN_ID &&
+    getSimpleClaimValue(entity.simpleClaims, WD_INSTANCE_OF) === WD_HUMAN &&
     !entity.sitelinks?.enwiki?.title?.includes("(") //peoplePill uses a counter for same names
   ) {
     //TODO: check for foreign characters
@@ -22,7 +22,7 @@ export default function addPeoplePillImage(entity: Entity) {
     if (entity.peoplepillSlug) {
       entity.peoplepillImageUrl =
         "https://web.archive.org/web/20220210233602if_/https://peoplepill.com/media/people/thumbs/" +
-        entity.peoplepillSlug?.substr(0, 1).toUpperCase() +
+        entity.peoplepillSlug.substring(0, 1).toUpperCase() +
         "/" +
         entity.peoplepillSlug +
         ".jpg";

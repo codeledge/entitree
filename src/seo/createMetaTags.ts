@@ -1,11 +1,12 @@
 import { Entity, EntityProp } from "types/Entity";
 
-import { CHILD_ID } from "constants/properties";
+import { LangCode } from "types/Lang";
 import { SITE_NAME } from "constants/meta";
+import { WD_CHILD } from "constants/properties";
 import pluralize from "pluralize";
 
 export const createMetaTags = (
-  langCode: string,
+  langCode: LangCode,
   currentEntity: Entity,
   currentProp?: EntityProp,
 ) => {
@@ -14,9 +15,9 @@ export const createMetaTags = (
   } - ${SITE_NAME}`;
 
   let ogDescription: string;
-  if (langCode === "hi" && currentProp?.id === CHILD_ID) {
+  if (langCode === "hi" && currentProp?.id === WD_CHILD) {
     ogDescription = `${currentEntity.label} के वंश वृक्ष की खोज करें`;
-  } else if (langCode === "es" && currentProp?.id === CHILD_ID) {
+  } else if (langCode === "es" && currentProp?.id === WD_CHILD) {
     ogDescription = `Descubre el árbol genealógico de ${currentEntity.label}`;
   } else {
     //Example: Discover the family tree of Elizabeth II: queen of the UK, Canada, Australia, and New Zealand, and head of the Commonwealth of Nations, 4 children, 1 sibling, 1 spouse
@@ -28,7 +29,7 @@ export const createMetaTags = (
         : ""
     }${currentEntity?.description}`;
 
-    if (currentProp?.id === CHILD_ID) {
+    if (currentProp?.id === WD_CHILD) {
       ogDescription += `
       ${
         currentEntity.targetIds?.length

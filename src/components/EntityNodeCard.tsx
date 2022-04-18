@@ -1,12 +1,6 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-to-interactive-role */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 
-import {
-  BIRTH_NAME_ID,
-  CHILD_ID,
-  NAME_IN_KANA_ID,
-  NICKNAME_ID,
-} from "constants/properties";
 import { FaEye, FaFemale, FaMale, FaUser } from "react-icons/fa";
 import { GiBigDiamondRing, GiPerson } from "react-icons/gi";
 import {
@@ -16,6 +10,13 @@ import {
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import React, { memo, useEffect, useState } from "react";
 import { RiGroupLine, RiParentLine } from "react-icons/ri";
+import {
+  WD_BIRTH_NAME,
+  WD_CHILD,
+  WD_NAME_IN_KANA,
+  WD_NICKNAME,
+  isProperyId,
+} from "@entitree/helper";
 import styled, { css, useTheme } from "styled-components";
 import {
   toggleChildren,
@@ -23,7 +24,6 @@ import {
   toggleSiblings,
   toggleSpouses,
 } from "actions/treeActions";
-import ReactGA from "react-ga";
 
 import { BottomToggle } from "./toggle/BottomToggle";
 import { BsImage } from "react-icons/bs";
@@ -33,13 +33,14 @@ import { Image } from "types/Entity";
 import { LangCode } from "types/Lang";
 import { LeftToggle } from "./toggle/LeftToggle";
 import { MdChildCare } from "react-icons/md";
+import ReactGA from "react-ga";
 import { RightToggle } from "./toggle/RightToggle";
 import { SettingsState } from "store/settingsSlice";
 import { TopToggle } from "./toggle/TopToggle";
 import { errorHandler } from "handlers/errorHandler";
+import { filterSpousePartnersIds } from "filters/filterSpousePartnersIds";
 import getFandomPageProps from "../services/fandomService";
 import getWikibaseEntitiesLabel from "wikibase/getWikibaseEntitiesLabel";
-import { isProperyId } from "helpers/isPropertyId";
 import { isValidImage } from "helpers/isValidImage";
 import { useAppSelector } from "store";
 import useBookmarks from "hooks/useBookmarks";
@@ -48,7 +49,6 @@ import useGeniProfileInfo from "hooks/useGeniProfileInfo";
 import usePreload from "hooks/usePreload";
 import useRootExpanded from "hooks/useRootExpanded";
 import useVideoOverlay from "hooks/useVideoOverlay";
-import { filterSpousePartnersIds } from "filters/filterSpousePartnersIds";
 
 export default memo(({ node }: { node: EntityNode }) => {
   const dispatch = useDispatch();
@@ -168,15 +168,15 @@ export default memo(({ node }: { node: EntityNode }) => {
   const hasSecondLabel = Boolean(secondLabel);
   useEffect(() => {
     if (node.wikidataId && settings.secondLabelCode) {
-      if (isProperyId(settings.secondLabelCode)) {
+      if (isProperyId(settings.secondLabelCode as string)) {
         switch (settings.secondLabelCode) {
-          case BIRTH_NAME_ID:
+          case WD_BIRTH_NAME:
             setSecondLabel(node.birthName);
             break;
-          case NICKNAME_ID:
+          case WD_NICKNAME:
             setSecondLabel(node.nickName);
             break;
-          case NAME_IN_KANA_ID:
+          case WD_NAME_IN_KANA:
             setSecondLabel(node.nameInKana);
             break;
           default:
@@ -410,7 +410,7 @@ export default memo(({ node }: { node: EntityNode }) => {
               <LeftToggle
                 disabled={node.loadingSiblings}
                 onClick={() => dispatch(toggleSiblings(node))}
-                icon={currentProp?.id === CHILD_ID && <RiGroupLine />}
+                icon={currentProp?.id === WD_CHILD && <RiGroupLine />}
                 open={node.openSiblingTreeIds}
                 counter={node.nextBeforeIds.length}
                 title={
@@ -422,7 +422,7 @@ export default memo(({ node }: { node: EntityNode }) => {
               <TopToggle
                 disabled={node.loadingSiblings}
                 onClick={() => dispatch(toggleSiblings(node))}
-                icon={currentProp?.id === CHILD_ID && <RiGroupLine />}
+                icon={currentProp?.id === WD_CHILD && <RiGroupLine />}
                 open={node.openSiblingTreeIds}
                 counter={node.nextBeforeIds.length}
                 title={
@@ -436,7 +436,7 @@ export default memo(({ node }: { node: EntityNode }) => {
               <RightToggle
                 disabled={node.loadingSpouses}
                 onClick={() => dispatch(toggleSpouses(node))}
-                icon={currentProp?.id === CHILD_ID && <GiBigDiamondRing />}
+                icon={currentProp?.id === WD_CHILD && <GiBigDiamondRing />}
                 open={node.openSpouseTreeIds}
                 counter={filteredNextAfterIds.length}
                 title={
@@ -448,7 +448,7 @@ export default memo(({ node }: { node: EntityNode }) => {
               <BottomToggle
                 disabled={node.loadingSpouses}
                 onClick={() => dispatch(toggleSpouses(node))}
-                icon={currentProp?.id === CHILD_ID && <GiBigDiamondRing />}
+                icon={currentProp?.id === WD_CHILD && <GiBigDiamondRing />}
                 open={node.openSpouseTreeIds}
                 counter={filteredNextAfterIds.length}
                 title={
@@ -462,7 +462,7 @@ export default memo(({ node }: { node: EntityNode }) => {
               <TopToggle
                 disabled={node.loadingParents}
                 onClick={() => dispatch(toggleParents(node))}
-                icon={currentProp?.id === CHILD_ID && <RiParentLine />}
+                icon={currentProp?.id === WD_CHILD && <RiParentLine />}
                 open={node.openParentTreeIds}
                 counter={node.sourceIds.length}
               />
@@ -470,7 +470,7 @@ export default memo(({ node }: { node: EntityNode }) => {
               <LeftToggle
                 disabled={node.loadingParents}
                 onClick={() => dispatch(toggleParents(node))}
-                icon={currentProp?.id === CHILD_ID && <RiParentLine />}
+                icon={currentProp?.id === WD_CHILD && <RiParentLine />}
                 open={node.openParentTreeIds}
                 counter={node.sourceIds.length}
               />
@@ -480,7 +480,7 @@ export default memo(({ node }: { node: EntityNode }) => {
               <BottomToggle
                 disabled={node.loadingChildren}
                 onClick={() => dispatch(toggleChildren(node))}
-                icon={currentProp?.id === CHILD_ID && <MdChildCare />}
+                icon={currentProp?.id === WD_CHILD && <MdChildCare />}
                 open={node.openChildTreeIds}
                 counter={node.targetIds.length}
               />
@@ -488,7 +488,7 @@ export default memo(({ node }: { node: EntityNode }) => {
               <RightToggle
                 disabled={node.loadingChildren}
                 onClick={() => dispatch(toggleChildren(node))}
-                icon={currentProp?.id === CHILD_ID && <MdChildCare />}
+                icon={currentProp?.id === WD_CHILD && <MdChildCare />}
                 open={node.openChildTreeIds}
                 counter={node.targetIds.length}
               />
@@ -497,7 +497,7 @@ export default memo(({ node }: { node: EntityNode }) => {
             !node.targetIds.length &&
             !!node.targetsCount &&
             node.targetsCount > 0 &&
-            currentProp?.id === CHILD_ID && (
+            currentProp?.id === WD_CHILD && (
               <RelativeToggle
                 forChildren
                 variant="link"

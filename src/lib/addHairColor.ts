@@ -1,10 +1,10 @@
-import { EYE_AND_HAIR_COLORS } from "constants/eyeHairColors";
+import { EYE_AND_HAIR_COLORS, WD_HAIR_COLOR } from "@entitree/helper";
+
 import { Entity } from "types/Entity";
-import { HAIR_COLOR_ID } from "constants/properties";
 import getSimpleClaimValue from "./getSimpleClaimValue";
 
 export default function addHairColor(entity: Entity) {
-  const hairColorId = getSimpleClaimValue(entity.simpleClaims, HAIR_COLOR_ID);
+  const hairColorId = getSimpleClaimValue(entity.simpleClaims, WD_HAIR_COLOR);
 
   const color = EYE_AND_HAIR_COLORS.find(
     (c) => c.item === "http://www.wikidata.org/entity/" + hairColorId,

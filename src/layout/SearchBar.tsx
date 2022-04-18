@@ -20,7 +20,7 @@ import { useCurrentLang } from "hooks/useCurrentLang";
 import useDebounce from "../hooks/useDebounce";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
-import { searchTerm as wikidataSearchTerm } from "services/wikidataService";
+import { wikibaseSearchEntities } from "@entitree/helper";
 
 export type SearchResult = {
   id: string;
@@ -52,9 +52,9 @@ export default function SearchBar() {
         setLoadingSuggestions(true);
         try {
           if (dataSource === "wikidata" || dataSource === "factgrid") {
-            const results = await wikidataSearchTerm(
+            const results = await wikibaseSearchEntities(
               debouncedSearchTerm,
-              currentLang.code,
+              currentLang.code as string,
               dataSource,
             );
             const filteredResults = results.filter(({ id, description }) => {
@@ -124,9 +124,9 @@ export default function SearchBar() {
       <Container>
         <Form.Group className="searchBox" controlId="searchBox">
           <InputGroup>
-            <InputGroup.Prepend>
+            <InputGroup.Text>
               <FaSearch />
-            </InputGroup.Prepend>
+            </InputGroup.Text>
             <Form.Control
               onKeyDown={() => setFromKeyboard(true)}
               onChange={(e) => {
@@ -142,7 +142,7 @@ export default function SearchBar() {
               spellCheck="false"
             />
             {currentEntity && (
-              <InputGroup.Append>
+              <InputGroup.Text>
                 <Dropdown>
                   <Overlay
                     placement="bottom"
@@ -171,7 +171,7 @@ export default function SearchBar() {
                     </Dropdown.Toggle>
                   )}
 
-                  <Dropdown.Menu alignRight>
+                  <Dropdown.Menu>
                     {currentEntityProps?.map((prop) => (
                       <Dropdown.Item
                         key={prop.id}
@@ -192,7 +192,7 @@ export default function SearchBar() {
                     ))}
                   </Dropdown.Menu>
                 </Dropdown>
-              </InputGroup.Append>
+              </InputGroup.Text>
             )}
           </InputGroup>
           {showSuggestions && (

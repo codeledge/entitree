@@ -1,5 +1,5 @@
 import { Entity } from "types/Entity";
-import { INSTANCE_OF_ID } from "constants/properties";
+import { WD_INSTANCE_OF } from "@entitree/helper";
 import addPeoplePillImage from "./addPeoplePillImage";
 import getWikibaseEntities from "wikibase/getWikibaseEntities";
 
@@ -14,7 +14,7 @@ describe("addPeoplePillImage", () => {
     const entity: Entity = {
       ...res[id],
       simpleClaims: {
-        [INSTANCE_OF_ID]: [{ value: "Q5", qualifiers: {} }],
+        [WD_INSTANCE_OF]: [{ value: "Q5", qualifiers: {} }],
       },
     };
 

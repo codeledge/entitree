@@ -1,14 +1,14 @@
 import { Button, Figure, Modal } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
-import ReactGA from "react-ga";
 
 import { EntityNode } from "types/EntityNode";
 import { FiExternalLink } from "react-icons/fi";
 import { Image } from "types/Entity";
+import ReactGA from "react-ga";
 import { errorHandler } from "handlers/errorHandler";
 import { getEntityUrl } from "helpers/getEntityUrl";
 import getWikibaseEntitiesLabel from "wikibase/getWikibaseEntitiesLabel";
-import getWikipediaArticle from "wikipedia/getWikipediaArticle";
+import { getWikipediaArticle } from "@entitree/helper";
 import { missingImagesLink } from "services/imageService";
 import { setLoadingEntity } from "store/treeSlice";
 import styled from "styled-components";
@@ -44,7 +44,7 @@ export default function DetailsModal({
   useEffect(() => {
     if (node.wikipediaSlug) {
       getWikipediaArticle(node.wikipediaSlug, languageCode)
-        .then(({ data: { extract, thumbnail } }) => {
+        .then(({ extract, thumbnail }) => {
           if (extract) setWikipediaExtract(extract);
           if (thumbnail && !images.length) {
             setImages((i) => [
@@ -187,6 +187,21 @@ export default function DetailsModal({
                 style={{ width: "100px" }}
                 alt="FactGrid Link"
               />
+            </a>
+          )}
+          {node.wikidataUrl && (
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Open wikidocumentaries page in a new tab"
+              href={
+                "https://wikidocumentaries-demo.wmflabs.org/" +
+                node.wikidataId +
+                "?language=" +
+                languageCode
+              }
+            >
+              <img src="/icons/wikidocumentaries.svg" alt="" />
             </a>
           )}
           {node.wikipediaUrl && (

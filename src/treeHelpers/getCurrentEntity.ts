@@ -33,7 +33,7 @@ export const getCurrentEntity = async ({
     return { currentEntity };
   }
 
-  const { CHILD_ID, FAMILY_IDS_MAP, FAMILY_TREE_PROP } =
+  const { WD_CHILD, FAMILY_IDS_MAP, FAMILY_TREE_PROP } =
     getWikibaseConstants(dataSource);
 
   let currentEntityProps = await getWikibaseEntityProps(
@@ -59,7 +59,7 @@ export const getCurrentEntity = async ({
     const familyTreeProp = { ...FAMILY_TREE_PROP };
     //Remove all family-related props in favour of the custom
     currentEntityProps = currentEntityProps.filter((prop) => {
-      if (prop.id === CHILD_ID) familyTreeProp.label = prop.label; //get translated child label
+      if (prop.id === WD_CHILD) familyTreeProp.label = prop.label; //get translated child label
       return !FAMILY_IDS_MAP[prop.id];
     });
 
@@ -84,8 +84,8 @@ export const getCurrentEntity = async ({
     currentPropId: currentProp?.id,
     addSourceIds: true,
     addTargetIds: true,
-    addNextBeforeIds: currentProp?.id === CHILD_ID,
-    addNextAfterIds: currentProp?.id === CHILD_ID,
+    addNextBeforeIds: currentProp?.id === WD_CHILD,
+    addNextAfterIds: currentProp?.id === WD_CHILD,
   });
 
   return { currentEntity, currentProp, currentEntityProps };

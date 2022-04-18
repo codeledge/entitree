@@ -1,56 +1,28 @@
+import {
+  WD_BIRTH_NAME,
+  WD_FATHER,
+  WD_MOTHER,
+  WD_NAME_IN_KANA,
+  WD_NICKNAME,
+  WD_SIBLING,
+  WD_SPOUSE,
+  WD_UNMARRIED_PARTNER,
+} from "@entitree/helper";
+
 import { EntityProp } from "types/Entity";
 import { SecondLabel } from "types/Lang";
 
-export const INSTANCE_OF_ID = "P31";
-
-export const BIRTH_DATE_ID = "P569";
-export const BIRTH_NAME_ID = "P1477";
-export const BIRTH_PLACE_ID = "P19";
-export const CHILD_ID = "P40";
-export const COUNTRY_OF_CITIZENSHIP = "P27";
-export const DEATH_DATE_ID = "P570";
-export const DEATH_PLACE_ID = "P20";
-export const DISSOLVED_ABOLISHED_DEMOLISHED_ID = "P576";
-export const END_DATE_ID = "P582";
-export const EYE_COLOR_ID = "P1340";
-export const FANDOM_ARTICLE_ID = "P6262";
-export const FATHER_ID = "P22";
-export const GENDER_ID = "P21";
-export const GENI_ID = "P2600";
-export const HAIR_COLOR_ID = "P1884";
-export const IMAGE_ID = "P18";
-export const INCEPTION_ID = "P571";
-export const INSTAGRAM_ID = "P2003";
-export const LANGUAGE_OF_WORK_ID = "P407";
-export const LOCATED_IN_ID = "P131";
-export const LOGO_ID = "P154";
-export const MOTHER_ID = "P25";
-export const NAME_IN_KANA_ID = "P1814";
-export const NICKNAME_ID = "P1449";
-export const NUMBER_OF_CHILDREN_ID = "P1971";
-export const OCCUPATION_ID = "P106";
-export const PARTNER_ID = "P451"; // unmarried partner
-export const RELIGION_ID = "P140";
-export const SIBLINGS_ID = "P3373";
-export const SOURCING_CIRCUMSTANCES_ID = "P1480";
-export const SPOUSE_ID = "P26";
-export const START_DATE_ID = "P580";
-export const STUDENT_ID = "P802";
-export const STUDENT_OF_ID = "P1066";
-export const TWITTER_ID = "P2002";
-export const WEBSITE_ID = "P856";
-export const WIKITREE_ID = "P2949";
-
+export const WD_CHILD = "P40";
 export const FAMILY_IDS_MAP = {
-  [CHILD_ID]: true,
-  [SIBLINGS_ID]: true,
-  [SPOUSE_ID]: true,
-  [FATHER_ID]: true,
-  [MOTHER_ID]: true,
+  [WD_CHILD]: true,
+  [WD_SIBLING]: true,
+  [WD_SPOUSE]: true,
+  [WD_FATHER]: true,
+  [WD_MOTHER]: true,
 };
 
 export const FAMILY_TREE_PROP: EntityProp = {
-  id: CHILD_ID,
+  id: WD_CHILD,
   slug: "family_tree",
   label: "child",
   overrideLabel: "family tree",
@@ -109,15 +81,15 @@ export const RIGHT_ENTITY_OPTIONS = [
     title: "Nothing",
   },
   {
-    propIds: [SPOUSE_ID],
+    propIds: [WD_SPOUSE],
     title: "Only spouses",
   },
   {
-    propIds: [SPOUSE_ID, PARTNER_ID],
+    propIds: [WD_SPOUSE, WD_UNMARRIED_PARTNER],
     title: "Spouses and partners",
   },
   {
-    propIds: [PARTNER_ID],
+    propIds: [WD_SPOUSE],
     title: "Only partners",
   },
 ];
@@ -149,15 +121,15 @@ export const EXTRA_INFO_OPTIONS = [
 
 export const SECOND_LABELS: SecondLabel[] = [
   {
-    code: NICKNAME_ID,
+    code: WD_NICKNAME,
     name: "Nickname",
   },
   {
-    code: BIRTH_NAME_ID,
+    code: WD_BIRTH_NAME,
     name: "Birth name",
   },
   {
-    code: NAME_IN_KANA_ID,
+    code: WD_NAME_IN_KANA,
     name: "Name in Kana",
   },
 ];

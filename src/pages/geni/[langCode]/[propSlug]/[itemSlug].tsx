@@ -12,6 +12,7 @@ import Header from "layout/Header";
 import { LANGS } from "constants/langs";
 import { LangCode } from "types/Lang";
 import { Page } from "layout/Page";
+import { PageProps } from "types/PageProps";
 import SearchBar from "layout/SearchBar";
 import TreeLoader from "layout/TreeLoader";
 import { addGeniEntityConnectors } from "lib/geni/addGeniEntityConnectors";
@@ -21,7 +22,6 @@ import { getGeniCookies } from "helpers/cookies";
 import isInIframe from "lib/isInIframe";
 import { setSetting } from "store/settingsSlice";
 import { useDispatch } from "react-redux";
-import { PageProps } from "types/PageProps";
 
 const GeniTreePage = ({
   errorCode,
@@ -79,6 +79,14 @@ export const getServerSideProps = wrapper.getServerSideProps<PageProps>(
 
       const geniCookie = getGeniCookies(req);
 
+      if (propSlug !== "family_tree") {
+        return {
+          props: {
+            errorCode: 404,
+          },
+        };
+      }
+
       if (!geniCookie?.access_token) {
         return {
           redirect: {
@@ -96,7 +104,7 @@ export const getServerSideProps = wrapper.getServerSideProps<PageProps>(
         entityId = "";
       } else if (itemSlug) {
         //check if id is correct
-        entityId = itemSlug.substr(1);
+        entityId = itemSlug.substring(1);
       } else {
         return { props: { errorCode: 404, message: "ID not found" } };
       }

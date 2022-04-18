@@ -1,8 +1,8 @@
 import { Entity } from "types/Entity";
-import { WEBSITE_ID } from "constants/properties";
+import { WD_OFFICIAL_WEBSITE } from "@entitree/helper";
 import getSimpleClaimValue from "./getSimpleClaimValue";
 
 export default function addWebsite(entity: Entity) {
-  const website = getSimpleClaimValue(entity.simpleClaims, WEBSITE_ID);
+  const website = getSimpleClaimValue(entity.simpleClaims, WD_OFFICIAL_WEBSITE);
   if (website) entity.website = website;
 }

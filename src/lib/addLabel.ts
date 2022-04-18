@@ -1,8 +1,9 @@
 import { DEFAULT_LANGS_CODES } from "../constants/langs";
 /* eslint-disable no-restricted-syntax */
 import { Entity } from "types/Entity";
+import { LangCode } from "types/Lang";
 
-export default function addLabel(entity: Entity, languageCode) {
+export default function addLabel(entity: Entity, languageCode: LangCode) {
   const { labels } = entity;
   if (!labels) return;
 

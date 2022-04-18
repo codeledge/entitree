@@ -1,4 +1,4 @@
-import { ALL_LANGS } from "constants/langs";
+import { ALL_LANGS } from "@entitree/helper";
 
 // keep compatibility
 export interface Lang extends SecondLabel {
@@ -7,7 +7,7 @@ export interface Lang extends SecondLabel {
 }
 
 export type SecondLabel = {
-  code: string;
+  code: LangCode;
   name: string;
 };
 

@@ -1,11 +1,12 @@
 import { DataSource, getWikibaseInstance } from "wikibase/getWikibaseInstance";
 
+import { LangCode } from "types/Lang";
 import { WikibaseEntity } from "types/Entity";
 import axios from "axios";
 
 type GetWikibaseEntitiesProps = {
   ids: string[]; // ['Q1', 'Q2', 'Q3', ..., 'Q123']
-  languages?: string[]; // ['en', 'fr', 'de']
+  languages?: LangCode[]; // ['en', 'fr', 'de']
   props?: string[]; // ['info', 'claims']
   dataSource: DataSource;
 };

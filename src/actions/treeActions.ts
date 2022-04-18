@@ -1,12 +1,9 @@
-import ReactGA from "react-ga";
-import { filterSpousePartnersIds } from "../filters/filterSpousePartnersIds";
 import {
   CHILD_BOOKMARK_SYMBOL,
   PARENT_BOOKMARK_SYMBOL,
   SIBLING_BOOKMARK_SYMBOL,
   SPOUSE_BOOKMARK_SYMBOL,
 } from "constants/bookmarks";
-import { CHILD_ID } from "constants/properties";
 import {
   collapseChildren,
   collapseParents,
@@ -35,8 +32,11 @@ import {
 import { AppThunk } from "store";
 import { Entity } from "types/Entity";
 import { EntityNode } from "types/EntityNode";
+import ReactGA from "react-ga";
 import { ToggleOptions } from "../types/ToggleOptions";
+import { WD_CHILD } from "@entitree/helper";
 import { addUrlBookmark } from "treeHelpers/addUrlBookmark";
+import { filterSpousePartnersIds } from "../filters/filterSpousePartnersIds";
 import { removeUrlBookmark } from "treeHelpers/removeUrlBookmark";
 
 export const toggleChildren =
@@ -75,7 +75,7 @@ export const toggleChildren =
           dataSource,
           currentPropId: currentProp?.id,
           addTargetIds: true,
-          addNextAfterIds: currentProp?.id === CHILD_ID,
+          addNextAfterIds: currentProp?.id === WD_CHILD,
           areTargetIdsSorted: entityNode.areTargetIdsSorted,
         });
 
@@ -115,7 +115,7 @@ export const preloadChildren =
       dataSource,
       currentPropId: currentProp?.id,
       addTargetIds: true,
-      addNextAfterIds: currentProp?.id === CHILD_ID,
+      addNextAfterIds: currentProp?.id === WD_CHILD,
       areTargetIdsSorted: entityNode.areTargetIdsSorted,
     });
 
@@ -162,7 +162,7 @@ export const toggleParents =
           dataSource,
           currentPropId: currentProp?.id,
           addSourceIds: true,
-          addNextBeforeIds: currentProp?.id === CHILD_ID,
+          addNextBeforeIds: currentProp?.id === WD_CHILD,
         });
 
         dispatch(expandParents({ entityNode, parents, options }));
@@ -193,7 +193,7 @@ export const preloadParents =
       dataSource,
       currentPropId: currentProp?.id,
       addSourceIds: true,
-      addNextBeforeIds: currentProp?.id === CHILD_ID,
+      addNextBeforeIds: currentProp?.id === WD_CHILD,
     });
 
     dispatch(setPreloadedParents({ entityNode, parents }));

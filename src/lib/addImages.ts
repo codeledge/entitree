@@ -1,4 +1,4 @@
-import { IMAGE_ID, LOGO_ID } from "../constants/properties";
+import { WD_IMAGE, WD_LOGO_IMAGE } from "@entitree/helper";
 
 import { Entity } from "types/Entity";
 
@@ -10,7 +10,7 @@ export default function addImages(
 ) {
   entity.thumbnails = [];
 
-  const imageClaim = entity.simpleClaims?.[IMAGE_ID];
+  const imageClaim = entity.simpleClaims?.[WD_IMAGE];
   if (imageClaim) {
     imageClaim.forEach((image, index) => {
       //catch undefined value
@@ -44,7 +44,7 @@ export default function addImages(
   // }
 
   //Logo last, people might have logos like Trump
-  const logoClaim = entity.simpleClaims?.[LOGO_ID];
+  const logoClaim = entity.simpleClaims?.[WD_LOGO_IMAGE];
   if (logoClaim) {
     logoClaim.forEach((image, index) => {
       //catch undefined value

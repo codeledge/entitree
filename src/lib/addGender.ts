@@ -1,20 +1,20 @@
 import {
-  ANIMAL_FEMALE_ID,
-  ANIMAL_MALE_ID,
-  HUMAN_FEMALE_ID,
-  HUMAN_MALE_ID,
-} from "constants/entities";
+  WD_ANIMAL_FEMALE,
+  WD_ANIMAL_MALE,
+  WD_HUMAN_FEMALE,
+  WD_HUMAN_MALE,
+  WD_SEX_OR_GENDER,
+} from "@entitree/helper";
 
 import { Entity } from "types/Entity";
-import { GENDER_ID } from "constants/properties";
 import getSimpleClaimValue from "./getSimpleClaimValue";
 
 export default function addGender(entity: Entity) {
-  const genderId = getSimpleClaimValue(entity.simpleClaims, GENDER_ID);
+  const genderId = getSimpleClaimValue(entity.simpleClaims, WD_SEX_OR_GENDER);
   if (genderId) {
-    if (genderId === HUMAN_MALE_ID || genderId === ANIMAL_MALE_ID) {
+    if (genderId === WD_HUMAN_MALE || genderId === WD_ANIMAL_MALE) {
       entity.gender = "male";
-    } else if (genderId === HUMAN_FEMALE_ID || genderId === ANIMAL_FEMALE_ID) {
+    } else if (genderId === WD_HUMAN_FEMALE || genderId === WD_ANIMAL_FEMALE) {
       entity.gender = "female";
     } else {
       entity.gender = "thirdgender";

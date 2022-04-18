@@ -1,11 +1,14 @@
-import formatDateClaim, { getDateClaimISO } from "./formatDateClaim";
+import {
+  WD_DATE_OF_BIRTH,
+  formatDateClaim,
+  getDateClaimISO,
+} from "@entitree/helper";
 
-import { BIRTH_DATE_ID } from "../constants/properties";
 import { Entity } from "types/Entity";
 import { LangCode } from "types/Lang";
 
 export default function addBirthDate(entity: Entity, languageCode: LangCode) {
-  const birthDateClaims = entity.claims?.[BIRTH_DATE_ID];
+  const birthDateClaims = entity.claims?.[WD_DATE_OF_BIRTH];
 
   if (birthDateClaims) {
     const birthISO = getDateClaimISO(birthDateClaims);

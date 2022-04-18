@@ -1,6 +1,7 @@
+import { WD_SPOUSE, WD_UNMARRIED_PARTNER } from "@entitree/helper";
+
 import { EntityNode } from "types/EntityNode";
 import { SettingsState } from "store/settingsSlice";
-import { PARTNER_ID, SPOUSE_ID } from "constants/properties";
 
 export const filterSpousePartnersIds = (
   node: EntityNode,
@@ -13,12 +14,12 @@ export const filterSpousePartnersIds = (
 
   return node.nextAfterIds?.filter((nextAfterId) => {
     if (
-      settings.rightEntityOption.propIds.indexOf(SPOUSE_ID) > -1 &&
+      settings.rightEntityOption.propIds.indexOf(WD_SPOUSE) > -1 &&
       node.spousesIds?.includes(nextAfterId)
     )
       return true;
     if (
-      settings.rightEntityOption.propIds.indexOf(PARTNER_ID) > -1 &&
+      settings.rightEntityOption.propIds.indexOf(WD_UNMARRIED_PARTNER) > -1 &&
       node.partnersIds?.includes(nextAfterId)
     )
       return true;

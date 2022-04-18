@@ -1,18 +1,18 @@
 import {
-  FICTIONAL_HUMAN_ID,
-  HUMAN_FETUS_ID,
-  HUMAN_ID,
-} from "constants/entities";
+  WD_FICTIONAL_HUMAN,
+  WD_HUMAN,
+  WD_HUMAN_FETUS,
+  WD_INSTANCE_OF,
+} from "@entitree/helper";
 
 import { Entity } from "types/Entity";
-import { INSTANCE_OF_ID } from "constants/properties";
 
 export default function addIsHuman(entity: Entity) {
-  const isHuman = entity.simpleClaims?.[INSTANCE_OF_ID]?.some(
+  const isHuman = entity.simpleClaims?.[WD_INSTANCE_OF]?.some(
     ({ value }) =>
-      value === HUMAN_ID ||
-      value === FICTIONAL_HUMAN_ID ||
-      value === HUMAN_FETUS_ID,
+      value === WD_HUMAN ||
+      value === WD_FICTIONAL_HUMAN ||
+      value === WD_HUMAN_FETUS,
   );
 
   if (isHuman) entity.isHuman = isHuman;

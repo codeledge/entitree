@@ -1,10 +1,10 @@
 import {
-  CHILD_ID,
-  NUMBER_OF_CHILDREN_ID,
-  PARTNER_ID,
-  SIBLINGS_ID,
-  SPOUSE_ID,
-} from "../constants/properties";
+  WD_CHILD,
+  WD_NUMBER_OF_CHILDREN,
+  WD_SIBLING,
+  WD_SPOUSE,
+  WD_UNMARRIED_PARTNER,
+} from "@entitree/helper";
 import getClaimIds, { checkIfClaimsHasSeriesOrdinal } from "./getClaimIds";
 
 import { DataSource } from "wikibase/getWikibaseInstance";
@@ -44,11 +44,11 @@ export default async function addEntityConnectors(
     );
 
     //use number of children property, use count of children if not available
-    if (options.currentPropId === CHILD_ID) {
+    if (options.currentPropId === WD_CHILD) {
       //only for family trees
       entity.targetsCount =
         Number(
-          getSimpleClaimValue(entity.simpleClaims, NUMBER_OF_CHILDREN_ID),
+          getSimpleClaimValue(entity.simpleClaims, WD_NUMBER_OF_CHILDREN),
         ) || entity.targetIds.length;
     } else {
       entity.targetsCount = entity.targetIds.length;
@@ -60,7 +60,7 @@ export default async function addEntityConnectors(
   if (options.addNextAfterIds) addNextAfterIds(entity);
 
   if (options.addNextBeforeIds)
-    entity.nextBeforeIds = getClaimIds(entity, SIBLINGS_ID);
+    entity.nextBeforeIds = getClaimIds(entity, WD_SIBLING);
   else delete entity.nextBeforeIds;
 }
 
@@ -68,8 +68,8 @@ function addNextAfterIds(entity: Entity) {
   //cannot use simpleclaims here as only preferred will show up
   //load everything here then you filter on the client
 
-  const spousesClaim = entity.claims?.[SPOUSE_ID];
-  const partnersClaim = entity.claims?.[PARTNER_ID];
+  const spousesClaim = entity.claims?.[WD_SPOUSE];
+  const partnersClaim = entity.claims?.[WD_UNMARRIED_PARTNER];
   const combinedClaim = [...(spousesClaim || []), ...(partnersClaim || [])];
 
   if (spousesClaim) {

@@ -1,4 +1,4 @@
-import { BIRTH_DATE_ID, DEATH_DATE_ID } from "../constants/properties";
+import { WD_DATE_OF_BIRTH, WD_DATE_OF_DEATH } from "@entitree/helper";
 
 import { DateTime } from "luxon";
 import { Entity } from "types/Entity";
@@ -6,16 +6,16 @@ import getSimpleClaimValue from "./getSimpleClaimValue";
 
 export default function addIsInfantDeath(entity: Entity) {
   if (
-    entity.simpleClaims?.[DEATH_DATE_ID] &&
-    entity.simpleClaims?.[BIRTH_DATE_ID]
+    entity.simpleClaims?.[WD_DATE_OF_DEATH] &&
+    entity.simpleClaims?.[WD_DATE_OF_BIRTH]
   ) {
     try {
       entity.isInfantDeath =
         DateTime.fromISO(
-          getSimpleClaimValue(entity.simpleClaims, DEATH_DATE_ID)!,
+          getSimpleClaimValue(entity.simpleClaims, WD_DATE_OF_DEATH)!,
         ).year -
           DateTime.fromISO(
-            getSimpleClaimValue(entity.simpleClaims, BIRTH_DATE_ID)!,
+            getSimpleClaimValue(entity.simpleClaims, WD_DATE_OF_BIRTH)!,
           ).year <
         5;
 
