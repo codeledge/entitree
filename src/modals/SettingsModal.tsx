@@ -13,7 +13,7 @@ import CustomThemeForm from "./CustomThemeForm";
 import { CustomToggle } from "./CustomToggle";
 import { IMAGE_SERVER_OVERFLOW } from "services/imageService";
 import { LANGS } from "constants/langs";
-import ReactGA from "react-ga";
+import ReactGA from "react-ga4";
 import { THEMES } from "constants/themes";
 import { switchLanguage } from "actions/loadActions";
 import { useAppSelector } from "store";

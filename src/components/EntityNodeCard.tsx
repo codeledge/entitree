@@ -33,7 +33,7 @@ import { Image } from "types/Entity";
 import { LangCode } from "types/Lang";
 import { LeftToggle } from "./toggle/LeftToggle";
 import { MdChildCare } from "react-icons/md";
-import ReactGA from "react-ga";
+import ReactGA from "react-ga4";
 import { RightToggle } from "./toggle/RightToggle";
 import { SettingsState } from "store/settingsSlice";
 import { TopToggle } from "./toggle/TopToggle";

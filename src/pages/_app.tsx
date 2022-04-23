@@ -8,7 +8,7 @@ import { GlobalStyle } from "layout/GlobalStyle";
 import { PersistGate } from "redux-persist/integration/react";
 import { Provider } from "react-redux";
 import React from "react";
-import ReactGA from "react-ga";
+import ReactGA from "react-ga4";
 import { ThemeProvider } from "styled-components";
 import { useCurrentTheme } from "hooks/useCurrentTheme";
 import usePageView from "hooks/usePageView";
