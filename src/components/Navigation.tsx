@@ -17,7 +17,7 @@ import styled, { useTheme } from "styled-components";
 
 import { FaRegShareSquare } from "react-icons/fa";
 import { IoMdExpand } from "react-icons/io";
-import ReactGA from "react-ga";
+import ReactGA from "react-ga4";
 import { RiFocus3Line } from "react-icons/ri";
 import { SITE_NAME } from "constants/meta";
 import fitEdges from "treeHelpers/fitEdges";

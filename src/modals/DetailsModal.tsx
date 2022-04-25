@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { EntityNode } from "types/EntityNode";
 import { FiExternalLink } from "react-icons/fi";
 import { Image } from "types/Entity";
-import ReactGA from "react-ga";
+import ReactGA from "react-ga4";
 import { errorHandler } from "handlers/errorHandler";
 import { getEntityUrl } from "helpers/getEntityUrl";
 import getWikibaseEntitiesLabel from "wikibase/getWikibaseEntitiesLabel";

@@ -32,7 +32,7 @@ import {
 import { AppThunk } from "store";
 import { Entity } from "types/Entity";
 import { EntityNode } from "types/EntityNode";
-import ReactGA from "react-ga";
+import ReactGA from "react-ga4";
 import { ToggleOptions } from "../types/ToggleOptions";
 import { WD_CHILD } from "@entitree/helper";
 import { addUrlBookmark } from "treeHelpers/addUrlBookmark";
@@ -84,12 +84,13 @@ export const toggleChildren =
         if (!entityNode.isRoot)
           addUrlBookmark(entityNode.treeId!, CHILD_BOOKMARK_SYMBOL);
 
-        ReactGA.timing({
-          category: "Async",
-          variable: dataSource,
-          value: performance.now() - start,
-          label: "toggleChildren getChildEntities",
-        });
+        //TODO: upgrade to react-ga4
+        // ReactGA.timing({
+        //   category: "Async",
+        //   variable: dataSource,
+        //   value: performance.now() - start,
+        //   label: "toggleChildren getChildEntities",
+        // });
       } catch (error) {
         console.error(error);
       } finally {
@@ -118,13 +119,13 @@ export const preloadChildren =
       addNextAfterIds: currentProp?.id === WD_CHILD,
       areTargetIdsSorted: entityNode.areTargetIdsSorted,
     });
-
-    ReactGA.timing({
-      category: "Async",
-      variable: dataSource,
-      value: performance.now() - start,
-      label: "preloadChildren getChildEntities",
-    });
+    //TODO: upgrade to react-ga4
+    // ReactGA.timing({
+    //   category: "Async",
+    //   variable: dataSource,
+    //   value: performance.now() - start,
+    //   label: "preloadChildren getChildEntities",
+    // });
     dispatch(setPreloadedChildren({ entityNode, children }));
   };
 

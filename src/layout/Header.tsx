@@ -12,7 +12,7 @@ import { EXAMPLES } from "../constants/examples";
 import { FiSliders } from "react-icons/fi";
 import Link from "next/link";
 import Logo from "./Logo";
-import ReactGA from "react-ga";
+import ReactGA from "react-ga4";
 import { SITE_NAME } from "../constants/meta";
 import SettingsModal from "modals/SettingsModal";
 import { setLoadingEntity } from "store/treeSlice";
