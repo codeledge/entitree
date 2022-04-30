@@ -49,9 +49,6 @@ const TreePage = ({
   if (errorCode) {
     return <Error statusCode={errorCode} />;
   }
-  // if (typeof window === "undefined") {
-  //   return <>f</>;
-  // }
 
   return (
     <>

@@ -89,7 +89,7 @@ export const RIGHT_ENTITY_OPTIONS = [
     title: "Spouses and partners",
   },
   {
-    propIds: [WD_SPOUSE],
+    propIds: [WD_UNMARRIED_PARTNER],
     title: "Only partners",
   },
 ];
