@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { getWikipediaArticle, isItemId } from "@entitree/helper";
 import {
   setCurrentEntity,
@@ -6,7 +6,6 @@ import {
   setCurrentProp,
 } from "store/treeSlice";
 import { useAppSelector, wrapper } from "store";
-
 import { DEFAULT_PROPERTY_ALL } from "constants/properties";
 import DrawingArea from "components/DrawingArea";
 import Error from "next/error";
@@ -25,6 +24,7 @@ import getEntityIdFromSlug from "wikidata/getEntityIdFromSlug";
 import isInIframe from "lib/isInIframe";
 import { setSetting } from "store/settingsSlice";
 import { useDispatch } from "react-redux";
+import NoSsr from "layout/NoSsr";
 
 const TreePage = ({
   errorCode,
@@ -62,11 +62,23 @@ const TreePage = ({
         twitterTitle={twitterTitle}
       />
       <Page>
-        {!isInIframe() && <Header />}
-        {!isInIframe() && <SearchBar />}
+        {!isInIframe() && (
+          <NoSsr>
+            <Header />
+          </NoSsr>
+        )}
+        {!isInIframe() && (
+          <NoSsr>
+            <SearchBar />
+          </NoSsr>
+        )}
         {loadingEntity ? <TreeLoader /> : <DrawingArea />}
       </Page>
-      <Footer />
+      {!isInIframe() && (
+        <NoSsr>
+          <Footer />
+        </NoSsr>
+      )}
     </>
   );
 };

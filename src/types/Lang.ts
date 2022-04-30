@@ -1,5 +1,3 @@
-import { ALL_LANGS } from "@entitree/helper";
-
 // keep compatibility
 export interface Lang extends SecondLabel {
   code: LangCode;
@@ -11,4 +9,4 @@ export type SecondLabel = {
   name: string;
 };
 
-export type LangCode = keyof typeof ALL_LANGS;
+export type LangCode = string; //keyof typeof ALL_LANGS; <= this, for some reason, becomes `string|number`
