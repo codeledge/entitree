@@ -109,7 +109,7 @@ export default function SettingsModal({ show, onHideModal }) {
           <Dropdown.Toggle as={CustomToggle}>
             <span className="label">Language</span> {currentLang?.name}
           </Dropdown.Toggle>
-          <Dropdown.Menu align="end" as={CustomMenu}>
+          <Dropdown.Menu alignRight as={CustomMenu}>
             {LANGS.map((lang, index) => (
               <Dropdown.Item
                 key={lang.code}
@@ -143,7 +143,7 @@ export default function SettingsModal({ show, onHideModal }) {
             <span className="label">Add second label</span>{" "}
             {currentSecondLabel ? currentSecondLabel.name : <i>no</i>}
           </Dropdown.Toggle>
-          <Dropdown.Menu align="end" as={CustomMenu}>
+          <Dropdown.Menu alignRight as={CustomMenu}>
             <Dropdown.Item
               active={!currentSecondLabel}
               onClick={() => dispatch(setSecondLabelCode(undefined))}
@@ -251,6 +251,7 @@ export default function SettingsModal({ show, onHideModal }) {
         <hr />
         <Form.Group controlId="followNavigation">
           <Form.Check
+            custom
             checked={followNavigation}
             onChange={(e) =>
               dispatch(
@@ -268,6 +269,7 @@ export default function SettingsModal({ show, onHideModal }) {
         </Form.Group>
         <Form.Group controlId="iconsDisplay">
           <Form.Check
+            custom
             checked={hideToggleButton}
             onChange={(e) =>
               dispatch(
@@ -285,6 +287,7 @@ export default function SettingsModal({ show, onHideModal }) {
         </Form.Group>
         <Form.Group controlId="genderColors">
           <Form.Check
+            custom
             checked={showGenderColor}
             onChange={(e) =>
               dispatch(
@@ -305,6 +308,7 @@ export default function SettingsModal({ show, onHideModal }) {
           <>
             <Form.Group controlId="extraInfo">
               <Form.Check
+                custom
                 className="d-inline-block"
                 checked={showExtraInfo}
                 onChange={(e) =>
@@ -348,6 +352,7 @@ export default function SettingsModal({ show, onHideModal }) {
             </Form.Group>
             <Form.Group controlId="birthName">
               <Form.Check
+                custom
                 checked={showBirthName}
                 onChange={(e) =>
                   dispatch(
@@ -366,6 +371,7 @@ export default function SettingsModal({ show, onHideModal }) {
 
             <Form.Group controlId="showExternalImages">
               <Form.Check
+                custom
                 checked={showExternalImages}
                 onChange={(e) =>
                   dispatch(
@@ -383,6 +389,7 @@ export default function SettingsModal({ show, onHideModal }) {
             </Form.Group>
             <Form.Group controlId="faceDisplay">
               <Form.Check
+                custom
                 checked={imageType === "transparent_head"}
                 className="d-inline-block"
                 onChange={(e) =>
@@ -467,7 +474,7 @@ export default function SettingsModal({ show, onHideModal }) {
 
 const StyledModal = styled(Modal)`
   .dropdown-toggle {
-    display: block;
+    display: inline-block;
     padding: 0.4rem 0;
     .label {
       color: #212529;
