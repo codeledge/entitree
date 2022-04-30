@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { EntityNode } from "types/EntityNode";
 import { FiExternalLink } from "react-icons/fi";
 import { Image } from "types/Entity";
-import ReactGA from "react-ga4";
+// import ReactGA from "react-ga4";
 import { errorHandler } from "handlers/errorHandler";
 import { getEntityUrl } from "helpers/getEntityUrl";
 import getWikibaseEntitiesLabel from "wikibase/getWikibaseEntitiesLabel";
@@ -26,7 +26,8 @@ export default function DetailsModal({
   nodeImages: Image[];
 }) {
   useEffect(() => {
-    ReactGA.modalview("details");
+    //TODO: upgrade to react-ga4
+    // ReactGA.modalview("details");
   }, []);
 
   const { languageCode, dataSource } = useAppSelector(
