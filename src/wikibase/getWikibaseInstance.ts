@@ -15,3 +15,10 @@ export function getWikibaseInstance(alias: DataSource) {
   }
   return wikibaseInstance;
 }
+
+export function getWikibaseURL(alias: DataSource) {
+  if (alias === "factgrid") {
+    return "https://database.factgrid.de";
+  }
+  return "https://www.wikidata.org";
+}

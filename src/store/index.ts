@@ -1,4 +1,4 @@
-import { Action, combineReducers, Store } from "redux";
+import { Action, Store, combineReducers } from "redux";
 import {
   FLUSH,
   PAUSE,
@@ -9,12 +9,12 @@ import {
   persistReducer,
   persistStore,
 } from "redux-persist";
-import { createWrapper } from "next-redux-wrapper";
 import { ThunkAction, configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import settingsReducer, { SETTINGS_SLICE_NAME } from "./settingsSlice";
 
 import alertReducer from "./alertSlice";
+import { createWrapper } from "next-redux-wrapper";
 import storage from "redux-persist/lib/storage";
 import treeReducer from "./treeSlice";
 
@@ -27,7 +27,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: "entitree_v1",
   whitelist: [SETTINGS_SLICE_NAME],
-  version: 5,
+  version: 6,
   storage,
   debug: process.env.NODE_ENV === "development",
 };

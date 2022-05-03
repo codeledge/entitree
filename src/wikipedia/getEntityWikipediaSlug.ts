@@ -10,7 +10,7 @@ export default async function getEntityWikipediaSlug(
 ) {
   const wikibaseInstance = getWikibaseInstance(dataSource);
 
-  const url = await wikibaseInstance.getEntities({
+  const url = wikibaseInstance.getEntities({
     ids: [id],
     languages: [langCode],
     props: ["sitelinks/urls"],
