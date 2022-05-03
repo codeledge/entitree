@@ -1,10 +1,9 @@
+import { DataSource, getEntityWikipediaSlug } from "@entitree/helper";
 import { Entity, EntityProp } from "types/Entity";
 
 import { AppThunk } from "store";
-import { DataSource } from "wikibase/getWikibaseInstance";
 import { LangCode } from "types/Lang";
 import { getEntityUrl } from "helpers/getEntityUrl";
-import getEntityWikipediaSlug from "wikipedia/getEntityWikipediaSlug";
 import getWikibaseEntityProps from "wikibase/getWikibaseEntityProps";
 import { reset } from "store/treeSlice";
 import router from "next/router";

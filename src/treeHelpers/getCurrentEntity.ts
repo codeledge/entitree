@@ -1,7 +1,7 @@
 import { Entity, EntityProp } from "types/Entity";
 
 import { DEFAULT_PROPERTY_ALL } from "constants/properties";
-import { DataSource } from "wikibase/getWikibaseInstance";
+import { DataSource } from "@entitree/helper";
 import { FAMILY_TREE_PROP_TRANSLATIONS } from "constants/langs";
 import { LangCode } from "types/Lang";
 import { getRootEntity } from "treeHelpers/getEntities";

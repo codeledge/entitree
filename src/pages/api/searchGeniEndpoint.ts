@@ -20,9 +20,7 @@ export default async function handler(
         return res.json(profiles.slice(0, 15));
       } catch (error: any) {
         const axiosError: AxiosError = error;
-        return res
-          .status(500)
-          .json({ message: axiosError.response?.data.error.message });
+        return res.status(500).json({ message: axiosError.response?.data });
       }
       break;
     }

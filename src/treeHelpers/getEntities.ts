@@ -4,6 +4,7 @@ import {
   SIBLING_BOOKMARK_SYMBOL,
   SPOUSE_BOOKMARK_SYMBOL,
 } from "constants/bookmarks";
+import { WD_CHILD, getWikibaseEntities } from "@entitree/helper";
 import addEntityConnectors, {
   ConnectorOptions,
 } from "../lib/addEntityConnectors";
@@ -17,12 +18,10 @@ import { DEFAULT_LANGS_CODES } from "../constants/langs";
 import { Entity } from "types/Entity";
 import { EntityNode } from "types/EntityNode";
 import { LangCode } from "types/Lang";
-import { WD_CHILD } from "@entitree/helper";
 import { addGeniEntityConnectors } from "lib/geni/addGeniEntityConnectors";
 // import filterSpouses from "../lib/filterSpouses";
 import { formatGeniProfile } from "../lib/formatGeniProfile";
 import formatWikibaseEntity from "../lib/formatWikibaseEntity";
-import getWikibaseEntities from "wikibase/getWikibaseEntities";
 
 type Options = ConnectorOptions & {
   secondLanguageCode?: LangCode;

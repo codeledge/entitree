@@ -1,10 +1,9 @@
+import { DataSource, getWikibaseEntities } from "@entitree/helper";
 import { Entity, WikibaseEntity } from "types/Entity";
 
 import { DEFAULT_LANGS_CODES } from "../constants/langs";
-import { DataSource } from "wikibase/getWikibaseInstance";
 import { LangCode } from "types/Lang";
 import addLabel from "../lib/addLabel";
-import getWikibaseEntities from "wikibase/getWikibaseEntities";
 
 export default async function getWikibaseEntitiesLabel(
   ids: string[],

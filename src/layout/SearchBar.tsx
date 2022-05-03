@@ -12,7 +12,6 @@ import { FaSearch } from "react-icons/fa";
 import SearchSuggestions from "./SearchSuggestions";
 import { errorHandler } from "handlers/errorHandler";
 import { getEntityUrl } from "helpers/getEntityUrl";
-import { getWikibaseURL } from "wikibase/getWikibaseInstance";
 import { searchGeniCall } from "services/apiService";
 import { setLoadingEntity } from "store/treeSlice";
 import styled from "styled-components";
@@ -56,7 +55,7 @@ export default function SearchBar() {
             const results = await wikibaseSearchEntities(
               debouncedSearchTerm,
               currentLang.code as string,
-              getWikibaseURL(dataSource),
+              dataSource,
             );
             const filteredResults = results.filter(({ id, description }) => {
               // remove current entity from results

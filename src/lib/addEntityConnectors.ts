@@ -1,4 +1,5 @@
 import {
+  DataSource,
   WD_CHILD,
   WD_NUMBER_OF_CHILDREN,
   WD_SIBLING,
@@ -7,7 +8,6 @@ import {
 } from "@entitree/helper";
 import getClaimIds, { checkIfClaimsHasSeriesOrdinal } from "./getClaimIds";
 
-import { DataSource } from "wikibase/getWikibaseInstance";
 import { Entity } from "types/Entity";
 import getSimpleClaimValue from "./getSimpleClaimValue";
 import getWikibaseSourceIds from "wikibase/getWikibaseSourceIds";

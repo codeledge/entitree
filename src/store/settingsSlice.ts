@@ -2,7 +2,7 @@ import { Lang, LangCode, SecondLabel } from "types/Lang";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 import { DEFAULT_LANG_CODE } from "constants/langs";
-import { DataSource } from "wikibase/getWikibaseInstance";
+import { DataSource } from "@entitree/helper";
 import { DefaultTheme } from "styled-components";
 import { RIGHT_ENTITY_OPTIONS } from "constants/properties";
 import { defaultTheme } from "constants/themes";

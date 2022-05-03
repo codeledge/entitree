@@ -1,11 +1,11 @@
-import { WD_HUMAN, WD_INSTANCE_OF } from "@entitree/helper";
+import { WDQ_HUMAN, WD_INSTANCE_OF } from "@entitree/helper";
 
 import { Entity } from "types/Entity";
 import getSimpleClaimValue from "./getSimpleClaimValue";
 
 export default function addPeoplePillImage(entity: Entity) {
   if (
-    getSimpleClaimValue(entity.simpleClaims, WD_INSTANCE_OF) === WD_HUMAN &&
+    getSimpleClaimValue(entity.simpleClaims, WD_INSTANCE_OF) === WDQ_HUMAN &&
     !entity.sitelinks?.enwiki?.title?.includes("(") //peoplePill uses a counter for same names
   ) {
     //TODO: check for foreign characters

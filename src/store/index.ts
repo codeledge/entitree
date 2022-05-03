@@ -1,4 +1,4 @@
-import { Action, Store, combineReducers } from "redux";
+import { Action, combineReducers } from "redux";
 import {
   FLUSH,
   PAUSE,
