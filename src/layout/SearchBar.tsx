@@ -7,6 +7,7 @@ import {
   Tooltip,
 } from "react-bootstrap";
 import React, { useEffect, useRef, useState } from "react";
+import { getWikibaseURL, wikibaseSearchEntities } from "@entitree/helper";
 
 import { FaSearch } from "react-icons/fa";
 import SearchSuggestions from "./SearchSuggestions";
@@ -20,7 +21,6 @@ import { useCurrentLang } from "hooks/useCurrentLang";
 import useDebounce from "../hooks/useDebounce";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
-import { wikibaseSearchEntities } from "@entitree/helper";
 
 export type SearchResult = {
   id: string;
@@ -55,7 +55,7 @@ export default function SearchBar() {
             const results = await wikibaseSearchEntities(
               debouncedSearchTerm,
               currentLang.code as string,
-              dataSource,
+              getWikibaseURL(dataSource),
             );
             const filteredResults = results.filter(({ id, description }) => {
               // remove current entity from results

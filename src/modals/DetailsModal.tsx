@@ -86,7 +86,7 @@ export default function DetailsModal({
           <div className="allImages">
             {images &&
               images.map((image) => (
-                <Figure>
+                <Figure key={image.url}>
                   <Figure.Image
                     key={image.url}
                     alt={image.alt}

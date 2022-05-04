@@ -528,10 +528,10 @@
   resolved "https://registry.yarnpkg.com/@emotion/unitless/-/unitless-0.7.5.tgz#77211291c1900a700b8a78cfafda3160d76949ed"
   integrity sha512-OWORNpfjMsSSUBVrRBVGECkhWcULOAJz9ZW8uK9qgxD+87M7jHRcvh/A96XXNhXTLmKcoYSQtBEX7lHMO7YRwg==
 
-"@entitree/helper@0.4.3":
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/@entitree/helper/-/helper-0.4.3.tgz#22dfa3776f08a281823e34ef4764d8cc796cadd0"
-  integrity sha512-W+Bu621oyQbJQYU4OtYqGPslBVMAlk2mvMimFevYJZn5zacBC+jjypCm3XCFJlh8L1z53LO/9y3e22TqdxVz4A==
+"@entitree/helper@0.4.5":
+  version "0.4.5"
+  resolved "https://registry.yarnpkg.com/@entitree/helper/-/helper-0.4.5.tgz#993a08a545def623ec760daedd1c96df27d067aa"
+  integrity sha512-5SARk/iHVJ7vYOa4g07tjo8HPxUmn+WeUoSFeSgciPrC/kIWnAVVwLYJmVLQrPtA4aQoPasfoW7Hx1gARycj2w==
   dependencies:
     "@changesets/cli" "^2.22.0"
     "@types/latinize" "^0.2.15"
@@ -5452,12 +5452,12 @@ wikibase-edit@^5.0.0:
     oauth-1.0a "^2.2.6"
     wikibase-sdk "^8.0.0"
 
-wikibase-sdk@^8.0.0:
+wikibase-sdk@8.0.0, wikibase-sdk@^8.0.0:
   version "8.0.0"
   resolved "https://registry.yarnpkg.com/wikibase-sdk/-/wikibase-sdk-8.0.0.tgz#5f17a4f051b6b194296f283b9d577aa588cb5fef"
   integrity sha512-t2mKvASLPqkDNk/CY1z4boB9F/7JsRls9qLXftO2xHAvUVzAcBD/aTjhzwRMmvLRcHfoo38cOlo8J2/tN0yTMA==
 
-wikidata-sdk@*, wikidata-sdk@^8.0.0:
+wikidata-sdk@*, wikidata-sdk@8.0.0, wikidata-sdk@^8.0.0:
   version "8.0.0"
   resolved "https://registry.yarnpkg.com/wikidata-sdk/-/wikidata-sdk-8.0.0.tgz#ae4c52b970a28b4d0b18190eb9b1e1181c5d77c4"
   integrity sha512-jhEQ6tdlSHGeDRb0DhHGPjoKRNaVr5E5dFAxVnkpdDNca7mAIBmONC24+QUCcx42MgIt6qD3s1bB3IRIYr7sRg==
