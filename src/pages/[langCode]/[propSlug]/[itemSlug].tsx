@@ -1,11 +1,15 @@
-import { useEffect } from "react";
-import { getWikipediaArticle, isItemId } from "@entitree/helper";
+import {
+  getEntityIdFromSlug,
+  getWikipediaArticle,
+  isItemId,
+} from "@entitree/helper";
 import {
   setCurrentEntity,
   setCurrentEntityProps,
   setCurrentProp,
 } from "store/treeSlice";
 import { useAppSelector, wrapper } from "store";
+
 import { DEFAULT_PROPERTY_ALL } from "constants/properties";
 import DrawingArea from "components/DrawingArea";
 import Error from "next/error";
@@ -14,17 +18,17 @@ import { HeadMeta } from "layout/HeadMeta";
 import Header from "layout/Header";
 import { LANGS } from "constants/langs";
 import { LangCode } from "types/Lang";
+import NoSsr from "layout/NoSsr";
 import { Page } from "layout/Page";
 import { PageProps } from "types/PageProps";
 import SearchBar from "layout/SearchBar";
 import TreeLoader from "layout/TreeLoader";
 import { createMetaTags } from "seo/createMetaTags";
 import { getCurrentEntity } from "treeHelpers/getCurrentEntity";
-import getEntityIdFromSlug from "wikidata/getEntityIdFromSlug";
 import isInIframe from "lib/isInIframe";
 import { setSetting } from "store/settingsSlice";
 import { useDispatch } from "react-redux";
-import NoSsr from "layout/NoSsr";
+import { useEffect } from "react";
 
 const TreePage = ({
   errorCode,

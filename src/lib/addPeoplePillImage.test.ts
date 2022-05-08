@@ -1,7 +1,7 @@
+import { WD_INSTANCE_OF, getWikibaseEntities } from "@entitree/helper";
+
 import { Entity } from "types/Entity";
-import { WD_INSTANCE_OF } from "@entitree/helper";
 import addPeoplePillImage from "./addPeoplePillImage";
-import getWikibaseEntities from "wikibase/getWikibaseEntities";
 
 describe("addPeoplePillImage", () => {
   test("it should give the correct name", async () => {

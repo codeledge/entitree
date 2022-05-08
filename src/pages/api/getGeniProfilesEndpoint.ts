@@ -26,9 +26,7 @@ export default async function handler(
       } catch (error: any) {
         //console.error(error);
         const axiosError: AxiosError = error;
-        return res
-          .status(500)
-          .json({ message: axiosError.response?.data.error.message });
+        return res.status(500).json({ message: axiosError.response?.data });
       }
       break;
     }

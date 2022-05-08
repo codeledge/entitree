@@ -1,4 +1,4 @@
-import { DataSource, getWikibaseInstance } from "wikibase/getWikibaseInstance";
+import { DataSource, getWikibaseInstance } from "@entitree/helper";
 
 import axios from "axios";
 

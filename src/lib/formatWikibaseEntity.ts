@@ -36,16 +36,19 @@ import addStartEndSpan from "./addStartEndSpan";
 import addWebsite from "./addWebsite";
 import addWikidataUrl from "./addWikidataUrl";
 import addWikipediaUrl from "./addWikipediaUrl";
-import wbk from "wikibase-sdk";
+import { getWikidataInstance } from "@entitree/helper";
 
 export default function formatWikibaseEntity(
   wikibaseEntity: WikibaseEntity,
   languageCode: LangCode,
   dataSource: string,
 ) {
-  const simpleClaims = wbk.simplify.claims(wikibaseEntity.claims, {
-    keepQualifiers: true,
-  });
+  const simpleClaims = getWikidataInstance().simplify.claims(
+    wikibaseEntity.claims,
+    {
+      keepQualifiers: true,
+    },
+  );
 
   const entity: Entity = {
     ...wikibaseEntity,

@@ -1,5 +1,5 @@
 import {
-  WD_ENGLISH,
+  WDQ_ENGLISH,
   WD_FANDOM_ARTICLE_ID,
   WD_LANGUAGE_OF_WORK_OR_NAME,
 } from "@entitree/helper";
@@ -14,7 +14,7 @@ export default function addFandom(entity: Entity) {
       (entry) =>
         entry.qualifiers &&
         entry.qualifiers[WD_LANGUAGE_OF_WORK_OR_NAME] &&
-        entry.qualifiers[WD_LANGUAGE_OF_WORK_OR_NAME][0] === WD_ENGLISH,
+        entry.qualifiers[WD_LANGUAGE_OF_WORK_OR_NAME][0] === WDQ_ENGLISH,
     );
     let fandomId: any;
     if (englishArticle) {

@@ -1,5 +1,5 @@
 import { DEFAULT_PROPERTY_ALL } from "constants/properties";
-import { DataSource } from "wikibase/getWikibaseInstance";
+import { DataSource } from "@entitree/helper";
 import { LangCode } from "types/Lang";
 
 export const getEntityUrl = (

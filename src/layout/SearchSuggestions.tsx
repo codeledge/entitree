@@ -1,9 +1,9 @@
 import { Button, Spinner } from "react-bootstrap";
 import React, { useRef } from "react";
+import { getEntityWikipediaSlug, getWikibaseURL } from "@entitree/helper";
 
 import { SearchResult } from "./SearchBar";
 import { getEntityUrl } from "helpers/getEntityUrl";
-import getEntityWikipediaSlug from "wikipedia/getEntityWikipediaSlug";
 import { reset } from "store/treeSlice";
 import styled from "styled-components";
 import { useAppSelector } from "store";

@@ -1,5 +1,5 @@
 import { DEFAULT_LANG, FAMILY_TREE_PROP_TRANSLATIONS } from "constants/langs";
-import { DataSource, getWikibaseInstance } from "wikibase/getWikibaseInstance";
+import { DataSource, getWikibaseInstance } from "@entitree/helper";
 
 import { EntityProp } from "types/Entity";
 import { LangCode } from "types/Lang";
