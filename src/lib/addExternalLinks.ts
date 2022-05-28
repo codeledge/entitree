@@ -1,5 +1,6 @@
 /* eslint-disable guard-for-in */
 /* eslint-disable no-restricted-syntax */
+import { WIKIDATA_ICON } from "@entitree/helper";
 import { Entity, ExternalLink } from "types/Entity";
 
 import { SOCIAL_PROPS_IDS } from "../constants/properties";
@@ -18,7 +19,9 @@ export default function addExternalLinks(entity: Entity) {
       const { alt, baseUrl, title, iconName } = SOCIAL_PROPS_IDS[socialPropId];
       socialProps.push({
         title,
-        iconSrc: `/icons/${iconName}.png`,
+        iconSrc: WIKIDATA_ICON[socialPropId]
+          ? WIKIDATA_ICON[socialPropId]
+          : `/icons/${iconName}.png`,
         alt,
         url: baseUrl + claimValue,
       });
