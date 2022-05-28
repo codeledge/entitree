@@ -1,12 +1,21 @@
 import {
+  FormatUrlProps,
   WD_BIRTH_NAME,
+  WD_FACEBOOK_ID,
+  WD_FANVUE_CREATOR_ID,
   WD_FATHER,
+  WD_GENI_COM_PROFILE_ID,
+  WD_INSTAGRAM_USERNAME,
+  WD_LINKEDIN_PERSONAL_PROFILE_ID,
   WD_MOTHER,
   WD_NAME_IN_KANA,
   WD_NICKNAME,
   WD_SIBLING,
   WD_SPOUSE,
+  WD_TIKTOK_USERNAME,
+  WD_TWITTER_USERNAME,
   WD_UNMARRIED_PARTNER,
+  WD_WIKITREE_PERSON_ID,
 } from "@entitree/helper";
 
 import { EntityProp } from "types/Entity";
@@ -29,51 +38,55 @@ export const FAMILY_TREE_PROP: EntityProp = {
   isFav: true,
 };
 
-export const SOCIAL_PROPS_IDS = {
-  P6634: {
+type SocialProps = {
+  id: FormatUrlProps;
+  title: string;
+  iconName: string;
+};
+
+export const SOCIAL_PROPS_IDS: SocialProps[] = [
+  {
+    id: WD_LINKEDIN_PERSONAL_PROFILE_ID,
     title: "Open LinkedIn profile in a new tab",
     iconName: "linkedin",
-    alt: "linkedin icon",
-    baseUrl: "https://www.linkedin.com/in/",
   },
-  P2003: {
+  {
+    id: WD_INSTAGRAM_USERNAME,
     title: "Open instagram profile in a new tab",
-    alt: "instagram icon",
     iconName: "instagram",
-    baseUrl: "https://www.instagram.com/",
   },
-  P2002: {
+  {
+    id: WD_TWITTER_USERNAME,
     title: "Open twitter profile in a new tab",
-    alt: "twitter icon",
     iconName: "twitter",
-    baseUrl: "https://twitter.com/",
   },
-  P2013: {
+  {
+    id: WD_FACEBOOK_ID,
     title: "Open facebook page in a new tab",
     iconName: "facebook",
-    alt: "facebook icon",
-    baseUrl: "https://www.facebook.com/",
   },
-  P2949: {
+  {
+    id: WD_WIKITREE_PERSON_ID,
     title: "Open wikitree profile in a new tab",
     iconName: "wikitree",
-    alt: "wikitree icon",
-    baseUrl: "https://www.wikitree.com/wiki/",
   },
-  P2600: {
+  {
+    id: WD_GENI_COM_PROFILE_ID,
     title: "Open geni profile in a new tab",
     iconName: "geni",
-    alt: "geni icon",
-    baseUrl: "https://www.geni.com/profile/index/",
   },
-  P7085: {
+  {
+    id: WD_TIKTOK_USERNAME,
     title: "Open tiktok user in a new tab",
     iconName: "tiktok",
-    alt: "tiktok icon",
-    baseUrl: "https://www.tiktok.com/@",
+  },
+  {
+    id: WD_FANVUE_CREATOR_ID,
+    title: "Open Fanvue profile in a new tab",
+    iconName: "fanvue",
   },
   // 'P345' : ['imdb',' https://www.imdb.com/name/$1/']
-};
+];
 
 export const RIGHT_ENTITY_OPTIONS = [
   {

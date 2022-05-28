@@ -1,7 +1,7 @@
 lockfileVersion: 5.3
 
 specifiers:
-  '@entitree/helper': 0.5.4
+  '@entitree/helper': 0.6.1
   '@reduxjs/toolkit': 1.8.2
   '@testing-library/jest-dom': 5.16.4
   '@testing-library/react': 13.2.0
@@ -59,7 +59,7 @@ specifiers:
   url-join: 5.0.0
 
 dependencies:
-  '@entitree/helper': 0.5.4
+  '@entitree/helper': 0.6.1
   '@reduxjs/toolkit': 1.8.2_react-redux@7.2.8+react@18.0.0
   '@types/axios': 0.14.0
   '@types/luxon': 2.3.2
@@ -667,8 +667,8 @@ packages:
     resolution: {integrity: sha512-OWORNpfjMsSSUBVrRBVGECkhWcULOAJz9ZW8uK9qgxD+87M7jHRcvh/A96XXNhXTLmKcoYSQtBEX7lHMO7YRwg==}
     dev: false
 
-  /@entitree/helper/0.5.4:
-    resolution: {integrity: sha512-2wqEyh0QMFLlRsmc48W7f8FXkvsYjZ2FO7kqqv+xZFcEasgRIWwd0kD10/3a4WNI2kxF0CuWB6fpSyWcP4UIAQ==}
+  /@entitree/helper/0.6.1:
+    resolution: {integrity: sha512-2U4SYeo2cq9BOIW4cUikHl7TAtEPJ58jVb8U5XqbjdjRdbgi0ZaYsXP8PZzjyd9WK+Gj1n9RLStNJkbjzUPisA==}
     dependencies:
       '@changesets/cli': 2.22.0
       '@types/latinize': 0.2.15
