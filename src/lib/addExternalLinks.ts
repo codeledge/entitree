@@ -1,5 +1,6 @@
 /* eslint-disable guard-for-in */
 /* eslint-disable no-restricted-syntax */
+import { formatUrl, WIKIDATA_ICON } from "@entitree/helper";
 import { Entity, ExternalLink } from "types/Entity";
 
 import { SOCIAL_PROPS_IDS } from "../constants/properties";
@@ -12,15 +13,17 @@ import getSimpleClaimValue from "./getSimpleClaimValue";
 export default function addExternalLinks(entity: Entity) {
   const socialProps: ExternalLink[] = [];
   const { simpleClaims } = entity;
-  for (const socialPropId in SOCIAL_PROPS_IDS) {
-    const claimValue = getSimpleClaimValue(simpleClaims, socialPropId);
+  for (const social of SOCIAL_PROPS_IDS) {
+    const claimValue = getSimpleClaimValue(simpleClaims, social.id);
     if (claimValue) {
-      const { alt, baseUrl, title, iconName } = SOCIAL_PROPS_IDS[socialPropId];
+      const { title, iconName } = social;
       socialProps.push({
         title,
-        iconSrc: `/icons/${iconName}.png`,
-        alt,
-        url: baseUrl + claimValue,
+        iconSrc: WIKIDATA_ICON[social.id]
+          ? WIKIDATA_ICON[social.id]
+          : `/icons/${iconName}.png`,
+        alt: iconName + " icon",
+        url: formatUrl(social.id, claimValue),
       });
     }
   }

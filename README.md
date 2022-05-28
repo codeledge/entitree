@@ -1,12 +1,8 @@
 # EntiTree.com
 
-This project was bootstrapped with Next.js + Typescript (https://github.com/jpedroschmitz/typescript-nextjs-starter).
-
 Live website here https://www.entitree.com/
 
-Test website here https://entitree-next.herokuapp.com/
-
-![Interface example](https://github.com/codeledge/entitree-next/blob/main/public/examples/interface.png)
+![Interface example](https://raw.githubusercontent.com/codeledge/entitree/main/public/examples/interface.png)
 
 ## User instructions
 
@@ -26,7 +22,7 @@ sudo apt install npm
 curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 sudo apt-get update
-sudo apt-get install yarn -y
+sudo apt-get install pnpm
 ```
 
 ## Clone the project
@@ -34,7 +30,7 @@ sudo apt-get install yarn -y
 ```
 git clone https://github.com/codeledge/entitree-next
 cd entitree-next/
-yarn
+pnpm
 ```
 
 ## Run in the browser
@@ -42,7 +38,7 @@ yarn
 Run the development environment
 
 ```
-yarn dev
+pnpm dev
 ```
 
 Open [localhost:3009](http://localhost:3009/)
