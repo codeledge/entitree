@@ -202,7 +202,7 @@ export default function Home() {
                     project.image &&
                     project.key !== "entitree" &&
                     project.show !== false && (
-                      <StyledCol xs={12} md={6}>
+                      <StyledCol xs={12} md={6} key={project.key}>
                         <Card>
                           <ImgBox alt="Image" src={project.image} />
                           <Card.Body>
