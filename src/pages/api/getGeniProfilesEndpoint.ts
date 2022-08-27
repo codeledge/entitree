@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 import { AxiosError } from "axios";
 import { getGeniCookies } from "helpers/cookies";
-import { getGeniProfiles } from "../../services/geniService";
+import { getGeniProfiles } from "geni-api";
 
 export default async function handler(
   req: NextApiRequest,
