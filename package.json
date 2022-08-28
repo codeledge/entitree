@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@entitree/helper": "0.6.1",
+    "@entitree/shared": "0.0.2",
     "@reduxjs/toolkit": "1.8.2",
     "@types/luxon": "3.0.0",
     "axios": "0.27.2",
@@ -29,7 +30,6 @@
     "luxon": "3.0.1",
     "next": "12.2.5",
     "next-redux-wrapper": "7.0.5",
-    "ordinalize": "1.0.2",
     "pluralize": "8.0.0",
     "react": "18.2.0",
     "react-bootstrap": "1.6.0",
