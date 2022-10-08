@@ -12,7 +12,6 @@ import { setSetting } from "store/settingsSlice";
 import styled from "styled-components";
 import { useAppSelector } from "store";
 import { useDispatch } from "react-redux";
-import { projects } from "@entitree/shared";
 
 const imgHeight = 240;
 
@@ -194,34 +193,6 @@ export default function Home() {
                     </Card>
                   </a>
                 </StyledCol>
-              </StyledRow>
-              <SubTitle>Our other projects:</SubTitle>
-              <StyledRow>
-                {projects.map(
-                  (project) =>
-                    project.image &&
-                    project.key !== "entitree" &&
-                    project.show !== false && (
-                      <StyledCol xs={12} md={6} key={project.key}>
-                        <Card>
-                          <ImgBox alt="Image" src={project.image} />
-                          <Card.Body>
-                            <Card.Title>
-                              <a
-                                title="Open site"
-                                href={project.link}
-                                target="_blank"
-                                rel="noreferrer"
-                              >
-                                {project.name}
-                              </a>
-                            </Card.Title>
-                            <Card.Text>{project.description}</Card.Text>
-                          </Card.Body>
-                        </Card>
-                      </StyledCol>
-                    ),
-                )}
               </StyledRow>
               <SubTitle>What they say about us:</SubTitle>
               <StyledRow>
