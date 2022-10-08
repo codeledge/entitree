@@ -54,17 +54,17 @@ export default function Home() {
                 </StyledCol>
                 <StyledCol xs={12} md={6}>
                   <a
-                    title="Go to Queen Elizabeth II family tree"
-                    href="/en/family_tree/Elizabeth_II"
+                    title="Go to King Charles III's family tree"
+                    href="/en/family_tree/Charles_III"
                   >
                     <Card>
                       <ImgBox
-                        alt="Queen Elizabeth II family tree"
-                        src="/examples/queen.png"
+                        alt="King Charles III family tree"
+                        src="/examples/king_charles.png"
                       />
 
                       <Card.Body>
-                        Explore the British royal family tree 👸🏻🤴
+                        Explore the British royal family tree 🤴👸🏻
                       </Card.Body>
                     </Card>
                   </a>
