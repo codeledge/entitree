@@ -3,14 +3,13 @@ import { FaGithub } from "react-icons/fa";
 import Footer from "../layout/Footer";
 import Head from "next/head";
 import Header from "../layout/Header";
-import React from "react";
 import { SITE_NAME } from "../constants/meta";
 import { Title } from "layout/Title";
-import styled from "styled-components";
+import DonateButtons from "components/DonateButtons";
 
 export default function AboutPage() {
   return (
-    <Page>
+    <div>
       <Head>
         <title>About - {SITE_NAME}</title>
       </Head>
@@ -112,73 +111,9 @@ export default function AboutPage() {
           project and you want to participate to the growth of the amazing
           community orbiting around Wikidata, please make a donation.
         </p>
-        <div className="donateButtons">
-          <div>
-            <form
-              action="https://www.paypal.com/cgi-bin/webscr"
-              method="post"
-              target="_top"
-            >
-              <input type="hidden" name="cmd" value="_s-xclick" />
-              <input
-                type="hidden"
-                name="hosted_button_id"
-                value="MC7KHB7EAYQVS"
-              />
-              <input
-                type="image"
-                src="https://www.paypalobjects.com/en_GB/i/btn/btn_donate_LG.gif"
-                name="submit"
-                title="PayPal - The safer, easier way to pay online!"
-                alt="Donate with PayPal button"
-              />
-              <img
-                alt=""
-                src="https://www.paypal.com/en_GB/i/scr/pixel.gif"
-                width="1"
-                height="1"
-              />
-            </form>
-            <i>in £ (Pound)</i>
-          </div>
-          <div>
-            <form
-              action="https://www.paypal.com/cgi-bin/webscr"
-              method="post"
-              target="_top"
-            >
-              <input type="hidden" name="cmd" value="_s-xclick" />
-              <input
-                type="hidden"
-                name="hosted_button_id"
-                value="UCGVUMMYRQKX6"
-              />
-              <input
-                type="image"
-                src="https://www.paypalobjects.com/en_GB/i/btn/btn_donate_LG.gif"
-                name="submit"
-                title="PayPal - The safer, easier way to pay online!"
-                alt="Donate with PayPal button"
-              />
-              <img
-                alt=""
-                src="https://www.paypal.com/en_GB/i/scr/pixel.gif"
-                width="1"
-                height="1"
-              />
-            </form>
-            <i>in € (Euro)</i>
-          </div>
-        </div>
+        <DonateButtons />
       </Container>
       <Footer />
-    </Page>
+    </div>
   );
 }
-
-const Page = styled.div`
-  .donateButtons {
-    display: flex;
-    justify-content: space-around;
-  }
-`;

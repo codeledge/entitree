@@ -7,8 +7,7 @@ export default function usePageView() {
 
   useEffect(() => {
     const handleRouteChange = (url) => {
-      ReactGA.set({ page: url });
-      ReactGA.pageview(url);
+      ReactGA.send({ hitType: "pageview", page: url });
     };
     //When the component is mounted, subscribe to router changes
     //and log those page views
