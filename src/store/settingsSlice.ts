@@ -26,6 +26,8 @@ export type SettingsState = {
   themeCode: string;
   orientation: "horizontal" | "vertical";
   dataSource: DataSource;
+  hasDonatedAt?: Date;
+  hasAcceptedCookies: boolean;
 };
 
 const initialState: SettingsState = {
@@ -44,6 +46,7 @@ const initialState: SettingsState = {
   themeCode: defaultTheme.code,
   orientation: "vertical",
   dataSource: "wikidata",
+  hasAcceptedCookies: false,
 };
 
 export const SETTINGS_SLICE_NAME = "settings";

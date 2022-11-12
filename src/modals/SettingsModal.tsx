@@ -23,6 +23,7 @@ import { useDispatch } from "react-redux";
 
 export default function SettingsModal({ show, onHideModal }) {
   useEffect(() => {
+    //TODO
     // ReactGA.modalview("settings");
   }, []);
 
