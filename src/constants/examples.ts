@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 export const EXAMPLES = [
   {
-    name: "The Queen's Royal family",
-    href: `/en/family_tree/Elizabeth_II`,
+    name: "The King's Royal family",
+    href: `/en/family_tree/Charles_III`,
   },
   {
     name: "Sudono Salim's descendants",

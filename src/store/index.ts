@@ -42,7 +42,7 @@ const store = configureStore({
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     }),
-  devTools: true,
+  devTools: process.env.NODE_ENV === "development",
 });
 
 const makeStore = () => store;

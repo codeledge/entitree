@@ -44,6 +44,10 @@ export default class MyDocument extends Document {
         <Head>
           <link rel="icon" href="/favicon.png" />
           <script async src="https://platform.twitter.com/widgets.js" />
+          <script
+            src="https://www.paypalobjects.com/donate/sdk/donate-sdk.js"
+            charSet="UTF-8"
+          />
           <meta
             name="keywords"
             content="Family, Entity, Item, Tree, Taxonomy, Graph, Wikipedia, Wikidata, Diagram, Chart, D3, Hierarchy"
