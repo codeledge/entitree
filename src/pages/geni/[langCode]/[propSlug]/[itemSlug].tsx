@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { getGeniImmediateFamily, getGeniProfiles } from "services/geniService";
 import { setCurrentEntity, setCurrentProp } from "store/treeSlice";
 import { useAppSelector, wrapper } from "store";
 
@@ -22,6 +21,7 @@ import { getGeniCookies } from "helpers/cookies";
 import isInIframe from "lib/isInIframe";
 import { setSetting } from "store/settingsSlice";
 import { useDispatch } from "react-redux";
+import { geniImmediateFamily, getGeniProfiles } from "geni-api";
 
 const GeniTreePage = ({
   errorCode,
@@ -121,7 +121,7 @@ export const getServerSideProps = wrapper.getServerSideProps<PageProps>(
       currentEntity.treeId = "0";
 
       // Server-side addConnetions function
-      const [immediateFamily] = await getGeniImmediateFamily(
+      const [immediateFamily] = await geniImmediateFamily(
         entityId,
         geni.access_token,
       );

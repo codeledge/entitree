@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 import { AxiosError } from "axios";
 import { getGeniCookies } from "helpers/cookies";
-import { getGeniImmediateFamily } from "../../services/geniService";
+import { geniImmediateFamily } from "geni-api";
 
 export default async function handler(
   req: NextApiRequest,
@@ -17,7 +17,7 @@ export default async function handler(
   switch (req.method) {
     case "GET": {
       try {
-        const profiles = await getGeniImmediateFamily(
+        const profiles = await geniImmediateFamily(
           req.query.guids as string,
           geni.access_token,
         );

@@ -1,4 +1,4 @@
-import { GeniNode, GeniRelType } from "types/Geni";
+import { GeniNode, GeniRelType } from "geni-api";
 
 export function getIdsByUnionAndType(
   nodes: GeniNode[],
