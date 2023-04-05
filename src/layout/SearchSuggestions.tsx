@@ -1,6 +1,6 @@
 import { Button, Spinner } from "react-bootstrap";
 import React, { useRef } from "react";
-import { getEntityWikipediaSlug, getWikibaseURL } from "@entitree/helper";
+import { getEntityWikipediaSlug } from "@entitree/helper";
 
 import { SearchResult } from "./SearchBar";
 import { getEntityUrl } from "helpers/getEntityUrl";

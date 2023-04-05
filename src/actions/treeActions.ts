@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import {
   CHILD_BOOKMARK_SYMBOL,
   PARENT_BOOKMARK_SYMBOL,
@@ -32,7 +33,6 @@ import {
 import { AppThunk } from "store";
 import { Entity } from "types/Entity";
 import { EntityNode } from "types/EntityNode";
-import ReactGA from "react-ga4";
 import { ToggleOptions } from "../types/ToggleOptions";
 import { WD_CHILD } from "@entitree/helper";
 import { addUrlBookmark } from "treeHelpers/addUrlBookmark";
@@ -66,7 +66,7 @@ export const toggleChildren =
         addUrlBookmark(entityNode.treeId!, CHILD_BOOKMARK_SYMBOL);
     } else {
       try {
-        const start = performance.now();
+        // const start = performance.now();
 
         const { languageCode, dataSource } = getState().settings;
         const { currentProp } = getState().tree;
@@ -107,7 +107,7 @@ export const preloadChildren =
       !entityNode.targetIds
     )
       return;
-    const start = performance.now();
+    // const start = performance.now();
 
     const { languageCode, dataSource } = getState().settings;
     const { currentProp } = getState().tree;
