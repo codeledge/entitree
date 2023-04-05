@@ -24,7 +24,7 @@ export const getEntityUrl = (
   }
 
   const entitySlug =
-    wikipediaSlug && /^[a-z0-9\-_ ,]+$/.test(wikipediaSlug)
+    wikipediaSlug && /^[a-z0-9\-_ ,()]+$/.test(wikipediaSlug)
       ? wikipediaSlug
       : entityId;
 
