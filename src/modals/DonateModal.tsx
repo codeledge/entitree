@@ -2,7 +2,6 @@ import DonateButtons from "components/DonateButtons";
 import { Button, Modal, Alert } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { setSetting } from "store/settingsSlice";
-import styled from "styled-components";
 
 export default function DonateModal({ onHideModal }) {
   const dispatch = useDispatch();
@@ -42,7 +41,3 @@ export default function DonateModal({ onHideModal }) {
     </Modal>
   );
 }
-
-const CTA = styled.p`
-  text-align: center;
-`;

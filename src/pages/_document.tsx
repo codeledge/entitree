@@ -44,6 +44,7 @@ export default class MyDocument extends Document {
           <script async src="https://platform.twitter.com/widgets.js" />
           <script
             src="https://www.paypalobjects.com/donate/sdk/donate-sdk.js"
+            // eslint-disable-next-line react/no-unknown-property
             charSet="UTF-8"
           />
           <meta

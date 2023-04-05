@@ -51,7 +51,7 @@ export default function CustomThemeForm() {
               name="nodeFlexDirection"
               id="nodeFlexDirection-horizontal"
               checked={currentCustomTheme.nodeFlexDirection === "row"}
-              onChange={(e) => setCustomProp("nodeFlexDirection", "row")}
+              onChange={() => setCustomProp("nodeFlexDirection", "row")}
             />
             <Form.Check
               type="radio"
@@ -59,7 +59,7 @@ export default function CustomThemeForm() {
               name="nodeFlexDirection"
               id="nodeFlexDirection-vertical"
               checked={currentCustomTheme.nodeFlexDirection === "column"}
-              onChange={(e) => setCustomProp("nodeFlexDirection", "column")}
+              onChange={() => setCustomProp("nodeFlexDirection", "column")}
             />
           </Col>
         </Form.Group>
@@ -281,7 +281,7 @@ export default function CustomThemeForm() {
               name="descriptionDisplay"
               id="descriptionDisplay-inline"
               checked={currentCustomTheme.descriptionDisplay === "inline"}
-              onChange={(e) => setCustomProp("descriptionDisplay", "inline")}
+              onChange={() => setCustomProp("descriptionDisplay", "inline")}
             />
             <Form.Check
               type="radio"
@@ -289,7 +289,7 @@ export default function CustomThemeForm() {
               name="descriptionDisplay"
               id="descriptionDisplay-none"
               checked={currentCustomTheme.descriptionDisplay === "none"}
-              onChange={(e) => setCustomProp("descriptionDisplay", "none")}
+              onChange={() => setCustomProp("descriptionDisplay", "none")}
             />
           </Col>
         </Form.Group>
@@ -306,7 +306,7 @@ export default function CustomThemeForm() {
               name="datesDisplay"
               id="datesDisplay-block"
               checked={currentCustomTheme.datesDisplay === "block"}
-              onChange={(e) => setCustomProp("datesDisplay", "block")}
+              onChange={() => setCustomProp("datesDisplay", "block")}
             />
             <Form.Check
               type="radio"
@@ -314,7 +314,7 @@ export default function CustomThemeForm() {
               name="datesDisplay"
               id="datesDisplay-none"
               checked={currentCustomTheme.datesDisplay === "none"}
-              onChange={(e) => setCustomProp("datesDisplay", "none")}
+              onChange={() => setCustomProp("datesDisplay", "none")}
             />
           </Col>
         </Form.Group>
@@ -365,7 +365,7 @@ export default function CustomThemeForm() {
               name="thumbCounterDisplay"
               id="thumbCounterDisplay-show"
               checked={currentCustomTheme.thumbCounterDisplay === "block"}
-              onChange={(e) => setCustomProp("thumbCounterDisplay", "block")}
+              onChange={() => setCustomProp("thumbCounterDisplay", "block")}
             />
             <Form.Check
               type="radio"
@@ -373,7 +373,7 @@ export default function CustomThemeForm() {
               name="thumbCounterDisplay"
               id="thumbCounterDisplay-hide"
               checked={currentCustomTheme.thumbCounterDisplay === "none"}
-              onChange={(e) => setCustomProp("thumbCounterDisplay", "none")}
+              onChange={() => setCustomProp("thumbCounterDisplay", "none")}
             />
           </Col>
         </Form.Group>

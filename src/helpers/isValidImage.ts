@@ -4,7 +4,7 @@ export const isValidImage = (url: string): Promise<boolean> =>
     img.onload = () => {
       resolve(true);
     };
-    img.onerror = (error) => {
+    img.onerror = () => {
       resolve(false);
     };
     img.src = url;
