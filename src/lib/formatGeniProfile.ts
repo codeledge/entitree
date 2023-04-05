@@ -1,6 +1,5 @@
+import { GeniProfile } from "geni-api";
 import { Entity, Image } from "types/Entity";
-
-import { GeniProfile } from "types/Geni";
 import addGeniDates from "./addGeniDates";
 
 export const formatGeniProfile = (geniProfile: GeniProfile) => {
@@ -42,13 +41,19 @@ export const formatGeniProfile = (geniProfile: GeniProfile) => {
 };
 
 const addCountryOfCitizenship = (entity: Entity, geniProfile: GeniProfile) => {
-  if (geniProfile?.birth?.location?.country_code) {
+  if (
+    geniProfile?.birth?.location?.country_code &&
+    geniProfile.birth.location.country
+  ) {
     entity.countryOfCitizenship = {
       code: geniProfile.birth.location.country_code,
       name: geniProfile.birth.location.country,
       text: "Born in " + geniProfile.birth.location.country + " (geni)",
     };
-  } else if (geniProfile?.location?.country_code) {
+  } else if (
+    geniProfile?.location?.country_code &&
+    geniProfile.location.country
+  ) {
     entity.countryOfCitizenship = {
       code: geniProfile.location.country_code,
       name: geniProfile.location.country,

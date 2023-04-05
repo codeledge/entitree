@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { GeniImmediateFamily } from "geni-api";
 import { ConnectorOptions } from "lib/addEntityConnectors";
 import { Entity } from "types/Entity";
-import { GeniImmediateFamily } from "types/Geni";
 import { getIdsByUnionAndType } from "./getIdsByUnionAndType";
 
 export const addGeniEntityConnectors = (

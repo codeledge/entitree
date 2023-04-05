@@ -277,8 +277,9 @@ export default function DetailsModal({
               const url = getEntityUrl(
                 languageCode,
                 currentProp?.slug || "",
-                node.wikipediaSlug || node.id,
                 dataSource,
+                node.id,
+                node.wikipediaSlug,
               );
               router.push(url);
               onHideModal();

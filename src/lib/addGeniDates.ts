@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 import { Entity } from "types/Entity";
-import { GeniProfile } from "types/Geni";
 import addLifeSpan from "lib/addLifeSpan";
+import { GeniProfile } from "geni-api";
 
 function convertGeniDate(input, languageCode = "en") {
   // console.log(input.formatted_date);

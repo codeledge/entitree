@@ -1,6 +1,6 @@
 import { Button, Spinner } from "react-bootstrap";
 import React, { useRef } from "react";
-import { getEntityWikipediaSlug, getWikibaseURL } from "@entitree/helper";
+import { getEntityWikipediaSlug } from "@entitree/helper";
 
 import { SearchResult } from "./SearchBar";
 import { getEntityUrl } from "helpers/getEntityUrl";
@@ -42,16 +42,16 @@ export default function SearchSuggestions({
         targetUrl = getEntityUrl(
           languageCode,
           currentProp?.slug || "",
-          searchResult.id,
           dataSource,
+          searchResult.id,
         );
         break;
       case "geni":
         targetUrl = getEntityUrl(
           "en",
           "family_tree",
-          searchResult.id,
           dataSource,
+          searchResult.id,
         );
         break;
       case "wikidata":
@@ -66,8 +66,9 @@ export default function SearchSuggestions({
           targetUrl = getEntityUrl(
             languageCode,
             currentProp?.slug || "",
-            wikipediaSlug || searchResult.id,
             dataSource,
+            searchResult.id,
+            wikipediaSlug,
           );
         }
         break;

@@ -1,6 +1,5 @@
-import { GeniImmediateFamily, GeniProfile } from "types/Geni";
-
 import axios from "axios";
+import { GeniProfile, GeniImmediateFamily } from "geni-api";
 import serviceSuccessInterceptor from "./serviceSuccessInterceptor";
 
 const apiService = axios.create({
