@@ -181,8 +181,9 @@ export default function SearchBar() {
                           const url = getEntityUrl(
                             currentLang.code,
                             prop.slug,
-                            currentEntity.wikipediaSlug || currentEntity.id,
                             dataSource,
+                            currentEntity.id,
+                            currentEntity.wikipediaSlug,
                           );
                           router.push(url);
                         }}

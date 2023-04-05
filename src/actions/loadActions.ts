@@ -40,8 +40,9 @@ export const switchLanguage =
     const url = getEntityUrl(
       langCode,
       propSlug,
-      wikipediaSlug || entityId,
       dataSource,
+      entityId,
+      wikipediaSlug,
     );
 
     router.push(url);
