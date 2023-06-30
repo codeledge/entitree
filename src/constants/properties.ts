@@ -2,7 +2,6 @@ import {
   FormatUrlProps,
   WD_BIRTH_NAME,
   WD_FACEBOOK_ID,
-  WD_FANVUE_CREATOR_ID,
   WD_FATHER,
   WD_GENI_COM_PROFILE_ID,
   WD_INSTAGRAM_USERNAME,
@@ -80,12 +79,6 @@ export const SOCIAL_PROPS_IDS: SocialProps[] = [
     title: "Open tiktok user in a new tab",
     iconName: "tiktok",
   },
-  {
-    id: WD_FANVUE_CREATOR_ID,
-    title: "Open Fanvue profile in a new tab",
-    iconName: "fanvue",
-  },
-  // 'P345' : ['imdb',' https://www.imdb.com/name/$1/']
 ];
 
 export const RIGHT_ENTITY_OPTIONS = [

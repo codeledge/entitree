@@ -190,21 +190,6 @@ export default function DetailsModal({
               />
             </a>
           )}
-          {node.wikidataUrl && (
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Open wikidocumentaries page in a new tab"
-              href={
-                "https://wikidocumentaries-demo.wmflabs.org/" +
-                node.wikidataId +
-                "?language=" +
-                languageCode
-              }
-            >
-              <img src="/icons/wikidocumentaries.svg" alt="" />
-            </a>
-          )}
           {node.wikipediaUrl && (
             <a
               target="_blank"
