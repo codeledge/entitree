@@ -47,7 +47,7 @@ type DPImage = {
   url?: any;
 };
 
-export const getDataprickImages = (numericId: string) => {
+export const getEntitreeImages = (numericId: string) => {
   return imageServer
     .get<any, { images: DPImage[] }>(`/api/v1/image/info/wikidata/${numericId}`)
     .then(({ images }) => {

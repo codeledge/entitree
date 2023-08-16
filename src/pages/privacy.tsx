@@ -190,8 +190,7 @@ export default function PrivacyPolicyPage() {
         </p>
 
         <p>Orlando Groppo and Martin Schibel</p>
-        <p>Phone: 15201752285</p>
-        <p>Email: ms.hd94 *at* gmail.com</p>
+        <p>Email: entitree.app@gmail.com</p>
 
         <h4>3. Cookies</h4>
         <p>
