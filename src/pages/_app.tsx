@@ -1,5 +1,9 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 
+// Configure axios defaults for Wikipedia REST API compliance
+// See: https://w.wiki/4wJS and T400119
+import "lib/axiosConfig";
+
 import store, { persistor, useAppSelector, wrapper } from "../store";
 
 import { AppProps } from "next/app";

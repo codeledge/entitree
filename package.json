@@ -12,7 +12,7 @@
     "start": "next start -p $PORT",
     "test": "jest",
     "type-check": "tsc",
-    "upgrade:interactive": "yarn upgrade-interactive --latest"
+    "upgrade:interactive": "pnpm update --interactive --latest"
   },
   "dependencies": {
     "@entitree/helper": "0.6.1",
