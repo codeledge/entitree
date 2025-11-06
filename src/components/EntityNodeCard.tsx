@@ -5,7 +5,7 @@ import { FaEye, FaFemale, FaMale, FaUser } from "react-icons/fa";
 import { GiBigDiamondRing, GiPerson } from "react-icons/gi";
 import {
   IMAGE_SERVER_BASE_URL,
-  getDataprickImages,
+  getEntitreeImages,
 } from "services/imageService";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import React, { memo, useEffect, useState } from "react";
@@ -75,7 +75,7 @@ export default memo(({ node }: { node: EntityNode }) => {
   // let processedImageUrls = []; //Don't ask users to import images that have already been imported
   useEffect(() => {
     if (node.wikidataId) {
-      getDataprickImages(node.id.substr(1))
+      getEntitreeImages(node.id.substr(1))
         .then((imageSet) => {
           imageSet?.forEach((thumbnail) => {
             setThumbnails((thumbnails) => [thumbnail, ...thumbnails]);

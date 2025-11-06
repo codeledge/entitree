@@ -1,3 +1,6 @@
+// Configure axios defaults for Wikipedia REST API compliance before any imports
+import "lib/axiosConfig";
+
 import { Button, Figure, Modal } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 
@@ -188,21 +191,6 @@ export default function DetailsModal({
                 style={{ width: "100px" }}
                 alt="FactGrid Link"
               />
-            </a>
-          )}
-          {node.wikidataUrl && (
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Open wikidocumentaries page in a new tab"
-              href={
-                "https://wikidocumentaries-demo.wmflabs.org/" +
-                node.wikidataId +
-                "?language=" +
-                languageCode
-              }
-            >
-              <img src="/icons/wikidocumentaries.svg" alt="" />
             </a>
           )}
           {node.wikipediaUrl && (

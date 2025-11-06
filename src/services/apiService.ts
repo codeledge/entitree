@@ -19,7 +19,7 @@ export const searchGeniCall = (term: string): Promise<GeniProfile[]> => {
 export const getGeniProfilesCall = (ids: string[]): Promise<GeniProfile[]> => {
   return apiService.get("/getGeniProfilesEndpoint", {
     params: {
-      guids: ids.map((id) => id.substr(1)).join(","),
+      guids: ids.map((id) => id.substring(1)).join(","),
     },
   });
 };
@@ -29,7 +29,7 @@ export const getGeniImmediateFamilyCall = (
 ): Promise<GeniImmediateFamily[]> => {
   return apiService.get("/getGeniImmediateFamilyEndpoint", {
     params: {
-      guids: ids.map((id) => id.substr(1)).join(","),
+      guids: ids.map((id) => id.substring(1)).join(","),
     },
   });
 };

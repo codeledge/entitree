@@ -1,3 +1,6 @@
+// Configure axios defaults for Wikipedia REST API compliance before any imports
+import "lib/axiosConfig";
+
 import {
   getEntityIdFromSlug,
   getWikipediaArticle,

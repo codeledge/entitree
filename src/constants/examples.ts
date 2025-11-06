@@ -1,28 +1,27 @@
-/* eslint-disable prettier/prettier */
 export const EXAMPLES = [
   {
     name: "The King's Royal family",
     href: `/en/family_tree/Charles_III`,
   },
   {
-    name: "Sudono Salim's descendants",
-    href: `/en/family_tree/Sudono_Salim`,
+    name: "Ivan III of Moscow's family",
+    href: `/en/family_tree/Q171185`,
   },
   {
     name: "Dhirendra of Nepal's ancestors",
     href: `/en/family_tree/Prince_Dhirendra_of_Nepal`,
   },
   {
-    name: "Jesus Christ's pedigree",
-    href: `/en/family_tree/Jesus`,
+    name: "Y. S. Raja Reddy's pedigree",
+    href: `/en/family_tree/Y._S._Raja_Reddy`,
   },
   {
     name: "Joe Biden's family",
     href: `/en/family_tree/Joe_Biden`,
   },
   {
-    name: "Trump's family",
-    href: `/en/family_tree/Donald_Trump`,
+    name: "Charlemagne family",
+    href: `/en/family_tree/Q3044`,
   },
   {
     name: "Mammal taxonomy",
