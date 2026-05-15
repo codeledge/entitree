@@ -7,7 +7,7 @@ export default function addLabel(entity: Entity, languageCode: LangCode) {
   const { labels } = entity;
   if (!labels) return;
 
-  let labelObject = labels[languageCode];
+  let labelObject = labels.mul || labels[languageCode];
   if (!labelObject)
     for (const defaultLangCode of DEFAULT_LANGS_CODES) {
       const defaultLangLabel = labels[defaultLangCode];

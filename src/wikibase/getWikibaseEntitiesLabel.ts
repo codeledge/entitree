@@ -15,7 +15,7 @@ export default async function getWikibaseEntitiesLabel(
 
   const allentities = await getWikibaseEntities({
     ids,
-    languages: [languageCode].concat(DEFAULT_LANGS_CODES),
+    languages: ["mul", languageCode].concat(DEFAULT_LANGS_CODES),
     props: ["labels"],
     dataSource,
   });
