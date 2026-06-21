@@ -53,7 +53,7 @@ export default async function getEntities(
     return entities;
   }
 
-  const languages = DEFAULT_LANGS_CODES;
+  const languages = ["mul"].concat(DEFAULT_LANGS_CODES);
 
   //avoid duplicate language, but it won't break anyway
   if (!languages.includes(languageCode)) languages.push(languageCode);
