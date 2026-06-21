@@ -1,7 +1,6 @@
 import { ImageOverflowType, ImageType } from "types/Image";
 
 import axios from "axios";
-import { errorHandler } from "handlers/errorHandler";
 import serviceSuccessInterceptor from "./serviceSuccessInterceptor";
 
 export const IMAGE_SERVER_BASE_URL = "https://images.entitree.com";
@@ -38,40 +37,6 @@ export const imageServer = axios.create({
 
 imageServer.interceptors.response.use(serviceSuccessInterceptor);
 
-type DPImage = {
-  id?: string;
-  uploadSite?: string;
-  comment?: string;
-  recordedDate?: string;
-  sourceUrl?: string;
-  url?: any;
-};
-
-export const getEntitreeImages = (numericId: string) => {
-  return imageServer
-    .get<any, { images: DPImage[] }>(`/api/v1/image/info/wikidata/${numericId}`)
-    .then(({ images }) => {
-      return images.map((dpImg) => {
-        // const dpImg = data.images[0];
-        let descr = `${dpImg.uploadSite}\nImage Database`;
-        if (dpImg.comment) {
-          descr += `\n${dpImg.comment}`;
-        }
-        if (dpImg.recordedDate) {
-          descr += `\nPhoto taken in ${dpImg.recordedDate.substr(0, 4)}`;
-        }
-        if (dpImg.sourceUrl) {
-          descr += `\n\n${dpImg.sourceUrl}`;
-        }
-
-        return {
-          url: dpImg.url.transparent_face,
-          urlByType: dpImg.url,
-          title: descr,
-          imageDb: true,
-          sourceUrl: IMAGE_SERVER_BASE_URL + "/#/images/" + dpImg.id + "/show",
-        };
-      });
-    })
-    .catch(errorHandler);
+export const getEntitreeImages = (_numericId: string) => {
+  return Promise.resolve([]);
 };
