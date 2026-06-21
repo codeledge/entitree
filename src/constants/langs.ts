@@ -42,6 +42,11 @@ export const DEFAULT_LANGS_CODES: LangCode[] = Object.keys(
   DISAMBIGUATION_PAGE_DESC,
 ) as LangCode[];
 
+export const LABEL_FALLBACK_LANGS: LangCode[] = [
+  "mul",
+  ...DEFAULT_LANGS_CODES,
+];
+
 export const FAMILY_TREE_PROP_TRANSLATIONS = {
   "zh-hans": "家族树",
   "zh-hant": "家族樹",

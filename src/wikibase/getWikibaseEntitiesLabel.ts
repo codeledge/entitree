@@ -1,7 +1,7 @@
 import { DataSource, getWikibaseEntities } from "@entitree/helper";
 import { Entity, WikibaseEntity } from "types/Entity";
 
-import { DEFAULT_LANGS_CODES } from "../constants/langs";
+import { LABEL_FALLBACK_LANGS } from "../constants/langs";
 import { LangCode } from "types/Lang";
 import addLabel from "../lib/addLabel";
 
@@ -15,7 +15,7 @@ export default async function getWikibaseEntitiesLabel(
 
   const allentities = await getWikibaseEntities({
     ids,
-    languages: ["mul", languageCode].concat(DEFAULT_LANGS_CODES),
+    languages: [languageCode, ...LABEL_FALLBACK_LANGS],
     props: ["labels"],
     dataSource,
   });

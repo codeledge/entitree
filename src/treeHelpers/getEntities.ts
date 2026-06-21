@@ -14,7 +14,7 @@ import {
 } from "services/apiService";
 import { sortByBirthDate, sortByGender } from "../lib/sortEntities";
 
-import { DEFAULT_LANGS_CODES } from "../constants/langs";
+import { LABEL_FALLBACK_LANGS } from "../constants/langs";
 import { Entity } from "types/Entity";
 import { EntityNode } from "types/EntityNode";
 import { LangCode } from "types/Lang";
@@ -53,7 +53,7 @@ export default async function getEntities(
     return entities;
   }
 
-  const languages = ["mul"].concat(DEFAULT_LANGS_CODES);
+  const languages = [...LABEL_FALLBACK_LANGS];
 
   //avoid duplicate language, but it won't break anyway
   if (!languages.includes(languageCode)) languages.push(languageCode);
