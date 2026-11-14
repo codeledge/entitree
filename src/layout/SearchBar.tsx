@@ -154,7 +154,10 @@ export default function SearchBar() {
                     </Tooltip>
                   </Overlay>
                   {/* in the edge case there are no props, hide the dropdown */}
-                  {!!currentEntityProps?.length && (
+                  {/* the props list loads after the page, show the current prop meanwhile */}
+                  {(!currentEntityProps ||
+                    !!currentEntityProps.length ||
+                    !!currentProp) && (
                     <Dropdown.Toggle
                       variant="none"
                       ref={propToggleRef}
@@ -172,6 +175,9 @@ export default function SearchBar() {
                   )}
 
                   <Dropdown.Menu alignRight>
+                    {!currentEntityProps && (
+                      <Dropdown.Item disabled>Loading properties...</Dropdown.Item>
+                    )}
                     {currentEntityProps?.map((prop) => (
                       <Dropdown.Item
                         key={prop.id}

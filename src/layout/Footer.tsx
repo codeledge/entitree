@@ -46,10 +46,10 @@ export default function Footer() {
           </Nav.Item>
         </Nav>
         <Nav className="ml-auto rightLinks">
-          <Link href="/about" passHref>
+          <Link href="/about" passHref legacyBehavior>
             <Nav.Link>About</Nav.Link>
           </Link>
-          <Link href="/privacy" passHref>
+          <Link href="/privacy" passHref legacyBehavior>
             <Nav.Link>Privacy</Nav.Link>
           </Link>
         </Nav>

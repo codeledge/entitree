@@ -15,13 +15,14 @@ import {
 import { sortByBirthDate, sortByGender } from "../lib/sortEntities";
 
 import { LABEL_FALLBACK_LANGS } from "../constants/langs";
-import { Entity } from "types/Entity";
+import { Entity, WikibaseEntity } from "types/Entity";
 import { EntityNode } from "types/EntityNode";
 import { LangCode } from "types/Lang";
 import { addGeniEntityConnectors } from "lib/geni/addGeniEntityConnectors";
 // import filterSpouses from "../lib/filterSpouses";
 import { formatGeniProfile } from "../lib/formatGeniProfile";
 import formatWikibaseEntity from "../lib/formatWikibaseEntity";
+import getEntitiesSourceIds from "wikibase/getWikibaseSourceIds";
 
 type Options = ConnectorOptions & {
   secondLanguageCode?: LangCode;
@@ -53,6 +54,23 @@ export default async function getEntities(
     return entities;
   }
 
+  const wikibaseEntitiesMap = await fetchWikibaseEntitiesMap(
+    ids,
+    languageCode,
+    options,
+  );
+
+  return buildEntities(ids, wikibaseEntitiesMap, languageCode, options);
+}
+
+export type WikibaseEntitiesMap = Record<string, WikibaseEntity>;
+
+// Raw wikibase entities (with claims), before formatting
+export function fetchWikibaseEntitiesMap(
+  ids: string[],
+  languageCode: LangCode,
+  options: Pick<Options, "dataSource" | "secondLanguageCode">,
+): Promise<WikibaseEntitiesMap> {
   const languages = [...LABEL_FALLBACK_LANGS];
 
   //avoid duplicate language, but it won't break anyway
@@ -64,40 +82,56 @@ export default async function getEntities(
   )
     languages.push(options.secondLanguageCode);
 
-  const wikibaseEntitiesMap = await getWikibaseEntities({
+  return getWikibaseEntities({
     ids,
     languages,
     dataSource: options.dataSource,
   });
+}
 
-  const entities = await ids.reduce(async (acc: Promise<Entity[]>, id) => {
-    const accumulator = await Promise.resolve(acc);
-
+// Format raw wikibase entities and add the connectors (parents, children...)
+export async function buildEntities(
+  ids: string[],
+  wikibaseEntitiesMap: WikibaseEntitiesMap,
+  languageCode: LangCode,
+  options: Options,
+): Promise<Entity[]> {
+  const entities = ids
     //get rid of unwanted records
-    if (
-      !wikibaseEntitiesMap[id] ||
-      wikibaseEntitiesMap[id]["missing"] !== undefined
+    .filter(
+      (id) =>
+        wikibaseEntitiesMap[id] &&
+        wikibaseEntitiesMap[id]["missing"] === undefined,
     )
-      return accumulator;
-
     //add all custom fields
-    const entity = formatWikibaseEntity(
-      wikibaseEntitiesMap[id],
-      languageCode,
-      options?.dataSource,
+    .map((id) =>
+      formatWikibaseEntity(
+        wikibaseEntitiesMap[id],
+        languageCode,
+        options?.dataSource,
+      ),
     );
 
+  // one batched lookup for all entities instead of one query per entity
+  const sourceIdsMap =
+    options?.currentPropId && options.addSourceIds
+      ? await getEntitiesSourceIds(
+          entities,
+          options.currentPropId,
+          options.dataSource,
+        )
+      : {};
+
+  entities.forEach((entity) => {
     // siblings and spouses don't need connectors, so no currentPropId is passed
     if (options?.currentPropId) {
-      await addEntityConnectors(entity, options);
+      addEntityConnectors(entity, options, sourceIdsMap[entity.id]);
     }
 
     //delete as non-serializeable and save on memory
     delete entity.claims;
     delete entity.simpleClaims;
-
-    return Promise.resolve([...accumulator, entity]);
-  }, Promise.resolve([]));
+  });
 
   return entities;
 }

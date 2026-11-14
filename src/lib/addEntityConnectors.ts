@@ -10,7 +10,6 @@ import getClaimIds, { checkIfClaimsHasSeriesOrdinal } from "./getClaimIds";
 
 import { Entity } from "types/Entity";
 import getSimpleClaimValue from "./getSimpleClaimValue";
-import getWikibaseSourceIds from "wikibase/getWikibaseSourceIds";
 import { sortClaimsByStartDate } from "claims/sortClaimsByStartDate";
 
 export type ConnectorOptions = {
@@ -22,16 +21,14 @@ export type ConnectorOptions = {
   addNextBeforeIds?: boolean;
 };
 
-export default async function addEntityConnectors(
+// sourceIds are fetched in batch for all entities beforehand, see getEntitiesSourceIds
+export default function addEntityConnectors(
   entity: Entity,
   options: ConnectorOptions,
+  sourceIds?: string[],
 ) {
   if (options.addSourceIds && options.currentPropId) {
-    entity.sourceIds = await getWikibaseSourceIds(
-      entity.id,
-      options.currentPropId,
-      options.dataSource,
-    );
+    entity.sourceIds = sourceIds || [];
   } else {
     delete entity.sourceIds;
   }

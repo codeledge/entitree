@@ -23,6 +23,7 @@ import { errorHandler } from "handlers/errorHandler";
 import { getCurrentEntity } from "treeHelpers/getCurrentEntity";
 import { isItemId } from "@entitree/helper";
 import { setSetting } from "store/settingsSlice";
+import useLoadEntityProps from "hooks/useLoadEntityProps";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 
@@ -45,6 +46,8 @@ const TreePage = ({
   useEffect(() => {
     dispatch(setSetting({ languageCode: langCode, dataSource: "factgrid" }));
   }, []);
+
+  useLoadEntityProps(langCode, "factgrid");
 
   if (errorCode) {
     return <Error statusCode={errorCode} />;
