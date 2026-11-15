@@ -6,12 +6,27 @@ import { LangCode } from "types/Lang";
 import axios from "axios";
 import { errorHandler } from "handlers/errorHandler";
 import getWikibaseConstants from "./getWikibaseConstants";
+import memoryCache, { HOUR } from "lib/memoryCache";
 
-export default async function getWikibaseEntityProps(
+// The list of properties of an item rarely changes, so it is cached for an hour
+export default function getWikibaseEntityProps(
   id: string,
   langCode: LangCode,
   dataSource: DataSource,
-) {
+): Promise<EntityProp[]> {
+  return memoryCache(`entityProps:${dataSource}:${langCode}:${id}`, HOUR, () =>
+    fetchWikibaseEntityProps(id, langCode, dataSource),
+  ).catch((err) => {
+    errorHandler(err);
+    return [];
+  });
+}
+
+async function fetchWikibaseEntityProps(
+  id: string,
+  langCode: LangCode,
+  dataSource: DataSource,
+): Promise<EntityProp[]> {
   const wbk = getWikibaseInstance(dataSource);
 
   const url = await new Promise<string>((resolve, reject) => {
@@ -79,9 +94,5 @@ export default async function getWikibaseEntityProps(
         [],
       );
       return props;
-    })
-    .catch((err) => {
-      errorHandler(err);
-      return [];
     });
 }

@@ -1,9 +1,10 @@
-import { Action, combineReducers } from "redux";
+import { Action, Reducer, combineReducers } from "redux";
 import {
   FLUSH,
   PAUSE,
   PERSIST,
   PURGE,
+  Persistor,
   REGISTER,
   REHYDRATE,
   persistReducer,
@@ -24,6 +25,8 @@ const rootReducer = combineReducers({
   tree: treeReducer,
 });
 
+export type RootState = ReturnType<typeof rootReducer>;
+
 const persistConfig = {
   key: "entitree_v1",
   whitelist: [SETTINGS_SLICE_NAME],
@@ -32,27 +35,37 @@ const persistConfig = {
   debug: process.env.NODE_ENV === "development",
 };
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+const createAppStore = (reducer: Reducer<RootState>) =>
+  configureStore({
+    reducer,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: {
+          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+        },
+      }),
+    devTools: process.env.NODE_ENV === "development",
+  });
 
-const store = configureStore({
-  reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
-    }),
-  devTools: process.env.NODE_ENV === "development",
-});
+export type AppStore = ReturnType<typeof createAppStore>;
 
-const makeStore = () => store;
+// Only set in the browser, where settings are persisted to localStorage
+let persistor: Persistor | undefined;
+export const getPersistor = () => persistor;
 
-export const persistor = persistStore(store);
+// next-redux-wrapper calls this once per request on the server,
+// and only once in the browser (it keeps the client store)
+const makeStore = (): AppStore => {
+  if (typeof window === "undefined") return createAppStore(rootReducer);
 
-export default store;
+  const store = createAppStore(
+    persistReducer(persistConfig, rootReducer) as unknown as Reducer<RootState>,
+  );
+  persistor = persistStore(store);
+  return store;
+};
 
-export type AppStore = ReturnType<typeof makeStore>;
-export type AppState = ReturnType<AppStore["getState"]>;
+export type AppState = RootState;
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   AppState,
@@ -60,8 +73,7 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   Action
 >;
 
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+export type AppDispatch = AppStore["dispatch"];
 
 export const wrapper = createWrapper<AppStore>(makeStore, {
   debug: false,

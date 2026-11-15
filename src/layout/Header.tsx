@@ -56,7 +56,7 @@ export default function Header({ simple }: { simple?: boolean }) {
             className="examplesButton"
           >
             {EXAMPLES.map(({ name, href }) => (
-              <Link key={name} href={href} passHref>
+              <Link key={name} href={href} passHref legacyBehavior>
                 <Dropdown.Item onClick={openExampleLink}>{name}</Dropdown.Item>
               </Link>
             ))}

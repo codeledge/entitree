@@ -29,7 +29,9 @@ import TreeLoader from "layout/TreeLoader";
 import { createMetaTags } from "seo/createMetaTags";
 import { getCurrentEntity } from "treeHelpers/getCurrentEntity";
 import isInIframe from "lib/isInIframe";
+import memoryCache, { HOUR } from "lib/memoryCache";
 import { setSetting } from "store/settingsSlice";
+import useLoadEntityProps from "hooks/useLoadEntityProps";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 
@@ -52,6 +54,8 @@ const TreePage = ({
   useEffect(() => {
     dispatch(setSetting({ languageCode: langCode, dataSource: "wikidata" }));
   }, []);
+
+  useLoadEntityProps(langCode, "wikidata");
 
   if (errorCode) {
     return <Error statusCode={errorCode} />;
@@ -90,9 +94,46 @@ const TreePage = ({
   );
 };
 
+// Wikipedia title -> wikidata item id
+async function resolveWikipediaSlug(
+  itemSlug: string,
+  decodedItemSlug: string,
+  langCode: LangCode,
+): Promise<{
+  entityId: string;
+  entityThumbnail: string;
+  redirectToCanonical?: string;
+}> {
+  const {
+    wikibase_item,
+    thumbnail,
+    titles: { canonical },
+  } = await getWikipediaArticle(decodedItemSlug, langCode);
+
+  //the wikipedia article redirects to another article
+  if (canonical !== itemSlug) {
+    //try to get the item from wikidata and avoid the redirects
+    const entityId = await getEntityIdFromSlug(decodedItemSlug, langCode);
+    if (!entityId)
+      return { entityId: "", entityThumbnail: "", redirectToCanonical: canonical };
+
+    // losing entityThumbnail feature for those isolated cases
+    return { entityId, entityThumbnail: "" };
+  }
+
+  return {
+    entityId: wikibase_item || "",
+    entityThumbnail: thumbnail?.source || "",
+  };
+}
+
+// The page only depends on the url, so CDNs can cache it
+const PAGE_CACHE_CONTROL =
+  "public, s-maxage=600, stale-while-revalidate=86400";
+
 export const getServerSideProps = wrapper.getServerSideProps<PageProps>(
   ({ dispatch }) =>
-    async ({ query }) => {
+    async ({ query, res }) => {
       const { langCode, propSlug, itemSlug } = query as {
         langCode: LangCode;
         propSlug: string;
@@ -111,33 +152,25 @@ export const getServerSideProps = wrapper.getServerSideProps<PageProps>(
         entityId = itemSlug;
       } else {
         try {
-          //TODO: cache this
-          const {
-            wikibase_item,
-            thumbnail,
-            titles: { canonical },
-          } = await getWikipediaArticle(decodedItemSlug, langCode);
+          const resolved = await memoryCache(
+            `wikipediaSlug:${langCode}:${itemSlug}`,
+            HOUR,
+            () => resolveWikipediaSlug(itemSlug, decodedItemSlug, langCode),
+          );
 
-          //the wikipedia article redirects to another article
-          if (canonical !== itemSlug) {
-            //try to get the item from wikidata and avoid the redirects
-            entityId = await getEntityIdFromSlug(decodedItemSlug, langCode);
-            if (!entityId) {
-              // ok, not found, redirect to page then
-              return {
-                redirect: {
-                  destination: `/${langCode}/${encodeURIComponent(
-                    propSlug,
-                  )}/${encodeURIComponent(canonical)}`,
-                  permanent: false,
-                },
-              };
-            }
-            // losing entityThumbnail feature for those isolated cases
-          } else {
-            if (wikibase_item) entityId = wikibase_item;
-            if (thumbnail) entityThumbnail = thumbnail.source;
+          if (resolved.redirectToCanonical) {
+            // ok, not found, redirect to page then
+            return {
+              redirect: {
+                destination: `/${langCode}/${encodeURIComponent(
+                  propSlug,
+                )}/${encodeURIComponent(resolved.redirectToCanonical)}`,
+                permanent: false,
+              },
+            };
           }
+          entityId = resolved.entityId;
+          entityThumbnail = resolved.entityThumbnail;
         } catch (error: any) {
           console.error(error); // eslint-disable-line no-console
           return { props: { errorCode: error.response?.status || 500 } };
@@ -201,6 +234,8 @@ export const getServerSideProps = wrapper.getServerSideProps<PageProps>(
           ogImage = "icons/entitree_square.png";
           twitterCard = "summary";
         }
+
+        res.setHeader("Cache-Control", PAGE_CACHE_CONTROL);
 
         return {
           props: { ogTitle, ogImage, twitterCard, ogDescription, langCode },

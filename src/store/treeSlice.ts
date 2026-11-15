@@ -404,9 +404,13 @@ export const treeSlice = createSlice({
 
   extraReducers(builder) {
     builder.addCase(hydrate, (state, action) => {
+      const serverTree = action.payload[treeSlice.name];
       return {
         ...state,
-        ...action.payload[treeSlice.name],
+        ...serverTree,
+        // keys missing from the server state must not keep the previous page's value
+        currentProp: serverTree.currentProp,
+        currentEntityProps: serverTree.currentEntityProps,
       };
     });
   },
