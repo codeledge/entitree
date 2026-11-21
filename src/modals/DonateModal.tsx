@@ -1,10 +1,10 @@
 import DonateButtons from "components/DonateButtons";
 import { Button, Modal, Alert } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "store";
 import { setSetting } from "store/settingsSlice";
 
 export default function DonateModal({ onHideModal }) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   return (
     <Modal show onHide={onHideModal} backdrop="static">
@@ -21,7 +21,7 @@ export default function DonateModal({ onHideModal }) {
       <Modal.Footer>
         <Button
           variant="light"
-          className="mr-auto"
+          className="me-auto"
           onClick={() => {
             dispatch(
               setSetting({

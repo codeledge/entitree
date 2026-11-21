@@ -32,7 +32,7 @@ import isInIframe from "lib/isInIframe";
 import memoryCache, { HOUR } from "lib/memoryCache";
 import { setSetting } from "store/settingsSlice";
 import useLoadEntityProps from "hooks/useLoadEntityProps";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "store";
 import { useEffect } from "react";
 
 const TreePage = ({
@@ -48,7 +48,7 @@ const TreePage = ({
 }: PageProps) => {
   const { loadingEntity } = useAppSelector(({ tree }) => tree);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   // force settings to be as url, otherwise you get a mix up
   useEffect(() => {
@@ -94,6 +94,19 @@ const TreePage = ({
   );
 };
 
+// getEntityIdFromSlug interpolates the slug into a SPARQL string literal
+const escapeSparqlString = (value: string) =>
+  value.replace(/[\\"]/g, "\\$&").replace(/\r/g, "\\r").replace(/\n/g, "\\n");
+
+// Next already decodes route params once; a stray "%" must not throw
+const safeDecode = (value: string) => {
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return null;
+  }
+};
+
 // Wikipedia title -> wikidata item id
 async function resolveWikipediaSlug(
   itemSlug: string,
@@ -108,14 +121,21 @@ async function resolveWikipediaSlug(
     wikibase_item,
     thumbnail,
     titles: { canonical },
-  } = await getWikipediaArticle(decodedItemSlug, langCode);
+  } = await getWikipediaArticle(encodeURIComponent(decodedItemSlug), langCode);
 
   //the wikipedia article redirects to another article
   if (canonical !== itemSlug) {
     //try to get the item from wikidata and avoid the redirects
-    const entityId = await getEntityIdFromSlug(decodedItemSlug, langCode);
+    const entityId = await getEntityIdFromSlug(
+      escapeSparqlString(decodedItemSlug),
+      langCode,
+    );
     if (!entityId)
-      return { entityId: "", entityThumbnail: "", redirectToCanonical: canonical };
+      return {
+        entityId: "",
+        entityThumbnail: "",
+        redirectToCanonical: canonical,
+      };
 
     // losing entityThumbnail feature for those isolated cases
     return { entityId, entityThumbnail: "" };
@@ -128,8 +148,7 @@ async function resolveWikipediaSlug(
 }
 
 // The page only depends on the url, so CDNs can cache it
-const PAGE_CACHE_CONTROL =
-  "public, s-maxage=600, stale-while-revalidate=86400";
+const PAGE_CACHE_CONTROL = "public, s-maxage=600, stale-while-revalidate=86400";
 
 export const getServerSideProps = wrapper.getServerSideProps<PageProps>(
   ({ dispatch }) =>
@@ -143,8 +162,10 @@ export const getServerSideProps = wrapper.getServerSideProps<PageProps>(
       if (!LANGS.find(({ code }) => code === langCode))
         return { props: { errorCode: 404 } };
 
-      const decodedPropSlug = decodeURIComponent(propSlug);
-      const decodedItemSlug = decodeURIComponent(itemSlug);
+      const decodedPropSlug = safeDecode(propSlug);
+      const decodedItemSlug = safeDecode(itemSlug);
+      if (decodedPropSlug === null || decodedItemSlug === null)
+        return { props: { errorCode: 404 } };
 
       let entityId = "";
       let entityThumbnail = "";

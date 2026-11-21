@@ -16,7 +16,7 @@ import { missingImagesLink } from "services/imageService";
 import { setLoadingEntity } from "store/treeSlice";
 import styled from "styled-components";
 import { useAppSelector } from "store";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "store";
 import { useRouter } from "next/router";
 
 export default function DetailsModal({
@@ -39,7 +39,7 @@ export default function DetailsModal({
   const { currentEntity, currentProp } = useAppSelector(({ tree }) => tree);
   const router = useRouter();
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [images, setImages] = useState(nodeImages);
   const [birthPlace, setBirthPlace] = useState(node.birthPlace);
   const [deathPlace, setDeathPlace] = useState(node.deathPlace);
@@ -259,7 +259,7 @@ export default function DetailsModal({
         {node.id !== currentEntity?.id && (
           <Button
             variant="light"
-            className="mr-auto"
+            className="me-auto"
             onClick={() => {
               dispatch(setLoadingEntity(true));
               const url = getEntityUrl(

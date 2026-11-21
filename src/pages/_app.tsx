@@ -14,7 +14,8 @@ import { GlobalStyle } from "layout/GlobalStyle";
 import { PersistGate } from "redux-persist/integration/react";
 import { Provider } from "react-redux";
 import ReactGA from "react-ga4";
-import { ThemeProvider } from "styled-components";
+import isPropValid from "@emotion/is-prop-valid";
+import { StyleSheetManager, ThemeProvider } from "styled-components";
 import { useCurrentTheme } from "hooks/useCurrentTheme";
 import usePageView from "hooks/usePageView";
 import useReadQuery from "../hooks/useReadQuery";
@@ -24,6 +25,11 @@ ReactGA.initialize(process.env.NEXT_PUBLIC_GA_TRACKING_CODE || "placeholder", {
 });
 
 const MINUTES_BEFORE_SHOWING_MODAL = 3;
+
+// styled-components v6 no longer filters props before they reach the DOM;
+// keep the v5 behaviour so styling props don't end up as HTML attributes
+const shouldForwardProp = (prop: string, target: unknown) =>
+  typeof target === "string" ? isPropValid(prop) : true;
 
 // Everything that reads the store has to live inside the Provider
 const AppContent = ({ Component, pageProps }: Omit<AppProps, "router">) => {
@@ -35,9 +41,12 @@ const AppContent = ({ Component, pageProps }: Omit<AppProps, "router">) => {
   const hasDonatedAt = useAppSelector(({ settings }) => settings.hasDonatedAt);
   useEffect(() => {
     if (!hasDonatedAt) {
-      const timer = setTimeout(() => {
-        setShowDonateModal(true);
-      }, 1000 * 60 * MINUTES_BEFORE_SHOWING_MODAL);
+      const timer = setTimeout(
+        () => {
+          setShowDonateModal(true);
+        },
+        1000 * 60 * MINUTES_BEFORE_SHOWING_MODAL,
+      );
 
       return () => {
         clearTimeout(timer);
@@ -71,14 +80,16 @@ const MyApp = ({ Component, ...rest }: AppProps) => {
   const { store, props } = wrapper.useWrappedStore(rest);
 
   return (
-    <CookiesProvider>
-      <GlobalStyle />
-      <Provider store={store}>
-        <MaybePersistGate>
-          <AppContent Component={Component} pageProps={props.pageProps} />
-        </MaybePersistGate>
-      </Provider>
-    </CookiesProvider>
+    <StyleSheetManager shouldForwardProp={shouldForwardProp}>
+      <CookiesProvider>
+        <GlobalStyle />
+        <Provider store={store}>
+          <MaybePersistGate>
+            <AppContent Component={Component} pageProps={props.pageProps} />
+          </MaybePersistGate>
+        </Provider>
+      </CookiesProvider>
+    </StyleSheetManager>
   );
 };
 

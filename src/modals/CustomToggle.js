@@ -6,7 +6,8 @@ export const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
     variant="link"
     aria-haspopup="true"
     ref={ref}
-    className="dropdown-toggle nav-link"
+    // no "nav-link": in Bootstrap 5 its color only resolves inside a .nav
+    className="dropdown-toggle"
     onClick={(e) => {
       e.preventDefault();
       onClick(e);

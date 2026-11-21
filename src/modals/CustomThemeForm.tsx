@@ -4,7 +4,7 @@ import { resetCurrentTheme, setCustomTheme } from "store/settingsSlice";
 
 import Button from "react-bootstrap/Button";
 import useDebounce from "hooks/useDebounce";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "store";
 import { useTheme } from "styled-components";
 
 export default function CustomThemeForm() {
@@ -32,7 +32,7 @@ export default function CustomThemeForm() {
     element?.parentNode?.removeChild(element);
   };
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const setCustomProp = (key, val) => {
     setCurrentCustomTheme((t) => ({ ...t, [key]: val }));
   };
@@ -73,9 +73,7 @@ export default function CustomThemeForm() {
               type="number"
               value={currentCustomTheme.nodeHeight}
             />
-            <InputGroup.Append>
-              <InputGroup.Text>px</InputGroup.Text>
-            </InputGroup.Append>
+            <InputGroup.Text>px</InputGroup.Text>
           </InputGroup>
           <Form.Text className="text-muted">
             The fixed Height for all cards
@@ -91,9 +89,7 @@ export default function CustomThemeForm() {
               type="number"
               value={currentCustomTheme.nodeWidth}
             />
-            <InputGroup.Append>
-              <InputGroup.Text>px</InputGroup.Text>
-            </InputGroup.Append>
+            <InputGroup.Text>px</InputGroup.Text>
           </InputGroup>
           <Form.Text className="text-muted">
             The fixed width for all cards
@@ -109,9 +105,7 @@ export default function CustomThemeForm() {
               type="text"
               value={currentCustomTheme.nodeBorder}
             />
-            <InputGroup.Append>
-              <InputGroup.Text>CSS</InputGroup.Text>
-            </InputGroup.Append>
+            <InputGroup.Text>CSS</InputGroup.Text>
           </InputGroup>
           <Form.Text className="text-muted">
             The fixed width for all cards
@@ -129,9 +123,7 @@ export default function CustomThemeForm() {
               type="number"
               value={currentCustomTheme.nodeBorderRadius}
             />
-            <InputGroup.Append>
-              <InputGroup.Text>px</InputGroup.Text>
-            </InputGroup.Append>
+            <InputGroup.Text>px</InputGroup.Text>
           </InputGroup>
           <Form.Text className="text-muted">
             The fixed width for all cards
@@ -147,9 +139,7 @@ export default function CustomThemeForm() {
               type="text"
               value={currentCustomTheme.nodeBoxShadow}
             />
-            <InputGroup.Append>
-              <InputGroup.Text>CSS</InputGroup.Text>
-            </InputGroup.Append>
+            <InputGroup.Text>CSS</InputGroup.Text>
           </InputGroup>
           <Form.Text className="text-muted">
             Style for box-shadow property
@@ -167,9 +157,7 @@ export default function CustomThemeForm() {
               type="text"
               value={currentCustomTheme.nodeFocusedBoxShadow}
             />
-            <InputGroup.Append>
-              <InputGroup.Text>CSS</InputGroup.Text>
-            </InputGroup.Append>
+            <InputGroup.Text>CSS</InputGroup.Text>
           </InputGroup>
           <Form.Text className="text-muted">
             Focused style for box-shadow property
@@ -191,9 +179,7 @@ export default function CustomThemeForm() {
                 type="number"
                 value={currentCustomTheme.contentPaddingTop}
               />
-              <InputGroup.Append>
-                <InputGroup.Text>px</InputGroup.Text>
-              </InputGroup.Append>
+              <InputGroup.Text>px</InputGroup.Text>
             </InputGroup>
             <Form.Text className="text-muted">
               The padding from the top line of the image (e.g. horizontal
@@ -212,9 +198,7 @@ export default function CustomThemeForm() {
                 type="number"
                 value={currentCustomTheme.contentPaddingLeft}
               />
-              <InputGroup.Append>
-                <InputGroup.Text>px</InputGroup.Text>
-              </InputGroup.Append>
+              <InputGroup.Text>px</InputGroup.Text>
             </InputGroup>
             <Form.Text className="text-muted">
               The padding from the right end of the image (e.g. horizontal
@@ -233,9 +217,7 @@ export default function CustomThemeForm() {
                 type="number"
                 value={currentCustomTheme.contentLineClamp}
               />
-              <InputGroup.Append>
-                <InputGroup.Text>lines</InputGroup.Text>
-              </InputGroup.Append>
+              <InputGroup.Text>lines</InputGroup.Text>
             </InputGroup>
             <Form.Text className="text-muted">
               The maximum number of lines shown on the node, incl. the
@@ -259,9 +241,7 @@ export default function CustomThemeForm() {
                 type="number"
                 value={currentCustomTheme.labelFontSize}
               />
-              <InputGroup.Append>
-                <InputGroup.Text>px</InputGroup.Text>
-              </InputGroup.Append>
+              <InputGroup.Text>px</InputGroup.Text>
             </InputGroup>
             <Form.Text className="text-muted">
               The cards label e.g. the person&apos;s name
@@ -321,15 +301,14 @@ export default function CustomThemeForm() {
       </fieldset>
 
       <Form.Group controlId="datesYearOnly">
-        <Col sm={{ span: 9, offset: 3 }} className="pl-0">
+        <Col sm={{ span: 9, offset: 3 }} className="ps-0">
           <Form.Check
-            custom
             checked={currentCustomTheme.datesYearOnly}
             onChange={(e) => setCustomProp("datesYearOnly", e.target.checked)}
             type="checkbox"
             label="Show only year of dates"
           />
-          <Form.Text className="text-muted pl-4">
+          <Form.Text className="text-muted ps-4">
             e.g. show 1968 instead of 26 May 1968
           </Form.Text>
         </Col>
@@ -343,9 +322,7 @@ export default function CustomThemeForm() {
               type="number"
               value={currentCustomTheme.datesFontSize}
             />
-            <InputGroup.Append>
-              <InputGroup.Text>px</InputGroup.Text>
-            </InputGroup.Append>
+            <InputGroup.Text>px</InputGroup.Text>
           </InputGroup>
           <Form.Text className="text-muted">
             The dates at the bottom of the card
@@ -387,9 +364,7 @@ export default function CustomThemeForm() {
               type="number"
               value={currentCustomTheme.thumbHeight}
             />
-            <InputGroup.Append>
-              <InputGroup.Text>px</InputGroup.Text>
-            </InputGroup.Append>
+            <InputGroup.Text>px</InputGroup.Text>
           </InputGroup>
           <Form.Text className="text-muted">
             e.g. The fixed height of the image in the Person&apos;s card
@@ -405,9 +380,7 @@ export default function CustomThemeForm() {
               type="number"
               value={currentCustomTheme.thumbWidth}
             />
-            <InputGroup.Append>
-              <InputGroup.Text>px</InputGroup.Text>
-            </InputGroup.Append>
+            <InputGroup.Text>px</InputGroup.Text>
           </InputGroup>
           <Form.Text className="text-muted">
             e.g. The fixed width of the image in the Person&apos;s card
@@ -425,9 +398,7 @@ export default function CustomThemeForm() {
               type="number"
               value={currentCustomTheme.thumbBorderRadius}
             />
-            <InputGroup.Append>
-              <InputGroup.Text>px</InputGroup.Text>
-            </InputGroup.Append>
+            <InputGroup.Text>px</InputGroup.Text>
           </InputGroup>
           <Form.Text className="text-muted">
             e.g. The rouded corners of the Person&apos;s image
@@ -465,9 +436,7 @@ export default function CustomThemeForm() {
                   type="number"
                   value={currentCustomTheme.separationCousins}
                 />
-                <InputGroup.Append>
-                  <InputGroup.Text>px</InputGroup.Text>
-                </InputGroup.Append>
+                <InputGroup.Text>px</InputGroup.Text>
               </InputGroup>
               <Form.Text className="text-muted">
                 The gap between the cousins
@@ -483,9 +452,7 @@ export default function CustomThemeForm() {
                   type="number"
                   value={currentCustomTheme.separationSameGroup}
                 />
-                <InputGroup.Append>
-                  <InputGroup.Text>px</InputGroup.Text>
-                </InputGroup.Append>
+                <InputGroup.Text>px</InputGroup.Text>
               </InputGroup>
               <Form.Text className="text-muted">
                 The gap between siblings or parents
@@ -501,9 +468,7 @@ export default function CustomThemeForm() {
                   type="number"
                   value={currentCustomTheme.separationSiblingSpouse}
                 />
-                <InputGroup.Append>
-                  <InputGroup.Text>px</InputGroup.Text>
-                </InputGroup.Append>
+                <InputGroup.Text>px</InputGroup.Text>
               </InputGroup>
               <Form.Text className="text-muted">
                 The gap between the sibling and the spouse of a person
@@ -519,9 +484,7 @@ export default function CustomThemeForm() {
                   type="number"
                   value={currentCustomTheme.separationVertical}
                 />
-                <InputGroup.Append>
-                  <InputGroup.Text>px</InputGroup.Text>
-                </InputGroup.Append>
+                <InputGroup.Text>px</InputGroup.Text>
               </InputGroup>
               <Form.Text className="text-muted">
                 e.g. The vertical space between parents and children
@@ -607,9 +570,7 @@ export default function CustomThemeForm() {
                   type="text"
                   value={currentCustomTheme.relStrokeWidth}
                 />
-                <InputGroup.Append>
-                  <InputGroup.Text>px</InputGroup.Text>
-                </InputGroup.Append>
+                <InputGroup.Text>px</InputGroup.Text>
               </InputGroup>
               <Form.Text className="text-muted">
                 The thickness of the line that forms the relationship
@@ -649,7 +610,7 @@ export default function CustomThemeForm() {
           <Button
             title="Save a copy of your customized theme, you may send it to us to include as a main theme. Importing a theme in the browser is not yet supported."
             size="sm"
-            className="ml-2"
+            className="ms-2"
             variant="outline-primary"
             onClick={downloadJsonFile}
           >

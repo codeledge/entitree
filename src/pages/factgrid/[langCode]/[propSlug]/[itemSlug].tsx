@@ -25,7 +25,7 @@ import { isItemId } from "@entitree/helper";
 import { setSetting } from "store/settingsSlice";
 import useLoadEntityProps from "hooks/useLoadEntityProps";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "store";
 
 const TreePage = ({
   errorCode,
@@ -40,7 +40,7 @@ const TreePage = ({
 }) => {
   const { loadingEntity } = useAppSelector(({ tree }) => tree);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   // force settings to be as url, otherwise you get a mix up
   useEffect(() => {

@@ -1,3 +1,4 @@
+import { FANDOM_HOST_REGEX } from "lib/addFandom";
 import jsonp from "jsonp-promise";
 
 export type FandomProfile = {
@@ -8,10 +9,13 @@ export default async function getFandomPageProps(
   fandomHost: string,
   fandomPage: string,
 ): Promise<any | undefined> {
+  if (!FANDOM_HOST_REGEX.test(fandomHost)) return;
   try {
     const host = `https://${fandomHost}.fandom.com/api.php`;
     const data = await jsonp(
-      `${host}?action=query&prop=pageprops&titles=${fandomPage}&format=json`,
+      `${host}?action=query&prop=pageprops&titles=${encodeURIComponent(
+        fandomPage,
+      )}&format=json`,
       {
         param: "callback",
         timeout: 2000,

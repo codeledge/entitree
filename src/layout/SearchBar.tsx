@@ -19,7 +19,7 @@ import styled from "styled-components";
 import { useAppSelector } from "store";
 import { useCurrentLang } from "hooks/useCurrentLang";
 import useDebounce from "../hooks/useDebounce";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "store";
 import { useRouter } from "next/router";
 
 export type SearchResult = {
@@ -36,7 +36,7 @@ export default function SearchBar() {
 
   const currentLang = useCurrentLang();
   const router = useRouter();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [loadingSuggestions, setLoadingSuggestions] = useState(false);
@@ -124,9 +124,9 @@ export default function SearchBar() {
       <Container>
         <Form.Group className="searchBox" controlId="searchBox">
           <InputGroup>
-            <InputGroup.Prepend>
+            <span className="searchIcon">
               <FaSearch />
-            </InputGroup.Prepend>
+            </span>
             <Form.Control
               onKeyDown={() => setFromKeyboard(true)}
               onChange={(e) => {
@@ -142,64 +142,64 @@ export default function SearchBar() {
               spellCheck="false"
             />
             {currentEntity && (
-              <InputGroup.Append>
-                <Dropdown>
-                  <Overlay
-                    placement="bottom"
-                    show={false}
-                    target={propToggleRef.current}
+              <Dropdown>
+                <Overlay
+                  placement="bottom"
+                  show={false}
+                  target={propToggleRef.current}
+                >
+                  <Tooltip id="select-prop">
+                    Select a property to show a tree
+                  </Tooltip>
+                </Overlay>
+                {/* in the edge case there are no props, hide the dropdown */}
+                {/* the props list loads after the page, show the current prop meanwhile */}
+                {(!currentEntityProps ||
+                  !!currentEntityProps.length ||
+                  !!currentProp) && (
+                  <Dropdown.Toggle
+                    variant="none"
+                    ref={propToggleRef}
+                    id="dropdown-props"
+                    className={
+                      !!currentEntity && !currentProp
+                        ? "shouldSelectProp btn-warning"
+                        : undefined
+                    }
                   >
-                    <Tooltip id="select-prop">
-                      Select a property to show a tree
-                    </Tooltip>
-                  </Overlay>
-                  {/* in the edge case there are no props, hide the dropdown */}
-                  {/* the props list loads after the page, show the current prop meanwhile */}
-                  {(!currentEntityProps ||
-                    !!currentEntityProps.length ||
-                    !!currentProp) && (
-                    <Dropdown.Toggle
-                      variant="none"
-                      ref={propToggleRef}
-                      id="dropdown-props"
-                      className={
-                        !!currentEntity && !currentProp
-                          ? "shouldSelectProp btn-warning"
-                          : undefined
-                      }
-                    >
-                      {currentProp
-                        ? currentProp.overrideLabel || currentProp.label
-                        : "Choose a property "}
-                    </Dropdown.Toggle>
-                  )}
+                    {currentProp
+                      ? currentProp.overrideLabel || currentProp.label
+                      : "Choose a property "}
+                  </Dropdown.Toggle>
+                )}
 
-                  <Dropdown.Menu alignRight>
-                    {!currentEntityProps && (
-                      <Dropdown.Item disabled>Loading properties...</Dropdown.Item>
-                    )}
-                    {currentEntityProps?.map((prop) => (
-                      <Dropdown.Item
-                        key={prop.id}
-                        className={prop.isFav ? "fav" : ""}
-                        onClick={() => {
-                          dispatch(setLoadingEntity(true));
-                          const url = getEntityUrl(
-                            currentLang.code,
-                            prop.slug,
-                            dataSource,
-                            currentEntity.id,
-                            currentEntity.wikipediaSlug,
-                          );
-                          router.push(url);
-                        }}
-                      >
-                        {prop.overrideLabel || prop.label}
-                      </Dropdown.Item>
-                    ))}
-                  </Dropdown.Menu>
-                </Dropdown>
-              </InputGroup.Append>
+                <Dropdown.Menu align="end">
+                  {!currentEntityProps && (
+                    <Dropdown.Item disabled>
+                      Loading properties...
+                    </Dropdown.Item>
+                  )}
+                  {currentEntityProps?.map((prop) => (
+                    <Dropdown.Item
+                      key={prop.id}
+                      className={prop.isFav ? "fav" : ""}
+                      onClick={() => {
+                        dispatch(setLoadingEntity(true));
+                        const url = getEntityUrl(
+                          currentLang.code,
+                          prop.slug,
+                          dataSource,
+                          currentEntity.id,
+                          currentEntity.wikipediaSlug,
+                        );
+                        router.push(url);
+                      }}
+                    >
+                      {prop.overrideLabel || prop.label}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
             )}
           </InputGroup>
           {showSuggestions && (
@@ -234,12 +234,19 @@ const ThemedSearchBar = styled(Form)`
 
     .input-group {
       position: relative;
-      .input-group-prepend {
+      flex-wrap: nowrap;
+      .searchIcon {
         position: absolute;
         z-index: 5;
-        top: 11px;
+        top: 7px;
         left: 10px;
-        color: var(--gray);
+        color: var(--bs-gray-600);
+      }
+      // react-bootstrap 2 renders the Dropdown without a wrapper inside an
+      // InputGroup, so the toggle is a direct flex item: size it to its label
+      > .dropdown-toggle {
+        width: auto;
+        flex: 0 0 auto;
       }
     }
 

@@ -9,10 +9,10 @@ import { Title } from "layout/Title";
 import TreeLoader from "layout/TreeLoader";
 import { setSetting } from "store/settingsSlice";
 import { useAppSelector } from "store";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "store";
 
 export default function Home() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   // force settings to be as url, otherwise you get a mix up
   useEffect(() => {

@@ -11,7 +11,7 @@ import { TransformComponent } from "react-zoom-pan-pinch";
 import fitEdges from "treeHelpers/fitEdges";
 import { layoutFromMap } from "entitree-flex";
 import { useAppSelector } from "store";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "store";
 
 export default function Graph({
   setTransform,
@@ -26,7 +26,7 @@ export default function Graph({
   );
 
   const theme = useTheme();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [nodes, setNodes] = useState<EntityNode[]>([]);
   const [rels, setRels] = useState<EntityRel[]>([]);

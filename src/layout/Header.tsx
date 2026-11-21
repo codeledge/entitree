@@ -17,11 +17,11 @@ import { SITE_NAME } from "../constants/meta";
 import SettingsModal from "modals/SettingsModal";
 import { setLoadingEntity } from "store/treeSlice";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "store";
 
 export default function Header({ simple }: { simple?: boolean }) {
   const [showSettingsModal, setShowSettingsModal] = useState(false);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const openSettingsModal = () => {
     ReactGA.event({
@@ -56,21 +56,26 @@ export default function Header({ simple }: { simple?: boolean }) {
             className="examplesButton"
           >
             {EXAMPLES.map(({ name, href }) => (
-              <Link key={name} href={href} passHref legacyBehavior>
-                <Dropdown.Item onClick={openExampleLink}>{name}</Dropdown.Item>
-              </Link>
+              <Dropdown.Item
+                key={name}
+                as={Link}
+                href={href}
+                onClick={openExampleLink}
+              >
+                {name}
+              </Dropdown.Item>
             ))}
           </DropdownButton>
         )}
         {!simple && (
-          <Nav className="ml-auto">
+          <Nav className="ms-auto">
             <Button
               className="settingsButton"
               variant="none"
               onClick={openSettingsModal}
             >
               settings
-              <FiSliders className="ml-2" />
+              <FiSliders className="ms-2" />
             </Button>
             <SettingsModal
               show={showSettingsModal}

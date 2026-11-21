@@ -6,11 +6,11 @@ import {
 } from "actions/treeActions";
 
 import { EntityNode } from "types/EntityNode";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "store";
 import { useEffect } from "react";
 
 export default function useRootExpanded(node: EntityNode) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   //Make sure root is expanded by default
   useEffect(() => {

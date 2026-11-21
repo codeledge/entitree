@@ -4,19 +4,23 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import Footer from "layout/Footer";
+import { GENI_ENABLED } from "constants/geni";
 import Header from "layout/Header";
 import SearchBar from "layout/SearchBar";
 import { Title } from "layout/Title";
 import { setSetting } from "store/settingsSlice";
 import { useCookies } from "react-cookie";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "store";
 import { useRouter } from "next/router";
+
+export const getServerSideProps = async () =>
+  GENI_ENABLED ? { props: {} } : { notFound: true as const };
 
 export default function GeniHome() {
   const router = useRouter();
   const [session, setSession] = useState();
   const [cookie, setCookie, removeCookie] = useCookies(["geni"]);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   // force settings to be as url, otherwise you get a mix up
   useEffect(() => {
@@ -37,6 +41,7 @@ export default function GeniHome() {
         path: "/",
         maxAge: expires_in,
         sameSite: true,
+        secure: window.location.protocol === "https:",
       });
 
       router.push({}, undefined, {

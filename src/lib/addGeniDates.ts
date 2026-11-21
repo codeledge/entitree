@@ -12,7 +12,7 @@ function convertGeniDate(input, languageCode = "en") {
 function convertGeniDateToISO(input, languageCode = "en") {
   // console.log(input.formatted_date);
   const parsedDate = DateTime.local(input.year, input.month, input.day);
-  return parsedDate.setLocale(languageCode).toISO();
+  return parsedDate.setLocale(languageCode).toISO() ?? undefined;
 }
 
 export default function addGeniDates(entity: Entity, geniProfile: GeniProfile) {

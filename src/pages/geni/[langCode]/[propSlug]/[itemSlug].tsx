@@ -5,6 +5,7 @@ import { useAppSelector, wrapper } from "store";
 import DrawingArea from "components/DrawingArea";
 import Error from "next/error";
 import { FAMILY_TREE_PROP } from "constants/properties";
+import { GENI_ENABLED } from "constants/geni";
 import Footer from "layout/Footer";
 import { HeadMeta } from "layout/HeadMeta";
 import Header from "layout/Header";
@@ -20,7 +21,7 @@ import { formatGeniProfile } from "lib/formatGeniProfile";
 import { getGeniCookies } from "helpers/cookies";
 import isInIframe from "lib/isInIframe";
 import { setSetting } from "store/settingsSlice";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "store";
 import { geniImmediateFamily, getGeniProfiles } from "geni-api";
 
 const GeniTreePage = ({
@@ -34,7 +35,7 @@ const GeniTreePage = ({
   twitterTitle,
   langCode,
 }) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const { loadingEntity } = useAppSelector(({ tree }) => tree);
 
@@ -71,6 +72,8 @@ const GeniTreePage = ({
 export const getServerSideProps = wrapper.getServerSideProps<PageProps>(
   ({ dispatch }) =>
     async ({ query, req }) => {
+      if (!GENI_ENABLED) return { notFound: true };
+
       const { langCode, propSlug, itemSlug } = query as {
         langCode: LangCode;
         propSlug: string;

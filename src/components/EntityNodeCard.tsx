@@ -44,14 +44,14 @@ import getWikibaseEntitiesLabel from "wikibase/getWikibaseEntitiesLabel";
 import { isValidImage } from "helpers/isValidImage";
 import { useAppSelector } from "store";
 import useBookmarks from "hooks/useBookmarks";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "store";
 import useGeniProfileInfo from "hooks/useGeniProfileInfo";
 import usePreload from "hooks/usePreload";
 import useRootExpanded from "hooks/useRootExpanded";
 import useVideoOverlay from "hooks/useVideoOverlay";
 
 export default memo(({ node }: { node: EntityNode }) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const theme = useTheme();
 
   const [showModal, setShowModal] = useState(false);
@@ -64,11 +64,10 @@ export default memo(({ node }: { node: EntityNode }) => {
   const settings = useAppSelector(({ settings: s }) => s);
   const { currentProp } = useAppSelector(({ tree }) => tree);
 
-  if (node.wikidataId) {
-    usePreload(node);
-    useBookmarks(node);
-    useVideoOverlay(node);
-  }
+  // these only act on wikidata nodes; the check lives inside each hook's effect
+  usePreload(node);
+  useBookmarks(node);
+  useVideoOverlay(node);
   //might get stuck on geni, but the expand icons will reset and triggered manually
   useRootExpanded(node);
 
@@ -336,7 +335,9 @@ export default memo(({ node }: { node: EntityNode }) => {
               node.occupations && (
                 <div className="occupation">
                   {node.occupations.map((entry) => (
-                    <span title={entry.itemLabel}>{entry.emoji}</span>
+                    <span key={entry.item} title={entry.itemLabel}>
+                      {entry.emoji}
+                    </span>
                   ))}
                 </div>
               )}
@@ -347,10 +348,10 @@ export default memo(({ node }: { node: EntityNode }) => {
                 ? lifeSpanInYears
                 : node.lifeSpan
               : node.startEndSpan
-              ? node.startEndSpan
-              : node.inceptionAblishedSpan
-              ? node.inceptionAblishedSpan
-              : ""}
+                ? node.startEndSpan
+                : node.inceptionAblishedSpan
+                  ? node.inceptionAblishedSpan
+                  : ""}
           </div>
         </ThemedContent>
       </ThemedNodeInner>
@@ -503,7 +504,7 @@ export default memo(({ node }: { node: EntityNode }) => {
                 variant="link"
                 title="Children not available, please add them on wikidata.org"
               >
-                <span className="value mr-1">{node.targetsCount}</span>
+                <span className="value me-1">{node.targetsCount}</span>
                 <span className="icon">
                   <MdChildCare />
                 </span>
@@ -583,10 +584,10 @@ const ThemedNodeOuter = styled.div<SettingsState & { gender?: string }>`
           background-color: #ffcccc;
         `
       : gender === "male"
-      ? css`
-          background-color: #ccd9ff;
-        `
-      : "")}
+        ? css`
+            background-color: #ccd9ff;
+          `
+        : "")}
 `;
 
 const Badge = styled.div`

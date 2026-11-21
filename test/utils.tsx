@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 // import { render } from "@testing-library/react";
 
 // Add in any providers here if necessary:

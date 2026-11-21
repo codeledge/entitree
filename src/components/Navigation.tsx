@@ -6,10 +6,10 @@ import {
   RedditShareButton,
   TelegramIcon,
   TelegramShareButton,
-  TwitterIcon,
-  TwitterShareButton,
   WhatsappIcon,
   WhatsappShareButton,
+  XIcon,
+  XShareButton,
 } from "react-share";
 import { FiMinus, FiPlus, FiPrinter } from "react-icons/fi";
 import React, { memo, useEffect, useState } from "react";
@@ -214,27 +214,27 @@ const ShareButton = memo(() => {
         </Modal.Header>
         <Modal.Body>
           <ShareButtonContainer>
-            <FacebookShareButton url={url} quote={title} hashtag={SITE_NAME}>
+            <FacebookShareButton url={url} hashtag={SITE_NAME}>
               <FacebookIcon /> Share on Facebook
             </FacebookShareButton>
           </ShareButtonContainer>
           <ShareButtonContainer>
-            <TwitterShareButton url={url} title={title} hashtags={[SITE_NAME]}>
-              <TwitterIcon /> Share on Twitter
-            </TwitterShareButton>
+            <XShareButton url={url} text={title} hashtags={[SITE_NAME]}>
+              <XIcon /> Share on X
+            </XShareButton>
           </ShareButtonContainer>
           <ShareButtonContainer>
-            <RedditShareButton url={url} title={title}>
+            <RedditShareButton url={url} shareTitle={title}>
               <RedditIcon /> Share on Reddit
             </RedditShareButton>
           </ShareButtonContainer>
           <ShareButtonContainer>
-            <WhatsappShareButton url={url} title={title}>
+            <WhatsappShareButton url={url} message={title}>
               <WhatsappIcon /> Share on Whatsapp
             </WhatsappShareButton>
           </ShareButtonContainer>
           <ShareButtonContainer>
-            <TelegramShareButton url={url} title={title}>
+            <TelegramShareButton url={url} text={title}>
               <TelegramIcon /> Share on Telegram
             </TelegramShareButton>
           </ShareButtonContainer>

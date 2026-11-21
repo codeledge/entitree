@@ -18,11 +18,11 @@ export const BottomToggle = ({
       onClick={onClick}
       title={title}
     >
-      <span className="value mr-1">{counter}</span>
+      <span className="value me-1">{counter}</span>
       <span className="chevron">
         {open ? <FiChevronUp /> : <FiChevronDown />}
       </span>
-      {icon && <span className="icon ml-1">{icon}</span>}
+      {icon && <span className="icon ms-1">{icon}</span>}
     </StyledBottomToggle>
   );
 };

@@ -3,10 +3,10 @@ import { RefObject, useEffect, useRef } from "react";
 function useEventListener<T extends HTMLElement = HTMLDivElement>(
   eventName: keyof WindowEventMap,
   handler: (event: Event) => void,
-  element?: RefObject<T>,
+  element?: RefObject<T | null>,
 ) {
   // Create a ref that stores handler
-  const savedHandler = useRef<(event: Event) => void>();
+  const savedHandler = useRef<((event: Event) => void) | undefined>(undefined);
 
   useEffect(() => {
     // Define the listening target

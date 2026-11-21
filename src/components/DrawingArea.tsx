@@ -13,9 +13,6 @@ export default function DrawingArea() {
       velocityAnimation={{
         disabled: true,
       }}
-      alignmentAnimation={{
-        disabled: true,
-      }}
       zoomAnimation={{
         disabled: true,
       }}
@@ -41,7 +38,7 @@ export default function DrawingArea() {
 
 const GraphWrapper = memo(
   ({ zoomIn, zoomOut, resetTransform, setTransform }: any) => {
-    const wrapperRef = useRef(null);
+    const wrapperRef = useRef<HTMLDivElement>(null);
 
     const { width: drawingWidth, height: drawingHeight } =
       useElementSize(wrapperRef);
