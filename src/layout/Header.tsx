@@ -17,11 +17,11 @@ import { SITE_NAME } from "../constants/meta";
 import SettingsModal from "modals/SettingsModal";
 import { setLoadingEntity } from "store/treeSlice";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "store";
 
 export default function Header({ simple }: { simple?: boolean }) {
   const [showSettingsModal, setShowSettingsModal] = useState(false);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const openSettingsModal = () => {
     ReactGA.event({
@@ -70,7 +70,7 @@ export default function Header({ simple }: { simple?: boolean }) {
               onClick={openSettingsModal}
             >
               settings
-              <FiSliders className="ml-2" />
+              <FiSliders className="ms-2" />
             </Button>
             <SettingsModal
               show={showSettingsModal}

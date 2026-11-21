@@ -2,12 +2,12 @@ import Router, { useRouter } from "next/router";
 
 import { THEMES } from "constants/themes";
 import { setSetting } from "../store/settingsSlice";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "store";
 import { useEffect } from "react";
 
 export default function useReadQuery() {
   const router = useRouter();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (Router.router?.query.theme) {

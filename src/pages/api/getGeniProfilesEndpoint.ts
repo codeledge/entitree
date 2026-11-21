@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-import { AxiosError } from "axios";
+import { GENI_ENABLED } from "constants/geni";
 import { getGeniCookies } from "helpers/cookies";
 import { getGeniProfiles } from "geni-api";
 
@@ -8,29 +8,31 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
+  if (!GENI_ENABLED) return res.status(404).json({ message: "Not found" });
+
+  if (req.method !== "GET") {
+    res.setHeader("Allow", "GET");
+    return res.status(405).json({ message: "Method not allowed" });
+  }
+
   const geni = getGeniCookies(req);
-  if (!geni)
+  if (!geni?.access_token)
     return res
       .status(403)
       .json({ message: "No Geni cookies found in request" });
 
-  switch (req.method) {
-    case "GET": {
-      try {
-        const profiles = await getGeniProfiles(
-          req.query.guids as string,
-          geni.access_token,
-        );
+  const guids = req.query.guids;
+  if (typeof guids !== "string" || !guids)
+    return res.status(400).json({ message: "Missing guids" });
 
-        return res.json(profiles);
-      } catch (error: any) {
-        //console.error(error);
-        const axiosError: AxiosError = error;
-        return res.status(500).json({ message: axiosError.response?.data });
-      }
-      break;
-    }
-    default:
-      break;
+  try {
+    const profiles = await getGeniProfiles(guids, geni.access_token);
+    return res.json(profiles);
+  } catch (error: any) {
+    // don't echo Geni's raw error body back to the client
+    const status = error?.response?.status;
+    return res
+      .status(status === 401 || status === 403 ? status : 502)
+      .json({ message: "Geni request failed" });
   }
 }

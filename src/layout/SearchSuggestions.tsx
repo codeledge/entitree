@@ -7,7 +7,7 @@ import { getEntityUrl } from "helpers/getEntityUrl";
 import { reset } from "store/treeSlice";
 import styled from "styled-components";
 import { useAppSelector } from "store";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "store";
 import useOnClickOutside from "hooks/useOnClickOutside";
 import { useRouter } from "next/router";
 
@@ -20,9 +20,9 @@ export default function SearchSuggestions({
   searchResults: SearchResult[];
   setShowSuggestions: (a) => void;
 }) {
-  const wrapperRef = useRef(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   useOnClickOutside(wrapperRef, () => setShowSuggestions(false));
   const router = useRouter();
 

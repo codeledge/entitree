@@ -19,7 +19,7 @@ import { switchLanguage } from "actions/loadActions";
 import { useAppSelector } from "store";
 import { useCurrentLang } from "hooks/useCurrentLang";
 import { useCurrentSecondLabel } from "hooks/useCurrentSecondLabel";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "store";
 
 export default function SettingsModal({ show, onHideModal }) {
   useEffect(() => {
@@ -49,7 +49,7 @@ export default function SettingsModal({ show, onHideModal }) {
   } = useAppSelector(({ settings }) => settings);
   const { currentProp, currentEntity } = useAppSelector(({ tree }) => tree);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [openForm, setOpenForm] = useState(false);
 
@@ -66,7 +66,7 @@ export default function SettingsModal({ show, onHideModal }) {
       <Modal.Body>
         <Dropdown className="themeDropdown">
           <div>
-            <Dropdown.Toggle as={CustomToggle} className="float-left">
+            <Dropdown.Toggle as={CustomToggle} className="float-start">
               <span className="label">Use Theme</span>
               &nbsp;&nbsp;
               {currentTheme.name}
@@ -88,7 +88,7 @@ export default function SettingsModal({ show, onHideModal }) {
             </Dropdown.Menu>
             <Button
               variant="link"
-              className="float-right"
+              className="float-end"
               onClick={() => setOpenForm(!openForm)}
               aria-controls="collapse-custom-theme-form"
               aria-expanded={openForm}
@@ -110,7 +110,7 @@ export default function SettingsModal({ show, onHideModal }) {
           <Dropdown.Toggle as={CustomToggle}>
             <span className="label">Language</span> {currentLang?.name}
           </Dropdown.Toggle>
-          <Dropdown.Menu alignRight as={CustomMenu}>
+          <Dropdown.Menu align="end" as={CustomMenu}>
             {LANGS.map((lang, index) => (
               <Dropdown.Item
                 key={lang.code}
@@ -144,7 +144,7 @@ export default function SettingsModal({ show, onHideModal }) {
             <span className="label">Add second label</span>{" "}
             {currentSecondLabel ? currentSecondLabel.name : <i>no</i>}
           </Dropdown.Toggle>
-          <Dropdown.Menu alignRight as={CustomMenu}>
+          <Dropdown.Menu align="end" as={CustomMenu}>
             <Dropdown.Item
               active={!currentSecondLabel}
               onClick={() => dispatch(setSecondLabelCode(undefined))}
@@ -252,7 +252,6 @@ export default function SettingsModal({ show, onHideModal }) {
         <hr />
         <Form.Group controlId="followNavigation">
           <Form.Check
-            custom
             checked={followNavigation}
             onChange={(e) =>
               dispatch(
@@ -264,13 +263,12 @@ export default function SettingsModal({ show, onHideModal }) {
             type="checkbox"
             label="Follow navigation automatically"
           />
-          <Form.Text className="text-muted pl-4">
+          <Form.Text className="text-muted ps-4">
             Center the new appearing nodes and or the most relevant node
           </Form.Text>
         </Form.Group>
         <Form.Group controlId="iconsDisplay">
           <Form.Check
-            custom
             checked={hideToggleButton}
             onChange={(e) =>
               dispatch(
@@ -282,13 +280,12 @@ export default function SettingsModal({ show, onHideModal }) {
             type="checkbox"
             label="Hide expand/collapse buttons"
           />
-          <Form.Text className="text-muted pl-4">
+          <Form.Text className="text-muted ps-4">
             If this option is selected, it's not possible to navigate the tree
           </Form.Text>
         </Form.Group>
         <Form.Group controlId="genderColors">
           <Form.Check
-            custom
             checked={showGenderColor}
             onChange={(e) =>
               dispatch(
@@ -300,7 +297,7 @@ export default function SettingsModal({ show, onHideModal }) {
             type="checkbox"
             label="Use colors based on gender"
           />
-          <Form.Text className="text-muted pl-4">
+          <Form.Text className="text-muted ps-4">
             If browsing family trees, the nodes will have a background color
             (blue for men, red for women)
           </Form.Text>
@@ -309,7 +306,6 @@ export default function SettingsModal({ show, onHideModal }) {
           <>
             <Form.Group controlId="extraInfo">
               <Form.Check
-                custom
                 className="d-inline-block"
                 checked={showExtraInfo}
                 onChange={(e) =>
@@ -323,7 +319,7 @@ export default function SettingsModal({ show, onHideModal }) {
                 label="Show badge"
               />
               {showExtraInfo && (
-                <Dropdown className="imageDropdown d-inline-block ml-1">
+                <Dropdown className="imageDropdown d-inline-block ms-1">
                   <Dropdown.Toggle as={CustomToggle}>
                     {EXTRA_INFO_OPTIONS.find((c) => c.code === extraInfo)
                       ?.title || <i>Select</i>}
@@ -347,13 +343,12 @@ export default function SettingsModal({ show, onHideModal }) {
                   </Dropdown.Menu>
                 </Dropdown>
               )}
-              <Form.Text className="text-muted pl-4">
+              <Form.Text className="text-muted ps-4">
                 An icon with extra infos (beta)
               </Form.Text>
             </Form.Group>
             <Form.Group controlId="birthName">
               <Form.Check
-                custom
                 checked={showBirthName}
                 onChange={(e) =>
                   dispatch(
@@ -365,14 +360,13 @@ export default function SettingsModal({ show, onHideModal }) {
                 type="checkbox"
                 label="Show birth name instead of label"
               />
-              <Form.Text className="text-muted pl-4">
+              <Form.Text className="text-muted ps-4">
                 Often people change their names during their life
               </Form.Text>
             </Form.Group>
 
             <Form.Group controlId="showExternalImages">
               <Form.Check
-                custom
                 checked={showExternalImages}
                 onChange={(e) =>
                   dispatch(
@@ -384,13 +378,12 @@ export default function SettingsModal({ show, onHideModal }) {
                 type="checkbox"
                 label="Show external images"
               />
-              <Form.Text className="text-muted pl-4">
+              <Form.Text className="text-muted ps-4">
                 Allow entitree to fetch images from other websites
               </Form.Text>
             </Form.Group>
             <Form.Group controlId="faceDisplay">
               <Form.Check
-                custom
                 checked={imageType === "transparent_head"}
                 className="d-inline-block"
                 onChange={(e) =>
@@ -404,7 +397,7 @@ export default function SettingsModal({ show, onHideModal }) {
                 label="Remove image background"
               />
               {/* {true && (
-            <Dropdown className="imageDropdown d-inline-block ml-1">
+            <Dropdown className="imageDropdown d-inline-block ms-1">
               <Dropdown.Toggle as={CustomToggle}>
                 <span className="imageDropdownLabel">show</span> {imageType}
               </Dropdown.Toggle>
@@ -429,7 +422,7 @@ export default function SettingsModal({ show, onHideModal }) {
             </Dropdown>
           )} */}
               {imageType === "transparent_head" && (
-                <Dropdown className="imageDropdown d-inline-block ml-1">
+                <Dropdown className="imageDropdown d-inline-block ms-1">
                   <Dropdown.Toggle as={CustomToggle}>
                     <span className="imageDropdownLabel">overflow</span>{" "}
                     {imageOverflow}
@@ -454,7 +447,7 @@ export default function SettingsModal({ show, onHideModal }) {
                   </Dropdown.Menu>
                 </Dropdown>
               )}
-              <Form.Text className="text-muted pl-4">
+              <Form.Text className="text-muted ps-4">
                 {/* Try to zoom into the person's most relevant features */}
               </Form.Text>
             </Form.Group>
@@ -462,7 +455,7 @@ export default function SettingsModal({ show, onHideModal }) {
         )}
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="link" className="mr-auto ml-0" onClick={onHideModal}>
+        <Button variant="link" className="mr-auto ms-0" onClick={onHideModal}>
           Close
         </Button>
         <Button variant="primary" onClick={onHideModal}>

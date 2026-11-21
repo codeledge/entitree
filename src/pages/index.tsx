@@ -11,13 +11,13 @@ import TreeLoader from "layout/TreeLoader";
 import { setSetting } from "store/settingsSlice";
 import styled from "styled-components";
 import { useAppSelector } from "store";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "store";
 
 const imgHeight = 240;
 
 export default function Home() {
   const { loadingEntity } = useAppSelector(({ tree }) => tree);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(setSetting({ dataSource: "wikidata" }));
@@ -41,18 +41,6 @@ export default function Home() {
               </p>
               <StyledRow>
                 <StyledCol xs={12} md={6}>
-                  <a title="" href="/geni">
-                    <Card>
-                      <ImgBox alt="Geni Logo" src="/icons/geni_big.png" />
-
-                      <Card.Body>
-                        Start exploring &amp; visualizing your own family tree,
-                        if you have an account on Geni.com
-                      </Card.Body>
-                    </Card>
-                  </a>
-                </StyledCol>
-                <StyledCol xs={12} md={6}>
                   <a
                     title="Go to King Charles III's family tree"
                     href="/en/family_tree/Charles_III"
@@ -69,8 +57,6 @@ export default function Home() {
                     </Card>
                   </a>
                 </StyledCol>
-              </StyledRow>
-              <StyledRow>
                 <StyledCol xs={12} md={6}>
                   <a
                     title="Go to Freddie mercury's family tree"
@@ -104,8 +90,6 @@ export default function Home() {
                     </Card>
                   </a>
                 </StyledCol>
-              </StyledRow>
-              <StyledRow>
                 <StyledCol xs={12} md={6}>
                   <a
                     title="Go to Spongebob's family tree"
@@ -140,8 +124,6 @@ export default function Home() {
                     </Card.Body>
                   </Card>
                 </StyledCol>
-              </StyledRow>
-              <StyledRow>
                 <StyledCol xs={12} md={6}>
                   <a
                     title="Go to Entitree's Blog page"
@@ -175,8 +157,6 @@ export default function Home() {
                     </a>
                   </Card>
                 </StyledCol>
-              </StyledRow>
-              <StyledRow>
                 <StyledCol xs={12} md={6}>
                   <a
                     title="Chat with us on Telegram"

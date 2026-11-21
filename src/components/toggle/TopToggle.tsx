@@ -19,11 +19,11 @@ export const TopToggle = ({
       onClick={onClick}
       title={title}
     >
-      <span className="value mr-1">{counter}</span>
+      <span className="value me-1">{counter}</span>
       <span className="chevron">
         {open ? <FiChevronDown /> : <FiChevronUp />}
       </span>
-      {icon && <span className="icon ml-1">{icon}</span>}
+      {icon && <span className="icon ms-1">{icon}</span>}
     </StyledTopToggle>
   );
 };

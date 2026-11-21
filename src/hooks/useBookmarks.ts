@@ -12,18 +12,18 @@ import {
 } from "actions/treeActions";
 
 import { EntityNode } from "types/EntityNode";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "store";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 
 export default function useBookmarks(node: EntityNode) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const router = useRouter();
 
   useEffect(() => {
     //Expand bookmarks, applies only to non-root
     const bookmark = router.query?.[node.treeId!];
-    if (bookmark && !node.isRoot) {
+    if (node.wikidataId && bookmark && !node.isRoot) {
       if (bookmark?.indexOf(CHILD_BOOKMARK_SYMBOL) > -1) {
         dispatch(toggleChildren(node, { followNavigation: false }));
       }

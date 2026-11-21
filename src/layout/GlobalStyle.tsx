@@ -29,7 +29,24 @@ export const GlobalStyle = createGlobalStyle`
 
   .dropdown-toggle::after {
     vertical-align: middle;
-  }    
+  }
+
+  /* Bootstrap 4 showed help text on its own line; Bootstrap 5 made it inline */
+  .form-text {
+    display: block;
+  }
+
+  /* Bootstrap 4 only underlined links on hover; Bootstrap 5 always does */
+  a {
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  /* Bootstrap 5 cards set their own text color; keep linked cards link-colored */
+  a > .card {
+    color: inherit;
+  }
 
   .btn-link {
     text-decoration: none;

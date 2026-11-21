@@ -1,0 +1,12 @@
+# Supply-chain guard: don't resolve versions published less than 7 days ago.
+minimumReleaseAge: 10080
+
+# Install scripts are blocked unless listed here. @parcel/watcher (jest) ships prebuilt binaries.
+allowBuilds:
+  '@parcel/watcher': false
+
+overrides:
+  # @entitree/helper declares wikibase-edit (-> crypto-js 3.x, critical CVEs) but never imports it.
+  'wikibase-edit': '-'
+  # geni-api pins axios 0.27 (SSRF/DoS CVEs); it only uses axios.create + GET, which v1 supports.
+  'geni-api>axios': '1.21.1'

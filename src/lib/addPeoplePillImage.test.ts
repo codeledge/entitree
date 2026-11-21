@@ -1,3 +1,6 @@
+// Wikimedia rejects requests without a descriptive User-Agent
+import "lib/axiosConfig";
+
 import { WD_INSTANCE_OF, getWikibaseEntities } from "@entitree/helper";
 
 import { Entity } from "types/Entity";
