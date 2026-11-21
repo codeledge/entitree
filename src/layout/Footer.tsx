@@ -2,14 +2,16 @@ import { Container, Nav, Navbar } from "react-bootstrap";
 import { FaCreativeCommons, FaGithub } from "react-icons/fa";
 
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useRef } from "react";
+
+import NoSsr from "./NoSsr";
 import styled from "styled-components";
 
 export default function Footer() {
   return (
     <StyledFooter className="Footer" bg="light" expand="lg">
       <Container>
-        <Nav className="mr-auto">
+        <Nav className="me-auto">
           <Navbar.Brand
             id="wikidata-logo"
             target="_blank"
@@ -34,27 +36,43 @@ export default function Footer() {
             <FaGithub />
           </Nav.Link>
           <Nav.Item id="twitterFollowButton">
-            <a
-              href="https://twitter.com/EntitreeApp?ref_src=twsrc%5Etfw"
-              className="twitter-follow-button"
-              // data-size="large"
-              // data-show-screen-name=""
-              // data-show-count=""
-            >
-              Follow EntiTree
-            </a>
+            <NoSsr>
+              <TwitterFollowButton />
+            </NoSsr>
           </Nav.Item>
         </Nav>
-        <Nav className="ml-auto rightLinks">
-          <Link href="/about" passHref legacyBehavior>
-            <Nav.Link>About</Nav.Link>
-          </Link>
-          <Link href="/privacy" passHref legacyBehavior>
-            <Nav.Link>Privacy</Nav.Link>
-          </Link>
+        <Nav className="ms-auto rightLinks">
+          <Nav.Link as={Link} href="/about">
+            About
+          </Nav.Link>
+          <Nav.Link as={Link} href="/privacy">
+            Privacy
+          </Nav.Link>
         </Nav>
       </Container>
     </StyledFooter>
+  );
+}
+
+// Twitter's widgets.js swaps this link for an iframe as soon as it loads,
+// which can happen before React hydrates and causes a hydration mismatch.
+// Render it in the browser only, and ask widgets.js to upgrade it if the
+// script was already loaded by the time we mount.
+function TwitterFollowButton() {
+  const ref = useRef<HTMLSpanElement>(null);
+  useEffect(() => {
+    (window as any).twttr?.widgets?.load(ref.current);
+  }, []);
+
+  return (
+    <span ref={ref}>
+      <a
+        href="https://twitter.com/EntitreeApp?ref_src=twsrc%5Etfw"
+        className="twitter-follow-button"
+      >
+        Follow EntiTree
+      </a>
+    </span>
   );
 }
 

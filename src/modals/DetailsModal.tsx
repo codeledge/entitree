@@ -259,7 +259,7 @@ export default function DetailsModal({
         {node.id !== currentEntity?.id && (
           <Button
             variant="light"
-            className="mr-auto"
+            className="me-auto"
             onClick={() => {
               dispatch(setLoadingEntity(true));
               const url = getEntityUrl(

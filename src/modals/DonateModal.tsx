@@ -21,7 +21,7 @@ export default function DonateModal({ onHideModal }) {
       <Modal.Footer>
         <Button
           variant="light"
-          className="mr-auto"
+          className="me-auto"
           onClick={() => {
             dispatch(
               setSetting({

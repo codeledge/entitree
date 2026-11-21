@@ -25,7 +25,9 @@ const securityHeaders = [
     key: "Content-Security-Policy",
     value: `script-src ${scriptSrc}; object-src 'none'; base-uri 'self'`,
   },
-  { key: "X-Content-Type-Options", value: "nosniff" },
+  // the dev server serves _clientMiddlewareManifest.js as JSON, which nosniff
+  // makes the browser reject; production serves it as JavaScript
+  ...(isDev ? [] : [{ key: "X-Content-Type-Options", value: "nosniff" }]),
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "Strict-Transport-Security", value: "max-age=31536000" },
 ];

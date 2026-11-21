@@ -455,7 +455,7 @@ export default function SettingsModal({ show, onHideModal }) {
         )}
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="link" className="mr-auto ms-0" onClick={onHideModal}>
+        <Button variant="link" className="me-auto ms-0" onClick={onHideModal}>
           Close
         </Button>
         <Button variant="primary" onClick={onHideModal}>

@@ -56,14 +56,19 @@ export default function Header({ simple }: { simple?: boolean }) {
             className="examplesButton"
           >
             {EXAMPLES.map(({ name, href }) => (
-              <Link key={name} href={href} passHref legacyBehavior>
-                <Dropdown.Item onClick={openExampleLink}>{name}</Dropdown.Item>
-              </Link>
+              <Dropdown.Item
+                key={name}
+                as={Link}
+                href={href}
+                onClick={openExampleLink}
+              >
+                {name}
+              </Dropdown.Item>
             ))}
           </DropdownButton>
         )}
         {!simple && (
-          <Nav className="ml-auto">
+          <Nav className="ms-auto">
             <Button
               className="settingsButton"
               variant="none"
