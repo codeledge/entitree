@@ -45,63 +45,61 @@ export default function SearchBar() {
   const [fromKeyboard, setFromKeyboard] = useState(true);
 
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
-  useEffect(() => {
-    (async () => {
-      if (debouncedSearchTerm && fromKeyboard && currentLang) {
-        setShowSuggestions(true);
-        setLoadingSuggestions(true);
-        try {
-          if (dataSource === "wikidata" || dataSource === "factgrid") {
-            const results = await wikibaseSearchEntities(
-              debouncedSearchTerm,
-              currentLang.code as string,
-              getWikibaseURL(dataSource),
-            );
-            const filteredResults = results.filter(({ id, description }) => {
-              // remove current entity from results
-              if (currentEntity?.id === id) {
-                return false;
-              }
+  // the term the current searchResults belong to, so a submit can tell
+  // whether the debounced search already ran for what is in the box
+  const searchedTermRef = useRef<string | null>(null);
 
-              // remove wikimedia disam pages
-              if (currentLang?.disambPageDesc === description) return false;
-
-              return true;
-            });
-
-            setSearchResults(filteredResults);
-            setSearchResults(
-              filteredResults.map((result) => {
-                return {
-                  id: result.id,
-                  title: result.label,
-                  subtitle: result.description,
-                };
-              }),
-            );
-          }
-          if (dataSource === "geni") {
-            const profiles = await searchGeniCall(debouncedSearchTerm);
-            setSearchResults(
-              profiles.map((geniProfile) => {
-                return {
-                  id: "G" + geniProfile.guid,
-                  title: geniProfile.name,
-                  subtitle: geniProfile.birth?.date?.formatted_date,
-                };
-              }),
-            );
-          }
-        } catch (error) {
-          errorHandler(error);
-        } finally {
-          setLoadingSuggestions(false);
-        }
-      } else {
-        setLoadingSuggestions(false);
-        setShowSuggestions(false);
+  const runSearch = async (term: string) => {
+    searchedTermRef.current = term;
+    setShowSuggestions(true);
+    setLoadingSuggestions(true);
+    try {
+      let results: SearchResult[] = [];
+      if (dataSource === "wikidata" || dataSource === "factgrid") {
+        const entities = await wikibaseSearchEntities(
+          term,
+          currentLang.code as string,
+          getWikibaseURL(dataSource),
+        );
+        results = entities
+          .filter(({ id, description }) => {
+            // remove current entity from results
+            if (currentEntity?.id === id) return false;
+            // remove wikimedia disam pages
+            if (currentLang?.disambPageDesc === description) return false;
+            return true;
+          })
+          .map((result) => ({
+            id: result.id,
+            title: result.label,
+            subtitle: result.description,
+          }));
       }
-    })();
+      if (dataSource === "geni") {
+        const profiles = await searchGeniCall(term);
+        results = profiles.map((geniProfile) => ({
+          id: "G" + geniProfile.guid,
+          title: geniProfile.name,
+          subtitle: geniProfile.birth?.date?.formatted_date,
+        }));
+      }
+      // ignore responses for a term the user has already typed past
+      if (searchedTermRef.current === term) setSearchResults(results);
+    } catch (error) {
+      errorHandler(error);
+    } finally {
+      if (searchedTermRef.current === term) setLoadingSuggestions(false);
+    }
+  };
+
+  useEffect(() => {
+    if (debouncedSearchTerm && fromKeyboard && currentLang) {
+      runSearch(debouncedSearchTerm);
+    } else {
+      searchedTermRef.current = null;
+      setLoadingSuggestions(false);
+      setShowSuggestions(false);
+    }
   }, [debouncedSearchTerm]);
 
   useEffect(() => {
@@ -118,7 +116,17 @@ export default function SearchBar() {
       className="SearchBar"
       onSubmit={(e) => {
         e.preventDefault();
-        setShowSuggestions(true);
+        const term = searchTerm.trim();
+        if (!term) return;
+        // mobile "Go" can arrive before the debounce fires: search right away
+        if (searchedTermRef.current !== term) {
+          setFromKeyboard(true);
+          runSearch(term);
+        } else {
+          setShowSuggestions(true);
+        }
+        // close the mobile keyboard so the suggestions are visible
+        (document.activeElement as HTMLElement | null)?.blur();
       }}
     >
       <Container>
@@ -128,8 +136,11 @@ export default function SearchBar() {
               <FaSearch />
             </span>
             <Form.Control
-              onKeyDown={() => setFromKeyboard(true)}
               onChange={(e) => {
+                // onChange only fires for user edits (typing, autocorrect,
+                // swipe, dictation, paste), never for the programmatic
+                // setSearchTerm below; mobile keyboards often send no keydown
+                setFromKeyboard(true);
                 setSearchTerm(e.target.value);
               }}
               value={loadingEntity ? "Loading entity..." : searchTerm}
